@@ -24,13 +24,18 @@ TODO: Write history
 
 ## Credits
 
-Project Manager and Scrum Master: Greg Tighe
-Product Owner: Mike Giancola
-Lead Software Engineer: Jake Hackett
-UX/UI: Charlie Lovering
-Test Engineer/Document Specialist: Henry Wheeler-Mackta
+###Project Manager and Scrum Master: 
+Greg Tighe
+###Product Owner: 
+Mike Giancola
+###Lead Software Engineer: 
+Jake Hackett
+###UX/UI: 
+Charlie Lovering
+###Test Engineer/Document Specialist: 
+Henry Wheeler-Mackta
 
-Other members: 
+###Other members: 
 Anthony Ratte
 Kurt Bugbee
 Tucker Martin
