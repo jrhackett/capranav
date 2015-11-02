@@ -30,8 +30,8 @@ public class Display {
 	private final Logger logger = LoggerFactory.getLogger(Display.class);
 	
 	/* constants */
-	private static final double WIDTH_BUFFER = 25;
-	private static final double HEIGHT_BUFFER = 25;
+	private static final double WIDTH_BUFFER = 20;
+	private static final double HEIGHT_BUFFER = 20;
 	private static final double GAP = 5.5;
 	private static final double BUTTON_SIZE = 25;
 	
@@ -81,7 +81,9 @@ public class Display {
 		Label addButton = button("+", start.getMaxWidth(), 0);
 				
 		/* map */
-					
+		Map map = new Map((height - TABLE_HEIGHT - GAP - 2 * HEIGHT_BUFFER), (width - GAP * 2 - BUTTON_SIZE - 160 - WIDTH_BUFFER * 2));
+		map.setTranslateX(WIDTH_BUFFER + GAP * 2 + 160 + BUTTON_SIZE);	
+		map.setTranslateY(HEIGHT_BUFFER);
 		/* instructions */
 		TableView<Instructions> instructions = createInstructionsTable();
 
@@ -98,7 +100,7 @@ public class Display {
 		/* icon */
 
 		
-        root.getChildren().addAll(start, end, addButton, instructions, sp);
+        root.getChildren().addAll(start, end, addButton, instructions, map);
         scene = new Scene(root, width, height, BACKGROUND_COLOR);
         return scene;
 	}
