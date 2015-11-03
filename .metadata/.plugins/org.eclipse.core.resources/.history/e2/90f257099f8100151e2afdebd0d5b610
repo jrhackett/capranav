@@ -1,0 +1,59 @@
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import java.lang.Math;
+import java.util.HashMap;
+
+public class Launcher extends Application
+{
+	private TableView directions = new TableView();
+	
+	public static void main(String [] args)
+	{
+		Node node1 = new Node("here", 5, 6);
+		Node node2 = new Node("there", 3, 4);
+		Edge edge1 = new Edge(node1, node2, Math.sqrt(Math.pow((node1.getX() + node2.getX()),2.0) + Math.pow((node1.getY() + node2.getY()),2.0)));
+		Edge edge2 = new Edge(node2, node1, Math.sqrt(Math.pow((node1.getX() + node2.getX()),2.0) + Math.pow((node1.getY() + node2.getY()),2.0)));
+		
+		node1.addEdge(edge1);
+		node2.addEdge(edge2);
+		
+		HashMap<Integer, Node> hashmap = new HashMap<Integer, Node>();
+		hashmap.put(1, node1);
+		hashmap.put(2, node2);
+		
+		Graph graph = new Graph(hashmap);
+		System.out.println(graph.toString());
+		
+		//launch(args);
+	}
+
+	@Override
+	public void start(Stage primaryStage) 
+	{
+		primaryStage.setTitle("NavWPI");
+		
+		directions.setEditable(true);
+		TableColumn firstNameCol = new TableColumn("Step");
+		TableColumn secondNameCol = new TableColumn("Directions");
+		firstNameCol.setMinWidth(50);
+		secondNameCol.setMinWidth(100);
+		
+		directions.getColumns().addAll(firstNameCol, secondNameCol);
+		
+		VBox vbox = new VBox();
+		vbox.setSpacing(8);
+		vbox.setPadding(new Insets(10, 10, 10, 10));
+		vbox.setPrefWidth(200);
+		vbox.getChildren().addAll(directions);
+		
+		Scene scene = new Scene(vbox, 1000, 700);
+		primaryStage.setScene(scene);
+		
+		primaryStage.show();
+	}
+}

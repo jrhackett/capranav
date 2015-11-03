@@ -1,0 +1,10 @@
+import java.util.LinkedList;
+
+/*
+ * An implementation of a Graph of Nodes
+ */
+public class Graph 
+{
+	LinkedList<Node> nodes = new LinkedList<Node>();
+	
+}

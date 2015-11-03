@@ -1,0 +1,7 @@
+import javafx.application.Application;
+
+
+public class NavWPI extends Application
+{
+	private static Stage primaryStage;
+}

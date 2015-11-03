@@ -1,0 +1,37 @@
+
+public class Edge implements Comparable<Edge>{
+
+	/*
+	 * from and to are vertices
+	 * weight is distance between the vertices
+	 */
+	public int from;
+	public int to;
+	public double weight;
+	
+	public Edge(int from, int to, double weight)
+	{
+		//checks to make sure inputs are valid
+		if (from < 0) throw new IndexOutOfBoundsException("Vertex name must be a nonnegative integer");
+        if (to < 0) throw new IndexOutOfBoundsException("Vertex name must be a nonnegative integer");
+        if (Double.isNaN(weight)) throw new IllegalArgumentException("Weight is NaN");
+		
+		this.from = from;
+		this.to = to;
+		this.weight = weight;
+	}
+	
+	/*
+	 * Compares weights of this edge and Edge o
+	 * Returns -1 if this weight is greater
+	 * Returns 1 if this weight is less
+	 * Returns 0 if weights are equal
+	 */
+	public int compareTo(Edge o) {
+		
+		if(this.weight > o.weight) return -1;
+		if(this.weight < o.weight) return 1;
+		else return 0;
+	}
+
+}

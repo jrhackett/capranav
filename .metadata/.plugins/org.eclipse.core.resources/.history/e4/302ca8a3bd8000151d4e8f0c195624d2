@@ -1,0 +1,61 @@
+/*
+ * An implementation for a Node describing a location to be used in Graph
+ */
+public class Node 
+{
+	/*
+	 * name is the name of the location
+	 * index is an arbitrary number to identify Node in graph
+	 * x is the x coordinate on the map
+	 * y is the y coordinate on the map
+	 */
+	private String name;
+	private int index;
+	private double x;
+	private double y;
+	
+	public Node(String name, int index, double x, double y)
+	{
+		/*
+		 * Might want to do bounds checking on these in the future
+		 */
+		this.name = name;
+		this.index = index;
+		this.x = x;
+		this.y = y;
+	}
+	
+	/*
+	 * Returns name of the node
+	 */
+	public String getName()
+	{
+		return this.name;
+	}
+	
+	/*
+	 * Returns the node's index
+	 */
+	public int getIndex()
+	{
+		return this.index;
+	}
+	
+	public double getX()
+	{
+		return this.x;
+	}
+	
+	public double getY()
+	{
+		return this.y;
+	}
+	
+	/*
+	 * Returns a String describing this Node
+	 */
+	public String toString()
+	{
+		return String.format("%s(%d): %.5f, .5f", this.name, this.index, this.x, this.y);
+	}
+}

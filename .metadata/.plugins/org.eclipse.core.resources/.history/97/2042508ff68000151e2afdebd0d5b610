@@ -1,0 +1,26 @@
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
+/*
+ * An implementation of a simple JavaFX GUI
+ */
+public class window 
+{
+	//@Override
+	public void start(Stage primaryStage)
+	{
+		primaryStage.setTitle("NavWPI");
+		
+		GridPane grid = new GridPane();
+		grid.setAlignment(Pos.CENTER);
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(25,25,25,25));
+		
+		Scene scene = new Scene(grid, 300, 275);
+		
+		primaryStage.show();
+	}
+}

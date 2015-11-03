@@ -1,0 +1,11 @@
+
+public class Graph 
+{
+	private int vertices;
+	private int edges;
+	
+	public int getVertices()
+	{
+		return this.vertices;
+	}
+}

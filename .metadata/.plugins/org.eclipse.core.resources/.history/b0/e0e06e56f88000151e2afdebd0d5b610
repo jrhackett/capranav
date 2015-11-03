@@ -1,0 +1,9 @@
+
+public class Launcher extends Application
+{
+	public static void main(String [] args)
+	{
+		NavWPI client = new NavWPI();
+		client.launch(args);
+	}
+}

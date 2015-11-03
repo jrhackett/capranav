@@ -1,0 +1,17 @@
+import javafx.*;
+
+/*
+ * An implementation of a simple JavaFX GUI
+ */
+public class window 
+{
+	@Override
+	public void start(Stage primaryStage)
+	{
+		primaryStage.setTitle("NavWPI");
+		
+		GridPane grid = new GridPane();
+		
+		primaryStage.show();
+	}
+}

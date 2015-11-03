@@ -1,0 +1,14 @@
+import javafx.stage.Stage;
+
+/*
+ * An implementation of a simple JavaFX GUI
+ */
+public class window 
+{
+	@Override
+	public void start(Stage primaryStage)
+	{
+		primaryStage.setTitle("NavWPI");
+		primaryStage.show();
+	}
+}

@@ -1,0 +1,51 @@
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import java.lang.Math;
+import java.util.HashMap;
+
+public class Launcher extends Application
+{
+	private TableView directions = new TableView();
+	
+	public static void main(String [] args)
+	{
+		/*
+		 * Need to write a tool to parse input for all Nodes
+		 * Perhaps through some type of input txt file(s)
+		 */
+		String inputNodes = "nodes.txt";
+		String inputEdges = "edges.txt";
+		
+		//launch(args);
+	}
+
+	@Override
+	public void start(Stage primaryStage) 
+	{
+		primaryStage.setTitle("NavWPI");
+		
+		directions.setEditable(true);
+		TableColumn firstNameCol = new TableColumn("Step");
+		TableColumn secondNameCol = new TableColumn("Directions");
+		firstNameCol.setMinWidth(50);
+		secondNameCol.setMinWidth(100);
+		
+		directions.getColumns().addAll(firstNameCol, secondNameCol);
+		
+		VBox vbox = new VBox();
+		vbox.setSpacing(8);
+		vbox.setPadding(new Insets(10, 10, 10, 10));
+		vbox.setPrefWidth(200);
+		vbox.getChildren().addAll(directions);
+		
+		Scene scene = new Scene(vbox, 1000, 700);
+		primaryStage.setScene(scene);
+		
+		primaryStage.show();
+	}
+}

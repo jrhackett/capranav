@@ -1,0 +1,16 @@
+
+public class Graph 
+{
+	private int vertices;
+	private int edges;
+	
+	public int getNumOfVertices()
+	{
+		return this.vertices;
+	}
+	
+	public int getNumOfEdges()
+	{
+		return this.edges;
+	}
+}

@@ -1,0 +1,15 @@
+
+public class Node 
+{
+	private String name;
+	private int index;
+	private double x;
+	private double y;
+	
+	public Node(String name, int index, double x, double y)
+	{
+		/*
+		 * Might want to do bounds checking on these in the future
+		 */
+	}
+}

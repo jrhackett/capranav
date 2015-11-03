@@ -1,0 +1,19 @@
+
+public class Edge implements Comparable<Edge>{
+
+	public double weight;
+	
+	/*
+	 * Compares weights of this edge and Edge o
+	 * Returns -1 if this weight is greater
+	 * Returns 1 if this weight is less
+	 * Returns 0 if weights are equal
+	 */
+	public int compareTo(Edge o) {
+		
+		if(this.weight > o.weight) return -1;
+		if(this.weight < o.weight) return 1;
+		else return 0;
+	}
+
+}

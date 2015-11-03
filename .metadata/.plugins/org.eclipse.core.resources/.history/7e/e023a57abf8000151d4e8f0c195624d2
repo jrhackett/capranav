@@ -1,0 +1,14 @@
+import java.util.Comparator;
+import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
+import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
+
+public class EdgeComparator implements Comparator<Edge>{
+
+	@Override
+	public int compare(Edge o1, Edge o2) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+}

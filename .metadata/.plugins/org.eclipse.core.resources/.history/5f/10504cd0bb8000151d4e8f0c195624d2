@@ -1,0 +1,22 @@
+
+public class Graph 
+{
+	private int vertices;
+	private int edges;
+	
+	/*
+	 * Returns number of vertices in the graph
+	 */
+	public int getNumOfVertices()
+	{
+		return this.vertices;
+	}
+	
+	/*
+	 * Returns number of edges in the graph
+	 */
+	public int getNumOfEdges()
+	{
+		return this.edges;
+	}
+}
