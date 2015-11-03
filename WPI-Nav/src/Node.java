@@ -21,7 +21,7 @@ public class Node
 	/*
 	 * Constructor initializes the Node
 	 */
-	public Node(String name, int index, double x, double y)
+	public Node(String name, double x, double y)
 	{
 		/*
 		 * Might want to do bounds checking on these in the future
@@ -68,7 +68,7 @@ public class Node
 	 */
 	public String toString()
 	{
-		return String.format("%s: %.5f, .5f", this.name, this.x, this.y);
+		return String.format("%s: %.5f, %.5f", this.name, this.x, this.y);
 	}
 	
 	/*
