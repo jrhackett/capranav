@@ -1,6 +1,6 @@
 # WPI Navigation Application
 
-TODO: Write a project description
+This project is a navigation system for the campus Worcester Polytechnic Institute.
 
 ## Installation
 
