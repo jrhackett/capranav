@@ -1,3 +1,4 @@
+package logic;
 /*
  * An implementation of A* shortest path on Graphs 
  */

@@ -1,3 +1,4 @@
+package logic;
 /*
  * An implementation of a weighted edge to be used in a graph
  */
