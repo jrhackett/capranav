@@ -33,7 +33,10 @@ public class Display {
 	private static final double WIDTH_BUFFER = 20;
 	private static final double HEIGHT_BUFFER = 20;
 	private static final double GAP = 5.5;
-	private static final double BUTTON_SIZE = 25;
+	private static final double BUTTON_SIZE = 26;
+	
+	private Double width;
+	private Double height; 
 	
 	/* values */
     private static final Color BACKGROUND_COLOR = Color.web("a5adb0");
@@ -45,8 +48,7 @@ public class Display {
     /* visuals */
 	private Scene scene;
 	private AnchorPane root;
-	private Double width;
-	private Double height;
+
 	
 	/* simply for testing!!!! */
 	private static ObservableList<Instructions> getInstructionsTest(){
@@ -68,12 +70,12 @@ public class Display {
 	
 	public Scene Init(){
 		/* start */
-		TextField start = new Inputs("Starting Location?");
+		Inputs start = new Inputs("Starting Location?");
 		start.setTranslateX(WIDTH_BUFFER);
 		start.setTranslateY(HEIGHT_BUFFER);
 		
 		/* end */
-		TextField end = new Inputs("Destination!");
+		Inputs end = new Inputs("Destination!");
 		end.setTranslateX(WIDTH_BUFFER);
 		end.setTranslateY(HEIGHT_BUFFER * 2 + GAP);
 
@@ -84,6 +86,7 @@ public class Display {
 		Map map = new Map((height - TABLE_HEIGHT - GAP - 2 * HEIGHT_BUFFER), (width - GAP * 2 - BUTTON_SIZE - 160 - WIDTH_BUFFER * 2));
 		map.setTranslateX(WIDTH_BUFFER + GAP * 2 + 160 + BUTTON_SIZE);	
 		map.setTranslateY(HEIGHT_BUFFER);
+		
 		/* instructions */
 		TableView<Instructions> instructions = createInstructionsTable();
 
@@ -105,6 +108,10 @@ public class Display {
         return scene;
 	}
 
+	/**
+	 * Creates the InstructionsTable
+	 * @return
+	 */
 	private TableView<Instructions> createInstructionsTable() {
 		TableView<Instructions> instructions = new TableView<Instructions>();
 		instructions.setMinWidth(TABLE_WIDTH);
@@ -121,31 +128,18 @@ public class Display {
 		return instructions;
 	}
 
-	private StackPane createAddButton() {
-		Text plus = new Text("+");
-		plus.setFont(Font.font("Comic Sans", FontWeight.BOLD, 25));
-	    return createButton(plus);
-	}
-
-	private StackPane createButton(Node content) {
-		StackPane button = new StackPane();
-		Rectangle background = new Rectangle(BUTTON_SIZE, BUTTON_SIZE, Color.web("#ABB8B8"));
-		background.setArcHeight(7);
-		background.setArcWidth(7);
-		button.getChildren().addAll(background, content);
-		return button;
-	}
 	
 	private Label button(String content, double width, double height){
 		Label button = new Label(content);
 		button.getStyleClass().add("my_button");		
         button.setTranslateX(width + WIDTH_BUFFER + GAP);
 		button.setTranslateY(height + HEIGHT_BUFFER);
-		button.setMinSize(25, 25); button.setMaxSize(25, 25);
+		button.setMinSize(BUTTON_SIZE, BUTTON_SIZE);
+		button.setMaxSize(BUTTON_SIZE, BUTTON_SIZE);
 		
 		DropShadow ds = new DropShadow();
-		ds.setOffsetX(.5);
-		ds.setOffsetY(.5);
+		ds.setOffsetX(.2);
+		ds.setOffsetY(.2);
 		ds.setColor(Color.GRAY);
 		button.setEffect(ds);
 		

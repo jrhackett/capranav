@@ -1,33 +1,74 @@
 package visuals;
 
-import javafx.scene.control.TextField;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
+import logic.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.util.Callback;
 
-/**
- * This class will be the input text field
- * Once we allow the user to have multiple destinations this will need some work
- * @author Charlie Lovering
- *
- */
-public class Inputs extends TextField {
+public class Inputs extends ComboBox {
 	private final static int WIDTH = 160;
-	private int rank = 0;
 	private String initial;
-	
+	int rank;
+
+	@SuppressWarnings("unchecked") /* probably should remove this */
 	public Inputs(String s){
-		super(s);
+		super();
 		initial = s;
 		this.setMaxWidth(WIDTH);
 		this.setMinWidth(WIDTH);
-		rank++;
-		
-		DropShadow ds = new DropShadow();
-		ds.setOffsetX(.5);
-		ds.setOffsetY(.5);
-		ds.setColor(Color.GRAY);
-		this.setEffect(ds);
+		this.setItems(getDummyLocations());
+		this.valueProperty().addListener(new ChangeListener<Node>(){
+			
+			@Override
+			public void changed(ObservableValue<? extends Node> arg0, Node oldValue, Node newValue) {
+				// TODO Auto-generated method stub
+				if (oldValue != null){
+				System.out.print(oldValue.getName() + "->");
+				}
+				System.out.println(newValue.getName());
+			
+			}
+		});
+	
+		/*
+		this.setCellFactory(new Callback<ListView<Node>, ListCell<Node>>() {
 
-		/* add listeners here for when selected/input typed etc */
+			@Override
+			public ListCell<Node> call(ListView<Node> param) {
+				ListCell<Node> cell = new ListCell<>(){
+					@Override
+					public void updateItem(Node node, boolean empty){
+						if (node != null){
+							setText(node.toString());
+							 
+							
+						}
+						setTextFill(Color.GREEN);
+					}
+				}
+				return null;
+			}
+			
+		});
+		*/
 	}
+
+	/* this will be replaced later with actual data */
+	private ObservableList<Node> getDummyLocations() {
+		ObservableList<Node> data = FXCollections.observableArrayList();
+		
+		data.addAll(
+				new Node("Faraday", 0, 1, 2),
+				new Node("Campus Center", 1, 3, 4),
+				new Node("Student Center", 2, 3, 4));
+		
+		return data;
+	}
+	
+	
 }
