@@ -21,7 +21,7 @@ public class Launcher extends Application
 		Graph graph = parsing();
 		
 		//Uncomment this to start the application
-		//launch(args);
+		launch(args);
 	}
 	
 	/*

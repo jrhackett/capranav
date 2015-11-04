@@ -14,7 +14,9 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -30,24 +32,26 @@ public class Display {
 	private final Logger logger = LoggerFactory.getLogger(Display.class);
 	
 	/* constants */
-	private static final double WIDTH_BUFFER = 20;
-	private static final double HEIGHT_BUFFER = 20;
+	private static final double WIDTH_BUFFER = 15;
+	private static final double HEIGHT_BUFFER = 15;
 	private static final double GAP = 5.5;
 	private static final double BUTTON_SIZE = 26;
-	
+	private static final Color BACKGROUND_COLOR = Color.web("a5adb0");
+	private static final double TABLE_WIDTH = 600;
+	private static final double TABLE_HEIGHT = 200;
+	private static final int MAX_INPUTS = 5;
+		
 	private Double width;
 	private Double height; 
 	
-	/* values */
-    private static final Color BACKGROUND_COLOR = Color.web("a5adb0");
-
-	private static final double TABLE_WIDTH = 600;
-
-	private static final double TABLE_HEIGHT = 200;
+	/* variables */
+    private int NUMBER_INPUTS = 0;
 
     /* visuals */
 	private Scene scene;
 	private AnchorPane root;
+	private VBox inputs;
+	
 
 	
 	/* simply for testing!!!! */
@@ -69,19 +73,41 @@ public class Display {
 	}
 	
 	public Scene Init(){
+		
+		/* first input slot*/
+		HBox inputSlot = new HBox();
+		inputSlot.setSpacing(GAP);
+		
 		/* start */
 		Inputs start = new Inputs("Starting Location?");
-		start.setTranslateX(WIDTH_BUFFER);
-		start.setTranslateY(HEIGHT_BUFFER);
+		Label addButton = button("+", start.getMaxWidth(), 0);
+		addButton.setOnMouseClicked(e -> addAnotherSlot());
+		inputSlot.getChildren().addAll(start, addButton);
 		
+		/* second input slot */
+		HBox inputSlotTwo = new HBox();
+		inputSlotTwo.setSpacing(GAP);
+
 		/* end */
 		Inputs end = new Inputs("Destination!");
-		end.setTranslateX(WIDTH_BUFFER);
-		end.setTranslateY(HEIGHT_BUFFER * 2 + GAP);
-
-		/* + button [later] */
-		Label addButton = button("+", start.getMaxWidth(), 0);
-				
+		Label minusButton = button("✓", start.getMaxWidth(), 0);
+		inputSlotTwo.getChildren().addAll(end, minusButton);
+		
+		/* visual divide */
+		Rectangle divide = new Rectangle(160 + GAP + BUTTON_SIZE, 2);
+		divide.setArcHeight(2);
+		divide.setArcWidth(2);
+		divide.setFill(Color.GRAY);		
+		
+		/* start/end location section */
+		inputs = new VBox();
+		inputs.getChildren().addAll(inputSlot, inputSlotTwo);
+		inputs.setSpacing(GAP);
+		inputs.setTranslateX(WIDTH_BUFFER);
+		inputs.setTranslateY(HEIGHT_BUFFER);
+		inputs.getChildren().add(divide);
+	
+		
 		/* map */
 		Map map = new Map((height - TABLE_HEIGHT - GAP - 2 * HEIGHT_BUFFER), (width - GAP * 2 - BUTTON_SIZE - 160 - WIDTH_BUFFER * 2));
 		map.setTranslateX(WIDTH_BUFFER + GAP * 2 + 160 + BUTTON_SIZE);	
@@ -89,6 +115,9 @@ public class Display {
 		
 		/* instructions */
 		TableView<Instructions> instructions = createInstructionsTable();
+		instructions.setTranslateX(width - TABLE_WIDTH - WIDTH_BUFFER);
+		instructions.setTranslateY(height - TABLE_HEIGHT - HEIGHT_BUFFER);
+		
 
 		
 		/* image */
@@ -100,17 +129,47 @@ public class Display {
 		sp.setTranslateY(height - (HEIGHT_BUFFER + dimension));
 		sp.setTranslateX(WIDTH_BUFFER);
 
-		/* icon */
-
 		
-        root.getChildren().addAll(start, end, addButton, instructions, map);
+		/* build */
+        root.getChildren().addAll(inputs, instructions, map);
         scene = new Scene(root, width, height, BACKGROUND_COLOR);
         return scene;
 	}
 
 	/**
+	 * Adds another input slot to inputs
+	 * If there are already  MAX_INPUTS - do nothing
+	 * Event is logged
+	 */
+	private void addAnotherSlot(){
+		if (NUMBER_INPUTS < MAX_INPUTS){
+			
+			/* first input slot*/
+			HBox inputSlot = new HBox();
+			inputSlot.setSpacing(GAP);
+			
+			/* start */
+			Inputs next = new Inputs("Mid-Way Point");
+			Label addButton = button("-", next.getMaxWidth(), 0);
+			addButton.setOnMouseClicked(e -> removeThisSlot(inputSlot));
+			inputSlot.getChildren().addAll(next, addButton);
+			inputs.getChildren().add(NUMBER_INPUTS + 1, inputSlot);
+			
+			NUMBER_INPUTS++;
+		}
+		logger.info("Max inputs added");
+	}
+	
+	/**
+	 * Removes this slot -> should prompt re-validation and re-display
+	 */
+	private void removeThisSlot(javafx.scene.Node node){
+		inputs.getChildren().remove(node);
+		NUMBER_INPUTS--;
+	}
+	
+	/**
 	 * Creates the InstructionsTable
-	 * @return
 	 */
 	private TableView<Instructions> createInstructionsTable() {
 		TableView<Instructions> instructions = new TableView<Instructions>();
@@ -120,8 +179,6 @@ public class Display {
 		instructions.setMaxHeight(TABLE_HEIGHT);
 		instructions.getColumns().addAll(Instructions.getColumn(instructions));
 		instructions.setItems(getInstructionsTest());
-		instructions.setTranslateX(width - TABLE_WIDTH - WIDTH_BUFFER);
-		instructions.setTranslateY(height - TABLE_HEIGHT - HEIGHT_BUFFER);
 		instructions.setColumnResizePolicy(
 	            TableView.CONSTRAINED_RESIZE_POLICY
 		        );
@@ -132,8 +189,6 @@ public class Display {
 	private Label button(String content, double width, double height){
 		Label button = new Label(content);
 		button.getStyleClass().add("my_button");		
-        button.setTranslateX(width + WIDTH_BUFFER + GAP);
-		button.setTranslateY(height + HEIGHT_BUFFER);
 		button.setMinSize(BUTTON_SIZE, BUTTON_SIZE);
 		button.setMaxSize(BUTTON_SIZE, BUTTON_SIZE);
 		
