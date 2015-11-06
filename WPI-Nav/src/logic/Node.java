@@ -1,79 +1,43 @@
 package logic;
-import java.util.Comparator;
-import java.util.PriorityQueue;
 
-/*
- * An implementation for a Node describing a location to be used in Graph
- */
-public class Node 
-{
-	/*
-	 * name is the name of the location
-	 * x is the x coordinate on the map
-	 * y is the y coordinate on the map
-	 * edges is a minimum PriorityQueue of edges, organized by edge weight 
-	 */
-	private String name;
-	private double x;
-	private double y;
-	Comparator<Edge> comparator = new EdgeComparator(); 
-	PriorityQueue<Edge> edges = new PriorityQueue<Edge>(10, comparator);
-	
-	/*
-	 * Constructor initializes the Node
-	 */
-	public Node(String name, double x, double y)
-	{
-		/*
-		 * Might want to do bounds checking on these in the future
-		 */
-		this.name = name;
-		this.x = x;
-		this.y = y;
+public class Node {
+
+	public String name;
+	public double x_coord;
+	public double y_coord;
+	public double z_coord;
+	public double g_scores;
+	public double h_scores;
+	public double f_scores = 0;
+	public Edge[] adjacencies;
+	public Node parent;
+
+	public Node(String val, double x, double y, double z) {
+		name = val;
+		x_coord = x;
+		y_coord = y;
+		z_coord = z;
+	}
+
+	public String getName() {
+		return name;
 	}
 	
-	/*
-	 * Returns name of the node
-	 */
-	public String getName()
-	{
-		return this.name;
+	public double getX() {
+		return x_coord;
 	}
 	
-	/*
-	 * Returns the x coordinate of the node
-	 */
-	public double getX()
-	{
-		return this.x;
+	public double getY() {
+		return x_coord;
 	}
 	
-	/*
-	 * Return the y coordinate of the node
-	 */
-	public double getY()
-	{
-		return this.y;
+	public double getZ() {
+		return x_coord;
 	}
-	
-	/*
-	 * Adds an edge to this node
-	 */
-	public void addEdge(Edge e)
-	{
-		this.edges.add(e);
+
+	public void addEdge(Edge edge) {
+		// TODO Auto-generated method stub
+		
 	}
-	
-	/*
-	 * Returns a String describing this Node
-	 */
-	public String toString()
-	{
-		return String.format("%s: %.5f, %.5f", this.name, this.x, this.y);
-	}
-	
-	/*
-	 * Methods to add:
-	 * 
-	 */
+
 }
