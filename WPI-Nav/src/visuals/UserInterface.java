@@ -13,15 +13,15 @@ import javafx.stage.Stage;
 public class UserInterface extends Application {
 	private static final Double WINDOW_WIDTH = 900.0;
 	private static final Double WINDOW_HEIGHT = 600.0;
-	
+
 	private Display myDisplay;
 
 	@Override
 	public void start(Stage s) throws Exception {
-		
+
 		/* icon */
 		s.getIcons().add(new Image(getClass().getResourceAsStream("images/globe.png")));
-		
+
 		/* basic layoutgit */
 		s.setTitle("WPI MAPS");
 		s.setResizable(false);

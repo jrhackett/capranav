@@ -43,7 +43,7 @@ public class Map extends StackPane{
 
 		this.mapTest = new Image(getClass().getResourceAsStream("images/wpi-campus-map.png"), height - BORDER, width - BORDER, true, true);
 		ImageView mapTestView = new ImageView(mapTest);
-		
+
 		this.getChildren().addAll(default_background, mapTestView, nodes);
 	}
 

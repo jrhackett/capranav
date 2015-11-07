@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 public class Display {
 	/* logger */
 	private final Logger logger = LoggerFactory.getLogger(Display.class);
-	
+
 	/* constants */
 	private static final double WIDTH_BUFFER = 15;
 	private static final double HEIGHT_BUFFER = 15;
@@ -35,10 +35,10 @@ public class Display {
 	private static final double INPUT_WIDTH = 160;
 
 	private static final int MAX_INPUTS = 3;
-		
+
 	private Double width;
-	private Double height; 
-	
+	private Double height;
+
 	/* variables */
 	public Controller controller;
     private int NUMBER_INPUTS = 0;
@@ -64,9 +64,9 @@ public class Display {
 		for (int i = 0; i < 10; i++){
 			data.add(new Instructions("Go North!!", 50));
 		}
-		
+
 		return data;
-		
+
 	}
 
 	/**
@@ -114,9 +114,9 @@ public class Display {
 
 		/* map */
 		this.map = new Map((height - TABLE_HEIGHT - GAP - 2 * HEIGHT_BUFFER), (width - GAP * 2 - BUTTON_SIZE - 160 - WIDTH_BUFFER * 2), this.controller);
-		map.setTranslateX(WIDTH_BUFFER + GAP * 2 + 160 + BUTTON_SIZE);	
+		map.setTranslateX(WIDTH_BUFFER + GAP * 2 + 160 + BUTTON_SIZE);
 		map.setTranslateY(HEIGHT_BUFFER);
-		
+
 		/* instructions */
 		TableView<Instructions> instructions = createInstructionsTable();
 		instructions.setTranslateX(width - TABLE_WIDTH - WIDTH_BUFFER);
@@ -125,7 +125,7 @@ public class Display {
 		/* image */
 		double dimension = width - (TABLE_WIDTH + 2 * WIDTH_BUFFER + GAP);
 		ImageDisplay imageDisplay = new ImageDisplay(dimension);
-		
+
 		StackPane sp = new StackPane();
 		sp.getChildren().add(imageDisplay);
 		sp.setTranslateY(height - (HEIGHT_BUFFER + dimension));
@@ -267,7 +267,7 @@ public class Display {
 	 */
 	private void addAnotherSlot(){
 		if (controller.current_bonus_points < controller.max_bonus_points){
-			
+
 			/* first input slot*/
 			HBox inputSlot = new HBox();
 			inputSlot.setSpacing(GAP);
@@ -284,7 +284,7 @@ public class Display {
 
 			inputSlot.getChildren().addAll(next, addButton);
 			inputs.getChildren().add(controller.current_bonus_points + 1, inputSlot);
-			
+
 			controller.current_bonus_points++;
 			logger.info("Mid-Way Point Added");
 
@@ -292,7 +292,7 @@ public class Display {
 			logger.info("Max inputs added");
 		}
 	}
-	
+
 	/**
 	 * Removes this slot -> should prompt re-validation and re-display
 	 */
