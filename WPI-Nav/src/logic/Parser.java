@@ -1,3 +1,5 @@
+package logic;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -7,17 +9,56 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.Math;
 import java.util.HashMap;
 import java.util.Scanner;
 import logic.*;
+import com.google.gson.*;
+import com.google.gson.stream.*;
+import java.io.FileWriter;
+import java.io.FileReader;
 
 public class Parser
 {
 
+	// Write a new node out to file (hard-coded filename in method -- could change)
+	public void toFile(Node node) {
+		//Create a JsonWriter to append the file with graph nodes
+		try {
+			JsonWriter writer = new JsonWriter(new FileWriter(new File("graph.json"), true));
+			new Gson().toJson(node, writer);	//fix this
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	// Generate HashMap of nodes from JSON file.
+	public HashMap<String, Node> fromFile() {
+		HashMap<String, Node> graph = new HashMap<String, Node>();
+		Gson gson = new Gson();
+		try {
+			JsonStreamParser parser = new JsonStreamParser(new FileReader("nodes.json"));
+			while(parser.hasNext()){
+				Node temp = gson.fromJson(parser.next(), Node.class);
+				graph.put(temp.id, temp); //Probably not valid.. need to see Node implementation
+				//Puts Node in HashMap using ID as index
+			}
+			return graph;
+		}
+		catch (FileNotFoundException e) {
+			System.out.println("nodes.json file not found.");	//change to log message
+			return graph; //On File error, returns an empty graph
+		}
+	}
+
+
 	/*
 	 * Parses nodes and edges from nodes.txt and edges.txt
 	 * into a Graph, returns the graph
+	 * Note this is the old parsing method
 	 */
 	public static Graph parsing()
 	{
