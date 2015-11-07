@@ -21,7 +21,7 @@ public class UserInterface extends Application {
 		/* icon */
 		s.getIcons().add(new Image(getClass().getResourceAsStream("images/globe.png")));
 		
-		/* basics */	
+		/* basic layout */
 		s.setTitle("WPI MAPS");
 		s.setResizable(false);
 		
