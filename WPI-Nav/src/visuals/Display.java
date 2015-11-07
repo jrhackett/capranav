@@ -2,14 +2,9 @@ package visuals;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,10 +14,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +30,9 @@ public class Display {
 	private static final Color BACKGROUND_COLOR = Color.web("a5adb0");
 	private static final double TABLE_WIDTH = 600;
 	private static final double TABLE_HEIGHT = 200;
-	private static final int MAX_INPUTS = 5;
+	private static final double INPUT_WIDTH = 160;
+
+	private static final int MAX_INPUTS = 3;
 		
 	private Double width;
 	private Double height; 
@@ -73,41 +66,39 @@ public class Display {
 	}
 	
 	public Scene Init(){
-		
-		/* first input slot*/
-		HBox inputSlot = new HBox();
-		inputSlot.setSpacing(GAP);
-		
-		/* start */
-		Inputs start = new Inputs("Starting Location?");
-		Label addButton = button("+", start.getMaxWidth(), 0);
-		addButton.setOnMouseClicked(e -> addAnotherSlot());
-		inputSlot.getChildren().addAll(start, addButton);
-		
-		/* second input slot */
-		HBox inputSlotTwo = new HBox();
-		inputSlotTwo.setSpacing(GAP);
 
-		/* end */
-		Inputs end = new Inputs("Destination!");
-		Label minusButton = button("✓", start.getMaxWidth(), 0);
-		inputSlotTwo.getChildren().addAll(end, minusButton);
-		
+		/* side - panel: inputs + divisor + options + divisor + buttons */
+		VBox side_panel = new VBox();
+		side_panel.setTranslateX(WIDTH_BUFFER);
+		side_panel.setTranslateY(HEIGHT_BUFFER);
+		side_panel.setSpacing(2 * GAP);
+
+		/* button panel */
+		StackPane button_panel = createButtonPane();
+
+		/* stack pane of back ground and vbox of buttons */
+		StackPane input_panel = createInputsPane();
+
 		/* visual divide */
 		Rectangle divide = new Rectangle(160 + GAP + BUTTON_SIZE, 2);
 		divide.setArcHeight(2);
 		divide.setArcWidth(2);
-		divide.setFill(Color.GRAY);		
-		
-		/* start/end location section */
+		divide.setFill(Color.GRAY);
+
+		/*
 		inputs = new VBox();
 		inputs.getChildren().addAll(inputSlot, inputSlotTwo);
-		inputs.setSpacing(GAP);
 		inputs.setTranslateX(WIDTH_BUFFER);
 		inputs.setTranslateY(HEIGHT_BUFFER);
 		inputs.getChildren().add(divide);
-	
-		
+		*/
+
+
+		/* options */
+		OptionsMenu options = new OptionsMenu(INPUT_WIDTH, 300);
+		options.setTranslateX(WIDTH_BUFFER);
+		options.setTranslateY(HEIGHT_BUFFER + (MAX_INPUTS) * (BUTTON_SIZE + GAP) + 75); //this is some bad bad stuff
+
 		/* map */
 		Map map = new Map((height - TABLE_HEIGHT - GAP - 2 * HEIGHT_BUFFER), (width - GAP * 2 - BUTTON_SIZE - 160 - WIDTH_BUFFER * 2));
 		map.setTranslateX(WIDTH_BUFFER + GAP * 2 + 160 + BUTTON_SIZE);	
@@ -117,9 +108,7 @@ public class Display {
 		TableView<Instructions> instructions = createInstructionsTable();
 		instructions.setTranslateX(width - TABLE_WIDTH - WIDTH_BUFFER);
 		instructions.setTranslateY(height - TABLE_HEIGHT - HEIGHT_BUFFER);
-		
 
-		
 		/* image */
 		double dimension = width - (TABLE_WIDTH + 2 * WIDTH_BUFFER + GAP);
 		ImageDisplay imageDisplay = new ImageDisplay(dimension);
@@ -129,12 +118,105 @@ public class Display {
 		sp.setTranslateY(height - (HEIGHT_BUFFER + dimension));
 		sp.setTranslateX(WIDTH_BUFFER);
 
-		
+
+		side_panel.getChildren().addAll(button_panel, input_panel);
 		/* build */
-        root.getChildren().addAll(inputs, instructions, map);
+        root.getChildren().addAll(side_panel, instructions, map);
         scene = new Scene(root, width, height, BACKGROUND_COLOR);
         return scene;
 	}
+
+
+	/**
+	 * Creates/returns/sets input panel
+	 * @return Input Panel
+	 */
+	private StackPane createInputsPane() {
+
+		StackPane pane = new StackPane();
+
+		/* background */
+		Rectangle background = new Rectangle(INPUT_WIDTH, (NUMBER_INPUTS + 2) * (30 + GAP), Color.web("#638CA6", .5));
+		background.setArcWidth(5);
+		background.setArcHeight(5);
+		background.setStroke(Color.web("#BFD4D9", .5));
+		background.setStrokeWidth(2);
+
+		/* vbox of buttons */
+		inputs = new VBox();
+		inputs.setSpacing(GAP);
+
+
+		/* start */
+		Inputs start = new Inputs("Search WPI Maps", INPUT_WIDTH);
+
+		/* end */
+		Inputs end = new Inputs("For Destination", INPUT_WIDTH);
+
+		this.inputs.getChildren().addAll(start, end);
+
+		pane.getChildren().addAll(inputs); /* background taken out for now */
+
+		DropShadow ds = new DropShadow();
+		ds.setOffsetX(.3);
+		ds.setOffsetY(.3);
+		ds.setColor(Color.LIGHTGRAY);
+		pane.setEffect(ds);
+
+		return pane;
+
+	}
+
+
+	/**
+	 * Creates a StackPane
+	 * 	-> background
+	 * 	-> panel of buttons
+	 *
+	 * @return StackPane
+	 */
+	private StackPane createButtonPane(){
+		StackPane pane = new StackPane();
+
+		Rectangle stack_pane_background = new Rectangle(INPUT_WIDTH, (30 + GAP)); /* background */
+		stack_pane_background.setArcHeight(5);
+		stack_pane_background.setArcWidth(5);
+		stack_pane_background.setFill(Color.web("#17A697", .7));
+
+		HBox buttonPanel = new HBox();
+		buttonPanel.setSpacing(GAP);
+		buttonPanel.setMaxWidth(INPUT_WIDTH);
+
+		/* add button */
+		Button addButton = new Button("+");
+		addButton.setOnMouseClicked(e -> addAnotherSlot());
+
+		/* check/ button */
+		Button checkButton = new Button("✓");
+
+		/* /refresh button */
+		Image refresh =  new Image(getClass().getResourceAsStream("images/refresh.png"), 35, 35, true, true);
+		ImageView refreshView = new ImageView(refresh);
+		Button questionButton = new Button(refreshView, "refresh");
+
+		/* menu button */
+		VBox bars = new VBox();
+		bars.setSpacing(3);
+		for (int i = 0; i < 3; i++){
+			Rectangle bar = new Rectangle(BUTTON_SIZE - 5, 4);
+			bar.setArcHeight(4);
+			bar.setArcWidth(4);
+			bar.setFill(Color.web("#404040"));
+			bars.getChildren().add(bar);
+		}
+		Button menuButton = new Button(bars, "menu");
+
+		buttonPanel.getChildren().addAll(checkButton, addButton, menuButton, questionButton);
+		pane.getChildren().addAll(stack_pane_background, buttonPanel);
+		buttonPanel.setAlignment(Pos.CENTER);
+		return pane;
+	}
+
 
 	/**
 	 * Adds another input slot to inputs
@@ -149,11 +231,11 @@ public class Display {
 			inputSlot.setSpacing(GAP);
 			
 			/* start */
-			Inputs next = new Inputs("Mid-Way Point");
-			Label addButton = button("-", next.getMaxWidth(), 0);
+			Inputs next = new Inputs("Mid-Way Point", INPUT_WIDTH);
+			Button addButton = new Button("-");
 			addButton.setOnMouseClicked(e -> removeThisSlot(inputSlot));
-			inputSlot.getChildren().addAll(next, addButton);
-			inputs.getChildren().add(NUMBER_INPUTS + 1, inputSlot);
+			//inputSlot.getChildren().addAll(next, addButton);
+			inputs.getChildren().add(NUMBER_INPUTS + 1, next);
 			
 			NUMBER_INPUTS++;
 		}
@@ -172,7 +254,7 @@ public class Display {
 	 * Creates the InstructionsTable
 	 */
 	private TableView<Instructions> createInstructionsTable() {
-		TableView<Instructions> instructions = new TableView<Instructions>();
+		TableView<Instructions> instructions = new TableView<>();
 		instructions.setMinWidth(TABLE_WIDTH);
 		instructions.setMaxWidth(TABLE_WIDTH);
 		instructions.setMinHeight(TABLE_HEIGHT);
@@ -185,19 +267,4 @@ public class Display {
 		return instructions;
 	}
 
-	
-	private Label button(String content, double width, double height){
-		Label button = new Label(content);
-		button.getStyleClass().add("my_button");		
-		button.setMinSize(BUTTON_SIZE, BUTTON_SIZE);
-		button.setMaxSize(BUTTON_SIZE, BUTTON_SIZE);
-		
-		DropShadow ds = new DropShadow();
-		ds.setOffsetX(.2);
-		ds.setOffsetY(.2);
-		ds.setColor(Color.GRAY);
-		button.setEffect(ds);
-		
-		return button;
-	}
 }

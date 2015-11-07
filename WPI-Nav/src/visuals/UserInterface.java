@@ -19,7 +19,7 @@ public class UserInterface extends Application {
 		s.getIcons().add(new Image(getClass().getResourceAsStream("globe.png")));
 		
 		/* basics */	
-		s.setTitle("WPI MAPPER");
+		s.setTitle("WPI MAPS");
 		s.setResizable(false);
 		
 		/* setup */
