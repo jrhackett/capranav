@@ -10,29 +10,40 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 /**
- * Created by Xenocidist on 11/7/15.
+ * Class for Buttons - [custom not JavaFX]
  */
 public class Button extends StackPane{
 
+    /**
+     * Constructor for button
+     * @param content = string of content - 1 character.
+     * @param size = size of the button.
+     */
     public Button(String content, double size) {
+        /* background of button */
         Rectangle background = new Rectangle(size, size, Color.web("#638CA6", .3));
         background.setArcWidth(5);
         background.setArcHeight(5);
         background.setStroke(Color.web("#BFD4D9", .3));
         background.setStrokeWidth(2);
 
+        /* content */
         Text buttonContent = new Text(content);
         buttonContent.setFont(Font.font("Sans Serif", FontWeight.BOLD, 24));
         buttonContent.setFill(Color.BLACK);
 
         this.getChildren().addAll(background, buttonContent);
 
+        /* effects: */
+
+            /* shadow */
         DropShadow ds = new DropShadow();
         ds.setOffsetX(.3);
         ds.setOffsetY(.3);
         ds.setColor(Color.LIGHTGRAY);
         this.setEffect(ds);
 
+            /* user interaction: */
         this.setOnMouseEntered(e -> {
             background.setFill(Color.web("#638CA6", 1));
             background.setStroke(Color.web("#BFD4D9", 1));
@@ -51,13 +62,21 @@ public class Button extends StackPane{
         });
     }
 
+    /**
+     * Alternate constructor for Nodes [images / constructs]
+     * @param content = non-text javafx content
+     * @param translate = a BAD way of fixing individual buttons (moving around the content inside the button)
+     * @param size = size of button
+     */
     public Button(Node content, String translate, double size){
+        /* background of button */
         Rectangle background = new Rectangle(size, size, Color.web("#638CA6", .3));
         background.setArcWidth(5);
         background.setArcHeight(5);
         background.setStroke(Color.web("#BFD4D9", .3));
         background.setStrokeWidth(2);
 
+        /* quick/dirty fix for moving content to where I want it*/
         if(translate.equals("menu")) {
             content.setTranslateX(5);
             content.setTranslateY(9);
@@ -68,12 +87,16 @@ public class Button extends StackPane{
 
         this.getChildren().addAll(background, content);
 
+        /* effects: */
+
+            /* shadow */
         DropShadow ds = new DropShadow();
         ds.setOffsetX(.3);
         ds.setOffsetY(.3);
         ds.setColor(Color.LIGHTGRAY);
         this.setEffect(ds);
 
+            /* user interaction: */
         this.setOnMouseEntered(e -> {
             background.setFill(Color.web("#638CA6", 1));
             background.setStroke(Color.web("#BFD4D9", 1));

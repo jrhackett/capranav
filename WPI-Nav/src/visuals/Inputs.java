@@ -7,6 +7,10 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import logic.Node;
 
+/**
+ * Currently using a 'simple' ComboBox.
+ * Looking into alternate/advanced/accurate options
+ */
 public class Inputs extends ComboBox {
 	private double WIDTH;
 	private String initial;

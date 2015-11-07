@@ -6,6 +6,9 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 
+/**
+ * IMPORTANT: This is ultimately the Class that will 'launch' the application.
+ */
 public class UserInterface extends Application {
 	private static final Double WINDOW_WIDTH = 900.0;
 	private static final Double WINDOW_HEIGHT = 600.0;
@@ -24,11 +27,10 @@ public class UserInterface extends Application {
 		
 		/* setup */
 		myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT);
-		Scene display = myDisplay.Init();
+		//Struct Nodes = Controller.getNodes();
+		Scene display = myDisplay.Init(); //Nodes
 		s.setScene(display);
-		
-		/* css */
-		//display.getStylesheets().add("visuals/style.css");
+
 		s.show();	
 	}
 	

@@ -3,6 +3,7 @@ package visuals;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TableView;
 import javafx.scene.effect.DropShadow;
@@ -44,13 +45,16 @@ public class Display {
 	private Scene scene;
 	private AnchorPane root;
 	private VBox inputs;
-	
 
-	
-	/* simply for testing!!!! */
+
+	/**
+	 * Currently bogus testing. Later will call instance of Controller to get info from logic.
+	 * @return Instructions
+	 */
 	private static ObservableList<Instructions> getInstructionsTest(){
 		ObservableList<Instructions> data = FXCollections.observableArrayList();
-		
+
+		/* Here we need an array/struct with strings of instructions in it */
 		for (int i = 0; i < 10; i++){
 			data.add(new Instructions("Go North!!", 50));
 		}
@@ -58,13 +62,22 @@ public class Display {
 		return data;
 		
 	}
-	
+
+	/**
+	 * Basic constructor.
+	 * @param width
+	 * @param height
+	 */
 	public Display(Double width, Double height){
         root = new AnchorPane();
         this.width = width;
         this.height = height;
 	}
-	
+
+	/**
+	 * This sets up the GUI interface - both visuals and interactions.
+	 * @return
+	 */
 	public Scene Init(){
 
 		/* side - panel: inputs + divisor + options + divisor + buttons */
@@ -160,11 +173,11 @@ public class Display {
 
 
 	/**
-	 * Creates a StackPane
+	 * Creates a the button panel
 	 * 	-> background
 	 * 	-> panel of buttons
 	 *
-	 * @return StackPane
+	 * @return button panel
 	 */
 	private StackPane createButtonPane(){
 		StackPane pane = new StackPane();
@@ -237,6 +250,8 @@ public class Display {
 			inputs.getChildren().add(NUMBER_INPUTS + 1, inputSlot);
 			
 			NUMBER_INPUTS++;
+			logger.info("Mid-Way Point Added");
+
 		} else {
 			logger.info("Max inputs added");
 		}
@@ -245,13 +260,14 @@ public class Display {
 	/**
 	 * Removes this slot -> should prompt re-validation and re-display
 	 */
-	private void removeThisSlot(javafx.scene.Node node){
+	private void removeThisSlot(Node node){
 		inputs.getChildren().remove(node);
 		NUMBER_INPUTS--;
 	}
 	
 	/**
 	 * Creates the InstructionsTable
+	 * Somewhere in here must add an event that maps each instruction row to a node to a bool to an image
 	 */
 	private TableView<Instructions> createInstructionsTable() {
 		TableView<Instructions> instructions = new TableView<>();
