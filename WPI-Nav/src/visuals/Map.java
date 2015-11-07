@@ -21,7 +21,7 @@ public class Map extends StackPane{
 		default_background.setArcHeight(7);
 		default_background.setArcWidth(7);
 
-		Image mapTest = new Image(getClass().getResourceAsStream("wpi-campus-map.png"), height - BORDER, width - BORDER, true, true);
+		Image mapTest = new Image(getClass().getResourceAsStream("images/wpi-campus-map.png"), height - BORDER, width - BORDER, true, true);
 		ImageView mapTestView = new ImageView(mapTest);
 		
 		this.getChildren().addAll(default_background, mapTestView);

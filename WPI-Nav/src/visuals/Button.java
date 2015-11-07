@@ -13,9 +13,8 @@ import javafx.scene.text.Text;
  * Created by Xenocidist on 11/7/15.
  */
 public class Button extends StackPane{
-   private static final double size = 30;
 
-    public Button(String content) {
+    public Button(String content, double size) {
         Rectangle background = new Rectangle(size, size, Color.web("#638CA6", .3));
         background.setArcWidth(5);
         background.setArcHeight(5);
@@ -52,7 +51,7 @@ public class Button extends StackPane{
         });
     }
 
-    public Button(Node content, String translate){
+    public Button(Node content, String translate, double size){
         Rectangle background = new Rectangle(size, size, Color.web("#638CA6", .3));
         background.setArcWidth(5);
         background.setArcHeight(5);

@@ -85,15 +85,6 @@ public class Display {
 		divide.setArcWidth(2);
 		divide.setFill(Color.GRAY);
 
-		/*
-		inputs = new VBox();
-		inputs.getChildren().addAll(inputSlot, inputSlotTwo);
-		inputs.setTranslateX(WIDTH_BUFFER);
-		inputs.setTranslateY(HEIGHT_BUFFER);
-		inputs.getChildren().add(divide);
-		*/
-
-
 		/* options */
 		OptionsMenu options = new OptionsMenu(INPUT_WIDTH, 300);
 		options.setTranslateX(WIDTH_BUFFER);
@@ -181,23 +172,24 @@ public class Display {
 		Rectangle stack_pane_background = new Rectangle(INPUT_WIDTH, (30 + GAP)); /* background */
 		stack_pane_background.setArcHeight(5);
 		stack_pane_background.setArcWidth(5);
-		stack_pane_background.setFill(Color.web("#17A697", .7));
+		stack_pane_background.setFill(Color.LIGHTGREY);
+		stack_pane_background.setOpacity(.7);
 
 		HBox buttonPanel = new HBox();
 		buttonPanel.setSpacing(GAP);
 		buttonPanel.setMaxWidth(INPUT_WIDTH);
 
 		/* add button */
-		Button addButton = new Button("+");
+		Button addButton = new Button("+", 30);
 		addButton.setOnMouseClicked(e -> addAnotherSlot());
 
 		/* check/ button */
-		Button checkButton = new Button("✓");
+		Button checkButton = new Button("✓", 30);
 
 		/* /refresh button */
 		Image refresh =  new Image(getClass().getResourceAsStream("images/refresh.png"), 35, 35, true, true);
 		ImageView refreshView = new ImageView(refresh);
-		Button questionButton = new Button(refreshView, "refresh");
+		Button questionButton = new Button(refreshView, "refresh", 30);
 
 		/* menu button */
 		VBox bars = new VBox();
@@ -209,11 +201,12 @@ public class Display {
 			bar.setFill(Color.web("#404040"));
 			bars.getChildren().add(bar);
 		}
-		Button menuButton = new Button(bars, "menu");
+		Button menuButton = new Button(bars, "menu", 30);
 
 		buttonPanel.getChildren().addAll(checkButton, addButton, menuButton, questionButton);
 		pane.getChildren().addAll(stack_pane_background, buttonPanel);
 		buttonPanel.setAlignment(Pos.CENTER);
+		pane.setAlignment(Pos.CENTER_LEFT);
 		return pane;
 	}
 
@@ -229,17 +222,24 @@ public class Display {
 			/* first input slot*/
 			HBox inputSlot = new HBox();
 			inputSlot.setSpacing(GAP);
-			
+
+			Button addButton = new Button("-", 25);
+			addButton.setOnMouseClicked(e -> removeThisSlot(inputSlot));
+			addButton.setVisible(false);
+
 			/* start */
 			Inputs next = new Inputs("Mid-Way Point", INPUT_WIDTH);
-			Button addButton = new Button("-");
-			addButton.setOnMouseClicked(e -> removeThisSlot(inputSlot));
-			//inputSlot.getChildren().addAll(next, addButton);
-			inputs.getChildren().add(NUMBER_INPUTS + 1, next);
+			next.setOnMouseEntered(e -> {
+					addButton.setVisible(true);
+			});
+
+			inputSlot.getChildren().addAll(next, addButton);
+			inputs.getChildren().add(NUMBER_INPUTS + 1, inputSlot);
 			
 			NUMBER_INPUTS++;
+		} else {
+			logger.info("Max inputs added");
 		}
-		logger.info("Max inputs added");
 	}
 	
 	/**

@@ -16,7 +16,7 @@ public class UserInterface extends Application {
 	public void start(Stage s) throws Exception {
 		
 		/* icon */
-		s.getIcons().add(new Image(getClass().getResourceAsStream("globe.png")));
+		s.getIcons().add(new Image(getClass().getResourceAsStream("images/globe.png")));
 		
 		/* basics */	
 		s.setTitle("WPI MAPS");
