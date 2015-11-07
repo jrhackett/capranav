@@ -14,18 +14,9 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Launcher extends Application
+public class Parser
 {
-	private TableView directions = new TableView();
-	
-	public static void main(String [] args)
-	{
-		Graph graph = parsing();
-		
-		//Uncomment this to start the application
-		//launch(args);
-	}
-	
+
 	/*
 	 * Parses nodes and edges from nodes.txt and edges.txt
 	 * into a Graph, returns the graph
@@ -54,7 +45,8 @@ public class Launcher extends Application
             String name = s1.next();
             int x = Integer.parseInt(s1.next());
             int y = Integer.parseInt(s1.next());
-            Node node = new Node(name, x, y);
+            int z = 0; //TODO: change this value later
+            Node node = new Node(name, x, y, z);
             hashmap.put(i, node);
             i++;
 		}
@@ -89,7 +81,7 @@ public class Launcher extends Application
 			}
 			
 			double weight = Math.sqrt(Math.pow(node1.getX() - node2.getX(),2.0) + Math.pow(node1.getY() - node2.getY(), 2.0));
-			Edge edge = new Edge(node1, node2, weight);
+			Edge edge = new Edge(node1, weight); //TODO: check this...
 			
 			for(Node node : hashmap.values())
 			{
@@ -100,33 +92,5 @@ public class Launcher extends Application
 			}
 		}
 		return new Graph(hashmap);
-	}
-
-	/*
-	 * The JavaFX implementation to start the application
-	 */
-	@Override
-	public void start(Stage primaryStage) 
-	{
-		primaryStage.setTitle("NavWPI");
-		
-		directions.setEditable(true);
-		TableColumn firstNameCol = new TableColumn("Step");
-		TableColumn secondNameCol = new TableColumn("Directions");
-		firstNameCol.setMinWidth(50);
-		secondNameCol.setMinWidth(100);
-		
-		directions.getColumns().addAll(firstNameCol, secondNameCol);
-		
-		VBox vbox = new VBox();
-		vbox.setSpacing(8);
-		vbox.setPadding(new Insets(10, 10, 10, 10));
-		vbox.setPrefWidth(200);
-		vbox.getChildren().addAll(directions);
-		
-		Scene scene = new Scene(vbox, 1000, 700);
-		primaryStage.setScene(scene);
-		
-		primaryStage.show();
 	}
 }
