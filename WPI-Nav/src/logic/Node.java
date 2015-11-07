@@ -40,4 +40,9 @@ public class Node {
 		
 	}
 
+	public String toString()
+	{
+		return String.format("%s: %f, %f, %f\n", this.name, this.x_coord, this.y_coord, this.z_coord);
+	}
+
 }

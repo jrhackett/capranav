@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class AStarShortestPath {
-/*//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-					//below code is only for testing AStar, remove later//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	/*				//below code is only for testing AStar, remove later//
 	public static void main(String[] args) {
 
 		//Initialize arbitrary Nodes
@@ -71,7 +71,7 @@ public class AStarShortestPath {
 
 		
 
-		AstarSearch(n1, n13);
+		AStarSearch(n1, n13);
 
 
 	}
