@@ -37,16 +37,24 @@ public class OptionsMenu extends AnchorPane {
         /* handicap */
         final CheckBox cbh = new CheckBox("Handicap");
         cbh.setOnAction(event -> {
-            //Controller.handicap();
-            cbh.setTextFill(Color.GREEN);
+            if(cbh.isSelected()) {
+                cbh.setTextFill(Color.GREEN);
+            } else {
+                cbh.setTextFill(Color.BLACK);
+            }
         });
 
         /* weather */
         final CheckBox cbw = new CheckBox("Weather");
         cbw.setOnAction(event -> {
             //Controller.weather();
-            cbh.setTextFill(Color.GREEN);
+            if(cbw.isSelected()) {
+                cbw.setTextFill(Color.GREEN);
+            } else {
+                cbw.setTextFill(Color.BLACK);
+            }
         });
+
 
         panel.getChildren().addAll(cbh, cbw);
         return panel;

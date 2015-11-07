@@ -60,6 +60,22 @@ public class Button extends StackPane{
             ds.setColor(Color.LIGHTGRAY);
             this.setEffect(ds);
         });
+        this.setOnMousePressed(e -> {
+            background.setFill(Color.FORESTGREEN);
+            ds.setOffsetX(.3);
+            ds.setOffsetY(.3);
+            ds.setColor(Color.WHITE);
+            this.setEffect(ds);
+        });
+
+        this.setOnMouseReleased(e -> {
+            background.setFill(Color.web("#638CA6", .3));
+            background.setStroke(Color.web("#BFD4D9", .3));
+            ds.setOffsetX(.3);
+            ds.setOffsetY(.3);
+            ds.setColor(Color.LIGHTGRAY);
+            this.setEffect(ds);
+        });
     }
 
     /**
@@ -113,5 +129,23 @@ public class Button extends StackPane{
             ds.setColor(Color.LIGHTGRAY);
             this.setEffect(ds);
         });
+
+        this.setOnMousePressed(e -> {
+            background.setFill(Color.FORESTGREEN);
+            ds.setOffsetX(.3);
+            ds.setOffsetY(.3);
+            ds.setColor(Color.WHITE);
+            this.setEffect(ds);
+        });
+
+        this.setOnMouseReleased(e -> {
+            background.setFill(Color.web("#638CA6", .3));
+            background.setStroke(Color.web("#BFD4D9", .3));
+            ds.setOffsetX(.3);
+            ds.setOffsetY(.3);
+            ds.setColor(Color.LIGHTGRAY);
+            this.setEffect(ds);
+        });
     }
+
 }

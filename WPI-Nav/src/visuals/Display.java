@@ -1,5 +1,6 @@
 package visuals;
 
+import controller.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -30,7 +31,7 @@ public class Display {
 	private static final double BUTTON_SIZE = 26;
 	private static final Color BACKGROUND_COLOR = Color.web("a5adb0");
 	private static final double TABLE_WIDTH = 600;
-	private static final double TABLE_HEIGHT = 200;
+	private static final double TABLE_HEIGHT = 150;
 	private static final double INPUT_WIDTH = 160;
 
 	private static final int MAX_INPUTS = 3;
@@ -39,12 +40,17 @@ public class Display {
 	private Double height; 
 	
 	/* variables */
+	public Controller controller;
     private int NUMBER_INPUTS = 0;
+	private boolean MENU_VISIBLE = false;
 
     /* visuals */
 	private Scene scene;
 	private AnchorPane root;
 	private VBox inputs;
+	private	OptionsMenu options;
+	private	Rectangle divide;
+	private Map map;
 
 
 	/**
@@ -68,10 +74,11 @@ public class Display {
 	 * @param width
 	 * @param height
 	 */
-	public Display(Double width, Double height){
+	public Display(Double width, Double height, Controller controller){
         root = new AnchorPane();
         this.width = width;
         this.height = height;
+		this.controller = controller;
 	}
 
 	/**
@@ -93,18 +100,20 @@ public class Display {
 		StackPane input_panel = createInputsPane();
 
 		/* visual divide */
-		Rectangle divide = new Rectangle(160 + GAP + BUTTON_SIZE, 2);
+		this.divide = new Rectangle(160 + GAP + BUTTON_SIZE, 2);
 		divide.setArcHeight(2);
 		divide.setArcWidth(2);
 		divide.setFill(Color.GRAY);
+		divide.setVisible(false);
 
 		/* options */
-		OptionsMenu options = new OptionsMenu(INPUT_WIDTH, 300);
-		options.setTranslateX(WIDTH_BUFFER);
-		options.setTranslateY(HEIGHT_BUFFER + (MAX_INPUTS) * (BUTTON_SIZE + GAP) + 75); //this is some bad bad stuff
+		this.options = new OptionsMenu(INPUT_WIDTH, 300);
+		options.setVisible(false);
+		//options.setTranslateX(WIDTH_BUFFER);
+		//options.setTranslateY(HEIGHT_BUFFER + (MAX_INPUTS) * (BUTTON_SIZE + GAP) + 75); //this is some bad bad stuff
 
 		/* map */
-		Map map = new Map((height - TABLE_HEIGHT - GAP - 2 * HEIGHT_BUFFER), (width - GAP * 2 - BUTTON_SIZE - 160 - WIDTH_BUFFER * 2));
+		this.map = new Map((height - TABLE_HEIGHT - GAP - 2 * HEIGHT_BUFFER), (width - GAP * 2 - BUTTON_SIZE - 160 - WIDTH_BUFFER * 2), this.controller);
 		map.setTranslateX(WIDTH_BUFFER + GAP * 2 + 160 + BUTTON_SIZE);	
 		map.setTranslateY(HEIGHT_BUFFER);
 		
@@ -123,7 +132,7 @@ public class Display {
 		sp.setTranslateX(WIDTH_BUFFER);
 
 
-		side_panel.getChildren().addAll(button_panel, input_panel);
+		side_panel.getChildren().addAll(button_panel, input_panel, divide, options);
 		/* build */
         root.getChildren().addAll(side_panel, instructions, map);
         scene = new Scene(root, width, height, BACKGROUND_COLOR);
@@ -196,10 +205,11 @@ public class Display {
 		Button addButton = new Button("+", 30);
 		addButton.setOnMouseClicked(e -> addAnotherSlot());
 
-		/* check/ button */
+		/* check button */
 		Button checkButton = new Button("✓", 30);
+		checkButton.setOnMouseClicked(e -> findPaths());
 
-		/* /refresh button */
+		/* refresh button */
 		Image refresh =  new Image(getClass().getResourceAsStream("images/refresh.png"), 35, 35, true, true);
 		ImageView refreshView = new ImageView(refresh);
 		Button questionButton = new Button(refreshView, "refresh", 30);
@@ -215,6 +225,8 @@ public class Display {
 			bars.getChildren().add(bar);
 		}
 		Button menuButton = new Button(bars, "menu", 30);
+		menuButton.setOnMouseClicked(e -> showMenu());
+
 
 		buttonPanel.getChildren().addAll(checkButton, addButton, menuButton, questionButton);
 		pane.getChildren().addAll(stack_pane_background, buttonPanel);
@@ -223,6 +235,30 @@ public class Display {
 		return pane;
 	}
 
+	/**
+	 * This will kick everything off!
+	 * We can later change it so other things trigger this.
+	 * We also have to think about clearing things
+	 */
+	private void findPaths(){
+		String name = controller.getMapName();
+		//map.setMap(name);
+	}
+
+	/**
+	 *
+	 */
+	private void showMenu(){
+		if (!MENU_VISIBLE) {
+			this.options.setVisible(true);
+			this.divide.setVisible(true);
+			MENU_VISIBLE = true;
+		} else {
+			MENU_VISIBLE = false;
+			this.options.setVisible(false);
+			this.divide.setVisible(false);
+		}
+	}
 
 	/**
 	 * Adds another input slot to inputs
@@ -230,7 +266,7 @@ public class Display {
 	 * Event is logged
 	 */
 	private void addAnotherSlot(){
-		if (NUMBER_INPUTS < MAX_INPUTS){
+		if (controller.current_bonus_points < controller.max_bonus_points){
 			
 			/* first input slot*/
 			HBox inputSlot = new HBox();
@@ -247,9 +283,9 @@ public class Display {
 			});
 
 			inputSlot.getChildren().addAll(next, addButton);
-			inputs.getChildren().add(NUMBER_INPUTS + 1, inputSlot);
+			inputs.getChildren().add(controller.current_bonus_points + 1, inputSlot);
 			
-			NUMBER_INPUTS++;
+			controller.current_bonus_points++;
 			logger.info("Mid-Way Point Added");
 
 		} else {
@@ -262,7 +298,7 @@ public class Display {
 	 */
 	private void removeThisSlot(Node node){
 		inputs.getChildren().remove(node);
-		NUMBER_INPUTS--;
+		controller.current_bonus_points--;
 	}
 	
 	/**

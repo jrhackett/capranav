@@ -1,5 +1,6 @@
 package visuals;
 
+import controller.Controller;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -14,19 +15,22 @@ public class UserInterface extends Application {
 	private static final Double WINDOW_HEIGHT = 600.0;
 	
 	private Display myDisplay;
-	
+
 	@Override
 	public void start(Stage s) throws Exception {
 		
 		/* icon */
 		s.getIcons().add(new Image(getClass().getResourceAsStream("images/globe.png")));
 		
-		/* basic layout */
+		/* basic layoutgit */
 		s.setTitle("WPI MAPS");
 		s.setResizable(false);
-		
+
+		/* init controller */
+		Controller controller = new Controller();
+
 		/* setup */
-		myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT);
+		myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, controller);
 		//Struct Nodes = Controller.getNodes();
 		Scene display = myDisplay.Init(); //Nodes
 		s.setScene(display);
