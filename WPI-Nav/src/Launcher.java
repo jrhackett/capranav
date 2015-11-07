@@ -5,12 +5,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import logic.Edge;
+import logic.Graph;
+import logic.Node;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.Math;
 import java.util.HashMap;
 import java.util.Scanner;
-import logic.*;
 
 public class Launcher extends Application
 {
@@ -21,7 +23,7 @@ public class Launcher extends Application
 		Graph graph = parsing();
 		
 		//Uncomment this to start the application
-		launch(args);
+		//launch(args);
 	}
 	
 	/*

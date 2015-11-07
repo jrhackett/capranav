@@ -28,7 +28,7 @@ public class UserInterface extends Application {
 		s.setScene(display);
 		
 		/* css */
-		display.getStylesheets().add("visuals/style.css");
+		//display.getStylesheets().add("visuals/style.css");
 		s.show();	
 	}
 	
