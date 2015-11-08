@@ -63,9 +63,9 @@ public class Inputs extends ComboBox {
 		ObservableList<Node> data = FXCollections.observableArrayList();
 		
 		data.addAll(
-				new Node("Faraday", 1, 2, 0),
-				new Node("Campus Center", 3, 4, 0),
-				new Node("Student Center",  5, 4, 0));
+				new Node("Faraday", 1, 1, 2, 0),
+				new Node("Campus Center", 2, 3, 4, 0),
+				new Node("Student Center", 3, 5, 4, 0));
 		
 		return data;
 	}
