@@ -16,11 +16,13 @@ public class Parser
 	public static void main(String []args)
 	{
 		Parser parser = new Parser("nodes.json");
-		Node node1 = new Node("here", 1, 5, 6, 7);
+		/*Node node1 = new Node("here", 1, 5, 6, 7);
 		Node node2 = new Node("there", 2, 1, 2, 3);
 		Edge edge = new Edge(node2, 5);
-		node1.addEdge(edge, 0);
-		parser.toFile(node1);
+		node1.addEdge(edge);
+		parser.toFile(node1);*/
+		Graph graph = parser.fromFile();
+		graph.toString();
 		parser.close();
 	}
 

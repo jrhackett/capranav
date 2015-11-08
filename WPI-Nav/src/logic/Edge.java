@@ -5,8 +5,8 @@ public class Edge{
     public Node target;
 
     public Edge(Node targetNode, double weightVal){
-            target = targetNode;
-            weight = weightVal;
+            this.target = targetNode;
+            this.weight = weightVal;
     }
 
 }

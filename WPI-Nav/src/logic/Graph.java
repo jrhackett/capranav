@@ -30,7 +30,7 @@ public class Graph
 		{
 			System.out.println(node.toString());
 		}
-		return "done";
+		return null;
 	}
 	
 	/*

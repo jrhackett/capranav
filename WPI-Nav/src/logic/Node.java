@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.ArrayList;
+
 public class Node {
 
 	public String name;
@@ -10,7 +12,7 @@ public class Node {
 	public double g_scores;
 	public double h_scores;
 	public double f_scores = 0;
-	public Edge[] adjacencies = new Edge[10];
+	public ArrayList<Edge> adjacencies;
 	public Node parent;
 
 	public Node(String val, int id, double x, double y, double z) {
@@ -19,6 +21,7 @@ public class Node {
 		x_coord = x;
 		y_coord = y;
 		z_coord = z;
+		adjacencies = new ArrayList<Edge>();
 	}
 
 	public String getName() {
@@ -37,8 +40,8 @@ public class Node {
 		return x_coord;
 	}
 
-	public void addEdge(Edge edge, int pos) {
-		adjacencies[pos] = edge;
+	public void addEdge(Edge edge) {
+		adjacencies.add(edge);
 	}
 
 	public String toString()
