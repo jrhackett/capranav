@@ -21,36 +21,45 @@ import java.io.FileReader;
 
 public class Parser
 {
+	private String filename;
+	private JsonWriter writer;
+	private JsonStreamParser parser;
 
-	// Write a new node out to file (hard-coded filename in method -- could change)
-	public void toFile(Node node) {
-		//Create a JsonWriter to append the file with graph nodes
-		try {
-			JsonWriter writer = new JsonWriter(new FileWriter(new File("graph.json"), true));
-			new Gson().toJson(node, writer);	//fix this
+	public Parser(String name) {
+		filename = name;
+		try{
+			writer = new JsonWriter(new FileWriter(filename, true));
+			parser = new JsonStreamParser(new FileReader(filename));
 		}
-		catch(IOException e)
-		{
+		catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	// Write a new node out to file (hard-coded filename in method -- could change)
+	public void toFile(Node node) {
+		//Create a JsonWriter to append the file with graph nodes
+		new Gson().toJson(node, Node.class, writer);
+	}
+
 	// Generate HashMap of nodes from JSON file.
-	public HashMap<String, Node> fromFile() {
-		HashMap<String, Node> graph = new HashMap<String, Node>();
+	public HashMap<Integer, Node> fromFile() {
+		HashMap<Integer, Node> graph = new HashMap<Integer, Node>();
 		Gson gson = new Gson();
-		try {
-			JsonStreamParser parser = new JsonStreamParser(new FileReader("nodes.json"));
-			while(parser.hasNext()){
-				Node temp = gson.fromJson(parser.next(), Node.class);
-				graph.put(temp.id, temp); //Probably not valid.. need to see Node implementation
-				//Puts Node in HashMap using ID as index
-			}
-			return graph;
+		Node temp;
+		while(parser.hasNext()){
+			temp = gson.fromJson(parser.next(), Node.class);
+			graph.put(temp.id, temp); //Add Node to the map under its ID
 		}
-		catch (FileNotFoundException e) {
-			System.out.println("nodes.json file not found.");	//change to log message
-			return graph; //On File error, returns an empty graph
+		return graph;
+	}
+
+	public void closeWriter() {
+		try {
+			writer.close();
+		}
+		catch(IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -85,7 +94,7 @@ public class Parser
             int x = Integer.parseInt(s1.next());
             int y = Integer.parseInt(s1.next());
             int z = 0; //TODO: change this value later
-            Node node = new Node(name, x, y, z);
+            Node node = new Node(name, 7, x, y, z);
             hashmap.put(i, node);
             i++;
 		}

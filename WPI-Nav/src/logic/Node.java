@@ -3,6 +3,7 @@ package logic;
 public class Node {
 
 	public String name;
+	public int    id;
 	public double x_coord;
 	public double y_coord;
 	public double z_coord;
@@ -12,8 +13,9 @@ public class Node {
 	public Edge[] adjacencies;
 	public Node parent;
 
-	public Node(String val, double x, double y, double z) {
+	public Node(String val, int id, double x, double y, double z) {
 		name = val;
+		this.id = id;
 		x_coord = x;
 		y_coord = y;
 		z_coord = z;
