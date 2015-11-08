@@ -16,32 +16,32 @@ public class Node {
 	public Node parent;
 
 	public Node(String val, int id, double x, double y, double z) {
-		name = val;
+		this.name = val;
 		this.id = id;
-		x_coord = x;
-		y_coord = y;
-		z_coord = z;
-		adjacencies = new ArrayList<Edge>();
+		this.x_coord = x;
+		this.y_coord = y;
+		this.z_coord = z;
+		this.adjacencies = new ArrayList<Edge>();
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	public double getX() {
-		return x_coord;
+		return this.x_coord;
 	}
 	
 	public double getY() {
-		return x_coord;
+		return this.x_coord;
 	}
 	
 	public double getZ() {
-		return x_coord;
+		return this.x_coord;
 	}
 
 	public void addEdge(Edge edge) {
-		adjacencies.add(edge);
+		this.adjacencies.add(edge);
 	}
 
 	public String toString()
