@@ -7,12 +7,19 @@ import com.google.gson.stream.*;
 import java.io.FileWriter;
 import java.io.FileReader;
 
+/* A Parser object is used to do translations from JSON files and Nodes.
+ *
+ * NOTES
+ * Be sure to use "nodes.json" as the filename upon instantiation.
+ * DO NOT FORGET to call Parser.close() when done with the object; otherwise, changes will not be written to file
+ */
 public class Parser
 {
-	private String filename;
 	private JsonWriter writer;
 	private JsonStreamParser parser;
 
+	//TODO Remove when done testing
+	//Just for testing Parser class
 	public static void main(String []args)
 	{
 		Parser parser = new Parser("nodes.json");
@@ -24,8 +31,7 @@ public class Parser
 		parser.close();
 	}
 
-	public Parser(String name) {
-		filename = name;
+	public Parser(String filename) {
 		try{
 			writer = new JsonWriter(new FileWriter(filename, true));
 			parser = new JsonStreamParser(new FileReader(filename));
@@ -35,14 +41,13 @@ public class Parser
 		}
 	}
 
-	// Write a new node out to file (hard-coded filename in method -- could change)
+	// Write a new Node out to file
 	public void toFile(Node node) {
 		//Create a JsonWriter to append the file with graph nodes
 		new Gson().toJson(node, Node.class, writer);
-		System.out.println(new Gson().toJson(node, Node.class));
 	}
 
-	// Generate HashMap of nodes from JSON file.
+	// Generate Graph of nodes from JSON file.
 	public Graph fromFile() {
 		HashMap<Integer, Node> graph = new HashMap<Integer, Node>();
 		Gson gson = new Gson();
@@ -54,6 +59,7 @@ public class Parser
 		return new Graph(graph);
 	}
 
+	//Close JsonWriter (Necessary to flush changes to file)
 	public void close() {
 		try {
 			writer.close();
