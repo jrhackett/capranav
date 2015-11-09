@@ -20,12 +20,10 @@ public class Map extends StackPane{
 	private double width;
 
 	/* Data Structures */
-	private HashMap<String, Node>  NodeNameToNode; //this should be ID
-
-	/* below are old structures - trying to do it over better */
-	private Node[] NodeList;
-	private HashMap<Integer, Node> idToNode;
+	private HashMap<Integer, Node>  IDToNode; //no need to even have this here?
 	private HashMap<Integer, Circle> itToVisual;
+
+	private Node[] NodeList; // current structure -> switching to HashMap
 	private Controller controller;
 
 	/* Visuals */
@@ -203,8 +201,8 @@ public class Map extends StackPane{
 		/* assuming you put down 'normal' x - y cooridinates, now must translate into display x - y */
 		/* also assuming we know the correct height etc */
 		for (Node n : NodeList){
-			double x = (height - n.x_coord) * 15;  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
-			double y = (width - n.y_coord) * 15;
+			double x = (height - n.getX()) * 15;  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
+			double y = (width - n.getY()) * 15;
 
 			Circle circle = new Circle(x - 2.5, y - 2.5, 5, Color.DARKGRAY);
 			circle.setOnMouseEntered(e -> {
