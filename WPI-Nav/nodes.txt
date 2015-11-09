@@ -1,3 +1,0 @@
-here 5 6 0
-there 3 4 0
-hello 7 6 0

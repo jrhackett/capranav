@@ -45,7 +45,4 @@ Tucker Martin
 Josh Friscia
 
 
-## License
-
-TODO: Write license
 

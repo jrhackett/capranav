@@ -92,11 +92,11 @@ public class AStarShortestPath {
 				new Comparator<Node>() { // compare nodes based on comparator function
 					@Override
 					public int compare(Node o1, Node o2) { // compare two nodes based on f_scores
-						if (o1.f_scores > o2.f_scores) {
+						if (o1.getF() > o2.getF()) {
 							return 1; // return 1 if i is greater than j
 						}
 
-						else if (o1.f_scores < o2.f_scores) {
+						else if (o1.getF() < o2.getF()) {
 							return -1; // return -1 if i is less than j
 						}
 
@@ -108,7 +108,7 @@ public class AStarShortestPath {
 		);
 
 		// cost from start
-		start.g_scores = 0;
+		start.setG(0);
 
 		queue.add(start); // add the starting Node to the priority queue
 
@@ -127,30 +127,30 @@ public class AStarShortestPath {
 			explored.add(current);
 
 			// check if current value is the destination value
-			if (current.name.equals(destination.name)) {
+			if (current.getName().equals(destination.getName())) {
 				found = true; // if current Node = destination Node, set found
 								// boolean to true and exit while loop when done
 			}
 
 			// check children of current Node
-			for (Edge e : current.adjacencies) {
-				Node child = e.target; // set child Node = to edge of current Node
+			for (Edge e : current.getAdjacencies()) {
+				Node child = e.getTarget(); // set child Node = to edge of current Node
 				double movement_cost = getCost(current, e); // obtain movement_cost from edge
-				double temp_g_scores = current.g_scores + movement_cost; // calculate g_scores
+				double temp_g_scores = current.getG() + movement_cost; // calculate g_scores
 				double temp_h_scores = getHeuristic(child, destination); // get heuristic cost from current node and destination node
 				double temp_f_scores = temp_g_scores + temp_h_scores; // get f score
 
 				// if child has been evaluated already and the new f_score is higher, skip
-				if ((explored.contains(child)) && (temp_f_scores >= child.f_scores)) {
+				if ((explored.contains(child)) && (temp_f_scores >= child.getF())) {
 					continue; // continue through for loop
 				}
 
 				// if child is not in the queue or the new f_score is lower:
-				else if ((!queue.contains(child)) || (temp_f_scores < child.f_scores)) {
-					child.parent = current; // Set child's parent to the current Node to establish path
-					child.g_scores = temp_g_scores; // update child's g_scores
-					child.h_scores = temp_h_scores; // update childs h_scores
-					child.f_scores = temp_f_scores; // update childs f_scores
+				else if ((!queue.contains(child)) || (temp_f_scores < child.getF())) {
+					child.setParent(current); // Set child's parent to the current Node to establish path
+					child.setG(temp_g_scores); // update child's g_scores
+					child.setH(temp_h_scores); // update childs h_scores
+					child.setF(temp_f_scores); // update childs f_scores
 
 					// remove child from queue to avoid doubles
 					if (queue.contains(child)) {
@@ -175,11 +175,11 @@ public class AStarShortestPath {
 	 * @return the movement cost between two adjacent nodes
 	 */
 	public static double getCost(Node currentNode, Edge adjacentEdge) {
-		Node child = adjacentEdge.target;
-		double multiplier = adjacentEdge.weight;
+		Node child = adjacentEdge.getTarget();
+		double multiplier = adjacentEdge.getWeight();
 		double cost = Math.sqrt(
-				Math.pow((child.x_coord - currentNode.x_coord), 2) + Math.pow((child.y_coord - currentNode.y_coord), 2)
-						+ Math.pow((child.z_coord - currentNode.z_coord), 2));
+				Math.pow((child.getX() - currentNode.getX()), 2) + Math.pow((child.getY() - currentNode.getY()), 2)
+						+ Math.pow((child.getZ() - currentNode.getZ()), 2));
 		cost *= multiplier;
 		return cost;
 	}
@@ -191,9 +191,9 @@ public class AStarShortestPath {
 	 * @return heuristic value, AKA as the crow flies distance between Nodes
 	 */
 	public static double getHeuristic(Node currentNode, Node endNode) {
-		double heuristic = Math.sqrt(Math.pow((endNode.x_coord - currentNode.x_coord), 2)
-				+ Math.pow((endNode.y_coord - currentNode.y_coord), 2)
-				+ Math.pow((endNode.z_coord - currentNode.z_coord), 2));
+		double heuristic = Math.sqrt(Math.pow((endNode.getX() - currentNode.getX()), 2)
+				+ Math.pow((endNode.getY() - currentNode.getY()), 2)
+				+ Math.pow((endNode.getZ() - currentNode.getZ()), 2));
 		return heuristic;
 	}
 
@@ -206,7 +206,7 @@ public class AStarShortestPath {
 	public static List<Node> printPath(Node target) {
 		List<Node> path = new ArrayList<Node>();
 
-		for (Node node = target; node != null; node = node.parent) {
+		for (Node node = target; node != null; node = node.getParent()) {
 			path.add(node);
 		}
 		Collections.reverse(path);
