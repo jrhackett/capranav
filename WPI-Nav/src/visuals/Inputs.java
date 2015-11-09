@@ -1,23 +1,25 @@
 package visuals;
 
-import logic.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.util.Callback;
+import logic.Node;
 
+/**
+ * Currently using a 'simple' ComboBox.
+ * Looking into alternate/advanced/accurate options
+ */
 public class Inputs extends ComboBox {
-	private final static int WIDTH = 160;
+	private double WIDTH;
 	private String initial;
 	int rank;
 
 	@SuppressWarnings("unchecked") /* probably should remove this */
-	public Inputs(String s){
+	public Inputs(String s,double WIDTH ){
 		super();
+		this.WIDTH = WIDTH;
 		initial = s;
 		this.setMaxWidth(WIDTH);
 		this.setMinWidth(WIDTH);
@@ -26,9 +28,8 @@ public class Inputs extends ComboBox {
 			
 			@Override
 			public void changed(ObservableValue<? extends Node> arg0, Node oldValue, Node newValue) {
-				// TODO Auto-generated method stub
 				if (oldValue != null){
-				System.out.print(oldValue.getName() + "->");
+					System.out.print(oldValue.getName() + "->");
 				}
 				System.out.println(newValue.getName());
 			
