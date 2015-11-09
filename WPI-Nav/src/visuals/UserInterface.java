@@ -31,6 +31,7 @@ public class UserInterface extends Application {
 
 		/* setup */
 		myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, controller);
+
 		//Struct Nodes = Controller.getNodes();
 		Scene display = myDisplay.Init(); //Nodes
 		s.setScene(display);
