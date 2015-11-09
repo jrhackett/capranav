@@ -30,7 +30,7 @@ public class Display {
 	private static final double GAP = 5.5;
 	private static final double BUTTON_SIZE = 26;
 	private static final Color BACKGROUND_COLOR = Color.web("a5adb0");
-	private static final double TABLE_WIDTH = 600;
+	private static double TABLE_WIDTH;
 	private static final double TABLE_HEIGHT = 150;
 	private static final double INPUT_WIDTH = 160;
 
@@ -59,6 +59,7 @@ public class Display {
 	 */
 	private static ObservableList<Instructions> getInstructionsTest(){
 		ObservableList<Instructions> data = FXCollections.observableArrayList();
+
 
 		/* Here we need an array/struct with strings of instructions in it */
 		for (int i = 0; i < 10; i++){
@@ -100,7 +101,7 @@ public class Display {
 		StackPane input_panel = createInputsPane();
 
 		/* visual divide */
-		this.divide = new Rectangle(160 + GAP + BUTTON_SIZE, 2);
+		this.divide = new Rectangle(INPUT_WIDTH + GAP + BUTTON_SIZE, 2);
 		divide.setArcHeight(2);
 		divide.setArcWidth(2);
 		divide.setFill(Color.GRAY);
@@ -113,11 +114,12 @@ public class Display {
 		//options.setTranslateY(HEIGHT_BUFFER + (MAX_INPUTS) * (BUTTON_SIZE + GAP) + 75); //this is some bad bad stuff
 
 		/* map */
-		this.map = new Map((height - TABLE_HEIGHT - GAP - 2 * HEIGHT_BUFFER), (width - GAP * 2 - BUTTON_SIZE - 160 - WIDTH_BUFFER * 2), this.controller);
-		map.setTranslateX(WIDTH_BUFFER + GAP * 2 + 160 + BUTTON_SIZE);
+		this.map = new Map( (width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER), this.controller);
+		map.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
 		map.setTranslateY(HEIGHT_BUFFER);
 
 		/* instructions */
+		this.TABLE_WIDTH = (width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
 		TableView<Instructions> instructions = createInstructionsTable();
 		instructions.setTranslateX(width - TABLE_WIDTH - WIDTH_BUFFER);
 		instructions.setTranslateY(height - TABLE_HEIGHT - HEIGHT_BUFFER);
@@ -241,8 +243,9 @@ public class Display {
 	 * We also have to think about clearing things
 	 */
 	private void findPaths(){
-		String name = controller.getMapName();
+		//String name = controller.getMapName();
 		//map.setMap(name);
+		map.drawPath();
 	}
 
 	/**

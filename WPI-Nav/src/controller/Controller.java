@@ -5,7 +5,7 @@ import logic.Node;
 import java.util.ArrayList;
 
 /**
- * Created by Xenocidist on 11/7/15.
+ * This class will communicate between the logic and the data to the visuals (and from)
  */
 public class  Controller {
     /* variables */
@@ -38,8 +38,38 @@ public class  Controller {
 
     }
 
-    public static ArrayList<Node> getPathNodes() {
-        return null;
+    public static Node[] getMapNodes(String MAP_NAME) {
+        Node n1 = new Node("Institute", 0, 0, 0);
+        Node n2 = new Node("RecCenter", 0, 10, 0);
+        Node n3 = new Node("Field", 0, 20, 0);
+        Node n4 = new Node("Harrington", 3, 16, 0);
+        Node n5 = new Node("Quad", 5, 5, 0);
+        Node n6 = new Node("Morgan", 6, 1, 0);
+        Node n7 = new Node("Riley", 11, 2, 0);
+        Node n8 = new Node("Higgins La bs", 10, 13, 0);
+        Node n9 = new Node("Campus Center", 10, 20, 0);
+        Node n10 = new Node("Fountain", 16, 17, 0);
+        Node n11 = new Node("Alden", 16, 3, 0);
+        Node n12 = new Node("West Street", 18, 8, 0);
+        Node n13 = new Node("Library", 20, 20, 0);
+
+        Node[] nodes = {n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13};
+        return nodes;
+    }
+
+    public String getDefaultMapName() {
+        return "wpi-campus-map";
+    }
+
+    public Node[] getPathNodes(){
+        Node n8 = new Node("Higgins La bs", 10, 13, 0);
+        Node n9 = new Node("Campus Center", 10, 20, 0);
+        Node n10 = new Node("Fountain", 16, 17, 0);
+        Node n11 = new Node("Alden", 16, 3, 0);
+        Node n12 = new Node("West Street", 18, 8, 0);
+        Node n13 = new Node("Library", 20, 20, 0);
+        Node[] nodes = {n8, n9, n10, n11, n12, n13};
+        return nodes;
     }
 
 
