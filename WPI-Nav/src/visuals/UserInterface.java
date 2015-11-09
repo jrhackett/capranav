@@ -25,7 +25,7 @@ public class UserInterface extends Application {
 		s.setTitle("WPI MAPS");
 		s.setResizable(false);
 		
-		/* setup */
+		/* setup UI */
 		myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT);
 		//Struct Nodes = Controller.getNodes();
 		Scene display = myDisplay.Init(); //Nodes
