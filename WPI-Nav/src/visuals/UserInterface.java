@@ -15,6 +15,7 @@ public class UserInterface extends Application {
 	private static final Double WINDOW_HEIGHT = 600.0;
 
 	private Display myDisplay;
+	private Controller controller;
 
 	@Override
 	public void start(Stage s) throws Exception {
@@ -27,10 +28,10 @@ public class UserInterface extends Application {
 		s.setResizable(false);
 
 		/* init controller */
-		Controller controller = new Controller();
+		this.controller = new Controller();
 
 		/* setup */
-		myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, controller);
+		this.myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, controller);
 
 		//Struct Nodes = Controller.getNodes();
 		Scene display = myDisplay.Init(); //Nodes

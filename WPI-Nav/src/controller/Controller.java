@@ -9,9 +9,11 @@ import java.util.ArrayList;
  */
 public class  Controller {
     /* variables */
-    public Node[][] start_stops = new Node[5][2];
-    public int current_bonus_points = 0;
-    public int max_bonus_points = 3;
+    public String start;
+    public String destination;
+    public String[] mid_way_points;
+    public int current_mid_way_points = 0;
+    public int max_mid_way_points = 3;
 
 
 
