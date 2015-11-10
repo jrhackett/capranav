@@ -1,5 +1,6 @@
 package logic;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import com.google.gson.*;
@@ -8,46 +9,26 @@ import java.io.FileWriter;
 import java.io.FileReader;
 
 /* A Parser object is used to do translations from JSON files and Nodes.
- *
- * NOTES
  * Be sure to use "nodes.json" as the filename upon instantiation.
- * DO NOT FORGET to call Parser.close() when done with the object; otherwise, changes will not be written to file
  */
 public class Parser
 {
+	private String filename;        //File for reading/writing Nodes
 	private JsonWriter writer;
 	private JsonStreamParser parser;
-
-	//TODO Remove when done testing
-	//Just for testing Parser class
-    //Note must close parser after toFile but NOT after fromFile
-	public static void main(String []args) {
-		Parser parser = new Parser("nodes.json");
-		/*Node node1 = new Node("here", 1, 5, 6, 7);
-		Node node2 = new Node("there", 2, 1, 2, 3);
-		Edge edge = new Edge(node2, 5);
-		node1.addEdge(edge);
-		parser.toFile(node1);
-		parser.toFile(node2);*/
-
-		Graph graph = parser.fromFile();
-		graph.toString();
-
-		//parser.close();
-	}
 
     /**
      * Parser is used to communicate between the database and the rest of the program
      * @param filename: filename of the database to observe
      * @return void
      */
-	public Parser(String filename) {
-		try{
-			this.writer = new JsonWriter(new FileWriter(filename, true));
+	public Parser(String name) {
+		this.filename = name;
+		try {
 			this.parser = new JsonStreamParser(new FileReader(filename));
 		}
-		catch(IOException e) {
-			e.printStackTrace();
+		catch (FileNotFoundException e) {
+			System.out.println("nodes.json doesn't exist (opened for reading)");
 		}
 	}
 
@@ -57,13 +38,18 @@ public class Parser
      * @return void
      */
 	public void toFile(Node node) {
-		//Create a JsonWriter to append the file with graph nodes
-		new Gson().toJson(node, Node.class, writer);
-		System.out.println(new Gson().toJson(node, Node.class));
+		try { //Create a JsonWriter to append the file with graph nodes
+			writer = new JsonWriter(new FileWriter(filename, true));
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		new Gson().toJson(node, Node.class, writer); //Write to file
+		close(); //Close the writer
 	}
 
     /**
-     * fromFile is used to read in all Nodes from database file nodes.json
+     * fromFile reads in all Nodes from database file nodes.json
      * @param void
      * @return Graph - returns Graph representing contents of nodes.json
      */
@@ -80,10 +66,12 @@ public class Parser
 
     /**
      * close is used to close the FileWriter
+	 * Class methods handle opening/closing of FileWriter
+	 * DO NOT (try to) CALL THIS OUTSIDE OF PARSER CLASS
      * @param void
      * @return void
      */
-	public void close() {
+	private void close() {
 		try {
 			this.writer.close();
 		}
