@@ -277,8 +277,8 @@ public class Display {
 
 
 	private void sendEmail(){
-		TextInputDialog dialog = new TextInputDialog("Enter Email Here");
-		dialog.setTitle("Send Directions via Email");
+		TextInputDialog dialog = new TextInputDialog("Type Here");
+		dialog.setTitle("WPI Navigational App");
 		dialog.setHeaderText("Directions will be sent to your email");
 		dialog.setContentText("Please enter your email:");
 
