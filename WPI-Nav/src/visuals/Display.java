@@ -36,14 +36,11 @@ public class Display {
 	private static final double TABLE_HEIGHT = 150;
 	private static final double INPUT_WIDTH = 160;
 
-	private static final int MAX_INPUTS = 3;
-
 	private Double width;
 	private Double height;
 
 	/* variables */
 	public Controller controller;
-    private int NUMBER_INPUTS = 0;
 	private boolean MENU_VISIBLE = false;
 
     /* visuals */
@@ -153,7 +150,7 @@ public class Display {
 		StackPane pane = new StackPane();
 
 		/* background */
-		Rectangle background = new Rectangle(INPUT_WIDTH, (NUMBER_INPUTS + 2) * (30 + GAP), Color.web("#638CA6", .5));
+		Rectangle background = new Rectangle(INPUT_WIDTH, (controller.current_mid_way_points + 2) * (30 + GAP), Color.web("#638CA6", .5));
 		background.setArcWidth(5);
 		background.setArcHeight(5);
 		background.setStroke(Color.web("#BFD4D9", .5));
@@ -298,7 +295,7 @@ public class Display {
 	 * Event is logged
 	 */
 	private void addAnotherSlot(){
-		if (controller.current_bonus_points < controller.max_bonus_points){
+		if (controller.current_mid_way_points < controller.max_mid_way_points){
 
 			/* first input slot*/
 			HBox inputSlot = new HBox();
@@ -315,9 +312,9 @@ public class Display {
 			});
 
 			inputSlot.getChildren().addAll(next, addButton);
-			inputs.getChildren().add(controller.current_bonus_points + 1, inputSlot);
+			inputs.getChildren().add(controller.current_mid_way_points + 1, inputSlot);
 
-			controller.current_bonus_points++;
+			controller.current_mid_way_points++;
 			logger.info("Mid-Way Point Added");
 
 		} else {
@@ -330,7 +327,7 @@ public class Display {
 	 */
 	private void removeThisSlot(Node node){
 		inputs.getChildren().remove(node);
-		controller.current_bonus_points--;
+		controller.current_mid_way_points--;
 	}
 	
 	/**
