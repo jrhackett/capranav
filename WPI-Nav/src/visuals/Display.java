@@ -18,6 +18,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javafx.scene.control.TextInputDialog;
+import java.util.Optional;
 
 
 public class Display {
@@ -216,6 +218,7 @@ public class Display {
 		ImageView refreshView = new ImageView(refresh);
 		Button questionButton = new Button(refreshView, "refresh", 30);
 
+
 		/* menu button */
 		VBox bars = new VBox();
 		bars.setSpacing(3);
@@ -229,12 +232,17 @@ public class Display {
 		Button menuButton = new Button(bars, "menu", 30);
 		menuButton.setOnMouseClicked(e -> showMenu());
 
+		/* email button */
+		Button emailButton = new Button("@", 30);
+		emailButton.setOnMouseClicked(e -> sendEmail());
 
-		buttonPanel.getChildren().addAll(checkButton, addButton, menuButton, questionButton);
+
+		buttonPanel.getChildren().addAll(checkButton, addButton, menuButton, questionButton, emailButton);
 		pane.getChildren().addAll(stack_pane_background, buttonPanel);
 		buttonPanel.setAlignment(Pos.CENTER);
 		pane.setAlignment(Pos.CENTER_LEFT);
 		return pane;
+
 	}
 
 	/**
@@ -263,6 +271,27 @@ public class Display {
 		}
 	}
 
+	/**
+	 *
+	 */
+
+
+	private void sendEmail(){
+		TextInputDialog dialog = new TextInputDialog("Enter Email Here");
+		dialog.setTitle("Send Directions via Email");
+		dialog.setHeaderText("Directions will be sent to your email");
+		dialog.setContentText("Please enter your email:");
+
+	// Traditional way to get the response value.
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+			System.out.println("Your name: " + result.get());
+		}
+
+	// The Java 8 way to get the response value (with lambda expression).
+		result.ifPresent(name -> System.out.println("Your name: " + name));
+
+	}
 	/**
 	 * Adds another input slot to inputs
 	 * If there are already  MAX_INPUTS - do nothing
