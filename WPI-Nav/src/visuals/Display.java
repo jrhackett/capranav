@@ -282,14 +282,14 @@ public class Display {
 		dialog.setHeaderText("Directions will be sent to your email");
 		dialog.setContentText("Please enter your email:");
 
-	// Traditional way to get the response value.
+	// Traditional way
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
-			System.out.println("Your name: " + result.get());
+			System.out.println("Email: " + result.get());
 		}
 
-	// The Java 8 way to get the response value (with lambda expression).
-		result.ifPresent(name -> System.out.println("Your name: " + name));
+	// The Java 8 way
+		result.ifPresent(name -> System.out.println("Email: " + name));
 
 	}
 	/**
