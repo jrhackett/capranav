@@ -55,8 +55,19 @@ public class OptionsMenu extends AnchorPane {
             }
         });
 
+        /* email */
+        final CheckBox cxk = new CheckBox("Send Email");
+        cxk.setOnAction(event -> {
+            if(cxk.isSelected()) {
+                cxk.setTextFill(Color.GREEN);
+            } else {
+                cxk.setTextFill(Color.BLACK);
+            }
+        });
 
-        panel.getChildren().addAll(cbh, cbw);
+
+
+        panel.getChildren().addAll(cbh, cbw, cxk);
         return panel;
     }
 

@@ -48,7 +48,7 @@ public class  Controller {
         Node n5 = new Node("Quad",4, 5, 5, 0);
         Node n6 = new Node("Morgan",5, 6, 1, 0);
         Node n7 = new Node("Riley",6, 11, 2, 0);
-        Node n8 = new Node("Higgins La bs",7, 10, 13, 0);
+        Node n8 = new Node("Higgins Labs",7, 10, 13, 0);
         Node n9 = new Node("Campus Center",8, 10, 20, 0);
         Node n10 = new Node("Fountain",9, 16, 17, 0);
         Node n11 = new Node("Alden",10, 16, 3, 0);
@@ -64,7 +64,7 @@ public class  Controller {
     }
 
     public Node[] getPathNodes(){
-        Node n8 = new Node("Higgins La bs",7, 10, 13, 0);
+        Node n8 = new Node("Higgins Labs",7, 10, 13, 0);
         Node n9 = new Node("Campus Center",8, 10, 20, 0);
         Node n10 = new Node("Fountain",9, 16, 17, 0);
         Node n11 = new Node("Alden",10, 16, 3, 0);
@@ -73,6 +73,8 @@ public class  Controller {
         Node[] nodes = {n8, n9, n10, n11, n12, n13};
         return nodes;
     }
+
+
 
 
     /* function that gets a path, given two+ nodes */
