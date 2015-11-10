@@ -67,7 +67,7 @@ public class Node {
 	 * @return double: y-coordinate of the node
 	 */
 	public double getY() {
-		return this.x_coord;
+		return this.y_coord;
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class Node {
 	 * @return double: z-coordinate of the node
 	 */
 	public double getZ() {
-		return this.x_coord;
+		return this.z_coord;
 	}
 
 	/**
@@ -157,5 +157,70 @@ public class Node {
 	 * @return String: a string describing the node
 	 */
 	public String toString() { return String.format("%s: %f, %f, %f\n", this.name, this.x_coord, this.y_coord, this.z_coord);}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((adjacencies == null) ? 0 : adjacencies.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(f_scores);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(g_scores);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(h_scores);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + id;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+		temp = Double.doubleToLongBits(x_coord);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(y_coord);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(z_coord);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Node other = (Node) obj;
+		if (adjacencies == null) {
+			if (other.adjacencies != null)
+				return false;
+		} else if (!adjacencies.equals(other.adjacencies))
+			return false;
+		if (Double.doubleToLongBits(f_scores) != Double.doubleToLongBits(other.f_scores))
+			return false;
+		if (Double.doubleToLongBits(g_scores) != Double.doubleToLongBits(other.g_scores))
+			return false;
+		if (Double.doubleToLongBits(h_scores) != Double.doubleToLongBits(other.h_scores))
+			return false;
+		if (id != other.id)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (parent == null) {
+			if (other.parent != null)
+				return false;
+		} else if (!parent.equals(other.parent))
+			return false;
+		if (Double.doubleToLongBits(x_coord) != Double.doubleToLongBits(other.x_coord))
+			return false;
+		if (Double.doubleToLongBits(y_coord) != Double.doubleToLongBits(other.y_coord))
+			return false;
+		if (Double.doubleToLongBits(z_coord) != Double.doubleToLongBits(other.z_coord))
+			return false;
+		return true;
+	}
 
 }
