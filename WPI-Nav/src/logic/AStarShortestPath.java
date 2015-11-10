@@ -1,12 +1,12 @@
 package logic;
 
-import java.util.PriorityQueue;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.List;
-import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Set;
 
 public class AStarShortestPath {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -191,9 +191,13 @@ public class AStarShortestPath {
 	 * @return heuristic value, AKA as the crow flies distance between Nodes
 	 */
 	public static double getHeuristic(Node currentNode, Node endNode) {
-		double heuristic = Math.sqrt(Math.pow((endNode.getX() - currentNode.getX()), 2)
-				+ Math.pow((endNode.getY() - currentNode.getY()), 2)
-				+ Math.pow((endNode.getZ() - currentNode.getZ()), 2));
+		double x1 = currentNode.getX();
+		double x2 = endNode.getX();
+		double y1 = currentNode.getY();
+		double y2 = endNode.getY();
+		double z1 = currentNode.getZ();
+		double z2 = endNode.getZ();
+		double heuristic = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
 		return heuristic;
 	}
 
