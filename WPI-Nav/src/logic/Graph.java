@@ -3,7 +3,15 @@ import java.util.HashMap;
 
 public class Graph 
 {
-	HashMap<Integer, Node> nodes;
+	//MG: Changed to private, did this break anything?
+	private HashMap<Integer, Node> nodes;
+
+	/**
+	 * Simple constructor : Empty Hashmap
+	 */
+	public Graph() {
+		this.nodes = new HashMap<Integer, Node>();
+	}
 
 	/**
 	 * Graphs are used to represent collections of Nodes
@@ -27,5 +35,9 @@ public class Graph
 			System.out.println(node.toString());
 		}
 		return null;
+	}
+
+	public HashMap<Integer, Node> getNodes() {
+		return nodes;
 	}
 }
