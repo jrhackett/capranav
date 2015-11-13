@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -83,7 +82,7 @@ public class AStarShortestPath {
 	 * @param destination: final Node
 	 * @return void - path 
 	 */
-	public static void AStarSearch(Node start, Node destination) {
+	public static ArrayList<Node> AStarSearch(Node start, Node destination) {
 
 		Set<Node> explored = new HashSet<Node>(); // Create Set for explored
 													// nodes
@@ -164,9 +163,12 @@ public class AStarShortestPath {
 
 		}
 	
-		List<Node> path = printPath(destination); //create a list of Nodes, tracing from the destination Node back to the start
+		ArrayList<Node> path = printPath(destination); // create a list of
+														// Nodes, tracing from
+														// the destination Node
+														// back to the start
 		System.out.println("Path: " + path); //print out the List of Nodes from start to finish
-
+		return path;
 	}
 	/**
 	 * getCost calculates the weighted distance cost between a Node and one of its given edges based on the coordinate values of the Nodes
@@ -207,8 +209,8 @@ public class AStarShortestPath {
 	 * @return path - a List of Nodes from start to finish
 	 * @warning only run inside AStarSearch
 	 */
-	public static List<Node> printPath(Node target) {
-		List<Node> path = new ArrayList<Node>();
+	public static ArrayList<Node> printPath(Node target) {
+		ArrayList<Node> path = new ArrayList<Node>();
 
 		for (Node node = target; node != null; node = node.getParent()) {
 			path.add(node);
