@@ -56,12 +56,9 @@ public class MapBuilderController extends   Application {
         //TODO: On load, get information:
         loadMapsFromFile();
         loadNodesFromFile();
-        //TODO: ArrayList<Maps>
-        //TODO: HashMap<Key,Nodes>
 
 
 		/* basic layout */
-        //s.initStyle(StageStyle.UNDECORATED);  // <-- removes the top part of the app close/open
         s.setResizable(false);
 
 		/* setup */
@@ -80,11 +77,8 @@ public class MapBuilderController extends   Application {
 
         //garb tester:
         this.maps = new HashMap<>();
-
-        maps.put(0, new Map (0,1,2,"Campus Center","wpi-campus-map"));
-        maps.put(1, new Map (1,1,2,"Project Center Floor 1","project_center_floor_1_redo_1024"));
-
-
+        maps.put(0, new Map (11,1,2,"Campus Center","wpi-campus-map"));
+        maps.put(1, new Map (99,1,2,"Project Center Floor 1","project_center_floor_1_redo_1024"));
     }
 
     //return the ArrayList of Maps [to display]
@@ -102,19 +96,19 @@ public class MapBuilderController extends   Application {
         nodes = new HashMap<Integer, Node>();
 
 
-        Node n1 = new Node("Institute",0, 0, 0, 0, 0);
-        Node n2 = new Node("RecCenter",1, 0, 10, 0, 0);
-        Node n3 = new Node("Field",2, 0, 20, 0, 0);
-        Node n4 = new Node("Harrington",3, 3, 16, 0, 0);
-        Node n5 = new Node("Quad",4, 5, 5, 0, 0);
-        Node n6 = new Node("Morgan",5, 6, 1, 0, 0);
-        Node n7 = new Node("Riley",6, 11, 2, 0, 0);
-        Node n8 = new Node("Higgins Labs",7, 10, 13, 0, 1);
-        Node n9 = new Node("Campus Center",8, 10, 20, 0, 1);
-        Node n10 = new Node("Fountain",9, 16, 17, 0, 1);
-        Node n11 = new Node("Alden",10, 16, 3, 0, 1);
-        Node n12 = new Node("West Street",11, 18, 8, 0, 1);
-        Node n13 = new Node("Library",12, 20, 20, 0, 1);
+        Node n1 = new Node("Institute",0, 0, 0, 0, 11);
+        Node n2 = new Node("RecCenter",1, 10, 10, 0, 11);
+        Node n3 = new Node("Field",2, 0, 20, 10, 99);
+        Node n4 = new Node("Harrington",3, 3, 10, 20, 11);
+        Node n5 = new Node("Quad",4, 55, 34, 76, 11);
+        Node n6 = new Node("Morgan",5, 55, 44, 66, 99);
+        Node n7 = new Node("Riley",6, 11, 88, 55, 11);
+        Node n8 = new Node("Higgins Labs",7, 90, 53, 0, 99);
+        Node n9 = new Node("Campus Center",8, 100, 250, 0, 99);
+        Node n10 = new Node("Fountain",9, 106, 170, 0, 11);
+        Node n11 = new Node("Alden",10, 166, 53, 0, 99);
+        Node n12 = new Node("West Street",11, 168, 8, 0, 11);
+        Node n13 = new Node("Library",12, 260, 260, 0, 11);
         Node[] tester = {n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13};
         for (Node n : tester){
             nodes.put(n.getID(), n);

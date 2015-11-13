@@ -47,11 +47,11 @@ public class MapVisual extends StackPane{
 	public MapVisual(MapBuilderController controller){
 		super();
 		this.controller = controller;
+		this.mapView = new ImageView();
 		this.nodeCircles = new Group();
 
 		set_up_background(); //gray border
-		//this.setAlignment(Pos.TOP_LEFT);
-		this.getChildren().addAll(default_background, nodeCircles); //
+		this.getChildren().addAll(nodeCircles); //
 	}
 
 	/**
@@ -61,27 +61,35 @@ public class MapVisual extends StackPane{
 	 * @param map
 	 */
 	public void setMap(logic.Map map){
-		/* not sure if this alone will change image, may have to update imageview as well */
 		System.out.println("MAP PATH:  " + map.getPath());
-
 		this.getChildren().remove(mapView);
 		this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"));
 		this.mapView = new ImageView(mapImage);
-		drawNodes(controller.getNodesOfMap(map.getID()));
 		this.getChildren().add(mapView);
+		drawNodes(controller.getNodesOfMap(map.getID()));
+		mapView.setOnMouseClicked(e -> {
+			if(!HIGHLIGHTED){
+				highlightAll();
+				HIGHLIGHTED = true;
+			} else {
+				hideAll();
+				HIGHLIGHTED = false;
+			}
+		});
+
+
 	}
 
 
 	public void drawNodes(HashMap<Integer, Node> nodes){
+		System.out.println("DRAWING NODES!!");
+		this.getChildren().remove(nodeCircles);
 		this.nodeCircles = new Group();
 
-		//NodeList = controller.getMapNodes(MAP_NAME);
-		/* assuming you put down 'normal' x - y cooridinates, now must translate into display x - y */
-		/* also assuming we know the correct height etc */
-
 		nodes.forEach((k,v) -> {
-			double x = (height - v.getX()) * 15;  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
-			double y = (width - v.getY()) * 15;
+			double x = (height - v.getX());  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
+			double y = (width - v.getY());
+			System.out.println("DRAWING NODES!!");
 
 			Circle circle = new Circle(x - 2.5, y - 2.5, 5, Color.DARKGRAY);
 			circle.setOnMouseEntered(e -> {
@@ -92,7 +100,6 @@ public class MapVisual extends StackPane{
 			circle.setOnMouseExited(e -> highlight(circle, last, lastStroke));
 			circle.setOnMousePressed(e -> {
 				if (!CLICKED) {
-					//setNodeDest(n);
 					lastC = (Color)circle.getFill();
 					lastStrokeC = (Color)circle.getStroke();
 					highlight(circle, Color.GREEN, Color.GREEN);
@@ -113,7 +120,6 @@ public class MapVisual extends StackPane{
 	}
 
 	private void highlight(Circle c, Color color, Color colorStroke ) {
-		//c.setFill(Color.web("#33CC00", .4));
 		c.setFill(color);
 		c.setOpacity(.6);
 		c.setStroke(colorStroke);
@@ -129,6 +135,7 @@ public class MapVisual extends StackPane{
 	private void highlightAll() {
 		nodeCircles.getChildren().forEach(e -> {
 			if (e instanceof Circle) {
+				System.out.println("HIGHLIGHTING");
 				highlight((Circle) e, Color.GOLD, Color.RED);
 			}
 		});
@@ -140,8 +147,6 @@ public class MapVisual extends StackPane{
 			}
 		});
 	}
-
-
 	private void set_up_background(){
 		default_background = new Rectangle(width, height);
 		default_background.setFill(Color.DARKBLUE);

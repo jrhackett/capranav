@@ -4,8 +4,6 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import visuals.Inputs;
 
 /**
@@ -69,11 +67,11 @@ public class MapBuilderDisplay extends HBox {
         map_zone.setMinHeight(height);
         map_zone.setAlignment(Pos.TOP_LEFT);
         map_zone.setStyle("-fx-background-color: #444444;");
-        Circle c = new Circle(15);
-        c.setFill(Color.RED);
+        //Circle c = new Circle(15);
+        //c.setFill(Color.RED);
         this.mapvisual = new MapVisual(controller);
         mapvisual.setAlignment(Pos.TOP_LEFT);
-        map_zone.getChildren().addAll(mapvisual, c);
+        map_zone.getChildren().addAll(mapvisual);
 
 
 
