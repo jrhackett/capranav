@@ -1,6 +1,5 @@
 package MapBuilder;
 
-import controller.Controller;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
@@ -11,7 +10,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import logic.Node;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MapVisual extends StackPane{
@@ -60,7 +58,7 @@ public class MapVisual extends StackPane{
 	 * Given a MAP_NAME -> ask Controller for map name and nodes for the map
 	 * Add image to map
 	 * Then add the Nodes
-	 * @param MAP_NAME
+	 * @param map
 	 */
 	public void setMap(logic.Map map){
 		/* not sure if this alone will change image, may have to update imageview as well */
