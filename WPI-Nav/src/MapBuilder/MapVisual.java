@@ -29,7 +29,7 @@ public class MapVisual extends StackPane{
 	private Image mapImage;
 	private ImageView mapView;
 	private Rectangle default_background;
-	private Group nodes;
+	private Group nodeCircles;
 	private Canvas pathCanvas;
 
 	/* COLORS */
@@ -47,11 +47,11 @@ public class MapVisual extends StackPane{
 	public MapVisual(MapBuilderController controller){
 		super();
 		this.controller = controller;
-		this.nodes = new Group();
+		this.nodeCircles = new Group();
 
 		set_up_background(); //gray border
 		//this.setAlignment(Pos.TOP_LEFT);
-		this.getChildren().addAll(default_background, nodes); //
+		this.getChildren().addAll(default_background, nodeCircles); //
 	}
 
 	/**
@@ -63,15 +63,15 @@ public class MapVisual extends StackPane{
 	public void setMap(logic.Map map){
 		/* not sure if this alone will change image, may have to update imageview as well */
 		System.out.println("MAP PATH:  " + map.getPath());
-		this.mapImage = new Image(getClass().getResourceAsStream("images/" + map.getPath() + ".png"), height - BORDER, width - BORDER, true, true);
+		this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"));
 		this.mapView = new ImageView(mapImage);
-//		drawNodes(controller.getNodesOfMap(map.getID()));
+		drawNodes(controller.getNodesOfMap(map.getID()));
 		this.getChildren().add(mapView);
 	}
 
 
 	public void drawNodes(HashMap<Integer, Node> nodes){
-		this.nodes = new Group();
+		this.nodeCircles = new Group();
 
 		//NodeList = controller.getMapNodes(MAP_NAME);
 		/* assuming you put down 'normal' x - y cooridinates, now must translate into display x - y */
@@ -104,7 +104,7 @@ public class MapVisual extends StackPane{
 				}
 			});
 
-			//nodes.getChildren().add(circle); /* adding it to group */
+			nodeCircles.getChildren().add(circle); /* adding it to group */
 		});
 
 	}
@@ -124,14 +124,14 @@ public class MapVisual extends StackPane{
 	}
 
 	private void highlightAll() {
-		nodes.getChildren().forEach(e -> {
+		nodeCircles.getChildren().forEach(e -> {
 			if (e instanceof Circle) {
 				highlight((Circle) e, Color.GOLD, Color.RED);
 			}
 		});
 	}
 	private void hideAll() {
-		nodes.getChildren().forEach(e -> {
+		nodeCircles.getChildren().forEach(e -> {
 			if (e instanceof Circle) {
 				normal((Circle) e);
 			}

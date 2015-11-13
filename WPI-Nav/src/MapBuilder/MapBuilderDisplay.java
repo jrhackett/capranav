@@ -1,7 +1,7 @@
 package MapBuilder;
 
 import javafx.geometry.Pos;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -11,7 +11,7 @@ import visuals.Inputs;
 /**
  * Created by Xenocidist on 11/12/15.
  */
-public class MapBuilderDisplay extends BorderPane {
+public class MapBuilderDisplay extends HBox {
     /* constants */
     private static final double GAP = 5;
 
@@ -63,19 +63,22 @@ public class MapBuilderDisplay extends BorderPane {
 
         //right:
         this.map_zone = new StackPane();
+       // map_zone.setMaxWidth(3  * width / 4);
+        map_zone.setMinWidth(3  * width / 4);
+        map_zone.setMaxHeight(height);
+        map_zone.setMinHeight(height);
         map_zone.setAlignment(Pos.TOP_LEFT);
         map_zone.setStyle("-fx-background-color: #444444;");
         Circle c = new Circle(15);
         c.setFill(Color.RED);
         this.mapvisual = new MapVisual(controller);
-        map_zone.getChildren().addAll(c, mapvisual);
+        mapvisual.setAlignment(Pos.TOP_LEFT);
+        map_zone.getChildren().addAll(mapvisual, c);
 
 
 
 
-        this.setLeft(options);
-        this.setCenter(map_zone);
-        this.setRight(null);
+        this.getChildren().addAll(options, map_zone);
 
         //add parts to the whole
         //this.getChildren().addAll(options, map_zone);

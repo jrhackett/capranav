@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import logic.Node;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Currently using a 'simple' ComboBox.
@@ -79,16 +79,10 @@ public class Inputs extends ComboBox {
 	 * @param maps
 	 * @return
      */
-	public ObservableList<logic.Map> getMaps(ArrayList<logic.Map> maps) {
+	public ObservableList<logic.Map> getMaps(HashMap<Integer, logic.Map> maps) {
 		ObservableList<logic.Map> data = FXCollections.observableArrayList();
 
-		try {
-			for (logic.Map m : maps) {
-				data.add(m);
-			}
-		} catch (NullPointerException e){
-			System.out.println("LAGGER!");
-		}
+		maps.forEach((k,v) -> {data.add(v);});
 
 		return data;
 	}

@@ -7,6 +7,7 @@ public class Map {
     private double HEIGHT;
     private String name;
     private String path;
+    private double pixelToFeetRatio;
 
     public Map(int id, double width, double height, String name, String path){
         this.ID = id;

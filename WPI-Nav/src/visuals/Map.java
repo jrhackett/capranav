@@ -266,7 +266,7 @@ public class Map extends StackPane{
 
 	private void default_map(){
 		String default_map_name = controller.getDefaultMapName();
-		this.mapImage = new Image(getClass().getResourceAsStream("images/" + default_map_name + ".png"), width - BORDER, height - BORDER, true, true);
+		this.mapImage = new Image(getClass().getResourceAsStream("../images/" + default_map_name + ".png"), width - BORDER, height - BORDER, true, true);
 		this.mapView = new ImageView(mapImage);
 		mapView.setOnMouseClicked(e -> {
 			if(!HIGHLIGHTED){

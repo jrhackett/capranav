@@ -36,7 +36,7 @@ public class MapBuilderController extends   Application {
 
     /* information variables */
     private HashMap<Integer, Node> nodes;
-    private ArrayList<Map> maps;
+    private HashMap<Integer, Map> maps;
 
     private int currentMap;
     private int currentNode;
@@ -54,6 +54,8 @@ public class MapBuilderController extends   Application {
 
 
         //TODO: On load, get information:
+        loadMapsFromFile();
+        loadNodesFromFile();
         //TODO: ArrayList<Maps>
         //TODO: HashMap<Key,Nodes>
 
@@ -71,27 +73,53 @@ public class MapBuilderController extends   Application {
         s.show();   //shows scene
     }
 
-    //load and set the ArrayList of Maps
+    //load and set the ArrayList of Maps [using parser]
     public void loadMapsFromFile(){
         //TODO complete this!
         //gets and creates maps currently written
+
+        //garb tester:
+        this.maps = new HashMap<>();
+
+        maps.put(0, new Map (0,1,2,"Campus Center","wpi-campus-map"));
+        maps.put(1, new Map (1,1,2,"Project Center Floor 1","project_center_floor_1_redo_1024"));
+
+
     }
 
     //return the ArrayList of Maps [to display]
-    public ArrayList<logic.Map> getMaps(){
-        //TODO do this!
-        ArrayList<logic.Map> maps1 = new ArrayList<>();
-        maps1.add(new Map (0,1,2,"Campus Center","wpi-campus-map"));
-        maps1.add(new Map (0,1,2,"Campus Map","wpi-campus-map"));
-        maps1.add(new Map (0,2,3, "Trash Map", "wpi-campus-map"));
-
-        return maps1;
+    public HashMap<Integer, logic.Map> getMaps(){
+        return maps;
     }
 
-    //load and set the ArrayList of Maps
+    //load and set the HashMap of Nodes
     public void loadNodesFromFile(){
         //TODO complete this!
         //gets and creates maps currently written
+
+
+        //below is tester garb
+        nodes = new HashMap<Integer, Node>();
+
+
+        Node n1 = new Node("Institute",0, 0, 0, 0, 0);
+        Node n2 = new Node("RecCenter",1, 0, 10, 0, 0);
+        Node n3 = new Node("Field",2, 0, 20, 0, 0);
+        Node n4 = new Node("Harrington",3, 3, 16, 0, 0);
+        Node n5 = new Node("Quad",4, 5, 5, 0, 0);
+        Node n6 = new Node("Morgan",5, 6, 1, 0, 0);
+        Node n7 = new Node("Riley",6, 11, 2, 0, 0);
+        Node n8 = new Node("Higgins Labs",7, 10, 13, 0, 1);
+        Node n9 = new Node("Campus Center",8, 10, 20, 0, 1);
+        Node n10 = new Node("Fountain",9, 16, 17, 0, 1);
+        Node n11 = new Node("Alden",10, 16, 3, 0, 1);
+        Node n12 = new Node("West Street",11, 18, 8, 0, 1);
+        Node n13 = new Node("Library",12, 20, 20, 0, 1);
+        Node[] tester = {n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13};
+        for (Node n : tester){
+            nodes.put(n.getID(), n);
+        }
+
     }
 
     /**
@@ -100,7 +128,7 @@ public class MapBuilderController extends   Application {
      * @return
      */
     public HashMap<Integer, Node> getNodesOfMap(int id){
-        HashMap<Integer, Node> value = null;
+        HashMap<Integer, Node> value = new HashMap<>();
 
         nodes.forEach((k,v) -> {
             if(v.getMap_id() == id){
@@ -117,6 +145,7 @@ public class MapBuilderController extends   Application {
      */
     public void setCurrentMap(int id){
         this.currentMap = id;
+        //getNodesOfMap(id);
     }
 
     /**
