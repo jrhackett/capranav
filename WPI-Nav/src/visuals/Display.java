@@ -163,9 +163,10 @@ public class Display {
 
 		/* start */
 		Inputs start = new Inputs("Search WPI Maps", INPUT_WIDTH);
-
+		start.setItems(start.getDummyLocations());
 		/* end */
 		Inputs end = new Inputs("For Destination", INPUT_WIDTH);
+		end.setItems(end.getDummyLocations());
 
 		this.inputs.getChildren().addAll(start, end);
 

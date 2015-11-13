@@ -17,8 +17,8 @@ import javafx.scene.image.ImageView;
  *
  */
 public class ImageDisplay extends ImageView{
-	Image currentImage;
-	double dimension;
+	private Image currentImage;
+	private double dimension;
 	public ImageDisplay(double dimension){
 		super();
 		this.dimension = dimension;
