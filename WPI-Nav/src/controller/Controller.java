@@ -16,8 +16,8 @@ import java.util.ArrayList;
  */
 public class Controller extends Application {
     /* visual constants */
-    private static final Double WINDOW_WIDTH = 900.0;
-    private static final Double WINDOW_HEIGHT = 600.0;
+    private static final Double WINDOW_WIDTH = 1000.0;
+    private static final Double WINDOW_HEIGHT = 700.0;
 
     /* visual component */
     private Display myDisplay;
@@ -37,22 +37,22 @@ public class Controller extends Application {
 		/* icon */
         s.getIcons().add(new Image(getClass().getResourceAsStream("../visuals/images/globe.png")));
 
-		/* basic layoutgit */
-        s.setTitle("WPI MAPS");
+		/* basic layout */
+        //s.initStyle(StageStyle.UNDECORATED);  // <-- removes the top part of the app close/open
         s.setResizable(false);
 
 		/* setup */
-        this.myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, this);
+        this.myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, this);    //creates scene
 
-        //Struct Nodes = Controller.getNodes();
-        Scene display = myDisplay.Init(); //Nodes
-        s.setScene(display);
+        Scene display = myDisplay.Init(); //initializes scene
+        s.setScene(display); //sets scene to display
 
-        s.show();
+        s.show();   //shows scene
     }
 
 
     /* logic methods */
+
     /* function that gets the map name */
     public static String getMapName() {
         return "wpi-campus-map";

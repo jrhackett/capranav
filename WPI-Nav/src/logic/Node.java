@@ -6,6 +6,7 @@ public class Node {
 
 	private String name;
 	private int    id;
+	private int    map_id;
 	private double x_coord;
 	private double y_coord;
 	private double z_coord;
@@ -31,6 +32,26 @@ public class Node {
 		this.x_coord = x;
 		this.y_coord = y;
 		this.z_coord = z;
+		this.adjacencies = new ArrayList<Edge>();
+	}
+
+	/**
+	 * Alternate Constructor: includes map_id
+	 * Nodes are used to represent a location and to hold the Edges to all other locations
+	 * @param val: Name of the node
+	 * @param id: identification number of the node
+	 * @param x: x-coordinate of the node
+	 * @param y: y-coordinate of the node
+	 * @param z: z-coordinate of the node
+	 * @return void
+	 */
+	public Node(String val, int id, double x, double y, double z, int map_id) {
+		this.name = val;
+		this.id = id;
+		this.x_coord = x;
+		this.y_coord = y;
+		this.z_coord = z;
+		this.map_id = map_id;
 		this.adjacencies = new ArrayList<Edge>();
 	}
 
@@ -157,6 +178,26 @@ public class Node {
 	 * @return String: a string describing the node
 	 */
 	public String toString() { return String.format("%s: %f, %f, %f\n", this.name, this.x_coord, this.y_coord, this.z_coord);}
+
+	/**
+	 * getMap_id is used to get the map id of the node
+	 * @param void
+	 * @return int: map id of node
+	 */
+	public int getMap_id() {
+		return this.map_id;
+	}
+
+	/**
+	 * setF is used to change the map_id score of the node
+	 * @param map_id: a new map id score
+	 * @return void
+	 */
+	public void setMap_id(int map_id) {
+		this.map_id = map_id;
+	}
+
+
 
 	@Override
 	public int hashCode() {
