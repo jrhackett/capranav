@@ -79,9 +79,6 @@ public class MapBuilderDisplay extends HBox {
 
 
         this.getChildren().addAll(options, map_zone);
-
-        //add parts to the whole
-        //this.getChildren().addAll(options, map_zone);
     }
 
     private void create_options() {

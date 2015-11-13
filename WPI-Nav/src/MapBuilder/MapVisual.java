@@ -63,6 +63,8 @@ public class MapVisual extends StackPane{
 	public void setMap(logic.Map map){
 		/* not sure if this alone will change image, may have to update imageview as well */
 		System.out.println("MAP PATH:  " + map.getPath());
+
+		this.getChildren().remove(mapView);
 		this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"));
 		this.mapView = new ImageView(mapImage);
 		drawNodes(controller.getNodesOfMap(map.getID()));
@@ -107,6 +109,7 @@ public class MapVisual extends StackPane{
 			nodeCircles.getChildren().add(circle); /* adding it to group */
 		});
 
+		this.getChildren().add(nodeCircles);
 	}
 
 	private void highlight(Circle c, Color color, Color colorStroke ) {
