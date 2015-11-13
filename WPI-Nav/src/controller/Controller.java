@@ -1,14 +1,28 @@
 package controller;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import logic.Node;
+import visuals.Display;
 
 import java.util.ArrayList;
 
+
 /**
- * This class will communicate between the logic and the data to the visuals (and from)
+ * IMPORTANT: This Class will 'launch' the application.
+ *            And control the application
  */
-public class  Controller {
-    /* variables */
+public class Controller extends Application {
+    /* visual constants */
+    private static final Double WINDOW_WIDTH = 900.0;
+    private static final Double WINDOW_HEIGHT = 600.0;
+
+    /* visual component */
+    private Display myDisplay;
+
+    /* information variables */
     public String start;
     public String destination;
     public String[] mid_way_points;
@@ -17,14 +31,28 @@ public class  Controller {
 
 
 
+    @Override
+    public void start(Stage s) throws Exception {
 
-    public Controller(){
-        /* on creation, call/organize data ->
-                eventually have a small load screen while this happens
-                do any pre-emptive calculations during
-         */
+		/* icon */
+        s.getIcons().add(new Image(getClass().getResourceAsStream("../visuals/images/globe.png")));
+
+		/* basic layoutgit */
+        s.setTitle("WPI MAPS");
+        s.setResizable(false);
+
+		/* setup */
+        this.myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, this);
+
+        //Struct Nodes = Controller.getNodes();
+        Scene display = myDisplay.Init(); //Nodes
+        s.setScene(display);
+
+        s.show();
     }
 
+
+    /* logic methods */
     /* function that gets the map name */
     public static String getMapName() {
         return "wpi-campus-map";
@@ -75,8 +103,6 @@ public class  Controller {
     }
 
 
-
-
     /* function that gets a path, given two+ nodes */
 
     /* function for handicap path, given two+ nodes */
@@ -84,4 +110,12 @@ public class  Controller {
     /* function looking for nearest three bathrooms */
 
     /* function that shows three paths to food */
+
+
+
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
