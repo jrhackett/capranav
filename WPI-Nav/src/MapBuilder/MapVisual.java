@@ -19,8 +19,8 @@ public class MapVisual extends StackPane{
 	private double width;
 
 	/* Data Structures */
-	private HashMap<Integer, Node>  IDToNode; //no need to even have this here?
-	private HashMap<Integer, Circle> itToVisual;
+	private HashMap<Integer, Node>  id_node; //no need to even have this here?
+	private HashMap<Integer, Circle> id_circle;
 
 	private Node[] NodeList; // current structure -> switching to HashMap
 	private MapBuilderController controller;
@@ -68,37 +68,42 @@ public class MapVisual extends StackPane{
 		this.getChildren().add(mapView);
 		drawNodes(controller.getNodesOfMap(map.getID()));
 		mapView.setOnMouseClicked(e -> {
-			if(!HIGHLIGHTED){
-				highlightAll();
-				HIGHLIGHTED = true;
-			} else {
-				hideAll();
-				HIGHLIGHTED = false;
-			}
+			//create this node
+
+
+			//add this node back to the hashmap above
+
+
+			//create a circle for this node!!
 		});
-
-
 	}
 
-
+	/**
+	 * Draws the nodes given on the map
+	 * @param nodes
+     */
 	public void drawNodes(HashMap<Integer, Node> nodes){
-		System.out.println("DRAWING NODES!!");
 		this.getChildren().remove(nodeCircles);
 		this.nodeCircles = new Group();
+		this.id_circle = new HashMap<>();
+
 
 		nodes.forEach((k,v) -> {
 			double x = (height - v.getX());  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
 			double y = (width - v.getY());
-			System.out.println("DRAWING NODES!!");
 
-			Circle circle = new Circle(x - 2.5, y - 2.5, 5, Color.DARKGRAY);
+			Circle circle = new Circle(x - 2.5, y - 2.5, 5);
+			normal(circle);
 			circle.setOnMouseEntered(e -> {
 				last = (Color)circle.getFill();
 				lastStroke = (Color)circle.getStroke();
-				highlight(circle, Color.BLUE, Color.BLACK);
+				highlight(circle, Color.GOLD, Color.BLACK);
 			});
 			circle.setOnMouseExited(e -> highlight(circle, last, lastStroke));
 			circle.setOnMousePressed(e -> {
+				System.out.println(v.toString());
+
+
 				if (!CLICKED) {
 					lastC = (Color)circle.getFill();
 					lastStrokeC = (Color)circle.getStroke();
@@ -112,6 +117,9 @@ public class MapVisual extends StackPane{
 					CLICKED = false;
 				}
 			});
+
+			//TODO add circle to hashmap
+			id_circle.put(k, circle);
 
 			nodeCircles.getChildren().add(circle); /* adding it to group */
 		});
@@ -127,7 +135,7 @@ public class MapVisual extends StackPane{
 	}
 
 	private void normal(Circle c) {
-		c.setFill(Color.TRANSPARENT);
+		c.setFill(Color.BLUE);
 		c.setOpacity(1);
 		c.setStrokeWidth(0);
 	}
