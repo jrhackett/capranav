@@ -62,9 +62,10 @@ public class MapVisual extends StackPane{
 	 */
 	public void setMap(logic.Map map){
 		/* not sure if this alone will change image, may have to update imageview as well */
+		System.out.println("MAP PATH:  " + map.getPath());
 		this.mapImage = new Image(getClass().getResourceAsStream("images/" + map.getPath() + ".png"), height - BORDER, width - BORDER, true, true);
 		this.mapView = new ImageView(mapImage);
-		drawNodes(controller.getNodesOfMap(map.getID()));
+//		drawNodes(controller.getNodesOfMap(map.getID()));
 		this.getChildren().add(mapView);
 	}
 

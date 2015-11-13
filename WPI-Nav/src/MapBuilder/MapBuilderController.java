@@ -81,9 +81,9 @@ public class MapBuilderController extends   Application {
     public ArrayList<logic.Map> getMaps(){
         //TODO do this!
         ArrayList<logic.Map> maps1 = new ArrayList<>();
-        maps1.add(new Map (0,1,2,"Campus Center","wpi-campus-map.png"));
-        maps1.add(new Map (0,1,2,"Campus Map","wpi-campus-map.png"));
-        maps1.add(new Map (0,2,3, "Trash Map", "wpi-campus-map.png"));
+        maps1.add(new Map (0,1,2,"Campus Center","wpi-campus-map"));
+        maps1.add(new Map (0,1,2,"Campus Map","wpi-campus-map"));
+        maps1.add(new Map (0,2,3, "Trash Map", "wpi-campus-map"));
 
         return maps1;
     }
