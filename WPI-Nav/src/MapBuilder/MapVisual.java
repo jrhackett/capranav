@@ -118,7 +118,7 @@ public class MapVisual extends Pane {
 		double y = v.getY();
 		Circle circle = new Circle(x, y, 5);
 		normal(circle);
-
+		PopOver popOver = new PopOver();
 		//when mouse moves over the node highlight it
 		circle.setOnMouseEntered(e -> {
 			last = (Color)circle.getFill();
@@ -126,7 +126,7 @@ public class MapVisual extends Pane {
 			highlight(circle, Color.GOLD, Color.BLACK);
 			//TODO: POPOVER FOR NAME HERE!
 
-			PopOver popOver = new PopOver();
+			//PopOver popOver = new PopOver();
 			popOver.setDetachedTitle(v.toString());
 			popOver.show(circle);
 
@@ -136,7 +136,9 @@ public class MapVisual extends Pane {
 
 		});
 		circle.setOnMouseExited(e -> {
-			if (controller.SELECTED && !(controller.selectedNode.getID() == v.getID())) {
+
+			popOver.hide();
+			 if (controller.SELECTED && !(controller.selectedNode.getID() == v.getID())) {
 				highlight(circle, last, lastStroke);
 			} else {
 				highlight(circle, last, lastStroke);
