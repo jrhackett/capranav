@@ -102,6 +102,7 @@ public class MapBuilderController extends   Application {
         if (validate){
             Map newMap = new Map(nextMapID, 0, 0, name, path, ratio);
             maps.put(nextMapID, newMap);
+            myDisplay.chooseMap.addMapToMaps(newMap);
             nextMapID++;
             return  true;
         } else {
@@ -205,6 +206,7 @@ public class MapBuilderController extends   Application {
      * @param id
      */
     public void setCurrentMap(int id){
+
         this.currentMap = id;
         //getNodesOfMap(id);
     }

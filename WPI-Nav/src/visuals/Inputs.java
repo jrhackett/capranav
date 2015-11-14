@@ -3,7 +3,7 @@ package visuals;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
-import logic.Node;
+import logic.*;
 
 import java.util.HashMap;
 
@@ -15,6 +15,8 @@ public class Inputs extends ComboBox {
 	private double WIDTH;
 	private String initial;
 	int rank;
+	ObservableList<logic.Map> data;
+
 
 	@SuppressWarnings("unchecked") /* probably should remove this */
 	public Inputs(String s,double WIDTH ){
@@ -80,11 +82,13 @@ public class Inputs extends ComboBox {
 	 * @return
      */
 	public ObservableList<logic.Map> getMaps(HashMap<Integer, logic.Map> maps) {
-		ObservableList<logic.Map> data = FXCollections.observableArrayList();
-
+		this.data = FXCollections.observableArrayList();
 		maps.forEach((k,v) -> {data.add(v);});
-
 		return data;
+	}
+
+	public void addMapToMaps(logic.Map map){
+		data.add(map);
 	}
 	
 	

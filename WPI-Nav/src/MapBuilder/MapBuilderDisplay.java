@@ -24,6 +24,8 @@ public class MapBuilderDisplay extends HBox {
     /* visual forms */
     VBox options;
     StackPane map_zone;
+    public Inputs chooseMap;
+
 
     /* options */
     VBox mapMenu;
@@ -272,7 +274,7 @@ public class MapBuilderDisplay extends HBox {
         labelBox.setTranslateY(GAP);
 
         //ComboBox choose Map
-        Inputs chooseMap = new Inputs("maps", input_width);
+        this.chooseMap = new Inputs("maps", input_width);
         chooseMap.setItems(chooseMap.getMaps(controller.getMaps()));
         chooseMap.setOnAction(e -> {
             logic.Map newMap = (logic.Map) chooseMap.getValue();
