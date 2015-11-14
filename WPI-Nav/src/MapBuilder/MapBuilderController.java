@@ -47,10 +47,8 @@ public class MapBuilderController extends   Application {
 
 
     /* current node information */
-    private String currentNodeName;
-    private double currentNodeX;
-    private double currentNodeY;
-    private double currentNodeZ = 0;
+    public boolean SELECTED = false; //Describes if a node has been selected
+    public Node selectedNode;
 
 
 
@@ -132,6 +130,7 @@ public class MapBuilderController extends   Application {
             System.out.println(e);
             return false;
         }
+
         return true;
     }
 
@@ -160,10 +159,10 @@ public class MapBuilderController extends   Application {
 
         //below is tester garb
         nodes = new HashMap<Integer, Node>();
-        Node n1 = new Node("Institute",0, 0, 0, 0, 11);
-        Node n2 = new Node("RecCenter",1, 10, 10, 0, 11);
-        Node n3 = new Node("Field",2, 0, 20, 10, 99);
-        Node n4 = new Node("Harrington",3, 3, 10, 20, 11);
+        //Node n1 = new Node("Institute",0, 0, 0, 0, 11);
+        //Node n2 = new Node("RecCenter",1, 10, 10, 0, 11);
+        //Node n3 = new Node("Field",2, 0, 20, 10, 99);
+        //Node n4 = new Node("Harrington",3, 3, 10, 20, 11);
         Node n5 = new Node("Quad",4, 55, 34, 76, 11);
         Node n6 = new Node("Morgan",5, 55, 44, 66, 99);
         Node n7 = new Node("Riley",6, 11, 88, 55, 11);
@@ -173,7 +172,7 @@ public class MapBuilderController extends   Application {
         Node n11 = new Node("Alden",10, 166, 53, 0, 99);
         Node n12 = new Node("West Street",11, 168, 8, 0, 11);
         Node n13 = new Node("Library",12, 260, 260, 0, 11);
-        Node[] tester = {n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13};
+        Node[] tester = {n5, n6, n7, n8, n9, n10, n11, n12, n13};
         for (Node n : tester){
             nodes.put(n.getID(), n);
         }
