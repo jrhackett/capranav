@@ -135,7 +135,7 @@ public class MapBuilderController extends   Application {
             System.out.println(e);
             return false;
         }
-        return  true;
+        return true;
     }
 
 
@@ -157,7 +157,7 @@ public class MapBuilderController extends   Application {
 
     //load and set the HashMap of Nodes
     public void loadNodesFromFile(){
-        //TODO complete this!
+        //TODO: LOAD NODES FROM FILE
         //gets and creates maps currently written
 
 

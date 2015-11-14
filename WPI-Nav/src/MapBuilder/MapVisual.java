@@ -8,7 +8,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import logic.Node;
-
 import java.util.HashMap;
 
 public class MapVisual extends StackPane{
@@ -68,7 +67,6 @@ public class MapVisual extends StackPane{
 		mapView.setOnMouseClicked(e -> {
 			if (NODE) {
 				int id = controller.newNodeAtLocation(e); //x & y are already relative to map
-
 				//create a circle for this node!!
 				Node n = controller.getNode(id);
 				Circle c = createCircle(n);
