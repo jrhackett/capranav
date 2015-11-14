@@ -35,7 +35,7 @@ public class Controller extends Application {
     public void start(Stage s) throws Exception {
 
 		/* icon */
-        s.getIcons().add(new Image(getClass().getResourceAsStream("../visuals/images/globe.png")));
+        s.getIcons().add(new Image(getClass().getResourceAsStream("../images/globe.png")));
 
 		/* basic layout */
         //s.initStyle(StageStyle.UNDECORATED);  // <-- removes the top part of the app close/open
