@@ -1,5 +1,6 @@
 package MapBuilder;
 
+
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,8 +9,17 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import logic.Node;
 import org.controlsfx.control.PopOver;
+import javafx.stage.PopupWindow;
+import javafx.scene.control.PopupControl;
+
+
+
+
+
+
 
 
 
@@ -124,11 +134,12 @@ public class MapVisual extends Pane {
 			last = (Color)circle.getFill();
 			lastStroke = (Color)circle.getStroke();
 			highlight(circle, Color.GOLD, Color.BLACK);
-			//TODO: POPOVER FOR NAME HERE!
+			//TODO: POPOVER FOR NAME HERE
 
-			//PopOver popOver = new PopOver();
-			popOver.setDetachedTitle(v.toString());
 			popOver.show(circle);
+			popOver.setContentNode(new Text(v.toString()));
+
+
 
 
 
@@ -136,13 +147,13 @@ public class MapVisual extends Pane {
 
 		});
 		circle.setOnMouseExited(e -> {
-			popOver.hide();
+			/*popOver.hide();
 
 			if (controller.SELECTED && controller.selectedNode.getID() == v.getID()) {
 				//do nothing
 			} else {
 				highlight(circle, last, lastStroke);
-			}
+			} */
 		});
 
 
