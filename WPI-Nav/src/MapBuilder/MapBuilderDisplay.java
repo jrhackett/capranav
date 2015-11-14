@@ -28,9 +28,9 @@ public class MapBuilderDisplay extends HBox {
 
 
     /* options */
-    VBox mapMenu;
-    VBox nodeMenu;
-    VBox edgeMenu;
+    public VBox mapMenu;
+    public VBox nodeMenu;
+    public VBox edgeMenu;
 
     /* map */
     MapVisual mapvisual;
@@ -77,13 +77,9 @@ public class MapBuilderDisplay extends HBox {
         map_zone.setMinHeight(height);
         map_zone.setAlignment(Pos.TOP_LEFT);
         map_zone.setStyle("-fx-background-color: #444444;");
-        //Circle c = new Circle(15);
-        //c.setFill(Color.RED);
         this.mapvisual = new MapVisual(controller);
         mapvisual.setAlignment(Pos.TOP_LEFT);
         map_zone.getChildren().addAll(mapvisual);
-
-
         this.getChildren().addAll(options, map_zone);
     }
 
@@ -165,7 +161,6 @@ public class MapBuilderDisplay extends HBox {
         labelBackground.setArcWidth(5);
         labelBox.getChildren().addAll(labelBackground, status);
         labelBox.setTranslateY(GAP);
-
 
         //New Node Information
         Rectangle divide = new Rectangle(input_width, 2);
@@ -290,10 +285,10 @@ public class MapBuilderDisplay extends HBox {
         divide.setArcWidth(2);
         divide.setFill(Color.RED);
 
-        TextField name = new TextField("Enter New Map NAME");
-        TextField path = new TextField("Enter Map Name W/O Extenstion");
-        TextField ratio = new TextField("Enter New Map Pixel to Foot Ratio");
-        Rectangle divide1 = new Rectangle(input_width, 2);
+        TextField name =     new TextField("Enter New Map NAME");
+        TextField path =     new TextField("Enter Map Name W/O Extenstion");
+        TextField ratio =    new TextField("Enter New Map Pixel to Foot Ratio");
+        Rectangle divide1 =  new Rectangle(input_width, 2);
         divide.setArcHeight(2);
         divide.setArcWidth(2);
         divide.setFill(Color.GRAY);

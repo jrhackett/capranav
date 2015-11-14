@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import logic.Edge;
 import logic.Map;
 import logic.Node;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,9 +22,6 @@ import java.util.HashMap;
  * -> WRITES NODE
  *
  * [ADD EDGE PHASE]
- *
- * TODO: consider order of these!
- *
  *
  */
 
@@ -128,6 +124,7 @@ public class MapBuilderController extends   Application {
         //checking if we can find this patj
         try {
             //TODO make this better
+            //This throws an exception if user tries to load a map that DNE
             System.out.println("PATH ATTEMPT: " + path);
             Image mapI = new Image(getClass().getResourceAsStream("../images/" + path + ".png"));
             ImageView mapV = new ImageView(mapI);
@@ -271,9 +268,8 @@ public class MapBuilderController extends   Application {
      * @param
      */
     public boolean writeOut(){
-       //TODO: write Maps to map file
-
         //TODO: clear old file, and write nodes to new one
+        //TODO: write Maps to map file
         //TODO: either manually or via code save backups
 
         return  true;
