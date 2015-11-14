@@ -115,7 +115,6 @@ public class MapBuilderDisplay extends HBox {
         labelBox.getChildren().addAll(labelBackground, status);
         labelBox.setTranslateY(GAP);
 
-
         //ComboBox choose Map
         Inputs chooseMap = new Inputs("maps", input_width );
         chooseMap.setItems(chooseMap.getMaps(controller.getMaps()));
@@ -183,6 +182,7 @@ public class MapBuilderDisplay extends HBox {
         mapMenu.getChildren().forEach(n -> {
                     n.setTranslateX(GAP);
         });
+        labelBox.setTranslateX(0);
     }
 
     private void createAddNodeMenu(){
