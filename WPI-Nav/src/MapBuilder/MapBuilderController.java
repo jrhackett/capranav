@@ -8,6 +8,7 @@ import logic.Edge;
 import logic.Map;
 import logic.Node;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -43,7 +44,8 @@ public class MapBuilderController extends   Application {
 
     private int currentMap;
     private int currentNode;
-    private int nextID;
+    private int nextNodeID;
+    private int nextMapID;
 
 
 
@@ -57,7 +59,7 @@ public class MapBuilderController extends   Application {
 
     @Override
     public void start(Stage s) throws Exception {
-        this.nextID = 17;
+        this.nextNodeID = 17;
 
         //TODO: On load, get information:
         loadMapsFromFile();
@@ -88,12 +90,49 @@ public class MapBuilderController extends   Application {
         System.out.println("X: " + x);
         System.out.println("Y: " + y);
         //TODO: get UNIQUE or next number - look into singelton
-        Node newNode = new Node("ENTER TEXT", this.nextID, x, y, 0, this.currentMap);
-        nodes.put(this.nextID, newNode);
-        return this.nextID++;
+        Node newNode = new Node("ENTER TEXT", this.nextNodeID, x, y, 0, this.currentMap);
+        nodes.put(this.nextNodeID, newNode);
+        return this.nextNodeID++;
     }
 
+    public boolean createAndWriteNewMap(String path, String name, double ratio){
+        boolean validate = validatePath(path);
+        if (validate){
+            Map newMap = new Map(nextMapID, 0, 0, name, path);
+            maps.put(nextMapID, newMap);
+            nextMapID++;
+            return  true;
+        } else {
+            return false;
+        }
+    }
 
+    private boolean validatePath(String path){
+        System.out.println("VALIDATING PATH!");
+        //checking if this map exists
+        ArrayList<String> paths = new ArrayList<>();
+        maps.forEach((k,v) -> {
+             paths.add(v.getPath());
+        });
+
+        for (String s : paths) {
+            if (s.equals(path)){
+                System.out.println("Map Already Exists!");
+                return false;
+            }
+        }
+
+        //checking if we can find this patj
+        try {
+            File file = new File("../images" + path + ".png");
+            boolean exists = file.exists();
+            if (!exists) return false;
+        } catch (NullPointerException e){
+            System.out.println(e);
+            return false;
+        }
+        return  true;
+    }
 
 
     //load and set the ArrayList of Maps [using parser]

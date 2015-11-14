@@ -2,12 +2,14 @@ package MapBuilder;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import visuals.Inputs;
 
 /**
@@ -101,6 +103,19 @@ public class MapBuilderDisplay extends HBox {
         this.mapMenu = new VBox();
         mapMenu.setStyle("-fx-background-color: #336699;");
 
+        //status
+        StackPane labelBox = new StackPane();
+        Rectangle labelBackground = new Rectangle(input_width, 25);
+        labelBackground.setFill(Color.LIGHTGRAY);
+        Label status = new Label("Create or Choose a Map!");
+        status.setFont(Font.font(17));
+        status.setTextFill(Color.BLUE);
+        labelBackground.setArcHeight(5);
+        labelBackground.setArcWidth(5);
+        labelBox.getChildren().addAll(labelBackground, status);
+        labelBox.setTranslateY(GAP);
+
+
         //ComboBox choose Map
         Inputs chooseMap = new Inputs("maps", input_width );
         chooseMap.setItems(chooseMap.getMaps(controller.getMaps()));
@@ -108,8 +123,9 @@ public class MapBuilderDisplay extends HBox {
             logic.Map newMap = (logic.Map)chooseMap.getValue();
             controller.setCurrentMap(newMap.getID());
             mapvisual.setMap(newMap);
+            status.setText("Map Loaded!");
+            status.setTextFill(Color.GREEN);
         });
-        chooseMap.setTranslateY(GAP);
 
         //New Map
         Rectangle divide = new Rectangle(input_width, 2);
@@ -125,7 +141,34 @@ public class MapBuilderDisplay extends HBox {
         divide.setArcWidth(2);
         divide.setFill(Color.GRAY);
 
+        //button to create the map -> writes the map to the JSON FILE
         Button createButton = new Button("Create Map!");
+        createButton.setOnAction(e -> {
+            Double ratioD = 1.0;
+            try {
+                ratioD = Double.parseDouble(ratio.getText());
+            } catch (NumberFormatException n){
+                System.out.println("Failed to convert double, using 1 as default.");
+            }
+
+
+            if (controller.createAndWriteNewMap(name.getText(), path.getText(), ratioD)){
+                //validated and completed
+                //clear fields!
+                //set status!
+                status.setText("Map Loaded!");
+                status.setTextFill(Color.GREEN);
+
+            } else {
+                //validation failed
+                //something is wrong with information
+                //update status!
+                status.setText("Validation Failed!");
+                status.setTextFill(Color.RED);
+            }
+        });
+
+
 
 
         //setting max widths on visual forms
@@ -135,14 +178,11 @@ public class MapBuilderDisplay extends HBox {
 
 
         //general menu visuals:
-
         mapMenu.setSpacing(12);
-        mapMenu.getChildren().addAll(chooseMap, divide, name, path, ratio, divide1, createButton);
+        mapMenu.getChildren().addAll(labelBox, chooseMap, divide, name, path, ratio, divide1, createButton);
         mapMenu.getChildren().forEach(n -> {
                     n.setTranslateX(GAP);
-                }
-        );
-
+        });
     }
 
     private void createAddNodeMenu(){
