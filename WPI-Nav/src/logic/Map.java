@@ -18,6 +18,16 @@ public class Map {
         this.pixelToFeetRatio = pixelToFeetRatio;
     }
 
+    public Map(Map map) {
+        this.ID = map.getID();
+        this.WIDTH = map.getWIDTH();
+        this.HEIGHT = map.getHEIGHT();
+        this.name = map.getName();
+        this.path = map.getPath();
+        //TODO: fix this
+        this.pixelToFeetRatio = 0;
+    }
+
     public String toString() { return name; }
 
     public double getWIDTH() {

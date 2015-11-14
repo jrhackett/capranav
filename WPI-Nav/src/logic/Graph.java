@@ -1,7 +1,8 @@
 package logic;
+import java.util.Collection;
 import java.util.HashMap;
 
-public class Graph 
+public class Graph implements ICollection
 {
 	//MG: Changed to private, did this break anything?
 	private HashMap<Integer, Node> nodes;
@@ -39,5 +40,9 @@ public class Graph
 
 	public HashMap<Integer, Node> getNodes() {
 		return nodes;
+	}
+
+	public Collection<Node> get() {
+		return this.nodes.values();
 	}
 }

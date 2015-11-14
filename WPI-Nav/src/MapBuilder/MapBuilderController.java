@@ -6,9 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import logic.Edge;
-import logic.Map;
-import logic.Node;
+import logic.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,7 +34,8 @@ public class MapBuilderController extends   Application {
 
     /* information variables */
     private HashMap<Integer, Node> nodes;   //all nodes
-    private HashMap<Integer, Map> maps;     //all maps
+    //private HashMap<Integer, Map> maps;     //all maps
+    private Maps maps;
 
     private HashMap<Integer, Node> nodesForCurrentMap;
 
@@ -95,7 +95,7 @@ public class MapBuilderController extends   Application {
         boolean validate = validatePath(path);
         if (validate){
             Map newMap = new Map(nextMapID, 0, 0, name, path, ratio);
-            maps.put(nextMapID, newMap);
+            maps.addMap(newMap);
             myDisplay.chooseMap.addMapToMaps(newMap);
             nextMapID++;
             return  true;
@@ -112,17 +112,7 @@ public class MapBuilderController extends   Application {
     private boolean validatePath(String path){
         System.out.println("VALIDATING PATH!");
         //checking if this map exists
-        ArrayList<String> paths = new ArrayList<>();
-        maps.forEach((k,v) -> {
-             paths.add(v.getPath());
-        });
-
-        for (String s : paths) {
-            if (s.equals(path)){
-                System.out.println("Map Already Exists!");
-                return false;
-            }
-        }
+        this.maps.check(path);
 
         //checking if we can find this patj
         try {
@@ -145,22 +135,27 @@ public class MapBuilderController extends   Application {
         //TODO complete this!
         //gets and creates maps currently written
 
+
+
         //garb tester:
-        this.maps = new HashMap<>();
-        maps.put(0, new Map (11,1,2,"Campus Center","wpi-campus-map", 1));
-        maps.put(1, new Map (99,1,2,"Project Center Floor 1","project_center_floor_1_redo_1024", 1));
+        this.maps = new Maps();
+        maps.addMap(new Map (11,1,2,"Campus Center","wpi-campus-map", 1));
+        maps.addMap(new Map (99,1,2,"Project Center Floor 1","project_center_floor_1_redo_1024", 1));
     }
 
     //return the ArrayList of Maps [to display]
-    public HashMap<Integer, logic.Map> getMaps(){
-        return maps;
+    public Maps getMaps(){
+        return this.maps;
     }
 
     //load and set the HashMap of Nodes
     public void loadNodesFromFile(){
-        //TODO: LOAD NODES FROM FILE
         //gets and creates maps currently written
-
+        //TODO: uncomment this block and delete dummy stuff to work with file
+        /*
+        Parser test = new Parser("nodes.json");
+        Graph graph = test.fromFile();
+         */
 
         //below is tester garb
         nodes = new HashMap<Integer, Node>();
@@ -200,6 +195,16 @@ public class MapBuilderController extends   Application {
 
         this.nodesForCurrentMap = value;
         return value;
+    }
+
+    public void mapsToFile() {
+        Parser parser = new Parser("maps.json");
+        parser.toFile(this.maps);
+    }
+
+    public void mapsFromFile() {
+        Parser parser = new Parser("maps.json");
+        this.maps = (Maps)parser.fromFile();
     }
 
     /**
