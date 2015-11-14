@@ -60,11 +60,12 @@ public class MapBuilderDisplay extends HBox {
 
         this.options = new VBox();
         options.setMaxWidth(width / 4);
-        options.setMinWidth(width/4);
+        options.setMinWidth(width / 4);
         options.setMaxHeight(height);
         options.setMinHeight(height);
         options.setStyle("-fx-background-color: #336699;");
         create_options();
+        System.out.println(width/4);
 
         //right:
         this.map_zone = new StackPane();
@@ -133,7 +134,7 @@ public class MapBuilderDisplay extends HBox {
         divide.setFill(Color.RED);
 
         TextField name = new TextField("Enter New Map NAME");
-        TextField path = new TextField("Enter New Map PATH");
+        TextField path = new TextField();
         TextField ratio = new TextField("Enter New Map Pixel to Foot Ratio");
         Rectangle divide1 = new Rectangle(input_width, 2);
         divide.setArcHeight(2);
@@ -155,9 +156,11 @@ public class MapBuilderDisplay extends HBox {
                 //validated and completed
                 //clear fields!
                 //set status!
-                status.setText("Map Loaded!");
+                status.setText("Map Created!");
                 status.setTextFill(Color.GREEN);
-
+                path.clear();
+                ratio.clear();
+                name.clear();
             } else {
                 //validation failed
                 //something is wrong with information

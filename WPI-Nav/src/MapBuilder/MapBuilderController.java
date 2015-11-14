@@ -2,13 +2,14 @@ package MapBuilder;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import logic.Edge;
 import logic.Map;
 import logic.Node;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -85,8 +86,8 @@ public class MapBuilderController extends   Application {
      * @return ID of new Node
      */
     public int newNodeAtLocation(MouseEvent e){
-        double x = e.getX();
-        double y = e.getY();
+        double x = e.getX() - 3.5;
+        double y = e.getY() - 2.5;
         System.out.println("X: " + x);
         System.out.println("Y: " + y);
         //TODO: get UNIQUE or next number - look into singelton
@@ -95,10 +96,10 @@ public class MapBuilderController extends   Application {
         return this.nextNodeID++;
     }
 
-    public boolean createAndWriteNewMap(String path, String name, double ratio){
+    public boolean createAndWriteNewMap(String name, String path, double ratio){
         boolean validate = validatePath(path);
         if (validate){
-            Map newMap = new Map(nextMapID, 0, 0, name, path);
+            Map newMap = new Map(nextMapID, 0, 0, name, path, ratio);
             maps.put(nextMapID, newMap);
             nextMapID++;
             return  true;
@@ -124,9 +125,10 @@ public class MapBuilderController extends   Application {
 
         //checking if we can find this patj
         try {
-            File file = new File("../images" + path + ".png");
-            boolean exists = file.exists();
-            if (!exists) return false;
+            //TODO make this better
+            System.out.println("PATH ATTEMPT: " + path);
+            Image mapI = new Image(getClass().getResourceAsStream("../images/" + path + ".png"));
+            ImageView mapV = new ImageView(mapI);
         } catch (NullPointerException e){
             System.out.println(e);
             return false;
@@ -142,8 +144,8 @@ public class MapBuilderController extends   Application {
 
         //garb tester:
         this.maps = new HashMap<>();
-        maps.put(0, new Map (11,1,2,"Campus Center","wpi-campus-map"));
-        maps.put(1, new Map (99,1,2,"Project Center Floor 1","project_center_floor_1_redo_1024"));
+        maps.put(0, new Map (11,1,2,"Campus Center","wpi-campus-map", 1));
+        maps.put(1, new Map (99,1,2,"Project Center Floor 1","project_center_floor_1_redo_1024", 1));
     }
 
     //return the ArrayList of Maps [to display]
@@ -159,8 +161,6 @@ public class MapBuilderController extends   Application {
 
         //below is tester garb
         nodes = new HashMap<Integer, Node>();
-
-
         Node n1 = new Node("Institute",0, 0, 0, 0, 11);
         Node n2 = new Node("RecCenter",1, 10, 10, 0, 11);
         Node n3 = new Node("Field",2, 0, 20, 10, 99);
