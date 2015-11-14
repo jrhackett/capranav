@@ -140,7 +140,6 @@ public class MapBuilderDisplay extends HBox {
         createNodeMenu();
         createEdgeMenu();
 
-
         options.setSpacing(25);
         options.getChildren().addAll(background, mapMenu);
     }
@@ -232,6 +231,7 @@ public class MapBuilderDisplay extends HBox {
         Button saveButton = new Button("Save Nodes Information!");
         saveButton.setOnAction(e -> {
             System.out.println("Add !");
+            controller.setNodeName(name.getText());
         });
 
         //button to create the map -> writes the map to the JSON FILE
