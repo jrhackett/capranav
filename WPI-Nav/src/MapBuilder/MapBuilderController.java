@@ -37,7 +37,7 @@ public class MapBuilderController extends   Application {
     private HashMap<Integer, Node> nodes;   //all nodes
     private HashMap<Integer, Map> maps;     //all maps
 
-    private HashMap<Integer, Node> nodesForCurrentMap;
+    private ArrayList<Node> potentialEdgeNodes;
 
     private int currentMap;
     private int currentNode;
@@ -54,7 +54,9 @@ public class MapBuilderController extends   Application {
 
     @Override
     public void start(Stage s) throws Exception {
-        this.nextNodeID = 17;
+        this.nextNodeID = 17; //TODO FIX THIS ID INCREMENT thING
+        potentialEdgeNodes = new ArrayList<>();
+
 
         //TODO: On load, get information:
         loadMapsFromFile();
@@ -198,7 +200,7 @@ public class MapBuilderController extends   Application {
             }
         });
 
-        this.nodesForCurrentMap = value;
+       // this.nodesForCurrentMap = value;
         return value;
     }
 
@@ -240,29 +242,30 @@ public class MapBuilderController extends   Application {
     }
 
     /**
-     * Gets the current node id
-     */
-    public int getCurrenNode(){
-        return this.currentNode;
-    }
-
-    /**
      * Gets the node given a key
      * @param id
      * @return node
      */
-    public Node getNode(int id){
-        return nodes.get(id);
+    public Node getNode(int id){ return nodes.get(id);}
+
+
+    public void addPotentialEdge(Node node){
+        //validate
+        node.getAdjacencies().contains(node);
+        potentialEdgeNodes.contains(node);
+        potentialEdgeNodes.add(node);
     }
 
+    public void resetPotentialEdges(){
+        this.potentialEdgeNodes = new ArrayList<>();
+    }
 
     /**
      * Adds edges. NOTE: currently weight is defaulted to 1
-     * @param toNodes: the nodes to be added as edges
      */
-    public boolean addEdges(ArrayList<Node> toNodes){
-        for (Node n : toNodes){
-            nodes.get(currentNode).addEdge(new Edge(n, 1));
+    public boolean addEdges(){
+        for (Node n : potentialEdgeNodes){
+            nodes.get(selectedNode).addEdge(new Edge(n, 1));
         }
         return true;
     }

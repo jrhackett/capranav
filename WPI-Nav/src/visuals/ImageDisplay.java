@@ -22,7 +22,7 @@ public class ImageDisplay extends ImageView{
 	public ImageDisplay(double dimension){
 		super();
 		this.dimension = dimension;
-		currentImage = new Image(getClass().getResourceAsStream("images/wpibasictest.png"), dimension, dimension, false, false);
+		currentImage = new Image(getClass().getResourceAsStream("../images/wpibasictest.png"), dimension, dimension, false, false);
 		//currentImage = new Image("file:wpibasictest.png", dimension, dimension, false, false);
 		this.setImage(currentImage);
 		this.maxHeight(dimension);
