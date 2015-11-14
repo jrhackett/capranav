@@ -291,7 +291,7 @@ public class MapBuilderDisplay extends HBox {
         divide.setFill(Color.RED);
 
         TextField name = new TextField("Enter New Map NAME");
-        TextField path = new TextField();
+        TextField path = new TextField("Enter Map Name W/O Extenstion");
         TextField ratio = new TextField("Enter New Map Pixel to Foot Ratio");
         Rectangle divide1 = new Rectangle(input_width, 2);
         divide.setArcHeight(2);
