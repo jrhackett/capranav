@@ -197,6 +197,11 @@ public class Node {
 		this.map_id = map_id;
 	}
 
+	/**
+	 * sets the name of the node
+	 * @param name
+     */
+	public void setName(String name) {this.name = name;}
 
 
 	@Override

@@ -19,7 +19,7 @@ public class MapVisual extends Pane {
 	private double height;
 	private double width;
 
-	public boolean MAP  = false;	 //Describes what phase we are in
+	public boolean MAP  = true;	 //Describes what phase we are in
 	public boolean EDGE = false;
 	public boolean NODE = false;
 
@@ -123,8 +123,8 @@ public class MapVisual extends Pane {
 			//TODO: POPOVER FOR NAME HERE!
 		});
 		circle.setOnMouseExited(e -> {
-			if (controller.SELECTED && !(controller.selectedNode.getID() == v.getID())) {
-				highlight(circle, last, lastStroke);
+			if (controller.SELECTED && controller.selectedNode.getID() == v.getID()) {
+				//do nothing
 			} else {
 				highlight(circle, last, lastStroke);
 			}
@@ -134,36 +134,47 @@ public class MapVisual extends Pane {
 		//depending on the PHASE OF THE MBT, DO SOMETHING!
 		circle.setOnMouseClicked(e -> {
 
-			if (!controller.SELECTED && NODE){//no node is currently selected
-				controller.SELECTED = true;
-				controller.selectedNode = v;
-				System.out.println(v.toString());
-				selected(circle);
-			} else if (controller.SELECTED && v.getID() == controller.selectedNode.getID()){
-				deselect(v.getID());
+			if (MAP){
+				//do nothing
+			} else if (NODE){
+				if (!controller.SELECTED && NODE){//no node is currently selected
+					controller.SELECTED = true;
+					controller.selectedNode = v;
+					System.out.println(v.toString());
+					selected(circle);
+				} else if (controller.SELECTED && v.getID() == controller.selectedNode.getID()){
+					deselect(v.getID());
+				}
+			} else if (EDGE){
+				//select to add NODES
 			}
+
+
 		});
 
-		/*
+
 		circle.setOnMousePressed(e -> {
-			System.out.println(v.toString());
-			if (!CLICKED) {
-				lastC = (Color)circle.getFill();
-				lastStrokeC = (Color)circle.getStroke();
-				highlight(circle, Color.GREEN, Color.GREEN);
-				CLICKED = true;
+			if (MAP) {
+				if (!CLICKED) {
+					lastC = (Color) circle.getFill();
+					lastStrokeC = (Color) circle.getStroke();
+					highlight(circle, Color.GREEN, Color.GREEN);
+					CLICKED = true;
+				}
 			}
 		});
 
-		/*
+
 		circle.setOnMouseReleased(e -> {
-			if (CLICKED) {
-				highlight(circle, lastC, lastStrokeC);
-				CLICKED = false;
+			if (MAP) {
+				if (CLICKED) {
+					highlight(circle, lastC, lastStrokeC);
+					CLICKED = false;
+				}
 			}
 		});
 
-		*/
+
 		return circle;
 	}
 

@@ -104,6 +104,11 @@ public class MapBuilderController extends   Application {
         }
     }
 
+    public void setNodeName(String name){
+        selectedNode.setName(name);
+    }
+
+
     private boolean validatePath(String path){
         System.out.println("VALIDATING PATH!");
         //checking if this map exists
