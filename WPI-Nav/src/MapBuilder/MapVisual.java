@@ -1,5 +1,6 @@
 package MapBuilder;
 
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -8,6 +9,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import logic.Node;
+import org.controlsfx.control.PopOver;
+
+
 
 import java.util.HashMap;
 
@@ -121,8 +125,18 @@ public class MapVisual extends Pane {
 			lastStroke = (Color)circle.getStroke();
 			highlight(circle, Color.GOLD, Color.BLACK);
 			//TODO: POPOVER FOR NAME HERE!
+
+			PopOver popOver = new PopOver();
+			popOver.setDetachedTitle(v.toString());
+			popOver.show(circle);
+
+
+
+
+
 		});
 		circle.setOnMouseExited(e -> highlight(circle, last, lastStroke));
+
 
 		//when the mouse clicks a node change color!
 		//depending on the PHASE OF THE MBT, DO SOMETHING!
