@@ -231,12 +231,15 @@ public class MapBuilderDisplay extends HBox {
         //button to create the map -> writes the map to the JSON FILE
         Button saveButton = new Button("Save Nodes Information!");
         saveButton.setOnAction(e -> {
-            System.out.println("save button go!");
+            System.out.println("Add !");
         });
 
         //button to create the map -> writes the map to the JSON FILE
         Button deselectButton = new Button("Deselect Node!");
         deselectButton.setOnAction(e -> {
+            if (controller.SELECTED){
+                mapvisual.deselect(controller.selectedNode.getID());
+            }
             System.out.println("deselect button go!");
         });
 

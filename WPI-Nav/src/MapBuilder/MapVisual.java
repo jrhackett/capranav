@@ -135,16 +135,26 @@ public class MapVisual extends Pane {
 
 
 		});
-		circle.setOnMouseExited(e -> highlight(circle, last, lastStroke));
+		circle.setOnMouseExited(e -> {
+			if (controller.SELECTED && !(controller.selectedNode.getID() == v.getID())) {
+				highlight(circle, last, lastStroke);
+			} else {
+				highlight(circle, last, lastStroke);
+			}
+		});
 
 
 		//when the mouse clicks a node change color!
 		//depending on the PHASE OF THE MBT, DO SOMETHING!
 		circle.setOnMouseClicked(e -> {
-			if (!controller.SELECTED){//no node is currently selected
 
-			} else {
-
+			if (!controller.SELECTED && NODE){//no node is currently selected
+				controller.SELECTED = true;
+				controller.selectedNode = v;
+				System.out.println(v.toString());
+				selected(circle);
+			} else if (controller.SELECTED && v.getID() == controller.selectedNode.getID()){
+				deselect(v.getID());
 			}
 		});
 
@@ -171,6 +181,24 @@ public class MapVisual extends Pane {
 		return circle;
 	}
 
+	/**
+	 *
+	 * @param id:
+     */
+	public void deselect(int id){
+		controller.SELECTED = false;
+		controller.selectedNode = null;
+		normal(id_circle.get(id));
+	}
+
+	private void selected(Circle circle){
+
+		lastC = (Color)circle.getFill();
+		lastStrokeC = (Color)circle.getStroke();
+		highlight(circle, Color.GOLD, Color.RED);
+		circle.setRadius(7.5);
+	}
+
 	private void highlight(Circle c, Color color, Color colorStroke ) {
 		c.setFill(color);
 		c.setOpacity(.6);
@@ -182,6 +210,7 @@ public class MapVisual extends Pane {
 		c.setFill(Color.BLUE);
 		c.setOpacity(1);
 		c.setStrokeWidth(0);
+		c.setRadius(5);
 	}
 
 	private void highlightAll() {
