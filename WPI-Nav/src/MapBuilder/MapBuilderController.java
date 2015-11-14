@@ -47,10 +47,8 @@ public class MapBuilderController extends   Application {
 
 
     /* current node information */
-    private String currentNodeName;
-    private double currentNodeX;
-    private double currentNodeY;
-    private double currentNodeZ = 0;
+    public boolean SELECTED = false; //Describes if a node has been selected
+    public Node selectedNode;
 
 
 

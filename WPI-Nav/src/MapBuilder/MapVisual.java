@@ -11,14 +11,18 @@ import logic.Node;
 
 import java.util.HashMap;
 
+//The visual component of the maps and the Nodes
+
 public class MapVisual extends Pane {
 	/* Constants */
 	private static final double BORDER = 7;
 	private double height;
 	private double width;
-	public boolean MAP  = false;
+
+	public boolean MAP  = false;	 //Describes what phase we are in
 	public boolean EDGE = false;
 	public boolean NODE = false;
+
 
 
 	/* Data Structures */
@@ -116,11 +120,21 @@ public class MapVisual extends Pane {
 			last = (Color)circle.getFill();
 			lastStroke = (Color)circle.getStroke();
 			highlight(circle, Color.GOLD, Color.BLACK);
+			//TODO: POPOVER FOR NAME HERE!
 		});
 		circle.setOnMouseExited(e -> highlight(circle, last, lastStroke));
 
 		//when the mouse clicks a node change color!
 		//depending on the PHASE OF THE MBT, DO SOMETHING!
+		circle.setOnMouseClicked(e -> {
+			if (!controller.SELECTED){//no node is currently selected
+
+			} else {
+
+			}
+		});
+
+		/*
 		circle.setOnMousePressed(e -> {
 			System.out.println(v.toString());
 			if (!CLICKED) {
@@ -131,12 +145,15 @@ public class MapVisual extends Pane {
 			}
 		});
 
+		/*
 		circle.setOnMouseReleased(e -> {
 			if (CLICKED) {
 				highlight(circle, lastC, lastStrokeC);
 				CLICKED = false;
 			}
 		});
+
+		*/
 		return circle;
 	}
 
