@@ -1,16 +1,17 @@
 package MapBuilder;
 
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import logic.Node;
+
 import java.util.HashMap;
 
-public class MapVisual extends StackPane{
+public class MapVisual extends Pane {
 	/* Constants */
 	private static final double BORDER = 7;
 	private double height;
@@ -28,7 +29,7 @@ public class MapVisual extends StackPane{
 	private Image mapImage;
 	private ImageView mapView;
 	private Rectangle default_background;
-	private Group nodeCircles;
+	private AnchorPane nodeCircles;
 
 	/* COLORS */
 	private boolean HIGHLIGHTED = false;
@@ -45,10 +46,10 @@ public class MapVisual extends StackPane{
 		super();
 		this.controller = controller;
 		this.mapView = new ImageView();
-		this.nodeCircles = new Group();
+		//this.nodeCircles = new AnchorPane();
 
 		set_up_background(); //gray border
-		this.getChildren().addAll(nodeCircles); //
+		this.getChildren().addAll(); //nodeCircles
 	}
 
 	/**
@@ -71,8 +72,8 @@ public class MapVisual extends StackPane{
 				Node n = controller.getNode(id);
 				Circle c = createCircle(n);
 				id_circle.put(id, c);
-				nodeCircles.getChildren().removeAll();
-				nodeCircles.getChildren().add(c);
+				//nodeCircles.getChildren().removeAll();
+				this.getChildren().add(c);//nodeCircles
 			}
 		});
 	}
@@ -83,18 +84,25 @@ public class MapVisual extends StackPane{
      */
 	public void drawNodes(HashMap<Integer, Node> nodes){
 		this.getChildren().remove(nodeCircles);
-		this.nodeCircles = new Group();
+		//this.nodeCircles = new AnchorPane();
 		this.id_circle = new HashMap<>();
 
 
+
+//		nodeCircles.setMouseTransparent(true);
+		//nodeCircles.setPickOnBounds(false);
+		//this.getChildren().add(nodeCircles);
 		nodes.forEach((k,v) -> {
 			Circle circle = createCircle(v);
 			id_circle.put(k, circle);
-			nodeCircles.getChildren().add(circle); /* adding it to group */
+			this.getChildren().add(circle); /* adding directly to stackpane */
 		});
 
-		this.getChildren().add(nodeCircles);
+
+
 	}
+
+
 
 	private Circle createCircle(Node v){
 

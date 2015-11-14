@@ -78,7 +78,7 @@ public class MapBuilderDisplay extends HBox {
         map_zone.setAlignment(Pos.TOP_LEFT);
         map_zone.setStyle("-fx-background-color: #444444;");
         this.mapvisual = new MapVisual(controller);
-        mapvisual.setAlignment(Pos.TOP_LEFT);
+        //mapvisual.setAlignment(Pos.TOP_LEFT);
         map_zone.getChildren().addAll(mapvisual);
         this.getChildren().addAll(options, map_zone);
     }
@@ -300,23 +300,16 @@ public class MapBuilderDisplay extends HBox {
             try {
                 ratioD = Double.parseDouble(ratio.getText());
             } catch (NumberFormatException n) {
-                System.out.println("Failed to convert double, using 1 as default.");
+                ratio.setText("Failed to convert double");
             }
 
-
             if (controller.createAndWriteNewMap(name.getText(), path.getText(), ratioD)) {
-                //validated and completed
-                //clear fields!
-                //set status!
                 status.setText("Map Created!");
                 status.setTextFill(Color.GREEN);
                 path.clear();
                 ratio.clear();
                 name.clear();
             } else {
-                //validation failed
-                //something is wrong with information
-                //update status!
                 status.setText("Validation Failed!");
                 status.setTextFill(Color.RED);
             }
