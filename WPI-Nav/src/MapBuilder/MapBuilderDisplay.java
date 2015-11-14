@@ -1,9 +1,13 @@
 package MapBuilder;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import visuals.Inputs;
 
 /**
@@ -51,6 +55,7 @@ public class MapBuilderDisplay extends HBox {
         this.setMinSize(width / 4, height);
 
         //left:
+
         this.options = new VBox();
         options.setMaxWidth(width / 4);
         options.setMinWidth(width/4);
@@ -94,7 +99,7 @@ public class MapBuilderDisplay extends HBox {
 
     private void createMapMenu(){
         this.mapMenu = new VBox();
-        mapMenu.setStyle("-fx-background-color: #444444;");
+        mapMenu.setStyle("-fx-background-color: #336699;");
 
         //ComboBox choose Map
         Inputs chooseMap = new Inputs("maps", input_width );
@@ -104,10 +109,40 @@ public class MapBuilderDisplay extends HBox {
             controller.setCurrentMap(newMap.getID());
             mapvisual.setMap(newMap);
         });
+        chooseMap.setTranslateY(GAP);
 
         //New Map
+        Rectangle divide = new Rectangle(input_width, 2);
+        divide.setArcHeight(2);
+        divide.setArcWidth(2);
+        divide.setFill(Color.RED);
 
-        mapMenu.getChildren().addAll(chooseMap);
+        TextField name = new TextField("Enter New Map NAME");
+        TextField path = new TextField("Enter New Map PATH");
+        TextField ratio = new TextField("Enter New Map Pixel to Foot Ratio");
+        Rectangle divide1 = new Rectangle(input_width, 2);
+        divide.setArcHeight(2);
+        divide.setArcWidth(2);
+        divide.setFill(Color.GRAY);
+
+        Button createButton = new Button("Create Map!");
+
+
+        //setting max widths on visual forms
+        name.setMaxWidth(input_width - GAP * 2);
+        path.setMaxWidth(input_width - GAP * 2);
+        ratio.setMaxWidth(input_width - GAP * 2);
+
+
+        //general menu visuals:
+
+        mapMenu.setSpacing(12);
+        mapMenu.getChildren().addAll(chooseMap, divide, name, path, ratio, divide1, createButton);
+        mapMenu.getChildren().forEach(n -> {
+                    n.setTranslateX(GAP);
+                }
+        );
+
     }
 
     private void createAddNodeMenu(){

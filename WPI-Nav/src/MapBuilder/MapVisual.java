@@ -68,7 +68,7 @@ public class MapVisual extends StackPane{
 
 			//create a circle for this node!!
 			Node n = controller.getNode(id);
-			Circle c = createCircle(n.getID(), n);
+			Circle c = createCircle(n);
 			id_circle.put(id, c);
 			nodeCircles.getChildren().removeAll();
 			nodeCircles.getChildren().add(c);
@@ -87,9 +87,7 @@ public class MapVisual extends StackPane{
 
 
 		nodes.forEach((k,v) -> {
-
-			Circle circle = createCircle(k,v);
-			//TODO add circle to hashmap
+			Circle circle = createCircle(v);
 			id_circle.put(k, circle);
 			nodeCircles.getChildren().add(circle); /* adding it to group */
 		});
@@ -97,10 +95,10 @@ public class MapVisual extends StackPane{
 		this.getChildren().add(nodeCircles);
 	}
 
-	private Circle createCircle(int k, Node v){
+	private Circle createCircle(Node v){
 		double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
 		double y = v.getY();
-		Circle circle = new Circle(x - 2.5, y - 2.5, 5);
+		Circle circle = new Circle(x, y, 5);
 		normal(circle);
 
 		//when mouse moves over the node highlight it
@@ -122,7 +120,6 @@ public class MapVisual extends StackPane{
 				CLICKED = true;
 			}
 		});
-
 
 		circle.setOnMouseReleased(e -> {
 			if (CLICKED) {
