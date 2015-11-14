@@ -2,6 +2,7 @@ package MapBuilder;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import logic.Edge;
 import logic.Map;
@@ -35,8 +36,10 @@ public class MapBuilderController extends   Application {
     private MapBuilderDisplay myDisplay;
 
     /* information variables */
-    private HashMap<Integer, Node> nodes;
-    private HashMap<Integer, Map> maps;
+    private HashMap<Integer, Node> nodes;   //all nodes
+    private HashMap<Integer, Map> maps;     //all maps
+
+    private HashMap<Integer, Node> nodesForCurrentMap;
 
     private int currentMap;
     private int currentNode;
@@ -69,6 +72,27 @@ public class MapBuilderController extends   Application {
 
         s.show();   //shows scene
     }
+
+
+    /**
+     * Given a mouse event -> gets
+     * @param e
+     * @return ID of new Node
+     */
+    public int newNodeAtLocation(MouseEvent e){
+        double x = e.getX();
+        double y = e.getY();
+        System.out.println("X: " + x);
+        System.out.println("Y: " + y);
+        //TODO: get UNIQUE or next number - look into singelton
+        int id = 111;
+        Node newNode = new Node("ENTER TEXT", id, x, y, 0, this.currentMap);
+        nodes.put(id, newNode);
+        return id;
+    }
+
+
+
 
     //load and set the ArrayList of Maps [using parser]
     public void loadMapsFromFile(){
@@ -130,6 +154,7 @@ public class MapBuilderController extends   Application {
             }
         });
 
+        this.nodesForCurrentMap = value;
         return value;
     }
 
@@ -176,6 +201,15 @@ public class MapBuilderController extends   Application {
         return this.currentNode;
     }
 
+    /**
+     * Gets the node given a key
+     * @param id
+     * @return node
+     */
+    public Node getNode(int id){
+        return nodes.get(id);
+    }
+
 
     /**
      * Adds edges. NOTE: currently weight is defaulted to 1
@@ -192,15 +226,13 @@ public class MapBuilderController extends   Application {
      * Save/Write node
      * @param
      */
-    public boolean writeNode(){
-        //create the actual node object
-        Node newNode = new Node(currentNodeName, currentNode, currentNodeX, currentNodeY, currentNodeZ, currentMap);
+    public boolean writeOut(){
+       //TODO: write Maps to map file
 
-        //TODO: write it to file
+        //TODO: clear old file, and write nodes to new one
+        //TODO: either manually or via code save backups
 
-        nodes.put(currentNode, newNode);
-
-        return true;
+        return  true;
     }
 
 

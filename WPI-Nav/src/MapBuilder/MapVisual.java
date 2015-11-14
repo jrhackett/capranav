@@ -1,7 +1,6 @@
 package MapBuilder;
 
 import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -19,10 +18,8 @@ public class MapVisual extends StackPane{
 	private double width;
 
 	/* Data Structures */
-	private HashMap<Integer, Node>  id_node; //no need to even have this here?
 	private HashMap<Integer, Circle> id_circle;
 
-	private Node[] NodeList; // current structure -> switching to HashMap
 	private MapBuilderController controller;
 
 	/* Visuals */
@@ -30,7 +27,6 @@ public class MapVisual extends StackPane{
 	private ImageView mapView;
 	private Rectangle default_background;
 	private Group nodeCircles;
-	private Canvas pathCanvas;
 
 	/* COLORS */
 	private boolean HIGHLIGHTED = false;
@@ -40,7 +36,6 @@ public class MapVisual extends StackPane{
 	private Color lastC = Color.TRANSPARENT;
 	private Color lastStrokeC = Color.TRANSPARENT;
 
-	private boolean PATH_DRAWN = false;
 
 	/* this will be used to put together the map */
 	/* overlaying the nodes and fixed map image should work */
@@ -69,12 +64,15 @@ public class MapVisual extends StackPane{
 		drawNodes(controller.getNodesOfMap(map.getID()));
 		mapView.setOnMouseClicked(e -> {
 			//create this node
-
-
-			//add this node back to the hashmap above
-
+			int id = controller.newNodeAtLocation(e); //x & y are already relative to map
 
 			//create a circle for this node!!
+			Node n = controller.getNode(id);
+			Circle c = createCircle(n.getID(), n);
+			id_circle.put(id, c);
+			nodeCircles.getChildren().removeAll();
+			nodeCircles.getChildren().add(c);
+
 		});
 	}
 
@@ -89,42 +87,50 @@ public class MapVisual extends StackPane{
 
 
 		nodes.forEach((k,v) -> {
-			double x = (height - v.getX());  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
-			double y = (width - v.getY());
 
-			Circle circle = new Circle(x - 2.5, y - 2.5, 5);
-			normal(circle);
-			circle.setOnMouseEntered(e -> {
-				last = (Color)circle.getFill();
-				lastStroke = (Color)circle.getStroke();
-				highlight(circle, Color.GOLD, Color.BLACK);
-			});
-			circle.setOnMouseExited(e -> highlight(circle, last, lastStroke));
-			circle.setOnMousePressed(e -> {
-				System.out.println(v.toString());
-
-
-				if (!CLICKED) {
-					lastC = (Color)circle.getFill();
-					lastStrokeC = (Color)circle.getStroke();
-					highlight(circle, Color.GREEN, Color.GREEN);
-					CLICKED = true;
-				}
-			});
-			circle.setOnMouseReleased(e -> {
-				if (CLICKED) {
-					highlight(circle, lastC, lastStrokeC);
-					CLICKED = false;
-				}
-			});
-
+			Circle circle = createCircle(k,v);
 			//TODO add circle to hashmap
 			id_circle.put(k, circle);
-
 			nodeCircles.getChildren().add(circle); /* adding it to group */
 		});
 
 		this.getChildren().add(nodeCircles);
+	}
+
+	private Circle createCircle(int k, Node v){
+		double x = (height - v.getX());  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
+		double y = (width - v.getY());
+		Circle circle = new Circle(x - 2.5, y - 2.5, 5);
+		normal(circle);
+
+		//when mouse moves over the node highlight it
+		circle.setOnMouseEntered(e -> {
+			last = (Color)circle.getFill();
+			lastStroke = (Color)circle.getStroke();
+			highlight(circle, Color.GOLD, Color.BLACK);
+		});
+		circle.setOnMouseExited(e -> highlight(circle, last, lastStroke));
+
+		//when the mouse clicks a node change color!
+		//depending on the PHASE OF THE MBT, DO SOMETHING!
+		circle.setOnMousePressed(e -> {
+			System.out.println(v.toString());
+			if (!CLICKED) {
+				lastC = (Color)circle.getFill();
+				lastStrokeC = (Color)circle.getStroke();
+				highlight(circle, Color.GREEN, Color.GREEN);
+				CLICKED = true;
+			}
+		});
+
+
+		circle.setOnMouseReleased(e -> {
+			if (CLICKED) {
+				highlight(circle, lastC, lastStrokeC);
+				CLICKED = false;
+			}
+		});
+		return circle;
 	}
 
 	private void highlight(Circle c, Color color, Color colorStroke ) {
