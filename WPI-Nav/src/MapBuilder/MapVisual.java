@@ -1,10 +1,9 @@
 package MapBuilder;
 
-import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -12,25 +11,25 @@ import logic.Node;
 
 import java.util.HashMap;
 
-public class MapVisual extends StackPane{
+public class MapVisual extends Pane {
 	/* Constants */
 	private static final double BORDER = 7;
 	private double height;
 	private double width;
+	public boolean MAP  = false;
+	public boolean EDGE = false;
+	public boolean NODE = false;
+
 
 	/* Data Structures */
-	private HashMap<Integer, Node>  IDToNode; //no need to even have this here?
-	private HashMap<Integer, Circle> itToVisual;
-
-	private Node[] NodeList; // current structure -> switching to HashMap
+	private HashMap<Integer, Circle> id_circle;
 	private MapBuilderController controller;
 
 	/* Visuals */
 	private Image mapImage;
 	private ImageView mapView;
 	private Rectangle default_background;
-	private Group nodes;
-	private Canvas pathCanvas;
+	private AnchorPane nodeCircles;
 
 	/* COLORS */
 	private boolean HIGHLIGHTED = false;
@@ -40,18 +39,17 @@ public class MapVisual extends StackPane{
 	private Color lastC = Color.TRANSPARENT;
 	private Color lastStrokeC = Color.TRANSPARENT;
 
-	private boolean PATH_DRAWN = false;
 
 	/* this will be used to put together the map */
 	/* overlaying the nodes and fixed map image should work */
 	public MapVisual(MapBuilderController controller){
 		super();
 		this.controller = controller;
-		this.nodes = new Group();
+		this.mapView = new ImageView();
+		//this.nodeCircles = new AnchorPane();
 
 		set_up_background(); //gray border
-		//this.setAlignment(Pos.TOP_LEFT);
-		this.getChildren().addAll(default_background, nodes); //
+		this.getChildren().addAll(); //nodeCircles
 	}
 
 	/**
@@ -61,56 +59,88 @@ public class MapVisual extends StackPane{
 	 * @param map
 	 */
 	public void setMap(logic.Map map){
-		/* not sure if this alone will change image, may have to update imageview as well */
 		System.out.println("MAP PATH:  " + map.getPath());
-		this.mapImage = new Image(getClass().getResourceAsStream("images/" + map.getPath() + ".png"), height - BORDER, width - BORDER, true, true);
+		this.getChildren().remove(mapView);
+		this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"));
 		this.mapView = new ImageView(mapImage);
-//		drawNodes(controller.getNodesOfMap(map.getID()));
 		this.getChildren().add(mapView);
+		drawNodes(controller.getNodesOfMap(map.getID()));
+		mapView.setOnMouseClicked(e -> {
+			if (NODE) {
+				int id = controller.newNodeAtLocation(e); //x & y are already relative to map
+				//create a circle for this node!!
+				Node n = controller.getNode(id);
+				Circle c = createCircle(n);
+				id_circle.put(id, c);
+				//nodeCircles.getChildren().removeAll();
+				this.getChildren().add(c);//nodeCircles
+			}
+		});
+	}
+
+	/**
+	 * Draws the nodes given on the map
+	 * @param nodes
+     */
+	public void drawNodes(HashMap<Integer, Node> nodes){
+		this.getChildren().remove(nodeCircles);
+		//this.nodeCircles = new AnchorPane();
+		this.id_circle = new HashMap<>();
+
+
+
+//		nodeCircles.setMouseTransparent(true);
+		//nodeCircles.setPickOnBounds(false);
+		//this.getChildren().add(nodeCircles);
+		nodes.forEach((k,v) -> {
+			Circle circle = createCircle(v);
+			id_circle.put(k, circle);
+			this.getChildren().add(circle); /* adding directly to stackpane */
+		});
+
+
+
 	}
 
 
-	public void drawNodes(HashMap<Integer, Node> nodes){
-		this.nodes = new Group();
 
-		//NodeList = controller.getMapNodes(MAP_NAME);
-		/* assuming you put down 'normal' x - y cooridinates, now must translate into display x - y */
-		/* also assuming we know the correct height etc */
+	private Circle createCircle(Node v){
 
-		nodes.forEach((k,v) -> {
-			double x = (height - v.getX()) * 15;  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
-			double y = (width - v.getY()) * 15;
+		double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
+		double y = v.getY();
+		Circle circle = new Circle(x, y, 5);
+		normal(circle);
 
-			Circle circle = new Circle(x - 2.5, y - 2.5, 5, Color.DARKGRAY);
-			circle.setOnMouseEntered(e -> {
-				last = (Color)circle.getFill();
-				lastStroke = (Color)circle.getStroke();
-				highlight(circle, Color.BLUE, Color.BLACK);
-			});
-			circle.setOnMouseExited(e -> highlight(circle, last, lastStroke));
-			circle.setOnMousePressed(e -> {
-				if (!CLICKED) {
-					//setNodeDest(n);
-					lastC = (Color)circle.getFill();
-					lastStrokeC = (Color)circle.getStroke();
-					highlight(circle, Color.GREEN, Color.GREEN);
-					CLICKED = true;
-				}
-			});
-			circle.setOnMouseReleased(e -> {
-				if (CLICKED) {
-					highlight(circle, lastC, lastStrokeC);
-					CLICKED = false;
-				}
-			});
+		//when mouse moves over the node highlight it
+		circle.setOnMouseEntered(e -> {
+			last = (Color)circle.getFill();
+			lastStroke = (Color)circle.getStroke();
+			highlight(circle, Color.GOLD, Color.BLACK);
+		});
+		circle.setOnMouseExited(e -> highlight(circle, last, lastStroke));
 
-			//nodes.getChildren().add(circle); /* adding it to group */
+		//when the mouse clicks a node change color!
+		//depending on the PHASE OF THE MBT, DO SOMETHING!
+		circle.setOnMousePressed(e -> {
+			System.out.println(v.toString());
+			if (!CLICKED) {
+				lastC = (Color)circle.getFill();
+				lastStrokeC = (Color)circle.getStroke();
+				highlight(circle, Color.GREEN, Color.GREEN);
+				CLICKED = true;
+			}
 		});
 
+		circle.setOnMouseReleased(e -> {
+			if (CLICKED) {
+				highlight(circle, lastC, lastStrokeC);
+				CLICKED = false;
+			}
+		});
+		return circle;
 	}
 
 	private void highlight(Circle c, Color color, Color colorStroke ) {
-		//c.setFill(Color.web("#33CC00", .4));
 		c.setFill(color);
 		c.setOpacity(.6);
 		c.setStroke(colorStroke);
@@ -118,27 +148,26 @@ public class MapVisual extends StackPane{
 	}
 
 	private void normal(Circle c) {
-		c.setFill(Color.TRANSPARENT);
+		c.setFill(Color.BLUE);
 		c.setOpacity(1);
 		c.setStrokeWidth(0);
 	}
 
 	private void highlightAll() {
-		nodes.getChildren().forEach(e -> {
+		nodeCircles.getChildren().forEach(e -> {
 			if (e instanceof Circle) {
+				System.out.println("HIGHLIGHTING");
 				highlight((Circle) e, Color.GOLD, Color.RED);
 			}
 		});
 	}
 	private void hideAll() {
-		nodes.getChildren().forEach(e -> {
+		nodeCircles.getChildren().forEach(e -> {
 			if (e instanceof Circle) {
 				normal((Circle) e);
 			}
 		});
 	}
-
-
 	private void set_up_background(){
 		default_background = new Rectangle(width, height);
 		default_background.setFill(Color.DARKBLUE);

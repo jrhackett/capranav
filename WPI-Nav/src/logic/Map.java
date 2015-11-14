@@ -7,13 +7,15 @@ public class Map {
     private double HEIGHT;
     private String name;
     private String path;
+    private double pixelToFeetRatio;
 
-    public Map(int id, double width, double height, String name, String path){
+    public Map(int id, double width, double height, String name, String path, double pixelToFeetRatio){
         this.ID = id;
         this.WIDTH = width;
         this.HEIGHT = height;
         this.name = name;
         this.path = path;
+        this.pixelToFeetRatio = pixelToFeetRatio;
     }
 
     public String toString() { return name; }
