@@ -177,8 +177,8 @@ public class Node {
 	 * @param void
 	 * @return String: a string describing the node
 	 */
-	public String toString() { return String.format("%s: %f, %f, %f\n", this.name, this.x_coord, this.y_coord, this.z_coord);}
-
+	//public String toString() { return String.format("%s: %f, %f, %f\n", this.name, this.x_coord, this.y_coord, this.z_coord);}
+	public String toString() {return this.name;}
 	/**
 	 * getMap_id is used to get the map id of the node
 	 * @param void
