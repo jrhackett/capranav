@@ -165,32 +165,32 @@ public class MapBuilderDisplay extends HBox {
         Rectangle divide = new Rectangle(input_width, 2);
         divide.setArcHeight(2);
         divide.setArcWidth(2);
-        divide.setFill(Color.RED);
+        divide.setFill(Color.LIGHTGRAY);
 
-        TextField name = new TextField("Enter Node Name");
-        Rectangle divide1 = new Rectangle(input_width, 2);
-        divide.setArcHeight(2);
-        divide.setArcWidth(2);
-        divide.setFill(Color.GRAY);
 
         //button to create the map -> writes the map to the JSON FILE
         Button saveButton = new Button("Write Nodes Information!");
         saveButton.setOnAction(e -> {
             System.out.println("save button go!");
+            controller.addEdges();
+            status.setText("Edges saved!");
+            status.setTextFill(Color.GREEN);
         });
 
         //button to create the map -> writes the map to the JSON FILE
         Button deselectButton = new Button("Deselect Node!");
         deselectButton.setOnAction(e -> {
             System.out.println("deselect button go!");
+            if (controller.SELECTED){
+                mapvisual.deselect(controller.selectedNode.getID());
+            }
+            controller.resetPotentialEdges();
         });
 
-        //setting max widths on visual forms
-        name.setMaxWidth(input_width - GAP * 2);
 
         //general menu visuals:
         edgeMenu.setSpacing(12);
-        edgeMenu.getChildren().addAll(labelBox, divide, name, divide1, deselectButton, saveButton);
+        edgeMenu.getChildren().addAll(labelBox, divide, deselectButton, saveButton);
         edgeMenu.getChildren().forEach(n -> {
             n.setTranslateX(GAP);
         });
