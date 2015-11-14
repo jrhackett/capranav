@@ -93,7 +93,7 @@ public class MapVisual extends Pane {
 
 
 
-//		nodeCircles.setMouseTransparent(true);
+		//nodeCircles.setMouseTransparent(true);
 		//nodeCircles.setPickOnBounds(false);
 		//this.getChildren().add(nodeCircles);
 		nodes.forEach((k,v) -> {
@@ -101,9 +101,6 @@ public class MapVisual extends Pane {
 			id_circle.put(k, circle);
 			this.getChildren().add(circle); /* adding directly to stackpane */
 		});
-
-
-
 	}
 
 
@@ -117,8 +114,8 @@ public class MapVisual extends Pane {
 
 		//when mouse moves over the node highlight it
 		circle.setOnMouseEntered(e -> {
-			last = (Color)circle.getFill();
-			lastStroke = (Color)circle.getStroke();
+			last = (Color) circle.getFill();
+			lastStroke = (Color) circle.getStroke();
 			highlight(circle, Color.GOLD, Color.BLACK);
 			//TODO: POPOVER FOR NAME HERE!
 		});
@@ -133,11 +130,10 @@ public class MapVisual extends Pane {
 		//when the mouse clicks a node change color!
 		//depending on the PHASE OF THE MBT, DO SOMETHING!
 		circle.setOnMouseClicked(e -> {
-
 			if (MAP){
 				//do nothing
 			} else if (NODE){
-				if (!controller.SELECTED && NODE){//no node is currently selected
+				if (!controller.SELECTED){//no node is currently selected
 					controller.SELECTED = true;
 					controller.selectedNode = v;
 					System.out.println(v.toString());
@@ -145,10 +141,20 @@ public class MapVisual extends Pane {
 				} else if (controller.SELECTED && v.getID() == controller.selectedNode.getID()){
 					deselect(v.getID());
 				}
-			} else if (EDGE){
-				//select to add NODES
+			}else if (EDGE){
+				if (!controller.SELECTED){//no node is currently selected
+					controller.SELECTED = true;
+					controller.selectedNode = v;
+					System.out.println(v.toString());
+					selected(circle);
+				} else if (controller.SELECTED && v.getID() == controller.selectedNode.getID()){
+					deselect(v.getID());
+					controller.resetPotentialEdges();
+				} else {//controller selected
+					highlight(circle, Color.FIREBRICK, Color.WHITE);
+					controller.addPotentialEdge(v);
+				}
 			}
-
 
 		});
 
@@ -185,6 +191,9 @@ public class MapVisual extends Pane {
 	public void deselect(int id){
 		controller.SELECTED = false;
 		controller.selectedNode = null;
+		this.last = Color.BLUE;
+		this.lastStroke = Color.BLACK;
+		highlightAll();
 		normal(id_circle.get(id));
 	}
 
@@ -198,31 +207,28 @@ public class MapVisual extends Pane {
 
 	private void highlight(Circle c, Color color, Color colorStroke ) {
 		c.setFill(color);
-		c.setOpacity(.6);
 		c.setStroke(colorStroke);
 		c.setStrokeWidth(1);
 	}
 
 	private void normal(Circle c) {
 		c.setFill(Color.BLUE);
-		c.setOpacity(1);
 		c.setStrokeWidth(0);
 		c.setRadius(5);
 	}
 
 	private void highlightAll() {
-		nodeCircles.getChildren().forEach(e -> {
-			if (e instanceof Circle) {
-				System.out.println("HIGHLIGHTING");
-				highlight((Circle) e, Color.GOLD, Color.RED);
-			}
+		id_circle.forEach((k,v) -> {
+			System.out.println("HIGHLIGHTING");
+			highlight((Circle) v, last, lastStroke);
+
 		});
+
 	}
 	private void hideAll() {
-		nodeCircles.getChildren().forEach(e -> {
-			if (e instanceof Circle) {
-				normal((Circle) e);
-			}
+		id_circle.forEach((k,v) -> {
+			System.out.println("HIGHLIGHTING");
+			normal(v);
 		});
 	}
 	private void set_up_background(){
