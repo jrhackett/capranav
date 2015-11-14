@@ -12,6 +12,7 @@ import logic.Node;
 import java.util.HashMap;
 
 //The visual component of the maps and the Nodes
+
 public class MapVisual extends Pane {
 	/* Constants */
 	private static final double BORDER = 7;
