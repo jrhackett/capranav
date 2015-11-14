@@ -43,6 +43,9 @@ public class MapBuilderController extends   Application {
 
     private int currentMap;
     private int currentNode;
+    private int nextID;
+
+
 
     /* current node information */
     private String currentNodeName;
@@ -54,7 +57,7 @@ public class MapBuilderController extends   Application {
 
     @Override
     public void start(Stage s) throws Exception {
-
+        this.nextID = 17;
 
         //TODO: On load, get information:
         loadMapsFromFile();
@@ -85,10 +88,9 @@ public class MapBuilderController extends   Application {
         System.out.println("X: " + x);
         System.out.println("Y: " + y);
         //TODO: get UNIQUE or next number - look into singelton
-        int id = 111;
-        Node newNode = new Node("ENTER TEXT", id, x, y, 0, this.currentMap);
-        nodes.put(id, newNode);
-        return id;
+        Node newNode = new Node("ENTER TEXT", this.nextID, x, y, 0, this.currentMap);
+        nodes.put(this.nextID, newNode);
+        return this.nextID++;
     }
 
 

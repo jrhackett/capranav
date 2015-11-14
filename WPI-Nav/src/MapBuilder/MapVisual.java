@@ -98,8 +98,8 @@ public class MapVisual extends StackPane{
 	}
 
 	private Circle createCircle(int k, Node v){
-		double x = (height - v.getX());  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
-		double y = (width - v.getY());
+		double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
+		double y = v.getY();
 		Circle circle = new Circle(x - 2.5, y - 2.5, 5);
 		normal(circle);
 
