@@ -16,10 +16,13 @@ public class MapVisual extends StackPane{
 	private static final double BORDER = 7;
 	private double height;
 	private double width;
+	public boolean MAP  = false;
+	public boolean EDGE = false;
+	public boolean NODE = false;
+
 
 	/* Data Structures */
 	private HashMap<Integer, Circle> id_circle;
-
 	private MapBuilderController controller;
 
 	/* Visuals */
@@ -63,16 +66,16 @@ public class MapVisual extends StackPane{
 		this.getChildren().add(mapView);
 		drawNodes(controller.getNodesOfMap(map.getID()));
 		mapView.setOnMouseClicked(e -> {
-			//create this node
-			int id = controller.newNodeAtLocation(e); //x & y are already relative to map
+			if (NODE) {
+				int id = controller.newNodeAtLocation(e); //x & y are already relative to map
 
-			//create a circle for this node!!
-			Node n = controller.getNode(id);
-			Circle c = createCircle(n);
-			id_circle.put(id, c);
-			nodeCircles.getChildren().removeAll();
-			nodeCircles.getChildren().add(c);
-
+				//create a circle for this node!!
+				Node n = controller.getNode(id);
+				Circle c = createCircle(n);
+				id_circle.put(id, c);
+				nodeCircles.getChildren().removeAll();
+				nodeCircles.getChildren().add(c);
+			}
 		});
 	}
 
@@ -96,6 +99,7 @@ public class MapVisual extends StackPane{
 	}
 
 	private Circle createCircle(Node v){
+
 		double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
 		double y = v.getY();
 		Circle circle = new Circle(x, y, 5);

@@ -99,29 +99,29 @@ public class MapBuilderDisplay extends HBox {
         Button mapButton = new Button("MAP");
         mapButton.setId("first");
         mapButton.setOnAction(e -> {
-            mapMenu.setVisible(true);
-            nodeMenu.setVisible(false);
-            edgeMenu.setVisible(false);
+            mapvisual.MAP = true;
+            mapvisual.EDGE = false;
+            mapvisual.NODE = false;
             options.getChildren().removeAll(nodeMenu, edgeMenu, mapMenu);
             options.getChildren().add(mapMenu);
-
         });
 
         Button nodeButton = new Button("NODE");
         nodeButton.setOnAction(e -> {
-            mapMenu.setVisible(false);
-            nodeMenu.setVisible(true);
-            edgeMenu.setVisible(false);
-            options.getChildren().removeAll(mapMenu, edgeMenu, nodeButton);
+            mapvisual.MAP = false;
+            mapvisual.EDGE = false;
+            mapvisual.NODE = true;
+            options.getChildren().removeAll(mapMenu, edgeMenu, nodeMenu);
             options.getChildren().add(nodeMenu);
         });
 
         Button edgeButton = new Button("EDGE");
         edgeButton.setId("last");
         edgeButton.setOnAction(e -> {
-            mapMenu.setVisible(false);
-            nodeMenu.setVisible(false);
-            edgeMenu.setVisible(true);
+            mapvisual.MAP = false;
+            mapvisual.EDGE = true;
+            mapvisual.NODE = false;
+
             options.getChildren().removeAll(nodeMenu, mapMenu, edgeMenu);
             options.getChildren().add(edgeMenu);
         });
@@ -141,11 +141,6 @@ public class MapBuilderDisplay extends HBox {
         createMapMenu();
         createNodeMenu();
         createEdgeMenu();
-
-        //set visibilities
-        mapMenu.setVisible(true);
-        nodeMenu.setVisible(false);
-        edgeMenu.setVisible(false);
 
 
         options.setSpacing(25);
