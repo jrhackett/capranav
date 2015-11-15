@@ -97,6 +97,7 @@ public class MapBuilderDisplay extends HBox {
         Button mapButton = new Button("MAP");
         mapButton.setId("first");
         mapButton.setOnAction(e -> {
+            if (controller.SELECTED) { mapvisual.deselect(controller.selectedNode.getID()); }
             mapvisual.MAP = true;
             mapvisual.EDGE = false;
             mapvisual.NODE = false;
@@ -106,6 +107,7 @@ public class MapBuilderDisplay extends HBox {
 
         Button nodeButton = new Button("NODE");
         nodeButton.setOnAction(e -> {
+            if (controller.SELECTED) { mapvisual.deselect(controller.selectedNode.getID()); }
             mapvisual.MAP = false;
             mapvisual.EDGE = false;
             mapvisual.NODE = true;
@@ -116,6 +118,7 @@ public class MapBuilderDisplay extends HBox {
         Button edgeButton = new Button("EDGE");
         edgeButton.setId("last");
         edgeButton.setOnAction(e -> {
+            if (controller.SELECTED) { mapvisual.deselect(controller.selectedNode.getID()); }
             mapvisual.MAP = false;
             mapvisual.EDGE = true;
             mapvisual.NODE = false;
@@ -140,8 +143,15 @@ public class MapBuilderDisplay extends HBox {
         createNodeMenu();
         createEdgeMenu();
 
+        //
+        Button finishButton = new Button("WRITE");
+        finishButton.setOnAction(e -> {
+            controller.mapsToFile();
+            //controller.nodesToFile();
+        });
+
         options.setSpacing(25);
-        options.getChildren().addAll(background, mapMenu);
+        options.getChildren().addAll(background, finishButton, mapMenu);
     }
 
     private void createEdgeMenu() {
@@ -169,12 +179,13 @@ public class MapBuilderDisplay extends HBox {
 
 
         //button to create the map -> writes the map to the JSON FILE
-        Button saveButton = new Button("Write Nodes Information!");
+        Button saveButton = new Button("Save Edge Information!");
         saveButton.setOnAction(e -> {
             System.out.println("save button go!");
             controller.addEdges();
             status.setText("Edges saved!");
             status.setTextFill(Color.GREEN);
+            mapvisual.deselect(controller.selectedNode.getID());
         });
 
         //button to create the map -> writes the map to the JSON FILE

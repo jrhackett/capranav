@@ -114,29 +114,26 @@ public class MapVisual extends Pane {
 		normal(circle);
 
 		circle.setOnMouseEntered(e -> {
-			last = (Color) circle.getFill();
-			lastStroke = (Color) circle.getStroke();
-			highlight(circle, Color.GOLD, Color.BLACK);
-			//TODO: POPOVER FOR NAME HERE
+			if (!(EDGE && controller.SELECTED)) {
+				last = (Color) circle.getFill();
+				lastStroke = (Color) circle.getStroke();
+				highlight(circle, Color.GOLD, Color.BLACK);
+				//TODO: POPOVER FOR NAME HERE
 
-			//popOver.show(circle);
-			//p//opOver.setContentNode(new Text(v.toString()));
-
+				//popOver.show(circle);
+				//p//opOver.setContentNode(new Text(v.toString()));
+			}
 		});
 
 		circle.setOnMouseExited(e -> {
 
 
-//			popOver.hide();
+		//popOver.hide();
 
 
 			if (controller.SELECTED && controller.selectedNode.getID() == v.getID()) {
-				System.out.println("First");
 			} else if (EDGE && controller.SELECTED) {
-				System.out.println("Second");
-
 			} else {
-				System.out.println("Third");
 				highlight(circle, last, lastStroke);
 			}
 

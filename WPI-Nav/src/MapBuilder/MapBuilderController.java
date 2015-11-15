@@ -57,11 +57,9 @@ public class MapBuilderController extends   Application {
         this.nextNodeID = 17; //TODO FIX THIS ID INCREMENT thING
         potentialEdgeNodes = new ArrayList<>();
 
-
-        //TODO: On load, get information:
-        loadMapsFromFile();
+        mapsFromFile();
+        //nodesFromFile();
         loadNodesFromFile();
-
 
 		/* basic layout */
         s.setResizable(false);
@@ -93,6 +91,13 @@ public class MapBuilderController extends   Application {
         return this.nextNodeID++;
     }
 
+    /**
+     *
+     * @param name
+     * @param path
+     * @param ratio
+     * @return
+     */
     public boolean createAndWriteNewMap(String name, String path, double ratio){
         boolean validate = validatePath(path);
         if (validate){
@@ -106,17 +111,26 @@ public class MapBuilderController extends   Application {
         }
     }
 
+    /**
+     * sets the selected node name
+     * @param name
+     */
     public void setNodeName(String name){
-        selectedNode.setName(name);
+        if (SELECTED) {
+            selectedNode.setName(name);
+        }
     }
 
 
+    /**
+     * Make sure that the file exists and its unique
+     * @param path
+     * @return true if it exists
+     */
     private boolean validatePath(String path){
         System.out.println("VALIDATING PATH!");
-        //checking if this map exists
         this.maps.check(path);
 
-        //checking if we can find this patj
         try {
             //TODO make this better
             //This throws an exception if user tries to load a map that DNE
@@ -132,7 +146,9 @@ public class MapBuilderController extends   Application {
     }
 
 
-    //load and set the ArrayList of Maps [using parser]
+    /**
+     * loads maps from file
+     */
     public void loadMapsFromFile(){
         //TODO complete this!
         //gets and creates maps currently written
@@ -143,14 +159,21 @@ public class MapBuilderController extends   Application {
         this.maps = new Maps();
         maps.addMap(new Map (11,1,2,"Campus Center","wpi-campus-map", 1));
         maps.addMap(new Map (99,1,2,"Project Center Floor 1","project_center_floor_1_redo_1024", 1));
+
+        mapsFromFile();
     }
 
-    //return the ArrayList of Maps [to display]
+    /**
+     * get the maps [to display]
+     * @return
+     */
     public Maps getMaps(){
         return this.maps;
     }
 
-    //load and set the HashMap of Nodes
+    /**
+     * load Nodes from file
+     */
     public void loadNodesFromFile(){
         //gets and creates maps currently written
         //TODO: uncomment this block and delete dummy stuff to work with file
@@ -194,20 +217,9 @@ public class MapBuilderController extends   Application {
                 value.put(k,v);
             }
         });
-
-       // this.nodesForCurrentMap = value;
         return value;
     }
 
-    public void mapsToFile() {
-        Parser parser = new Parser("maps.json");
-        parser.toFile(this.maps);
-    }
-
-    public void mapsFromFile() {
-        Parser parser = new Parser("maps.json");
-        this.maps = (Maps)parser.fromFile();
-    }
 
     /**
      * Sets the current map to id
@@ -220,40 +232,15 @@ public class MapBuilderController extends   Application {
     }
 
     /**
-     * Gets the current map id
-     * @param
-     */
-    public int getCurrentMap(){
-        return this.currentMap;
-    }
-
-    /**
-     * Sets the current node to id
-     * @param id: id of new node
-     */
-    public boolean setCurrentNode(int id){
-        if (nodes.containsKey(id)){
-            //probably don't want to edit it old nodes
-            //TODO: consider when adding a node to a 'completed' map, how to add edges both ways
-
-            return false;
-        } else {
-            //nodes.put(id, new Node());
-            //we'll add when we complete/save
-        }
-
-        this.currentNode = id;
-        return true;
-    }
-
-    /**
      * Gets the node given a key
      * @param id
      * @return node
      */
     public Node getNode(int id){ return nodes.get(id);}
 
-
+    /**
+     * adds a node to the arraylist of node for potential edges
+     */
     public void addPotentialEdge(Node node){
         //validate
         node.getAdjacencies().contains(node);
@@ -261,6 +248,9 @@ public class MapBuilderController extends   Application {
         potentialEdgeNodes.add(node);
     }
 
+    /**
+     * resets the potential edges
+     */
     public void resetPotentialEdges(){
         this.potentialEdgeNodes = new ArrayList<>();
     }
@@ -270,24 +260,46 @@ public class MapBuilderController extends   Application {
      */
     public boolean addEdges(){
         for (Node n : potentialEdgeNodes){
-            nodes.get(selectedNode).addEdge(new Edge(n, 1));
+            nodes.get(selectedNode.getID()).addEdge(new Edge(n, 1));
+            //selectedNode.getID().addEdge(new Edge(n, 1));
         }
         return true;
     }
 
     /**
-     * Save/Write node
+     * Write nodes to file
      * @param
      */
-    public boolean writeOut(){
-        //TODO: clear old file, and write nodes to new one
-        //TODO: write Maps to map file
-        //TODO: either manually or via code save backups
-
-        return  true;
+    public void nodesToFile(){
+        Parser parser = new Parser("nodes.json");
+        parser.toFile(new Graph(this.nodes));
     }
 
+    /**
+     * Load nodes to file
+     * @param
+     */
+    public void nodesFromFile(){
+        Parser test = new Parser("nodes.json");
+        Graph graph = (Graph)test.fromFile();
+        this.nodes = graph.getNodes();
+    }
 
+    /**
+     * writes maps to file
+     */
+    public void mapsToFile() {
+        Parser parser = new Parser("maps.json");
+        parser.toFile(this.maps);
+    }
+
+    /**
+     * load maps from file
+     */
+    public void mapsFromFile() {
+        Parser parser = new Parser("maps.json");
+        this.maps = (Maps)parser.fromFile();
+    }
 
     public static void main(String[] args) {
         launch(args);
