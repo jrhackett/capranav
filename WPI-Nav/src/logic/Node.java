@@ -12,7 +12,7 @@ public class Node {
 	private double g_scores;
 	private double h_scores;
 	private double f_scores = 0;
-	private ArrayList<Edge> adjacencies;
+	ArrayList<Edge> adjacencies;
 	private Node parent;
 
 
