@@ -33,7 +33,7 @@ public class ParserTesting {
 
         graph = new Graph(nodes);
     }
-
+/*
     @Test
     public void fromFileTest1() throws Exception{
         testParser1.toFile(graph);
@@ -45,4 +45,5 @@ public class ParserTesting {
         testParser2.toFile(graph);
         assertEquals("toFile did not output the proper graph", new Graph(nodes), testParser2.fromFile());
     }
+    */
 }
