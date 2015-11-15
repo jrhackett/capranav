@@ -66,7 +66,7 @@ public class Parser
 	 * toFile(Graph) is used to write an entire graph out to a JSON database file
 	 * WARNING: This version will OVERWRITE the given file
 	 *
-	 * @param graph: Graph to write to the database
+	 * @param collection: Graph to write to the database
      */
 
 	public void toFile(ICollection collection) {
