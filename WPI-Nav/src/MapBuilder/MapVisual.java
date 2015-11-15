@@ -1,7 +1,6 @@
 package MapBuilder;
 
 
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -9,19 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import logic.Node;
-import org.controlsfx.control.PopOver;
-import javafx.stage.PopupWindow;
-import javafx.scene.control.PopupControl;
-
-
-
-
-
-
-
-
 
 import java.util.HashMap;
 
@@ -125,32 +112,34 @@ public class MapVisual extends Pane {
 		double y = v.getY();
 		Circle circle = new Circle(x, y, 5);
 		normal(circle);
-		PopOver popOver = new PopOver();
-		//when mouse moves over the node highlight it
+
 		circle.setOnMouseEntered(e -> {
 			last = (Color) circle.getFill();
 			lastStroke = (Color) circle.getStroke();
 			highlight(circle, Color.GOLD, Color.BLACK);
 			//TODO: POPOVER FOR NAME HERE
 
-			popOver.show(circle);
-			popOver.setContentNode(new Text(v.toString()));
-
-
-
-
-
-
+			//popOver.show(circle);
+			//p//opOver.setContentNode(new Text(v.toString()));
 
 		});
+
 		circle.setOnMouseExited(e -> {
-			/*popOver.hide();
+
+
+//			popOver.hide();
+
 
 			if (controller.SELECTED && controller.selectedNode.getID() == v.getID()) {
-				//do nothing
+				System.out.println("First");
+			} else if (EDGE && controller.SELECTED) {
+				System.out.println("Second");
+
 			} else {
+				System.out.println("Third");
 				highlight(circle, last, lastStroke);
-			} */
+			}
+
 		});
 
 
@@ -182,7 +171,6 @@ public class MapVisual extends Pane {
 					controller.addPotentialEdge(v);
 				}
 			}
-
 		});
 
 
