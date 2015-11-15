@@ -90,9 +90,14 @@ public class AStarTesting {
 
 	// Testing~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// AStar~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	/*
-	 * @Test public void AStarTest1() { assertEquals("Tests AStar",
-	 * ArrayList<Node>, AStarShortestPath.AStarSearch(n1, n13), 0); }
-	 */
+
+	@Test
+	public void AStarTest1() {
+		ArrayList<Node> path1 = new ArrayList<Node>(Arrays.asList(n1, n5, n8, n10, n13));
+		System.out.println(path1);
+		System.out.println("Next");
+		System.out.println(AStarShortestPath.AStarSearch(n1, n2));
+		assertEquals("Tests AStar", path1, AStarShortestPath.AStarSearch(n1, n13));
+	}
 
 }

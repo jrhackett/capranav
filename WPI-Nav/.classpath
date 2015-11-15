@@ -8,5 +8,6 @@
 	<classpathentry exported="true" kind="lib" path="util/slf4j-jdk14-1.7.12.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/Josh/Documents/cs3733-team9/WPI-Nav/util/gson-2.4.jar"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Josh/Documents/cs3733-team9/WPI-Nav/util/javax.mail.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

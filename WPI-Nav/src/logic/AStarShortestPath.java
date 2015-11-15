@@ -8,74 +8,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 public class AStarShortestPath {
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	/*				//below code is only for testing AStar, remove later//
-	public static void main(String[] args) {
 
-		//Initialize arbitrary Nodes
-		Node n1 = new Node("Institute", 0, 0, 0);
-		Node n2 = new Node("RecCenter", 0, 10, 0);
-		Node n3 = new Node("Field", 0, 20, 0);
-		Node n4 = new Node("Harrington", 3, 16, 0);
-		Node n5 = new Node("Quad", 5, 5, 0);
-		Node n6 = new Node("Morgan", 6, 1, 0);
-		Node n7 = new Node("Riley", 11, 2, 0);
-		Node n8 = new Node("Higgins Labs", 10, 13, 0);
-		Node n9 = new Node("Campus Center", 10, 20, 0);
-		Node n10 = new Node("Fountain", 16, 17, 0);
-		Node n11 = new Node("Alden", 16, 3, 0);
-		Node n12 = new Node("West Street", 18, 8, 0);
-		Node n13 = new Node("Library", 20, 20, 0);
-
-		// initialize the edges
-
-		// Institute
-		n1.adjacencies = new Edge[] { new Edge(n2, 1), new Edge(n5, 1) };
-
-		// RecCenter
-		n2.adjacencies = new Edge[] { new Edge(n1, 1), new Edge(n4, 1) };
-
-		// Field
-		n3.adjacencies = new Edge[] { new Edge(n4, 1) };
-
-		// Harrington
-		n4.adjacencies = new Edge[] { new Edge(n3, 1), new Edge(n2, 1), new Edge(n5, 1) };
-
-		// Quad
-		n5.adjacencies = new Edge[] { new Edge(n1, 1), new Edge(n4, 1), new Edge(n6, 1), new Edge(n8, 1) };
-
-		// Morgan
-		n6.adjacencies = new Edge[] { new Edge(n5, 1), new Edge(n7, 1)};
-
-		// Riley
-		n7.adjacencies = new Edge[] { new Edge(n6, 1) };
-
-		// Higgins Labs
-		n8.adjacencies = new Edge[] { new Edge(n5, 1), new Edge(n9, 1), new Edge(n10, 1), new Edge(n11, 1) };
-
-		// Campus Center
-		n9.adjacencies = new Edge[] { new Edge(n8, 1) };
-
-		// Fountain
-		n10.adjacencies = new Edge[] { new Edge(n8, 1), new Edge(n13, 1), new Edge(n12, 1) };
-
-		// Alden
-		n11.adjacencies = new Edge[] { new Edge(n8, 1), new Edge(n12, 1) };
-
-		// West Street
-		n12.adjacencies = new Edge[] { new Edge(n11, 1), new Edge(n10, 1), new Edge(n13, 1) };
-
-		// Library
-		n13.adjacencies = new Edge[] { new Edge(n10, 1), new Edge(n12, 1) };
-
-		
-
-		AStarSearch(n1, n13);
-
-
-	}
-					//above code is only for testing remove later//
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	/**
 	 * AStarSearch is used to find the shortest path between two different Nodes 
 	 * @param start: starting Node
