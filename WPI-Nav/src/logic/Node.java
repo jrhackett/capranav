@@ -43,6 +43,7 @@ public class Node {
 	 * @param x: x-coordinate of the node
 	 * @param y: y-coordinate of the node
 	 * @param z: z-coordinate of the node
+	 * @param map_id: map id number
 	 * @return void
 	 */
 	public Node(String val, int id, double x, double y, double z, int map_id) {

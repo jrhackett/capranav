@@ -28,13 +28,16 @@ public class Graph implements ICollection
 	 * toString is used to print the graph in a readable format
 	 * @return String: a string describing the graph
 	 */
+	//HW: Made this actually return something
 	public String toString()
 	{
+		String str = "";
 		for(Node node : this.nodes.values())
 		{
+			str = str + (node.toString() + " ");
 			System.out.println(node.toString());
 		}
-		return null;
+		return str;
 	}
 
 	public HashMap<Integer, Node> getNodes() {
