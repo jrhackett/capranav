@@ -1,7 +1,5 @@
 package logic;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,10 +14,11 @@ public class EmailTesting {
     public void test() {
 
     }
-
+/*
     @Test
     public void EmailTest() {
         assertEquals();
     }
+    */
 
 }
