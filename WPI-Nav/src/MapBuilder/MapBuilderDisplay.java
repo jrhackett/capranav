@@ -35,7 +35,6 @@ public class MapBuilderDisplay extends HBox {
     /* map */
     MapVisual mapvisual;
 
-
     /* controller */
     MapBuilderController controller;
 

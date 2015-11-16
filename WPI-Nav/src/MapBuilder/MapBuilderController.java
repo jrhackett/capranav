@@ -40,9 +40,9 @@ public class MapBuilderController extends   Application {
     private ArrayList<Node> potentialEdgeNodes;
 
     private int currentMap;
-    private int currentNode;
+
     private int nextNodeID;
-    private int nextMapID;
+    private int nextMapID  = 5;//TODO UNIQUE
 
 
 
@@ -58,8 +58,8 @@ public class MapBuilderController extends   Application {
         potentialEdgeNodes = new ArrayList<>();
 
         mapsFromFile();
-        //nodesFromFile();
-        loadNodesFromFile();
+        nodesFromFile();
+        //loadNodesFromFile();
 
 		/* basic layout */
         s.setResizable(false);
@@ -145,24 +145,6 @@ public class MapBuilderController extends   Application {
         return true;
     }
 
-
-    /**
-     * loads maps from file
-     */
-    public void loadMapsFromFile(){
-        //TODO complete this!
-        //gets and creates maps currently written
-
-
-
-        //garb tester:
-        this.maps = new Maps();
-        maps.addMap(new Map (11,1,2,"Campus Center","wpi-campus-map", 1));
-        maps.addMap(new Map (99,1,2,"Project Center Floor 1","project_center_floor_1_redo_1024", 1));
-
-        mapsFromFile();
-    }
-
     /**
      * get the maps [to display]
      * @return
@@ -183,11 +165,8 @@ public class MapBuilderController extends   Application {
          */
 
         //below is tester garb
+        /*
         nodes = new HashMap<Integer, Node>();
-        //Node n1 = new Node("Institute",0, 0, 0, 0, 11);
-        //Node n2 = new Node("RecCenter",1, 10, 10, 0, 11);
-        //Node n3 = new Node("Field",2, 0, 20, 10, 99);
-        //Node n4 = new Node("Harrington",3, 3, 10, 20, 11);
         Node n5 = new Node("Quad",4, 55, 34, 76, 11);
         Node n6 = new Node("Morgan",5, 55, 44, 66, 99);
         Node n7 = new Node("Riley",6, 11, 88, 55, 11);
@@ -201,6 +180,9 @@ public class MapBuilderController extends   Application {
         for (Node n : tester){
             nodes.put(n.getID(), n);
         }
+        */
+
+
 
     }
 

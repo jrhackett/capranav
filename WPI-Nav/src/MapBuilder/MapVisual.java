@@ -182,7 +182,6 @@ public class MapVisual extends Pane {
 			}
 		});
 
-
 		circle.setOnMouseReleased(e -> {
 			if (MAP) {
 				if (CLICKED) {
