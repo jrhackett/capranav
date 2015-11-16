@@ -22,6 +22,11 @@ public class Directions {
 
 		double angle = Math.atan2((aStarPath.get(0).getY() - aStarPath.get(1).getY()),
 				(aStarPath.get(0).getX() - aStarPath.get(1).getX()));
+		
+		angle = Math.round(angle*180/Math.PI - 180);
+		if(angle < 0){
+			angle+= 360;
+		}
 
 		directions.add("Face " + Math.round(angle) + ", and walk " + Math.round(dist) + " feet.");
 
@@ -34,9 +39,16 @@ public class Directions {
 			dist = Math.sqrt(Math.pow((turn.getX() - prev.getX()), 2) + Math.pow((turn.getY() - prev.getY()), 2));
 			totalDistance += dist;
 			angle = getAngle(prev, turn, next);
+			angle = angle*180/Math.PI - 180;
+			if(angle < -180){
+				angle+= 360;
+			}
+			if(angle > 180){
+				angle-= 360;
+			}
 
 			directions.add(
-					"Turn " + Math.round(angle * 180 / Math.PI - 180) + ", and walk " + Math.round(dist) + " feet.");
+					"Turn " + Math.round(angle) + ", and walk " + Math.round(dist) + " feet.");
 
 		}
 		// TODO Add english words for angles

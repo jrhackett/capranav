@@ -101,12 +101,12 @@ public class StepByStepTesting {
 	public void CorrectStringsTest1() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nD, nA, nB, nF, nI, nH, nE, nG));
 		ArrayList<String> steps = Directions.stepByStep(path);
-		//assertEquals("Message from Node 1 to Node 2", "Face 90, and walk 1 feet.", steps.get(0));
-		assertEquals("Message from Node 2 to Node 3", "Turn -90, and walk 1 feet.", steps.get(1));
-		assertEquals("Message from Node 3 to Node 4", "Turn -45, and walk 1 feet.", steps.get(2));
-		assertEquals("Message from Node 4 to Node 5", "Turn -45, and walk 1 feet.", steps.get(3));
-		assertEquals("Message from Node 5 to Node 6", "Turn -90, and walk 1 feet.", steps.get(4));
-		assertEquals("Message from Node 6 to Node 7", "Turn -90, and walk 1 feet.", steps.get(5));
+		assertEquals("Message from Node 1 to Node 2", "Face 270, and walk 1 feet.", steps.get(0));
+		assertEquals("Message from Node 2 to Node 3", "Turn 90, and walk 1 feet.", steps.get(1));
+		assertEquals("Message from Node 3 to Node 4", "Turn 45, and walk 1 feet.", steps.get(2));
+		assertEquals("Message from Node 4 to Node 5", "Turn 45, and walk 1 feet.", steps.get(3));
+		assertEquals("Message from Node 5 to Node 6", "Turn 90, and walk 1 feet.", steps.get(4));
+		assertEquals("Message from Node 6 to Node 7", "Turn 90, and walk 1 feet.", steps.get(5));
 	}
 	
 
