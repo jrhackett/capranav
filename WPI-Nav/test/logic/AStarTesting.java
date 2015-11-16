@@ -93,11 +93,14 @@ public class AStarTesting {
 
 	@Test
 	public void AStarTest1() {
-		ArrayList<Node> path1 = new ArrayList<Node>(Arrays.asList(n1, n5, n8, n10, n13));
-		System.out.println(path1);
-		System.out.println("Next");
-		System.out.println(AStarShortestPath.AStarSearch(n1, n2));
-		assertEquals("Tests AStar", path1, AStarShortestPath.AStarSearch(n1, n13));
+		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n1, n5, n8, n10, n13));
+		assertEquals("Tests AStar", path, AStarShortestPath.AStarSearch(n1, n13));
+	}
+
+	@Test
+	public void AStarTest2() {
+		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n1));
+		assertEquals("Tests AStar", path, AStarShortestPath.AStarSearch(n1, n1));
 	}
 
 }
