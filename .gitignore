@@ -1,4 +1,5 @@
 .metadata/
-WPI-Nav/bin/
-WPI-Nav.iml
+WPI-Nav/bin/*
+*.iml
+*.class
 .recommenders/
