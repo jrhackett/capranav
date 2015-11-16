@@ -1,9 +1,18 @@
 package logic;
+import java.util.Collection;
 import java.util.HashMap;
 
-public class Graph 
+public class Graph implements ICollection
 {
-	HashMap<Integer, Node> nodes;
+	//MG: Changed to private, did this break anything?
+	private HashMap<Integer, Node> nodes;
+
+	/**
+	 * Simple constructor : Empty Hashmap
+	 */
+	public Graph() {
+		this.nodes = new HashMap<Integer, Node>();
+	}
 
 	/**
 	 * Graphs are used to represent collections of Nodes
@@ -17,15 +26,25 @@ public class Graph
 
 	/**
 	 * toString is used to print the graph in a readable format
-	 * @param void
 	 * @return String: a string describing the graph
 	 */
+	//HW: Made this actually return something
 	public String toString()
 	{
+		String str = "";
 		for(Node node : this.nodes.values())
 		{
+			str = str + (node.toString() + " ");
 			System.out.println(node.toString());
 		}
-		return null;
+		return str;
+	}
+
+	public HashMap<Integer, Node> getNodes() {
+		return nodes;
+	}
+
+	public Collection<Node> get() {
+		return this.nodes.values();
 	}
 }

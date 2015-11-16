@@ -1,11 +1,11 @@
 package visuals;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
-import logic.Node;
+import logic.*;
+
+import java.util.HashMap;
 
 /**
  * Currently using a 'simple' ComboBox.
@@ -15,6 +15,8 @@ public class Inputs extends ComboBox {
 	private double WIDTH;
 	private String initial;
 	int rank;
+	ObservableList<logic.Map> data;
+
 
 	@SuppressWarnings("unchecked") /* probably should remove this */
 	public Inputs(String s,double WIDTH ){
@@ -23,7 +25,9 @@ public class Inputs extends ComboBox {
 		initial = s;
 		this.setMaxWidth(WIDTH);
 		this.setMinWidth(WIDTH);
-		this.setItems(getDummyLocations());
+
+		//		this.setItems(getDummyLocations());
+		/*
 		this.valueProperty().addListener(new ChangeListener<Node>(){
 			
 			@Override
@@ -35,7 +39,8 @@ public class Inputs extends ComboBox {
 			
 			}
 		});
-	
+	*/
+
 		/*
 		this.setCellFactory(new Callback<ListView<Node>, ListCell<Node>>() {
 
@@ -60,7 +65,7 @@ public class Inputs extends ComboBox {
 	}
 
 	/* this will be replaced later with actual data */
-	private ObservableList<Node> getDummyLocations() {
+	public ObservableList<Node> getDummyLocations() {
 		ObservableList<Node> data = FXCollections.observableArrayList();
 		
 		data.addAll(
@@ -69,6 +74,21 @@ public class Inputs extends ComboBox {
 				new Node("Student Center", 3, 5, 4, 0));
 		
 		return data;
+	}
+
+	/**
+	 * Takes in an ArrayList of logic.Maps
+	 * @param maps
+	 * @return
+     */
+	public ObservableList<logic.Map> getMaps(HashMap<Integer, logic.Map> maps) {
+		this.data = FXCollections.observableArrayList();
+		maps.forEach((k,v) -> {data.add(v);});
+		return data;
+	}
+
+	public void addMapToMaps(logic.Map map){
+		data.add(map);
 	}
 	
 	

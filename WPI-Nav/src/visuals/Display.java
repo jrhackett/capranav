@@ -163,9 +163,10 @@ public class Display {
 
 		/* start */
 		Inputs start = new Inputs("Search WPI Maps", INPUT_WIDTH);
-
+		start.setItems(start.getDummyLocations());
 		/* end */
 		Inputs end = new Inputs("For Destination", INPUT_WIDTH);
+		end.setItems(end.getDummyLocations());
 
 		this.inputs.getChildren().addAll(start, end);
 
@@ -211,7 +212,7 @@ public class Display {
 		checkButton.setOnMouseClicked(e -> findPaths());
 
 		/* refresh button */
-		Image refresh =  new Image(getClass().getResourceAsStream("images/refresh.png"), 35, 35, true, true);
+		Image refresh =  new Image(getClass().getResourceAsStream("../images/refresh.png"), 35, 35, true, true);
 		ImageView refreshView = new ImageView(refresh);
 		Button questionButton = new Button(refreshView, "refresh", 30);
 
@@ -274,8 +275,8 @@ public class Display {
 
 
 	private void sendEmail(){
-		TextInputDialog dialog = new TextInputDialog("Enter Email Here");
-		dialog.setTitle("Send Directions via Email");
+		TextInputDialog dialog = new TextInputDialog("Type Here");
+		dialog.setTitle("WPI Navigational App");
 		dialog.setHeaderText("Directions will be sent to your email");
 		dialog.setContentText("Please enter your email:");
 

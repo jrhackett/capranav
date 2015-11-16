@@ -6,6 +6,7 @@ public class Node {
 
 	private String name;
 	private int    id;
+	private int    map_id;
 	private double x_coord;
 	private double y_coord;
 	private double z_coord;
@@ -35,8 +36,29 @@ public class Node {
 	}
 
 	/**
+	 * Alternate Constructor: includes map_id
+	 * Nodes are used to represent a location and to hold the Edges to all other locations
+	 * @param val: Name of the node
+	 * @param id: identification number of the node
+	 * @param x: x-coordinate of the node
+	 * @param y: y-coordinate of the node
+	 * @param z: z-coordinate of the node
+	 * @param map_id: map id number
+	 * @return void
+	 */
+	public Node(String val, int id, double x, double y, double z, int map_id) {
+		this.name = val;
+		this.id = id;
+		this.x_coord = x;
+		this.y_coord = y;
+		this.z_coord = z;
+		this.map_id = map_id;
+		this.adjacencies = new ArrayList<Edge>();
+	}
+
+	/**
 	 * getName is used to return the name of the node
-	 * @param void
+	 * @param
 	 * @return String: name of the node
 	 */
 	public String getName() {
@@ -45,7 +67,7 @@ public class Node {
 
 	/**
 	 * getID is used to return the id of the node
-	 * @param void
+	 * @param
 	 * @return double: id of the node
 	 */
 	public int getID() {
@@ -54,7 +76,7 @@ public class Node {
 
 	/**
 	 * getX is used to return the x-coordinate of the node
-	 * @param void
+	 * @param
 	 * @return double: x-coordinate of the node
 	 */
 	public double getX() {
@@ -63,7 +85,7 @@ public class Node {
 
 	/**
 	 * getY is used to return the y-coordinate of the node
-	 * @param void
+	 * @param
 	 * @return double: y-coordinate of the node
 	 */
 	public double getY() {
@@ -72,7 +94,6 @@ public class Node {
 
 	/**
 	 * getZ is used to return the z-coordinate of the node
-	 * @param void
 	 * @return double: z-coordinate of the node
 	 */
 	public double getZ() {
@@ -81,35 +102,30 @@ public class Node {
 
 	/**
 	 * getG is used to return the g score of the node
-	 * @param void
 	 * @return double: g score of the node
 	 */
 	public double getG() { return this.g_scores; }
 
 	/**
 	 * getH is used to return the h score of the node
-	 * @param void
 	 * @return double: h score of the node
 	 */
 	public double getH() { return this.h_scores; }
 
 	/**
 	 * getF is used to return the f score of the node
-	 * @param void
 	 * @return double: f score of the node
 	 */
 	public double getF() { return this.f_scores; }
 
 	/**
 	 * getAdjacencies is used to return the ArrayList of edges for this node
-	 * @param void
 	 * @return ArrayList: edge ArrayList of the node
 	 */
 	public ArrayList<Edge> getAdjacencies() { return this.adjacencies; }
 
 	/**
 	 * getParent is used to return the parent of this node
-	 * @param void
 	 * @return Node: parent of the node
 	 */
 	public Node getParent() { return this.parent; }
@@ -153,10 +169,33 @@ public class Node {
 
 	/**
 	 * toString is used to print the node in a readable format
-	 * @param void
 	 * @return String: a string describing the node
 	 */
-	public String toString() { return String.format("%s: %f, %f, %f\n", this.name, this.x_coord, this.y_coord, this.z_coord);}
+	//public String toString() { return String.format("%s: %f, %f, %f\n", this.name, this.x_coord, this.y_coord, this.z_coord);}
+	public String toString() {return this.name;}
+	/**
+	 * getMap_id is used to get the map id of the node
+	 * @return int: map id of node
+	 */
+	public int getMap_id() {
+		return this.map_id;
+	}
+
+	/**
+	 * setF is used to change the map_id score of the node
+	 * @param map_id: a new map id score
+	 * @return void
+	 */
+	public void setMap_id(int map_id) {
+		this.map_id = map_id;
+	}
+
+	/**
+	 * sets the name of the node
+	 * @param name
+     */
+	public void setName(String name) {this.name = name;}
+
 
 	@Override
 	public int hashCode() {
