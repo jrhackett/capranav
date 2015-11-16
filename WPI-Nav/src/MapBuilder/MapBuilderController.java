@@ -192,9 +192,9 @@ public class MapBuilderController extends   Application {
      */
     public void addPotentialEdge(Node node){
         //validate
-        node.getAdjacencies().contains(node);
-        potentialEdgeNodes.contains(node);
-        potentialEdgeNodes.add(node);
+        if (!node.getAdjacencies().contains(node) &&  !potentialEdgeNodes.contains(node)) {
+            potentialEdgeNodes.add(node);
+        }
     }
 
     /**
@@ -210,7 +210,11 @@ public class MapBuilderController extends   Application {
     public boolean addEdges(){
         for (Node n : potentialEdgeNodes){
             nodes.get(selectedNode.getID()).addEdge(new Edge(n, 1));
-            //selectedNode.getID().addEdge(new Edge(n, 1));
+            /* below should add the edge both ways */
+
+            if (!n.getAdjacencies().contains(selectedNode)) {
+                n.addEdge(new Edge(selectedNode, 1));
+            }
         }
         return true;
     }

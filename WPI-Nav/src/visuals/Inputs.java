@@ -3,7 +3,6 @@ package visuals;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
-import logic.Node;
 
 import java.util.HashMap;
 
@@ -14,7 +13,6 @@ import java.util.HashMap;
 public class Inputs extends ComboBox {
 	private double WIDTH;
 	private String initial;
-	int rank;
 	ObservableList<logic.Map> dataMap;
 	ObservableList<logic.Node> dataNode;
 
@@ -62,18 +60,6 @@ public class Inputs extends ComboBox {
 			
 		});
 		*/
-	}
-
-	/* this will be replaced later with actual data */
-	public ObservableList<Node> getDummyLocations() {
-		ObservableList<Node> data = FXCollections.observableArrayList();
-		
-		data.addAll(
-				new Node("Faraday", 1, 1, 2, 0),
-				new Node("Campus Center", 2, 3, 4, 0),
-				new Node("Student Center", 3, 5, 4, 0));
-		
-		return data;
 	}
 
 	/**

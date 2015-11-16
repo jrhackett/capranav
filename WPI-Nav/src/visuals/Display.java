@@ -175,6 +175,8 @@ public class Display {
 		/* start */
 		this.start = new Inputs("Search WPI Maps", INPUT_WIDTH);
 		start.setOnAction(e -> {
+
+
 			logic.Node node = (logic.Node) start.getValue();
 			mapDisplay.setStartNode(node.getID());
 		});
@@ -209,9 +211,6 @@ public class Display {
 		Label endDescriptor = new Label("Select an Ending Location!");
 		mapDescriptor.setMinWidth(INPUT_WIDTH);
 		mapDescriptor.setMaxWidth(INPUT_WIDTH);
-
-
-		end.setItems(end.getDummyLocations());
 
 		this.inputs.getChildren().addAll(mapDescriptor, chooseMap, startDescriptor,start,endDescriptor, end);
 

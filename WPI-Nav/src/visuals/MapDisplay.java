@@ -143,6 +143,10 @@ public class MapDisplay extends Pane {
         return circle;
     }
 
+    /**
+     * The color and effect for when a node is set as a destination
+     * @param id
+     */
     public void setStartNode(int id){
         Circle c = id_circle.get(id);
         highlight(c, Color.RED, Color.FIREBRICK);

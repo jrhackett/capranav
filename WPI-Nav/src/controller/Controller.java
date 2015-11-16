@@ -44,6 +44,10 @@ public class Controller extends Application {
 
     private logic.Map currentMap;
 
+    private boolean START = false;
+    private boolean END = false;
+
+
     @Override
     public void start(Stage s) throws Exception {
 
