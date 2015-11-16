@@ -78,7 +78,7 @@ public class Parser
 			return;
 		}
 		Gson gson = new Gson();
-		if(this.filename == "nodes.json")
+		if(this.filename.equals("nodes.json"))
 		{
 			Collection<Node> nodes = collection.get();
 			for(Node n : nodes) {
@@ -99,9 +99,10 @@ public class Parser
      * @return ICollection - either a Graph or a Maps
      */
 	public ICollection fromFile() {
-		if(this.filename == "nodes.json") {
+		Gson gson = new Gson();
+
+		if(this.filename.equals("nodes.json")) {
 			HashMap<Integer, Node> graph = new HashMap<Integer, Node>();
-			Gson gson = new Gson();
 			Node temp;
 			while(parser.hasNext()){
 				temp = gson.fromJson(parser.next(), Node.class);
@@ -112,7 +113,6 @@ public class Parser
 		}
 		else {
 			HashMap<Integer, Map> maps = new HashMap<Integer, Map>();
-			Gson gson = new Gson();
 			Map temp;
 			while(parser.hasNext()){
 				temp = gson.fromJson(parser.next(), Map.class);
