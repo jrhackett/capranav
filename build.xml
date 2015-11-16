@@ -1,38 +1,220 @@
-<project name="Team9" default="dist" basedir=".">
-  <description>
-    simple build file
-  </description>
-  <!-- set global properties for this build -->
-  <property name="src" location="src"/>
-  <property name="build" location="build"/>
-  <property name="dist" location="dist"/>
-
-  <target name="init">
-    <!-- Create the time stamp -->
-    <tstamp/>
-    <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${build}"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="wpi-nav" default="all">
+  
+  
+  <property file="build.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.swc"/>
+    <include name="*.apk"/>
+    <include name="*.zip"/>
+    <include name="*.ear"/>
+    <include name="*.egg"/>
+    <include name="*.ane"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/ext/access-bridge-64.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunmscapi.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.controlsfx-8.40.9.classpath">
+    <pathelement location="${basedir}/util/controlsfx-8.40.9.jar"/>
+    <pathelement location="${basedir}/util/gson-2.4.jar"/>
+    <pathelement location="${basedir}/util/hamcrest-core-1.3.jar"/>
+    <pathelement location="${basedir}/util/javax.mail.jar"/>
+    <pathelement location="${basedir}/util/junit-4.12.jar"/>
+    <pathelement location="${basedir}/util/slf4j-api-1.7.12.jar"/>
+    <pathelement location="${basedir}/util/slf4j-jdk14-1.7.12.jar"/>
+  </path>
+  <!-- Register Custom Compiler Taskdefs -->
+  <property name="javac2.home" value="${idea.home}/lib"/>
+  <path id="javac2.classpath">
+    <pathelement location="${javac2.home}/javac2.jar"/>
+    <pathelement location="${javac2.home}/jdom.jar"/>
+    <pathelement location="${javac2.home}/asm-all.jar"/>
+    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+  </path>
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
   </target>
-
-  <target name="compile" depends="init"
-        description="compile the source">
-    <!-- Compile the java code from ${src} into ${build} -->
-    <javac srcdir="${src}" destdir="${build}"/>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module WPI-Nav -->
+  
+  <dirname property="module.wpi-nav.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.wpi-nav" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.wpi-nav" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.wpi-nav" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.wpi-nav" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="wpi-nav.output.dir" value="${module.wpi-nav.basedir}/bin"/>
+  <property name="wpi-nav.testoutput.dir" value="${module.wpi-nav.basedir}/bin"/>
+  
+  <path id="wpi-nav.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="wpi-nav.module.production.classpath">
+    <path refid="${module.jdk.classpath.wpi-nav}"/>
+    <pathelement location="${basedir}/util/slf4j-api-1.7.12.jar"/>
+    <pathelement location="${basedir}/util/slf4j-jdk14-1.7.12.jar"/>
+    <path refid="library.controlsfx-8.40.9.classpath"/>
+  </path>
+  
+  <path id="wpi-nav.runtime.production.module.classpath">
+    <pathelement location="${wpi-nav.output.dir}"/>
+    <pathelement location="${basedir}/util/slf4j-api-1.7.12.jar"/>
+    <pathelement location="${basedir}/util/slf4j-jdk14-1.7.12.jar"/>
+    <path refid="library.controlsfx-8.40.9.classpath"/>
+  </path>
+  
+  <path id="wpi-nav.module.classpath">
+    <pathelement location="${wpi-nav.output.dir}"/>
+    <path refid="${module.jdk.classpath.wpi-nav}"/>
+    <pathelement location="${basedir}/util/slf4j-api-1.7.12.jar"/>
+    <pathelement location="${basedir}/util/slf4j-jdk14-1.7.12.jar"/>
+    <path refid="library.controlsfx-8.40.9.classpath"/>
+  </path>
+  
+  <path id="wpi-nav.runtime.module.classpath">
+    <pathelement location="${wpi-nav.output.dir}"/>
+    <pathelement location="${basedir}/util/slf4j-api-1.7.12.jar"/>
+    <pathelement location="${basedir}/util/slf4j-jdk14-1.7.12.jar"/>
+    <path refid="library.controlsfx-8.40.9.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.wpi-nav">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.wpi-nav">
+    <patternset refid="excluded.from.module.wpi-nav"/>
+  </patternset>
+  
+  <path id="wpi-nav.module.sourcepath">
+    <dirset dir="${module.wpi-nav.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.wpi-nav" depends="compile.module.wpi-nav.production,compile.module.wpi-nav.tests" description="Compile module WPI-Nav"/>
+  
+  <target name="compile.module.wpi-nav.production" depends="register.custom.compilers" description="Compile module WPI-Nav; production classes">
+    <mkdir dir="${wpi-nav.output.dir}"/>
+    <javac2 destdir="${wpi-nav.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.wpi-nav}/javac">
+      <compilerarg line="${compiler.args.wpi-nav}"/>
+      <bootclasspath refid="wpi-nav.module.bootclasspath"/>
+      <classpath refid="wpi-nav.module.production.classpath"/>
+      <src refid="wpi-nav.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.wpi-nav"/>
+    </javac2>
+    
+    <copy todir="${wpi-nav.output.dir}">
+      <fileset dir="${module.wpi-nav.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
   </target>
-
-  <target name="dist" depends="compile"
-        description="generate the distribution">
-    <!-- Create the distribution directory -->
-    <mkdir dir="${dist}/lib"/>
-
-    <!-- Put everything in ${build} into the Team9-${DSTAMP}.jar file -->
-    <jar jarfile="${dist}/lib/Team9-${DSTAMP}.jar" basedir="${build}"/>
+  
+  <target name="compile.module.wpi-nav.tests" depends="register.custom.compilers,compile.module.wpi-nav.production" description="compile module WPI-Nav; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.wpi-nav" description="cleanup module">
+    <delete dir="${wpi-nav.output.dir}"/>
+    <delete dir="${wpi-nav.testoutput.dir}"/>
   </target>
-
-  <target name="clean"
-        description="clean up">
-    <!-- Delete the ${build} and ${dist} directory trees -->
-    <delete dir="${build}"/>
-    <delete dir="${dist}"/>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
   </target>
+  
+  <target name="clean" depends="clean.module.wpi-nav" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.wpi-nav" description="build all modules"/>
+  
+  <target name="all" depends="build.modules" description="build all"/>
 </project>
