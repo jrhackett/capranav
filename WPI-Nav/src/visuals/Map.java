@@ -67,7 +67,7 @@ public class Map extends StackPane{
 	public void setMap(String MAP_NAME){
 		/* not sure if this alone will change image, may have to update imageview as well */
 		this.mapImage = new Image(getClass().getResourceAsStream("images/" + MAP_NAME + ".png"), height - BORDER, width - BORDER, true, true);
-		drawNodes(MAP_NAME);
+		//drawNodes(MAP_NAME);
 	}
 
 	public void drawPath(){}
@@ -195,13 +195,13 @@ public class Map extends StackPane{
 		//this.getChildren().add(pathCanvas);
 	//}
 
-	public void drawNodes(String MAP_NAME){
+/*	public void drawNodes(String MAP_NAME){
 		this.nodes = new Group();
 		NodeList = controller.getMapNodes(MAP_NAME);
-		/* assuming you put down 'normal' x - y cooridinates, now must translate into display x - y */
-		/* also assuming we know the correct height etc */
+		*//* assuming you put down 'normal' x - y cooridinates, now must translate into display x - y *//*
+		*//* also assuming we know the correct height etc *//*
 		for (Node n : NodeList){
-			double x = (height - n.getX()) * 15;  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
+			double x = (height - n.getX()) * 15;  *//* the nodes currently have way too small X / Y s - later we'll need to somehow scale *//*
 			double y = (width - n.getY()) * 15;
 
 			Circle circle = new Circle(x - 2.5, y - 2.5, 5, Color.DARKGRAY);
@@ -227,9 +227,9 @@ public class Map extends StackPane{
 				}
 			});
 
-			nodes.getChildren().add(circle); /* adding it to group */
+			nodes.getChildren().add(circle); *//* adding it to group *//*
 		}
-	}
+	}*/
 
 	private void newDestination(Node n) {
 		Controller.setNewDestination(n);
@@ -265,8 +265,8 @@ public class Map extends StackPane{
 	}
 
 	private void default_map(){
-		String default_map_name = controller.getDefaultMapName();
-		this.mapImage = new Image(getClass().getResourceAsStream("../images/" + default_map_name + ".png"), width - BORDER, height - BORDER, true, true);
+		//String default_map_name = controller.getDefaultMapName();
+		//this.mapImage = new Image(getClass().getResourceAsStream("../images/" + default_map_name + ".png"), width - BORDER, height - BORDER, true, true);
 		this.mapView = new ImageView(mapImage);
 		mapView.setOnMouseClicked(e -> {
 			if(!HIGHLIGHTED){
@@ -277,7 +277,7 @@ public class Map extends StackPane{
 				HIGHLIGHTED = false;
 			}
 		});
-		drawNodes(default_map_name);
+		//drawNodes(default_map_name);
 	}
 
 	private void set_up_background(){

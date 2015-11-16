@@ -67,7 +67,7 @@ public class MapVisual extends Pane {
 		System.out.println("MAP PATH:  " + map.getPath());
 		this.getChildren().remove(mapView);
 		//id_circle.forEach((k,v) -> {if(v!= null){this.getChildren().remove(v); }});
-		this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"));
+		this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"), 660, 495, true, true);
 		this.mapView = new ImageView(mapImage);
 		this.getChildren().add(mapView);
 		drawNodes(controller.getNodesOfMap(map.getID()));

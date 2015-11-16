@@ -6,7 +6,9 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,7 +20,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javafx.scene.control.TextInputDialog;
+
+import java.util.ArrayList;
 import java.util.Optional;
 
 
@@ -31,7 +34,6 @@ public class Display {
 	private static final double HEIGHT_BUFFER = 15;
 	private static final double GAP = 5;
 	private static final double BUTTON_SIZE = 26;
-	private static final Color BACKGROUND_COLOR = Color.web("a5adb0");
 	private static double TABLE_WIDTH;
 	private static final double TABLE_HEIGHT = 150;
 	private static final double INPUT_WIDTH = 160;
@@ -49,25 +51,15 @@ public class Display {
 	private VBox inputs;
 	private	OptionsMenu options;
 	private	Rectangle divide;
-	private Map map;
+	//private Map map; //TODO CHANGE THIS
 
 
-	/**
-	 * Currently bogus testing. Later will call instance of Controller to get info from logic.
-	 * @return Instructions
-	 */
-	private static ObservableList<Instructions> getInstructionsTest(){
-		ObservableList<Instructions> data = FXCollections.observableArrayList();
+	private MapDisplay mapDisplay;
+	private Inputs chooseMap;
+	private TableView<Instructions> instructions;
+	private Inputs start;
+	private Inputs end;
 
-
-		/* Here we need an array/struct with strings of instructions in it */
-		for (int i = 0; i < 10; i++){
-			data.add(new Instructions("Go North!!", 50));
-		}
-
-		return data;
-
-	}
 
 	/**
 	 * Basic constructor.
@@ -113,10 +105,24 @@ public class Display {
 		//options.setTranslateY(HEIGHT_BUFFER + (MAX_INPUTS) * (BUTTON_SIZE + GAP) + 75); //this is some bad bad stuff
 
 		/* map */
+		StackPane mapPane = new StackPane();
+		mapPane.setPrefHeight((height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER));
+		mapPane.setMaxHeight((height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER));
+		mapPane.setMinHeight(450);
+		mapPane.setPrefWidth(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
+		mapPane.setMaxWidth(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
+		mapPane.setMinWidth(600);
+		System.out.println(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
+		System.out.println(height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER);
+		mapPane.setStyle("-fx-background-color: #eeeeee");
+		this.mapDisplay = new MapDisplay( this.controller); //(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER),
+		mapPane.getChildren().add(mapDisplay);
+		mapPane.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
+		mapPane.setTranslateY(HEIGHT_BUFFER);
+		/*
 		this.map = new Map( (width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER), this.controller);
-		map.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
-		map.setTranslateY(HEIGHT_BUFFER);
 
+		*/
 		/* instructions */
 		this.TABLE_WIDTH = (width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
 
@@ -136,8 +142,8 @@ public class Display {
 
 		side_panel.getChildren().addAll(button_panel, input_panel, divide, options);
 		/* build */
-        root.getChildren().addAll(side_panel, instructions, map);
-        scene = new Scene(root, width, height, BACKGROUND_COLOR);
+        root.getChildren().addAll(side_panel, instructions, mapPane);
+        scene = new Scene(root, width, height);
         return scene;
 	}
 
@@ -161,17 +167,49 @@ public class Display {
 		inputs = new VBox();
 		inputs.setSpacing(GAP);
 
+		/* select map input */
+		Label mapDescriptor = new Label("Select a map!");
+		mapDescriptor.setMinWidth(INPUT_WIDTH);
+		mapDescriptor.setMaxWidth(INPUT_WIDTH);
 
 		/* start */
-		Inputs start = new Inputs("Search WPI Maps", INPUT_WIDTH);
-		start.setItems(start.getDummyLocations());
+		this.start = new Inputs("Search WPI Maps", INPUT_WIDTH);
+
 		/* end */
-		Inputs end = new Inputs("For Destination", INPUT_WIDTH);
+		this.end = new Inputs("For Destination", INPUT_WIDTH);
+
+
+		//ComboBox choose Map
+		this.chooseMap = new Inputs("maps", INPUT_WIDTH);
+		chooseMap.setItems(chooseMap.getMaps(controller.getMaps().getMaps()));
+		chooseMap.setOnAction(e -> {
+			logic.Map newMap = (logic.Map) chooseMap.getValue();
+			controller.setCurrentMap(newMap.getID());
+			mapDisplay.setMap(newMap);
+
+			start.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
+			end.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
+
+
+		});
+
+		/* select start input */
+		Label startDescriptor = new Label("Select a Starting Location!");
+		mapDescriptor.setMinWidth(INPUT_WIDTH);
+		mapDescriptor.setMaxWidth(INPUT_WIDTH);
+
+
+		/* select end input */
+		Label endDescriptor = new Label("Select an Ending Location!");
+		mapDescriptor.setMinWidth(INPUT_WIDTH);
+		mapDescriptor.setMaxWidth(INPUT_WIDTH);
+
+
 		end.setItems(end.getDummyLocations());
 
-		this.inputs.getChildren().addAll(start, end);
+		this.inputs.getChildren().addAll(mapDescriptor, chooseMap, startDescriptor,start,endDescriptor, end);
 
-		pane.getChildren().addAll(inputs); /* background taken out for now */
+		pane.getChildren().addAll( inputs); /* background taken out for now */
 
 		DropShadow ds = new DropShadow();
 		ds.setOffsetX(.3);
@@ -216,7 +254,7 @@ public class Display {
 		Image refresh =  new Image(getClass().getResourceAsStream("../images/refresh.png"), 35, 35, true, true);
 		ImageView refreshView = new ImageView(refresh);
 		Button questionButton = new Button(refreshView, "refresh", 30);
-
+		questionButton.setOnMouseClicked(e -> refreshInformation());
 
 		/* menu button */
 		VBox bars = new VBox();
@@ -236,7 +274,9 @@ public class Display {
 		emailButton.setOnMouseClicked(e -> sendEmail());
 		*/
 
-		buttonPanel.getChildren().addAll(checkButton, addButton, menuButton, questionButton);
+		//addButton
+
+		buttonPanel.getChildren().addAll(checkButton, menuButton, questionButton);
 		pane.getChildren().addAll(stack_pane_background, buttonPanel);
 		buttonPanel.setAlignment(Pos.CENTER);
 		pane.setAlignment(Pos.CENTER_LEFT);
@@ -250,9 +290,28 @@ public class Display {
 	 * We also have to think about clearing things
 	 */
 	private void findPaths(){
+		//validate that there are inputs for beginging and end
+		if (this.start.getValue() != null && this.end.getValue() != null){
+			ArrayList<logic.Node> path = this.controller.getPathNodes((logic.Node)this.start.getValue(), (logic.Node)this.end.getValue());
+			ArrayList<String> instructions = this.controller.getInstructions();//pass correct instructions
+
+			setInstructions(path, instructions);
+			mapDisplay.showPath(path);
+		}
 		//String name = controller.getMapName();
 		//map.setMap(name);
-		map.drawPath();
+		//mapDisplay.drawPath();
+	}
+
+
+	/**
+	 * refresh all data
+	 */
+	private void refreshInformation(){
+		//this.start
+		//this.end
+		//this.mapvisual.removePath
+		//this.instructions.remove
 	}
 
 	/**
@@ -337,17 +396,29 @@ public class Display {
 	 * Somewhere in here must add an event that maps each instruction row to a node to a bool to an image
 	 */
 	private TableView<Instructions> createInstructionsTable() {
-		TableView<Instructions> instructions = new TableView<>();
+		this.instructions = new TableView<>();
 		instructions.setMinWidth(TABLE_WIDTH);
 		instructions.setMaxWidth(TABLE_WIDTH);
 		instructions.setMinHeight(TABLE_HEIGHT);
 		instructions.setMaxHeight(TABLE_HEIGHT);
 		instructions.getColumns().addAll(Instructions.getColumn(instructions));
-		instructions.setItems(getInstructionsTest());
 		instructions.setColumnResizePolicy(
 	            TableView.CONSTRAINED_RESIZE_POLICY
 		        );
 		return instructions;
+	}
+
+	/**
+	 * Call to set the instructions
+	 */
+	private void setInstructions(ArrayList<logic.Node> nodes, ArrayList<String> instructions){
+		ObservableList<Instructions> data = FXCollections.observableArrayList();
+
+		for (int i = 0; i < nodes.size(); i++){
+			data.add(new Instructions(instructions.get(i), nodes.get(i)));
+		}
+
+		this.instructions.setItems(data);
 	}
 
 }

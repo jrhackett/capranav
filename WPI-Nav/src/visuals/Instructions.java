@@ -13,9 +13,9 @@ public class Instructions {
 	Node end;
 	Node begin;
 	
-	public Instructions(String s, int d){
+	public Instructions(String s, logic.Node d){
 		this.instruction_string = s;
-		this.distance = d;
+		this.end = d;
 	}
 
 	public String getInstruction_string() {

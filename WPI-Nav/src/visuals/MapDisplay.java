@@ -1,6 +1,7 @@
 package visuals;
 
 import controller.Controller;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -8,6 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import logic.Node;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -62,6 +64,23 @@ public class MapDisplay extends Pane {
         */
     }
 
+    /**
+     * Show path of nodes
+     *
+     */
+    public void showPath(ArrayList<Node> path){
+        id_circle.forEach((k,v) -> {
+            normal(v);
+        });
+
+        for (Node n : path){
+            highlightPath(id_circle.get(n.getID()));
+        }
+
+
+    }
+
+
 
     /**
      * Draws the nodes given on the map
@@ -111,6 +130,19 @@ public class MapDisplay extends Pane {
     }
 
 
+
+    private void highlightPath(Circle c){
+        c.setFill(Color.web("#00CCFF"));
+        c.setStroke(Color.web("#0018A8"));
+        c.setRadius(1);
+
+        DropShadow ds = new DropShadow();
+        ds.setColor(Color.WHITE);
+        ds.setOffsetX(2.0);
+        ds.setOffsetY(2.0);
+        c.setEffect(ds);
+    }
+
     private void highlight(Circle c, Color color, Color colorStroke ) {
         c.setFill(color);
         c.setStroke(colorStroke);
@@ -118,9 +150,11 @@ public class MapDisplay extends Pane {
     }
 
     private void normal(Circle c) {
-        c.setFill(Color.BLUE);
+        c.setFill(Color.TRANSPARENT);
         c.setStrokeWidth(0);
         c.setRadius(5);
+        c.setOpacity(1);
+        c.setEffect(null);
     }
 
     /*

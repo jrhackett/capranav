@@ -3,7 +3,7 @@ package visuals;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
-import logic.*;
+import logic.Node;
 
 import java.util.HashMap;
 
@@ -15,8 +15,8 @@ public class Inputs extends ComboBox {
 	private double WIDTH;
 	private String initial;
 	int rank;
-	ObservableList<logic.Map> data;
-
+	ObservableList<logic.Map> dataMap;
+	ObservableList<logic.Node> dataNode;
 
 	@SuppressWarnings("unchecked") /* probably should remove this */
 	public Inputs(String s,double WIDTH ){
@@ -77,19 +77,31 @@ public class Inputs extends ComboBox {
 	}
 
 	/**
-	 * Takes in an ArrayList of logic.Maps
+	 * Converts a HashMap of maps to an ObserableList
 	 * @param maps
 	 * @return
      */
 	public ObservableList<logic.Map> getMaps(HashMap<Integer, logic.Map> maps) {
-		this.data = FXCollections.observableArrayList();
-		maps.forEach((k,v) -> {data.add(v);});
-		return data;
+		this.dataMap = FXCollections.observableArrayList();
+		maps.forEach((k,v) -> {dataMap.add(v);});
+		return dataMap.sorted(); //NOTE: this wont work in java 8.40
+	}
+
+	/**
+	 * Converts a HashMap of Nodes to an ObservableList
+	 * @param nodes
+	 * @return
+	 */
+	public ObservableList<logic.Node> convertNodes(HashMap<Integer, logic.Node> nodes) {
+		this.dataNode = FXCollections.observableArrayList();
+		nodes.forEach((k,v) -> {dataNode.add(v);});
+		return dataNode.sorted();
 	}
 
 	public void addMapToMaps(logic.Map map){
-		data.add(map);
+		dataMap.add(map);
 	}
+
 	
 	
 }

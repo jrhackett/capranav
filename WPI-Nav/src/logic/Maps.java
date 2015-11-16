@@ -26,13 +26,20 @@ public class Maps implements ICollection {
         this.maps.put(map.getID(), map);
     }
 
+    public Map getMap(int id) {return this.maps.get(id);}
+
     public boolean check(String path) {
         boolean check = true;
-        for(Map m : this.maps.values()) {
-            if(m.getPath().equals(path))
-                return false;
+        try {
+            for (Map m : this.maps.values()) {
+                if (m.getPath().equals(path))
+                    return false;
+            }
+            return check;
+        } catch (NullPointerException e) {
+            System.out.println("EMPTY MAP FILE. CONTINUE.");
+            return true;
         }
-        return check;
     }
 
 }

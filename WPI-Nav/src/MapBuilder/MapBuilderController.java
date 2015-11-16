@@ -80,8 +80,8 @@ public class MapBuilderController extends   Application {
      * @return ID of new Node
      */
     public int newNodeAtLocation(MouseEvent e){
-        double x = e.getX() - 3.5;
-        double y = e.getY() - 2.5;
+        double x = e.getX();
+        double y = e.getY();
         System.out.println("X: " + x);
         System.out.println("Y: " + y);
         //TODO: get UNIQUE or next number - look into singelton
