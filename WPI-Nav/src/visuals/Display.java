@@ -230,12 +230,12 @@ public class Display {
 		Button menuButton = new Button(bars, "menu", 30);
 		menuButton.setOnMouseClicked(e -> showMenu());
 
-		/* email button */
+		/* email button
 		Button emailButton = new Button("@", 30);
 		emailButton.setOnMouseClicked(e -> sendEmail());
+		*/
 
-
-		buttonPanel.getChildren().addAll(checkButton, addButton, menuButton, questionButton, emailButton);
+		buttonPanel.getChildren().addAll(checkButton, addButton, menuButton, questionButton);
 		pane.getChildren().addAll(stack_pane_background, buttonPanel);
 		buttonPanel.setAlignment(Pos.CENTER);
 		pane.setAlignment(Pos.CENTER_LEFT);
