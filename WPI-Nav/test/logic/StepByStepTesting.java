@@ -1,6 +1,6 @@
 package logic;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,15 +32,17 @@ public class StepByStepTesting {
 		nH = new Node("H", 8, 1, 2, 0);
 		nI = new Node("I", 9, 2, 2, 0);
 		
-		nA.adjacencies = new ArrayList<Edge> (Arrays.asList( new Edge(nB, 1), new Edge(nD, 1)));
-		nB.adjacencies = new ArrayList<Edge> (Arrays.asList( new Edge(nA, 1), new Edge(nE, 1), new Edge(nF, 1)));
-		nC.adjacencies = new ArrayList<Edge> (Arrays.asList( new Edge(nF, 1)));
-		nD.adjacencies = new ArrayList<Edge> (Arrays.asList( new Edge(nA, 1)));
-		nE.adjacencies = new ArrayList<Edge> (Arrays.asList( new Edge(nB, 1), new Edge(nF, 1), new Edge(nG, 1), new Edge(nH, 1)));
-		nF.adjacencies = new ArrayList<Edge> (Arrays.asList( new Edge(nB, 1), new Edge(nC, 1), new Edge(nE, 1), new Edge(nI, 1)));
-		nG.adjacencies = new ArrayList<Edge> (Arrays.asList( new Edge(nE, 1)));
-		nH.adjacencies = new ArrayList<Edge> (Arrays.asList( new Edge(nE, 1), new Edge(nI, 1)));
-		nI.adjacencies = new ArrayList<Edge> (Arrays.asList( new Edge(nF, 1), new Edge(nH, 1)));
+		nA.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nB, 1), new Edge(nD, 1))));
+		nB.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nA, 1), new Edge(nE, 1), new Edge(nF, 1))));
+		nC.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nF, 1))));
+		nD.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nA, 1))));
+		nE.setAdjacencies(
+				new ArrayList<Edge>(Arrays.asList(new Edge(nB, 1), new Edge(nF, 1), new Edge(nG, 1), new Edge(nH, 1))));
+		nF.setAdjacencies(
+				new ArrayList<Edge>(Arrays.asList(new Edge(nB, 1), new Edge(nC, 1), new Edge(nE, 1), new Edge(nI, 1))));
+		nG.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nE, 1))));
+		nH.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nE, 1), new Edge(nI, 1))));
+		nI.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nF, 1), new Edge(nH, 1))));
 	}
 
 	

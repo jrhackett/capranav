@@ -37,45 +37,45 @@ public class AStarTesting {
 		// initialize the edges
 
 		// Institute
-		n1.adjacencies = new ArrayList<Edge> (Arrays.asList( new Edge(n2, 1), new Edge(n5, 1)));
+		n1.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(n2, 1), new Edge(n5, 1))));
 
 		// RecCenter
-		n2.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n1, 1), new Edge(n4, 1)));
+		n2.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n1, 1), new Edge(n4, 1))));
 
 		// Field
-		n3.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n4, 1)));
+		n3.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n4, 1))));
 
 		// Harrington
-		n4.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n3, 1), new Edge(n2, 1), new Edge(n5, 1)));
+		n4.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n3, 1), new Edge(n2, 1), new Edge(n5, 1))));
 
 		// Quad
-		n5.adjacencies = new ArrayList<Edge>(
-				Arrays.asList(new Edge(n1, 1), new Edge(n4, 1), new Edge(n6, 1), new Edge(n8, 1)));
+		n5.setAdjacencies( new ArrayList<Edge>(
+				Arrays.asList(new Edge(n1, 1), new Edge(n4, 1), new Edge(n6, 1), new Edge(n8, 1))));
 
 		// Morgan
-		n6.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n5, 1), new Edge(n7, 1)));
+		n6.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n5, 1), new Edge(n7, 1))));
 
 		// Riley
-		n7.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n6, 1), new Edge(n11, 1)));
+		n7.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n6, 1), new Edge(n11, 1))));
 
 		// Higgins Labs
-		n8.adjacencies = new ArrayList<Edge>(
-				Arrays.asList(new Edge(n5, 1), new Edge(n9, 1), new Edge(n10, 1), new Edge(n11, 1)));
+		n8.setAdjacencies( new ArrayList<Edge>(
+				Arrays.asList(new Edge(n5, 1), new Edge(n9, 1), new Edge(n10, 1), new Edge(n11, 1))));
 
 		// Campus Center
-		n9.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n8, 1)));
+		n9.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n8, 1))));
 
 		// Fountain
-		n10.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n8, 1), new Edge(n13, 1), new Edge(n12, 1)));
+		n10.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n8, 1), new Edge(n13, 1), new Edge(n12, 1))));
 
 		// Alden
-		n11.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n8, 1), new Edge(n12, 1), new Edge(n7, 1)));
+		n11.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n8, 1), new Edge(n12, 1), new Edge(n7, 1))));
 
 		// West Street
-		n12.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n11, 1), new Edge(n10, 1), new Edge(n13, 1)));
+		n12.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n11, 1), new Edge(n10, 1), new Edge(n13, 1))));
 
 		// Library
-		n13.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n10, 1), new Edge(n12, 1), new Edge(n14, 2)));
+		n13.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n10, 1), new Edge(n12, 1), new Edge(n14, 2))));
 	}
 
 	// Testing~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
