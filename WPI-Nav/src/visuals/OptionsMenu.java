@@ -55,8 +55,8 @@ public class OptionsMenu extends AnchorPane {
             }
         });
 
-        /* email */
-        final CheckBox cxk = new CheckBox("Send Email");
+        /* email
+        /final CheckBox cxk = new CheckBox("Send Email");
         cxk.setOnAction(event -> {
             if(cxk.isSelected()) {
                 cxk.setTextFill(Color.GREEN);
@@ -64,10 +64,11 @@ public class OptionsMenu extends AnchorPane {
                 cxk.setTextFill(Color.BLACK);
             }
         });
+        */
 
 
 
-        panel.getChildren().addAll(cbh, cbw, cxk);
+        panel.getChildren().addAll(cbh, cbw);
         return panel;
     }
 

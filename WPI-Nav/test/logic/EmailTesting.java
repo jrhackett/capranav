@@ -17,7 +17,7 @@ public class EmailTesting {
 /*
     @Test
     public void EmailTest() {
-        assertEquals();
+        //assertEquals();
     }
     */
 
