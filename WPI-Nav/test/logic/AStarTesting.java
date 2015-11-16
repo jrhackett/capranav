@@ -95,6 +95,34 @@ public class AStarTesting {
 		assertEquals("Tests heuristic", Math.sqrt(75), AStarShortestPath.getHeuristic(t1, t5), 0);
 	}
 
+	// Testing~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// Cost~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	@Test
+	public void AStarCost1() {
+		assertEquals("Tests Cost", 10, AStarShortestPath.getCost(t1, new Edge(t2, 2)), 0);
+	}
+
+	@Test
+	public void AStarCost2() {
+		assertEquals("Tests Cost", 50, AStarShortestPath.getCost(t1, new Edge(t3, 10)), 0);
+	}
+
+	@Test
+	public void AStarCost3() {
+		assertEquals("Tests Cost", 2 * Math.sqrt(75), AStarShortestPath.getCost(t5, new Edge(t1, 2)), 0);
+	}
+
+	// Testing~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// PrintPath~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// implemented in AStarSearch, no further testing needed
+	@Test
+	public void AStarPrintPathTest1() {
+		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n1, n5, n8, n10, n13));
+		AStarShortestPath.AStarSearch(n1, n13);
+		assertEquals("Tests AStar", path, AStarShortestPath.printPath(n13));
+	}
+
 	// Testing~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// AStar~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
