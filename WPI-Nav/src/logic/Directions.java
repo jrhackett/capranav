@@ -3,15 +3,20 @@ package logic;
 import java.util.ArrayList;
 
 public class Directions {
+	private static double totalDistance = 0;
 
-	public ArrayList<String> stepByStep (ArrayList<Node> aStarPath){
+	public static ArrayList<String> stepByStep(ArrayList<Node> aStarPath) {
 		ArrayList<String> directions = new ArrayList<String> ();
 
 		// Do special case for first node
 		double dist = Math.sqrt(Math.pow((aStarPath.get(0).getX() - aStarPath.get(1).getX()), 2)
 				+ Math.pow((aStarPath.get(0).getY() - aStarPath.get(1).getY()), 2));
+
+		totalDistance += dist;
+
 		double angle = Math.atan2((aStarPath.get(0).getY() - aStarPath.get(1).getY()),
 				(aStarPath.get(0).getX() - aStarPath.get(1).getX()));
+
 		directions.add("Face " + Math.round(angle) + ", and walk " + Math.round(dist) + " feet.");
 
 		for (int i = 0; i < aStarPath.size() - 2; i++) {
@@ -21,13 +26,13 @@ public class Directions {
 
 			// get the distance to the next node and angle
 			dist = Math.sqrt(Math.pow((turn.getX() - prev.getX()), 2) + Math.pow((turn.getY() - prev.getY()), 2));
+			totalDistance += dist;
 			angle = getAngle(prev, turn, next);
 
 			directions.add(
 					"Turn " + Math.round(angle * 180 / Math.PI - 180) + ", and walk " + Math.round(dist) + " feet.");
 
 		}
-
 		// TODO Add english words for angles
 		// TODO Add landmarks in place of distance
 		return directions;
@@ -45,7 +50,7 @@ public class Directions {
 	 *            Node walking to after turn
 	 * @return angle in radians
 	 */
-	private double getAngle(Node previous, Node turn, Node next) {
+	private static double getAngle(Node previous, Node turn, Node next) {
 		double theta1;
 		double theta2;
 		double angle;
@@ -55,6 +60,10 @@ public class Directions {
 
 		angle = (Math.PI - theta1 + theta2) % (2 * Math.PI);
 		return angle;
+	}
+
+	public double getTotalDistance() {
+		return totalDistance;
 	}
 
 }
