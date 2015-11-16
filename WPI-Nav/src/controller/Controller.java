@@ -88,6 +88,23 @@ public class Controller extends Application {
     /* function that shows three paths to food */
 
 
+    public void nodeFromMapHandler(Node n){
+        //check if we have a start or false
+        if (myDisplay.start.getValue() == null){
+            System.out.println("controller start");
+            //no start, thus -> set it to n
+            myDisplay.start.setValue(n);
+            myDisplay.mapDisplay.setStartNode(n.getID());
+        } else if (myDisplay.end.getValue() == null){
+            System.out.println("controller end");
+            myDisplay.end.setValue(n);
+            myDisplay.mapDisplay.setStartNode(n.getID());
+        } else {
+            //myDisplay.mapDisplay.mapDescriptor.setText("Refresh to Click and Choose");
+        }
+    }
+
+
     public ArrayList<logic.Node> getPathNodes(logic.Node s, logic.Node f){
         //this.pathNodes = logic.AStarShortestPath.AStarSearch(s,f);
         //TODO make a star return an arraylist

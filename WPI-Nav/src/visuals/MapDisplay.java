@@ -1,12 +1,14 @@
 package visuals;
 
 import controller.Controller;
+import javafx.animation.ScaleTransition;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 import logic.Node;
 
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ public class MapDisplay extends Pane {
     private Color last = Color.TRANSPARENT;
     private Color lastStroke = Color.TRANSPARENT;
 
-
+    private boolean HIGLIGHTED = false;
 
     public MapDisplay(Controller controller){
         super();
@@ -53,15 +55,22 @@ public class MapDisplay extends Pane {
      */
     public void setMap(logic.Map map){
         this.getChildren().remove(mapView);
-        this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
+        this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".jpg"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
         this.mapView = new ImageView(mapImage);
         this.getChildren().add(mapView);
         drawNodes(controller.getNodesOfMap(map.getID()));
 
-        /*
+
         mapView.setOnMouseClicked(e -> {
+            if (!HIGLIGHTED) {
+                highlightAll();
+                HIGLIGHTED = true;
+            } else {
+                hidePath();
+                HIGLIGHTED = false;
+            }
         });
-        */
+
     }
 
     /**
@@ -69,17 +78,21 @@ public class MapDisplay extends Pane {
      *
      */
     public void showPath(ArrayList<Node> path){
-        id_circle.forEach((k,v) -> {
-            normal(v);
-        });
+        hidePath();
 
         for (Node n : path){
             highlightPath(id_circle.get(n.getID()));
         }
-
-
     }
 
+    /**
+     * Remove path and hides all
+     */
+    public void hidePath(){
+        id_circle.forEach((k,v) -> {
+            normal(v);
+        });
+    }
 
 
     /**
@@ -115,7 +128,8 @@ public class MapDisplay extends Pane {
         });
 
         circle.setOnMouseClicked(e -> {
-
+            System.out.println("node circle click handler");
+            controller.nodeFromMapHandler(v);
         });
 
         circle.setOnMousePressed(e -> {
@@ -129,8 +143,22 @@ public class MapDisplay extends Pane {
         return circle;
     }
 
+    public void setStartNode(int id){
+        Circle c = id_circle.get(id);
+        highlight(c, Color.RED, Color.FIREBRICK);
+        ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
+        st.setByX(1.1f);
+        st.setByY(1.1f);
+        st.setCycleCount(4);
+        st.setAutoReverse(true);
+        st.play();
+    }
 
 
+    /**
+     * Highlights the path of nodes.
+     * @param c
+     */
     private void highlightPath(Circle c){
         c.setFill(Color.web("#00CCFF"));
         c.setStroke(Color.web("#0018A8"));
@@ -143,12 +171,24 @@ public class MapDisplay extends Pane {
         c.setEffect(ds);
     }
 
+
+    /**
+     * highlights a circle
+     * @param c
+     * @param color
+     * @param colorStroke
+     */
     private void highlight(Circle c, Color color, Color colorStroke ) {
         c.setFill(color);
         c.setStroke(colorStroke);
         c.setStrokeWidth(1);
     }
 
+
+    /**
+     * default circle
+     * @param c
+     */
     private void normal(Circle c) {
         c.setFill(Color.TRANSPARENT);
         c.setStrokeWidth(0);
@@ -157,7 +197,7 @@ public class MapDisplay extends Pane {
         c.setEffect(null);
     }
 
-    /*
+
     private void highlightAll() {
         this.getChildren().forEach(e -> {
             if (e instanceof Circle) {
@@ -165,6 +205,9 @@ public class MapDisplay extends Pane {
             }
         });
     }
+
+    /*
+
     private void hideAll() {
         this.getChildren().forEach(e -> {
             if (e instanceof Circle) {

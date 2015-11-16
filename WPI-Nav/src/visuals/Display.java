@@ -54,11 +54,11 @@ public class Display {
 	//private Map map; //TODO CHANGE THIS
 
 
-	private MapDisplay mapDisplay;
+	public MapDisplay mapDisplay;
 	private Inputs chooseMap;
 	private TableView<Instructions> instructions;
-	private Inputs start;
-	private Inputs end;
+	public Inputs start;
+	public Inputs end;
 
 
 	/**
@@ -174,10 +174,16 @@ public class Display {
 
 		/* start */
 		this.start = new Inputs("Search WPI Maps", INPUT_WIDTH);
-
+		start.setOnAction(e -> {
+			logic.Node node = (logic.Node) start.getValue();
+			mapDisplay.setStartNode(node.getID());
+		});
 		/* end */
 		this.end = new Inputs("For Destination", INPUT_WIDTH);
-
+		end.setOnAction(e -> {
+			logic.Node node = (logic.Node) end.getValue();
+			mapDisplay.setStartNode(node.getID());
+		});
 
 		//ComboBox choose Map
 		this.chooseMap = new Inputs("maps", INPUT_WIDTH);
