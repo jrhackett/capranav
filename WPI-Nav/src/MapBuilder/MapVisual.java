@@ -66,10 +66,12 @@ public class MapVisual extends Pane {
 	public void setMap(logic.Map map){
 		System.out.println("MAP PATH:  " + map.getPath());
 		this.getChildren().remove(mapView);
+		//id_circle.forEach((k,v) -> {if(v!= null){this.getChildren().remove(v); }});
 		this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"));
 		this.mapView = new ImageView(mapImage);
 		this.getChildren().add(mapView);
 		drawNodes(controller.getNodesOfMap(map.getID()));
+
 		mapView.setOnMouseClicked(e -> {
 			if (NODE) {
 				int id = controller.newNodeAtLocation(e); //x & y are already relative to map
@@ -98,6 +100,7 @@ public class MapVisual extends Pane {
 		//nodeCircles.setPickOnBounds(false);
 		//this.getChildren().add(nodeCircles);
 		nodes.forEach((k,v) -> {
+			System.out.println("asdf");
 			Circle circle = createCircle(v);
 			id_circle.put(k, circle);
 			this.getChildren().add(circle); /* adding directly to stackpane */

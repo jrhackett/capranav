@@ -33,8 +33,7 @@ public class MapBuilderController extends   Application {
     private MapBuilderDisplay myDisplay;
 
     /* information variables */
-    private HashMap<Integer, Node> nodes;   //all nodes
-    //private HashMap<Integer, Map> maps;     //all maps
+    private HashMap<Integer, Node> nodes;
     private Maps maps;
 
     private ArrayList<Node> potentialEdgeNodes;
@@ -154,44 +153,12 @@ public class MapBuilderController extends   Application {
     }
 
     /**
-     * load Nodes from file
-     */
-    public void loadNodesFromFile(){
-        //gets and creates maps currently written
-        //TODO: uncomment this block and delete dummy stuff to work with file
-        /*
-        Parser test = new Parser("nodes.json");
-        Graph graph = test.fromFile();
-         */
-
-        //below is tester garb
-        /*
-        nodes = new HashMap<Integer, Node>();
-        Node n5 = new Node("Quad",4, 55, 34, 76, 11);
-        Node n6 = new Node("Morgan",5, 55, 44, 66, 99);
-        Node n7 = new Node("Riley",6, 11, 88, 55, 11);
-        Node n8 = new Node("Higgins Labs",7, 90, 53, 0, 99);
-        Node n9 = new Node("Campus Center",8, 100, 250, 0, 99);
-        Node n10 = new Node("Fountain",9, 106, 170, 0, 11);
-        Node n11 = new Node("Alden",10, 166, 53, 0, 99);
-        Node n12 = new Node("West Street",11, 168, 8, 0, 11);
-        Node n13 = new Node("Library",12, 260, 260, 0, 11);
-        Node[] tester = {n5, n6, n7, n8, n9, n10, n11, n12, n13};
-        for (Node n : tester){
-            nodes.put(n.getID(), n);
-        }
-        */
-
-
-
-    }
-
-    /**
      * return the HashMap of Nodes [to display][of the current map]
      * @param id
      * @return
      */
     public HashMap<Integer, Node> getNodesOfMap(int id){
+
         HashMap<Integer, Node> value = new HashMap<>();
 
         nodes.forEach((k,v) -> {

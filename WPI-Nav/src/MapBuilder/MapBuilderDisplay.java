@@ -146,7 +146,7 @@ public class MapBuilderDisplay extends HBox {
         Button finishButton = new Button("WRITE");
         finishButton.setOnAction(e -> {
             controller.mapsToFile();
-            //controller.nodesToFile();
+            controller.nodesToFile();
         });
 
         options.setSpacing(25);

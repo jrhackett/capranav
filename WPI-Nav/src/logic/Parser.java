@@ -1,13 +1,15 @@
 package logic;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonStreamParser;
+import com.google.gson.stream.JsonWriter;
+
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
-import com.google.gson.*;
-import com.google.gson.stream.*;
-import java.io.FileWriter;
-import java.io.FileReader;
 
 /* A Parser object is used to do translations from JSON files and Nodes.
  * Be sure to use "nodes.json" as the filename upon instantiation.
