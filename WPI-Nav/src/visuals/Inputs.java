@@ -1,40 +1,46 @@
 package visuals;
 
-import logic.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.util.Callback;
+import logic.*;
 
+import java.util.HashMap;
+
+/**
+ * Currently using a 'simple' ComboBox.
+ * Looking into alternate/advanced/accurate options
+ */
 public class Inputs extends ComboBox {
-	private final static int WIDTH = 160;
+	private double WIDTH;
 	private String initial;
 	int rank;
+	ObservableList<logic.Map> data;
+
 
 	@SuppressWarnings("unchecked") /* probably should remove this */
-	public Inputs(String s){
+	public Inputs(String s,double WIDTH ){
 		super();
+		this.WIDTH = WIDTH;
 		initial = s;
 		this.setMaxWidth(WIDTH);
 		this.setMinWidth(WIDTH);
-		this.setItems(getDummyLocations());
+
+		//		this.setItems(getDummyLocations());
+		/*
 		this.valueProperty().addListener(new ChangeListener<Node>(){
 			
 			@Override
 			public void changed(ObservableValue<? extends Node> arg0, Node oldValue, Node newValue) {
-				// TODO Auto-generated method stub
 				if (oldValue != null){
-				System.out.print(oldValue.getName() + "->");
+					System.out.print(oldValue.getName() + "->");
 				}
 				System.out.println(newValue.getName());
 			
 			}
 		});
-	
+	*/
+
 		/*
 		this.setCellFactory(new Callback<ListView<Node>, ListCell<Node>>() {
 
@@ -59,15 +65,30 @@ public class Inputs extends ComboBox {
 	}
 
 	/* this will be replaced later with actual data */
-	private ObservableList<Node> getDummyLocations() {
+	public ObservableList<Node> getDummyLocations() {
 		ObservableList<Node> data = FXCollections.observableArrayList();
 		
 		data.addAll(
-				new Node("Faraday", 1, 2, 0),
-				new Node("Campus Center", 3, 4, 0),
-				new Node("Student Center",  5, 4, 0));
+				new Node("Faraday", 1, 1, 2, 0),
+				new Node("Campus Center", 2, 3, 4, 0),
+				new Node("Student Center", 3, 5, 4, 0));
 		
 		return data;
+	}
+
+	/**
+	 * Takes in an ArrayList of logic.Maps
+	 * @param maps
+	 * @return
+     */
+	public ObservableList<logic.Map> getMaps(HashMap<Integer, logic.Map> maps) {
+		this.data = FXCollections.observableArrayList();
+		maps.forEach((k,v) -> {data.add(v);});
+		return data;
+	}
+
+	public void addMapToMaps(logic.Map map){
+		data.add(map);
 	}
 	
 	

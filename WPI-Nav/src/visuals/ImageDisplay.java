@@ -17,12 +17,12 @@ import javafx.scene.image.ImageView;
  *
  */
 public class ImageDisplay extends ImageView{
-	Image currentImage;
-	double dimension;
+	private Image currentImage;
+	private double dimension;
 	public ImageDisplay(double dimension){
 		super();
 		this.dimension = dimension;
-		currentImage = new Image(getClass().getResourceAsStream("wpibasictest.png"), dimension, dimension, false, false);
+		currentImage = new Image(getClass().getResourceAsStream("../images/wpibasictest.png"), dimension, dimension, false, false);
 		//currentImage = new Image("file:wpibasictest.png", dimension, dimension, false, false);
 		this.setImage(currentImage);
 		this.maxHeight(dimension);

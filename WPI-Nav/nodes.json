@@ -1,0 +1,1 @@
+{"name":"one","id":1,"map_id":1,"x_coord":1.0,"y_coord":1.0,"z_coord":1.0,"g_scores":0.0,"h_scores":0.0,"f_scores":0.0,"adjacencies":[]}{"name":"two","id":2,"map_id":2,"x_coord":2.0,"y_coord":2.0,"z_coord":2.0,"g_scores":0.0,"h_scores":0.0,"f_scores":0.0,"adjacencies":[]}

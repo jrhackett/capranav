@@ -1,0 +1,7 @@
+.metadata/
+WPI-Nav/bin/*
+*.iml
+*.class
+.recommenders/
+.idea/*
+out/*
