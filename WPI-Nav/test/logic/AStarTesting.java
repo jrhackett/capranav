@@ -9,14 +9,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class AStarTesting {
-	Node t1, t2, t3, t4;
-	Node n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13;
+	Node t1, t2, t3, t4, t5;
+	Node n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14;
 	@Before
 	public void setUp() throws Exception {
 		t1 = new Node("Origin", 1, 0, 0, 0);
 		t2 = new Node("X", 2, 5, 0, 0);
 		t3 = new Node("Y", 3, 0, 5, 0);
 		t4 = new Node("Slope", 4, 5, 5, 0);
+		t5 = new Node("Z", 5, 5, 5, 5);
 
 		n1 = new Node("Institute", 5, 0, 0, 0);
 		n2 = new Node("RecCenter", 6, 0, 10, 0);
@@ -31,6 +32,7 @@ public class AStarTesting {
 		n11 = new Node("Alden", 15, 16, 3, 0);
 		n12 = new Node("West Street", 16, 18, 8, 0);
 		n13 = new Node("Library", 17, 20, 20, 0);
+		n14 = new Node("Library, 2nd floor", 17, 20, 20, 2);
 
 		// initialize the edges
 
@@ -73,7 +75,7 @@ public class AStarTesting {
 		n12.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n11, 1), new Edge(n10, 1), new Edge(n13, 1)));
 
 		// Library
-		n13.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n10, 1), new Edge(n12, 1)));
+		n13.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n10, 1), new Edge(n12, 1), new Edge(n14, 2)));
 	}
 
 	// Testing~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -86,6 +88,11 @@ public class AStarTesting {
 	@Test
 	public void AStarHueristics2() {
 		assertEquals("Tests heuristic", 5, AStarShortestPath.getHeuristic(t1, t3), 0);
+	}
+
+	@Test
+	public void AStarHueristics3() {
+		assertEquals("Tests heuristic", Math.sqrt(75), AStarShortestPath.getHeuristic(t1, t5), 0);
 	}
 
 	// Testing~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,6 +108,48 @@ public class AStarTesting {
 	public void AStarTest2() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n1));
 		assertEquals("Tests AStar", path, AStarShortestPath.AStarSearch(n1, n1));
+	}
+
+	@Test
+	public void AStarTest3() {
+		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n3, n4, n2, n1));
+		assertEquals("Tests AStar", path, AStarShortestPath.AStarSearch(n3, n1));
+	}
+
+	@Test
+	public void AStarTest4() {
+		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n7, n6, n5, n8, n11));
+		assertEquals("Tests AStar", path, AStarShortestPath.AStarSearch(n7, n11));
+	}
+
+	@Test
+	public void AStarTest5() {
+		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n13, n10, n8, n5, n1));
+		assertEquals("Tests AStar", path, AStarShortestPath.AStarSearch(n13, n1));
+	}
+
+	@Test
+	public void AStarTest6() {
+		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n5, n1, n2));
+		assertEquals("Tests AStar", path, AStarShortestPath.AStarSearch(n5, n2));
+	}
+
+	@Test
+	public void AStarTest7() {
+		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n2, n1, n5));
+		assertEquals("Tests AStar", path, AStarShortestPath.AStarSearch(n2, n5));
+	}
+
+	@Test
+	public void AStarTest8() {
+		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n13, n10));
+		assertEquals("Tests AStar", path, AStarShortestPath.AStarSearch(n13, n10));
+	}
+
+	@Test
+	public void AStarTest9() {
+		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n1, n5, n8, n10, n13, n14));
+		assertEquals("Tests AStar", path, AStarShortestPath.AStarSearch(n1, n14));
 	}
 
 }
