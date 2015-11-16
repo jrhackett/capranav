@@ -56,7 +56,7 @@ public class AStarTesting {
 		n6.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n5, 1), new Edge(n7, 1)));
 
 		// Riley
-		n7.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n6, 1)));
+		n7.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n6, 1), new Edge(n11, 1)));
 
 		// Higgins Labs
 		n8.adjacencies = new ArrayList<Edge>(
@@ -69,7 +69,7 @@ public class AStarTesting {
 		n10.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n8, 1), new Edge(n13, 1), new Edge(n12, 1)));
 
 		// Alden
-		n11.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n8, 1), new Edge(n12, 1)));
+		n11.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n8, 1), new Edge(n12, 1), new Edge(n7, 1)));
 
 		// West Street
 		n12.adjacencies = new ArrayList<Edge>(Arrays.asList(new Edge(n11, 1), new Edge(n10, 1), new Edge(n13, 1)));
@@ -118,7 +118,7 @@ public class AStarTesting {
 
 	@Test
 	public void AStarTest4() {
-		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n7, n6, n5, n8, n11));
+		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n7, n11));
 		assertEquals("Tests AStar", path, AStarShortestPath.AStarSearch(n7, n11));
 	}
 
