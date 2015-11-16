@@ -5,6 +5,12 @@ import java.util.ArrayList;
 public class Directions {
 	private static double totalDistance = 0;
 
+	/**
+	 * stepByStep takes in an arrayList of Nodes and outputs a list of
+	 * 
+	 * @param aStarPath
+	 * @return
+	 */
 	public static ArrayList<String> stepByStep(ArrayList<Node> aStarPath) {
 		ArrayList<String> directions = new ArrayList<String> ();
 
