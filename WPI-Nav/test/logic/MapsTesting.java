@@ -1,4 +1,4 @@
-package testing;
+package logic;
 import static org.junit.Assert.assertEquals;
 
 import logic.Maps;
