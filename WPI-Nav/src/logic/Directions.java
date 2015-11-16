@@ -83,5 +83,20 @@ public class Directions {
 	public double getTotalDistance() {
 		return totalDistance;
 	}
+	
+	
+	// This method converts a given angle into the proper string 
+	public static String AngletoString(double angle){
+        if (angle <= 10 && angle >= -10) return "straight ahead"; //straight forward
+        if (angle < -10 && angle >= -35) return"slight left";
+        if (angle < -35 && angle >= -60) return"left";
+        if (angle < -60 && angle >= -110) return"hard left";
+        if (angle < -110 && angle >= -180) return"a near U-turn left";
+        if (angle > 10 && angle <= 35) return"slight right";
+        if (angle > 35 && angle <= 60) return"right";
+        if (angle > 60 && angle <= 110) return"hard right";
+        if (angle > 110 && angle <= 180) return"a near U-turn right";
+        else return"back to an actual coordinate system";
+    }
 
 }
