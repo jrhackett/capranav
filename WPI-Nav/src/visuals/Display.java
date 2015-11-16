@@ -29,7 +29,7 @@ public class Display {
 	/* constants */
 	private static final double WIDTH_BUFFER = 15;
 	private static final double HEIGHT_BUFFER = 15;
-	private static final double GAP = 5.5;
+	private static final double GAP = 5;
 	private static final double BUTTON_SIZE = 26;
 	private static final Color BACKGROUND_COLOR = Color.web("a5adb0");
 	private static double TABLE_WIDTH;
@@ -119,6 +119,7 @@ public class Display {
 
 		/* instructions */
 		this.TABLE_WIDTH = (width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
+
 		TableView<Instructions> instructions = createInstructionsTable();
 		instructions.setTranslateX(width - TABLE_WIDTH - WIDTH_BUFFER);
 		instructions.setTranslateY(height - TABLE_HEIGHT - HEIGHT_BUFFER);
