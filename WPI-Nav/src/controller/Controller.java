@@ -4,10 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import logic.Graph;
-import logic.Maps;
-import logic.Node;
-import logic.Parser;
+import logic.*;
 import visuals.Display;
 
 import java.util.ArrayList;
@@ -115,14 +112,18 @@ public class Controller extends Application {
 
 
     public ArrayList<logic.Node> getPathNodes(logic.Node s, logic.Node f){
-        //this.pathNodes = logic.AStarShortestPath.AStarSearch(s,f);
-        //TODO make a star return an arraylist
-        return null;
+        logic.AStarShortestPath aStarShortestPath = new AStarShortestPath();
+        this.pathNodes = aStarShortestPath.AStarSearch(s,f, nodes);
+        return pathNodes;
     }
 
+    /**
+     * gets the instructions by via pathNodes set by getPathNodes
+     * @return an ArrayList<String?
+     */
     public ArrayList<String> getInstructions(){
-        //return logic.instructionsConverter(this.pathNodes);
-        return null;
+        logic.Directions directions = new Directions();
+        return directions.stepByStep(this.pathNodes);
     }
 
 

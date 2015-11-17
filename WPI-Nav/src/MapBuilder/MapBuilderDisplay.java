@@ -242,6 +242,7 @@ public class MapBuilderDisplay extends HBox {
         saveButton.setOnAction(e -> {
             System.out.println("Add !");
             controller.setNodeName(name.getText());
+            mapvisual.deselect(controller.selectedNode.getID());
         });
 
         //button to create the map -> writes the map to the JSON FILE

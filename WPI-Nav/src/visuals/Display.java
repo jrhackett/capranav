@@ -304,7 +304,9 @@ public class Display {
 	private void findPaths(){
 		//validate that there are inputs for beginging and end
 		if (this.start.getValue() != null && this.end.getValue() != null){
-			ArrayList<logic.Node> path = this.controller.getPathNodes((logic.Node)this.start.getValue(), (logic.Node)this.end.getValue());
+			logic.Node s = (logic.Node)this.start.getValue();
+			logic.Node e = (logic.Node)this.end.getValue();
+			ArrayList<logic.Node> path = this.controller.getPathNodes(s, e);
 			ArrayList<String> instructions = this.controller.getInstructions();//pass correct instructions
 
 			setInstructions(path, instructions);

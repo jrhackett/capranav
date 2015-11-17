@@ -16,10 +16,7 @@ import java.util.HashMap;
 
 
 public class MapDisplay extends Pane {
-    private static final double BORDER = 7;
-    private double height;
-    private double width;
-
+    /* constants */
     private double IMAGE_WIDTH = 660;
     private double IMAGE_HEIGHT = 495;
 
@@ -37,6 +34,10 @@ public class MapDisplay extends Pane {
 
     private boolean HIGLIGHTED = false;
 
+    /**
+     * Constructor
+     * @param controller
+     */
     public MapDisplay(Controller controller){
         super();
         this.controller = controller;
@@ -44,7 +45,6 @@ public class MapDisplay extends Pane {
         this.mapView = new ImageView();
         this.setMaxWidth(IMAGE_WIDTH);
         this.setMaxHeight(IMAGE_HEIGHT);
-
     }
 
     /**
@@ -55,6 +55,9 @@ public class MapDisplay extends Pane {
      */
     public void setMap(logic.Map map){
         this.getChildren().remove(mapView);
+
+
+
         try {
             this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
         }
@@ -137,7 +140,7 @@ public class MapDisplay extends Pane {
             System.out.println("node circle click handler");
             controller.nodeFromMapHandler(v);
         });
-
+/*
         circle.setOnMousePressed(e -> {
 
         });
@@ -145,6 +148,7 @@ public class MapDisplay extends Pane {
         circle.setOnMouseReleased(e -> {
 
         });
+        */
 
         return circle;
     }
@@ -172,13 +176,16 @@ public class MapDisplay extends Pane {
     private void highlightPath(Circle c){
         c.setFill(Color.web("#00CCFF"));
         c.setStroke(Color.web("#0018A8"));
-        c.setRadius(1);
+        c.setRadius(5);
 
         DropShadow ds = new DropShadow();
         ds.setColor(Color.WHITE);
         ds.setOffsetX(2.0);
         ds.setOffsetY(2.0);
         c.setEffect(ds);
+        c.setOnMouseEntered(null);
+        c.setOnMouseExited(null);
+
     }
 
 
