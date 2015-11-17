@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import logic.Node;
 
@@ -86,9 +87,35 @@ public class MapDisplay extends Pane {
      */
     public void showPath(ArrayList<Node> path){
         hidePath();
+        drawPaths(path);
 
         for (Node n : path){
             highlightPath(id_circle.get(n.getID()));
+        }
+
+    }
+
+
+    public void drawPaths(ArrayList<Node> pathNodes){
+        if (pathNodes.size() > 0){
+            double coordX = pathNodes.get(0).getX();
+            double coordY = pathNodes.get(0).getY();
+
+            for (int i = 1; i < pathNodes.size(); i++){
+                Line line = new Line();
+                line.setStartX(coordX);
+                line.setStartY(coordY);
+                coordX = pathNodes.get(i).getX();
+                coordY = pathNodes.get(i).getY();
+                line.setEndX(coordX);
+                line.setEndY(coordY);
+                line.setStroke(Color.BLUE);
+                line.setStrokeWidth(2);
+                line.setStrokeDashOffset(5);
+                line.getStrokeDashArray().addAll(2d, 5d);
+                //line.setStrokeLineCap(StrokeLineCap.BUTT);
+                this.getChildren().add(line);
+            }
         }
     }
 
