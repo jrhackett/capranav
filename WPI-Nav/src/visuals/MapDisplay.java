@@ -112,7 +112,7 @@ public class MapDisplay extends Pane {
                 line.setStroke(Color.BLUE);
                 line.setStrokeWidth(2);
                 line.setStrokeDashOffset(5);
-                line.getStrokeDashArray().addAll(2d, 5d);
+                line.getStrokeDashArray().addAll(2d, 7d);
                 //line.setStrokeLineCap(StrokeLineCap.BUTT);
                 this.getChildren().add(line);
             }
