@@ -256,7 +256,14 @@ public class Display {
 		checkButton.setOnMouseClicked(e -> findPaths());
 
 		/* refresh button */
-		Image refresh =  new Image(getClass().getResourceAsStream("../images/refresh.png"), 35, 35, true, true);
+		Image refresh;
+		try {
+			refresh =  new Image(getClass().getResourceAsStream("../images/refresh.png"), 35, 35, true, true);
+		}
+		catch (NullPointerException e) {
+			refresh =  new Image(getClass().getResourceAsStream("/images/refresh.png"), 35, 35, true, true);
+		}
+
 		ImageView refreshView = new ImageView(refresh);
 		Button questionButton = new Button(refreshView, "refresh", 30);
 		questionButton.setOnMouseClicked(e -> refreshInformation());

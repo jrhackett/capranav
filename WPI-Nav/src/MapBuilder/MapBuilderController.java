@@ -137,8 +137,13 @@ public class MapBuilderController extends   Application {
             Image mapI = new Image(getClass().getResourceAsStream("../images/" + path + ".png"));
             ImageView mapV = new ImageView(mapI);
         } catch (NullPointerException e){
-            System.out.println(e);
-            return false;
+            try {
+                Image mapI = new Image(getClass().getResourceAsStream("/images/" + path + ".png"));
+            }
+            catch (NullPointerException f) {
+                System.out.println(f);
+                return false;
+            }
         }
 
         return true;

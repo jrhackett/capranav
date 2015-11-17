@@ -57,7 +57,12 @@ public class Controller extends Application {
 
 
         /* icon */
-        s.getIcons().add(new Image(getClass().getResourceAsStream("../images/globe.png")));
+        try {
+            s.getIcons().add(new Image(getClass().getResourceAsStream("../images/globe.png")));
+        }
+        catch (NullPointerException e) {
+            s.getIcons().add(new Image(getClass().getResourceAsStream("/images/globe.png")));
+        }
 
 		/* basic layout */
         //s.initStyle(StageStyle.UNDECORATED);  // <-- removes the top part of the app close/open

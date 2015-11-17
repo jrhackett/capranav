@@ -66,7 +66,12 @@ public class Map extends StackPane{
 	 */
 	public void setMap(String MAP_NAME){
 		/* not sure if this alone will change image, may have to update imageview as well */
-		this.mapImage = new Image(getClass().getResourceAsStream("images/" + MAP_NAME + ".png"), height - BORDER, width - BORDER, true, true);
+		try {
+			this.mapImage = new Image(getClass().getResourceAsStream("images/" + MAP_NAME + ".png"), height - BORDER, width - BORDER, true, true);
+		}
+		catch (NullPointerException e) {
+			this.mapImage = new Image(getClass().getResourceAsStream("/images/" + MAP_NAME + ".png"), height - BORDER, width - BORDER, true, true);
+		}
 		//drawNodes(MAP_NAME);
 	}
 
