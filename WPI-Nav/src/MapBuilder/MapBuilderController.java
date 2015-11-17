@@ -53,11 +53,15 @@ public class MapBuilderController extends   Application {
 
     @Override
     public void start(Stage s) throws Exception {
-        this.nextNodeID = 17; //TODO FIX THIS ID INCREMENT thING
+        this.nextNodeID = 0; //TODO FIX THIS ID INCREMENT thING
         potentialEdgeNodes = new ArrayList<>();
 
         mapsFromFile();
         nodesFromFile();
+
+        setNextNodeID();
+
+
         //loadNodesFromFile();
 
 		/* basic layout */
@@ -74,6 +78,15 @@ public class MapBuilderController extends   Application {
     }
 
 
+    /**
+     * sets the next node id to be the largest value
+     */
+    private void setNextNodeID(){
+        nodes.forEach((k,v) -> {
+            nextNodeID = (k > nextNodeID) ? k : nextNodeID;
+            nextNodeID++;
+        });
+    }
     /**
      * Given a mouse event -> gets
      * @param e
