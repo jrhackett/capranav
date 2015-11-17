@@ -13,7 +13,7 @@ public class Node {
 	private double g_scores;
 	private double h_scores;
 	private double f_scores = 0;
-	private ArrayList<Edge> adjacencies;
+	ArrayList<Edge> adjacencies;
 	private Node parent;
 
 
@@ -197,69 +197,10 @@ public class Node {
 	public void setName(String name) {this.name = name;}
 
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((adjacencies == null) ? 0 : adjacencies.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(f_scores);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(g_scores);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(h_scores);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + id;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
-		temp = Double.doubleToLongBits(x_coord);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(y_coord);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(z_coord);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
-	}
+	/**
+	 * @warning do not generate hashcode/equals, it creates a Stack Overflow in
+	 *          JUnit
+	 */
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Node other = (Node) obj;
-		if (adjacencies == null) {
-			if (other.adjacencies != null)
-				return false;
-		} else if (!adjacencies.equals(other.adjacencies))
-			return false;
-		if (Double.doubleToLongBits(f_scores) != Double.doubleToLongBits(other.f_scores))
-			return false;
-		if (Double.doubleToLongBits(g_scores) != Double.doubleToLongBits(other.g_scores))
-			return false;
-		if (Double.doubleToLongBits(h_scores) != Double.doubleToLongBits(other.h_scores))
-			return false;
-		if (id != other.id)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (parent == null) {
-			if (other.parent != null)
-				return false;
-		} else if (!parent.equals(other.parent))
-			return false;
-		if (Double.doubleToLongBits(x_coord) != Double.doubleToLongBits(other.x_coord))
-			return false;
-		if (Double.doubleToLongBits(y_coord) != Double.doubleToLongBits(other.y_coord))
-			return false;
-		if (Double.doubleToLongBits(z_coord) != Double.doubleToLongBits(other.z_coord))
-			return false;
-		return true;
-	}
 
 }

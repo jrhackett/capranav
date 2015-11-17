@@ -19,4 +19,9 @@ public class Edge{
 
     public Node getTarget() { return this.target; }
 
+	/**
+	 * @warning do not generate hashcode/equals, it creates a Stack Overflow in
+	 *          JUnit
+	 */
+
 }
