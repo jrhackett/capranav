@@ -24,25 +24,14 @@ public class Controller extends Application {
     private Display myDisplay;
 
     /* information variables */
-    //TODO delete below
-    public String start;
-    public String destination;
-    public String[] mid_way_points;
-    public int current_mid_way_points = 0;
-    public int max_mid_way_points = 3;
-
-    public ArrayList<Node> pathNodes;
-    public ArrayList<String> instructions;
+    public ArrayList<Node> pathNodes;   /* this is set then used to get instructions from logic.Directions */
 
 
     /* nodes and graphs */
     private HashMap<Integer, Node> nodes;
     private Maps maps;
-
     private logic.Map currentMap;
 
-    private boolean START = false;
-    private boolean END = false;
 
 
     @Override
@@ -77,14 +66,6 @@ public class Controller extends Application {
 
     /* logic methods */
 
-    /* function that sets a new destination */
-    public static void setNewDestination(Node n) {
-
-    }
-
-
-
-
     /* function that gets a path, given two+ nodes */
 
     /* function for handicap path, given two+ nodes */
@@ -93,6 +74,11 @@ public class Controller extends Application {
 
     /* function that shows three paths to food */
 
+
+    public void reset(){
+        this.currentMap = new Map();
+        this.pathNodes = new ArrayList<>();
+    }
 
     public void nodeFromMapHandler(Node n){
         //check if we have a start or false

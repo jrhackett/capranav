@@ -56,8 +56,6 @@ public class MapDisplay extends Pane {
     public void setMap(logic.Map map){
         this.getChildren().remove(mapView);
 
-
-
         try {
             this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
         }

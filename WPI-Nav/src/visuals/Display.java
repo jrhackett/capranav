@@ -4,7 +4,6 @@ import controller.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
@@ -53,7 +52,7 @@ public class Display {
 	private	Rectangle divide;
 	//private Map map; //TODO CHANGE THIS
 
-
+	private StackPane mapPane;
 	public MapDisplay mapDisplay;
 	private Inputs chooseMap;
 	private TableView<Instructions> instructions;
@@ -105,20 +104,8 @@ public class Display {
 		//options.setTranslateY(HEIGHT_BUFFER + (MAX_INPUTS) * (BUTTON_SIZE + GAP) + 75); //this is some bad bad stuff
 
 		/* map */
-		StackPane mapPane = new StackPane();
-		mapPane.setPrefHeight((height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER));
-		mapPane.setMaxHeight((height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER));
-		mapPane.setMinHeight(450);
-		mapPane.setPrefWidth(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
-		mapPane.setMaxWidth(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
-		mapPane.setMinWidth(600);
-		System.out.println(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
-		System.out.println(height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER);
-		mapPane.setStyle("-fx-background-color: #eeeeee");
-		this.mapDisplay = new MapDisplay( this.controller); //(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER),
-		mapPane.getChildren().add(mapDisplay);
-		mapPane.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
-		mapPane.setTranslateY(HEIGHT_BUFFER);
+		this.mapPane = createMapPane();
+
 		/*
 		this.map = new Map( (width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER), this.controller);
 
@@ -148,6 +135,24 @@ public class Display {
 	}
 
 
+	private StackPane createMapPane(){
+		StackPane mapPane = new StackPane();
+		mapPane.setPrefHeight((height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER));
+		mapPane.setMaxHeight((height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER));
+		mapPane.setMinHeight(450);
+		mapPane.setPrefWidth(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
+		mapPane.setMaxWidth(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
+		mapPane.setMinWidth(600);
+		System.out.println(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
+		System.out.println(height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER);
+		mapPane.setStyle("-fx-background-color: #eeeeee");
+		this.mapDisplay = new MapDisplay( this.controller); //(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER),
+		mapPane.getChildren().add(mapDisplay);
+		mapPane.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
+		mapPane.setTranslateY(HEIGHT_BUFFER);
+		return mapPane;
+	}
+
 	/**
 	 * Creates/returns/sets input panel
 	 * @return Input Panel
@@ -157,7 +162,7 @@ public class Display {
 		StackPane pane = new StackPane();
 
 		/* background */
-		Rectangle background = new Rectangle(INPUT_WIDTH, (controller.current_mid_way_points + 2) * (30 + GAP), Color.web("#638CA6", .5));
+		Rectangle background = new Rectangle(INPUT_WIDTH, (2) * (30 + GAP), Color.web("#638CA6", .5));
 		background.setArcWidth(5);
 		background.setArcHeight(5);
 		background.setStroke(Color.web("#BFD4D9", .5));
@@ -175,30 +180,32 @@ public class Display {
 		/* start */
 		this.start = new Inputs("Search WPI Maps", INPUT_WIDTH);
 		start.setOnAction(e -> {
-
-
-			logic.Node node = (logic.Node) start.getValue();
-			mapDisplay.setStartNode(node.getID());
+			if (start.getValue() != null && !start.getValue().toString().isEmpty()) {
+				logic.Node node = (logic.Node) start.getValue();
+				mapDisplay.setStartNode(node.getID());
+			}
 		});
 		/* end */
 		this.end = new Inputs("For Destination", INPUT_WIDTH);
 		end.setOnAction(e -> {
-			logic.Node node = (logic.Node) end.getValue();
-			mapDisplay.setStartNode(node.getID());
+			if (chooseMap.getValue() != null && !chooseMap.getValue().toString().isEmpty()) {
+				logic.Node node = (logic.Node) end.getValue();
+				mapDisplay.setStartNode(node.getID());
+			}
 		});
 
 		//ComboBox choose Map
 		this.chooseMap = new Inputs("maps", INPUT_WIDTH);
 		chooseMap.setItems(chooseMap.getMaps(controller.getMaps().getMaps()));
 		chooseMap.setOnAction(e -> {
-			logic.Map newMap = (logic.Map) chooseMap.getValue();
-			controller.setCurrentMap(newMap.getID());
-			mapDisplay.setMap(newMap);
+			if (chooseMap.getValue() != null && !chooseMap.getValue().toString().isEmpty()) {
+				logic.Map newMap = (logic.Map) chooseMap.getValue();
+				controller.setCurrentMap(newMap.getID());
+				mapDisplay.setMap(newMap);
 
-			start.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
-			end.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
-
-
+				start.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
+				end.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
+			}
 		});
 
 		/* select start input */
@@ -322,6 +329,16 @@ public class Display {
 	 * refresh all data
 	 */
 	private void refreshInformation(){
+		this.root.getChildren().remove(this.mapPane);
+		this.mapPane.getChildren().remove(this.mapDisplay);
+		this.mapPane = createMapPane();
+		this.root.getChildren().add(this.mapPane);
+
+		this.instructions.setItems(null);
+		this.chooseMap.getSelectionModel().clearSelection();
+		this.start.getSelectionModel().clearSelection();
+		this.end.getSelectionModel().clearSelection();
+		this.controller.reset();
 		//this.start
 		//this.end
 		//this.mapvisual.removePath
@@ -369,10 +386,11 @@ public class Display {
 	 * If there are already  MAX_INPUTS - do nothing
 	 * Event is logged
 	 */
-	private void addAnotherSlot(){
+	private void addAnotherSlot(){}
+		/*
 		if (controller.current_mid_way_points < controller.max_mid_way_points){
 
-			/* first input slot*/
+			*//* first input slot*//*
 			HBox inputSlot = new HBox();
 			inputSlot.setSpacing(GAP);
 
@@ -380,7 +398,7 @@ public class Display {
 			addButton.setOnMouseClicked(e -> removeThisSlot(inputSlot));
 			addButton.setVisible(false);
 
-			/* start */
+			*//* start *//*
 			Inputs next = new Inputs("Mid-Way Point", INPUT_WIDTH);
 			next.setOnMouseEntered(e -> {
 					addButton.setVisible(true);
@@ -395,15 +413,16 @@ public class Display {
 		} else {
 			logger.info("Max inputs added");
 		}
-	}
 
+	}
+*/
 	/**
 	 * Removes this slot -> should prompt re-validation and re-display
 	 */
-	private void removeThisSlot(Node node){
+/*	private void removeThisSlot(Node node){
 		inputs.getChildren().remove(node);
 		controller.current_mid_way_points--;
-	}
+	}*/
 	
 	/**
 	 * Creates the InstructionsTable

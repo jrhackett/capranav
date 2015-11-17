@@ -28,6 +28,8 @@ public class Map {
         this.pixelToFeetRatio = 0;
     }
 
+    public Map(){}
+
     public String toString() { return name; }
 
     public double getWIDTH() {
