@@ -200,7 +200,7 @@ public class MapBuilderController extends   Application {
         if (!potentialEdgeNodes.contains(node)) {
             boolean check = true;
             for(Edge e : selectedNode.getAdjacencies()) {
-                if(e.getTarget().getID() == node.getID()) {
+                if(e.getTarget() == node.getID()) {
                     check = false;
                 }
             }
@@ -221,16 +221,16 @@ public class MapBuilderController extends   Application {
      */
     public boolean addEdges(){
         for (Node n : potentialEdgeNodes){
-            nodes.get(selectedNode.getID()).addEdge(new Edge(n, 1));
+            nodes.get(selectedNode.getID()).addEdge(new Edge(n.getID(), 1));
             /* below should add the edge both ways */
             boolean check = true;
             for(Edge e : n.getAdjacencies()) {
-                if(e.getTarget().getID() == selectedNode.getID()) {
+                if(e.getTarget() == selectedNode.getID()) {
                     check = false;
                 }
             }
             if(check)
-                n.addEdge(new Edge(selectedNode, 1));
+                n.addEdge(new Edge(selectedNode.getID(), 1));
         }
         return true;
     }

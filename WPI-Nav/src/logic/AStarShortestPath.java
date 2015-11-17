@@ -67,10 +67,10 @@ public class AStarShortestPath {
 
 			// check children of current Node
 			for (Edge e : current.getAdjacencies()) {
-				Node child = map.get(e.getTarget().getID()); // set child Node =
+				Node child = map.get(e.getTarget()); // set child Node =
 																// to edge of
 																// current Node
-				double movement_cost = getCost(current, e); // obtain movement_cost from edge
+				double movement_cost = getCost(current, e, map); // obtain movement_cost from edge
 				double temp_g_scores = current.getG() + movement_cost; // calculate g_scores
 				double temp_h_scores = getHeuristic(child, destination); // get heuristic cost from current node and destination node
 				double temp_f_scores = temp_g_scores + temp_h_scores; // get f score
@@ -112,8 +112,8 @@ public class AStarShortestPath {
 	 * @param adjacentEdge - one of the current Node's edges
 	 * @return the movement cost between two adjacent nodes
 	 */
-	public static double getCost(Node currentNode, Edge adjacentEdge) {
-		Node child = adjacentEdge.getTarget();
+	public static double getCost(Node currentNode, Edge adjacentEdge, HashMap<Integer, Node> map) {
+		Node child = map.get(adjacentEdge.getTarget());
 		double multiplier = adjacentEdge.getWeight();
 		double cost = Math.sqrt(
 				Math.pow((child.getX() - currentNode.getX()), 2) + Math.pow((child.getY() - currentNode.getY()), 2)

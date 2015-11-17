@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class AStarTesting {
 	Node t1, t2, t3, t4, t5;
 	Node n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14;
-	HashMap<Integer, Node> nodes;
+	HashMap<Integer, Node> nodes, tnodes;
 
 	@Before
 	public void setUp() throws Exception {
@@ -42,45 +42,45 @@ public class AStarTesting {
 		// initialize the edges
 
 		// Institute
-		n1.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(n2, 1), new Edge(n5, 1))));
+		n1.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(n2.getID(), 1), new Edge(n5.getID(), 1))));
 
 		// RecCenter
-		n2.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n1, 1), new Edge(n4, 1))));
+		n2.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n1.getID(), 1), new Edge(n4.getID(), 1))));
 
 		// Field
-		n3.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n4, 1))));
+		n3.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n4.getID(), 1))));
 
 		// Harrington
-		n4.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n3, 1), new Edge(n2, 1), new Edge(n5, 1))));
+		n4.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n3.getID(), 1), new Edge(n2.getID(), 1), new Edge(n5.getID(), 1))));
 
 		// Quad
 		n5.setAdjacencies( new ArrayList<Edge>(
-				Arrays.asList(new Edge(n1, 1), new Edge(n4, 1), new Edge(n6, 1), new Edge(n8, 1))));
+				Arrays.asList(new Edge(n1.getID(), 1), new Edge(n4.getID(), 1), new Edge(n6.getID(), 1), new Edge(n8.getID(), 1))));
 
 		// Morgan
-		n6.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n5, 1), new Edge(n7, 1))));
+		n6.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n5.getID(), 1), new Edge(n7.getID(), 1))));
 
 		// Riley
-		n7.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n6, 1), new Edge(n11, 1))));
+		n7.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n6.getID(), 1), new Edge(n11.getID(), 1))));
 
 		// Higgins Labs
 		n8.setAdjacencies( new ArrayList<Edge>(
-				Arrays.asList(new Edge(n5, 1), new Edge(n9, 1), new Edge(n10, 1), new Edge(n11, 1))));
+				Arrays.asList(new Edge(n5.getID(), 1), new Edge(n9.getID(), 1), new Edge(n10.getID(), 1), new Edge(n11.getID(), 1))));
 
 		// Campus Center
-		n9.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n8, 1))));
+		n9.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n8.getID(), 1))));
 
 		// Fountain
-		n10.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n8, 1), new Edge(n13, 1), new Edge(n12, 1))));
+		n10.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n8.getID(), 1), new Edge(n13.getID(), 1), new Edge(n12.getID(), 1))));
 
 		// Alden
-		n11.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n8, 1), new Edge(n12, 1), new Edge(n7, 1))));
+		n11.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n8.getID(), 1), new Edge(n12.getID(), 1), new Edge(n7.getID(), 1))));
 
 		// West Street
-		n12.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n11, 1), new Edge(n10, 1), new Edge(n13, 1))));
+		n12.setAdjacencies( new ArrayList<Edge>(Arrays.asList(new Edge(n11.getID(), 1), new Edge(n10.getID(), 1), new Edge(n13.getID(), 1))));
 
 		// Library
-		n13.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(n10, 1), new Edge(n12, 1))));
+		n13.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(n10.getID(), 1), new Edge(n12.getID(), 1))));
 
 		nodes = new HashMap<>();
 		nodes.put(n1.getID(), n1);
@@ -97,6 +97,12 @@ public class AStarTesting {
 		nodes.put(n12.getID(), n12);
 		nodes.put(n13.getID(), n13);
 		// nodes.put(n14.getID(), n14);
+		tnodes = new HashMap<>();
+		tnodes.put(t1.getID(), t1);
+		tnodes.put(t2.getID(), t2);
+		tnodes.put(t3.getID(), t3);
+		tnodes.put(t4.getID(), t4);
+		tnodes.put(t5.getID(), t5);
 
 	}
 
@@ -123,17 +129,17 @@ public class AStarTesting {
 
 	@Test
 	public void AStarCost1() {
-		assertEquals("Tests Cost", 10, AStarShortestPath.getCost(t1, new Edge(t2, 2)), 0);
+		assertEquals("Tests Cost", 10, AStarShortestPath.getCost(t1, new Edge(t2.getID(), 2), tnodes), 0);
 	}
 
 	@Test
 	public void AStarCost2() {
-		assertEquals("Tests Cost", 50, AStarShortestPath.getCost(t1, new Edge(t3, 10)), 0);
+		assertEquals("Tests Cost", 50, AStarShortestPath.getCost(t1, new Edge(t3.getID(), 10), tnodes), 0);
 	}
 
 	@Test
 	public void AStarCost3() {
-		assertEquals("Tests Cost", 2 * Math.sqrt(75), AStarShortestPath.getCost(t5, new Edge(t1, 2)), 0);
+		assertEquals("Tests Cost", 2 * Math.sqrt(75), AStarShortestPath.getCost(t5, new Edge(t1.getID(), 2), tnodes), 0);
 	}
 
 	// Testing~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,10 +1,10 @@
 package testing;
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Before;
-import org.junit.Test;
 import logic.Edge;
 import logic.Node;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Henry on 11/15/2015.
@@ -27,8 +27,8 @@ public class EdgeTesting {
     public void setUp() throws Exception {
         node1 = new Node("X", 1, 0, 0, 0);
         node2 = new Node("Y", 2, 0, 0, 0);
-        testEdge1 = new Edge(node1, 55);
-        testEdge2 = new Edge(node2, 25);
+        testEdge1 = new Edge(node1.getID(), 55);
+        testEdge2 = new Edge(node2.getID(), 25);
     }
 
     @Test

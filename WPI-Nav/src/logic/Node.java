@@ -69,7 +69,7 @@ public class Node {
 	 * @return String: name of the node
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class Node {
 	 * @return double: id of the node
 	 */
 	public int getID() {
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -108,10 +108,6 @@ public class Node {
 
 	/**
 	 * getY is used to return the y-coordinate of the node
-<<<<<<< HEAD
-=======
-	 * 
->>>>>>> a7912e4ff9906d10b17ccdc394cd031a1574214d
 	 * @param
 	 * @return double: y-coordinate of the node
 	 */
@@ -137,10 +133,6 @@ public class Node {
 
 	/**
 	 * getG is used to return the g score of the node
-<<<<<<< HEAD
-=======
-	 * 
->>>>>>> a7912e4ff9906d10b17ccdc394cd031a1574214d
 	 * @return double: g score of the node
 	 */
 	public double getG() {
@@ -153,10 +145,6 @@ public class Node {
 
 	/**
 	 * getH is used to return the h score of the node
-<<<<<<< HEAD
-=======
-	 * 
->>>>>>> a7912e4ff9906d10b17ccdc394cd031a1574214d
 	 * @return double: h score of the node
 	 */
 	public double getH() {
@@ -175,14 +163,9 @@ public class Node {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * getAdjacencies is used to return the ArrayList of edges for this node
-	 * @return ArrayList: edge ArrayList of the node
-=======
 	 * getF is used to return the f score of the node
 	 * 
 	 * @return double: f score of the node
->>>>>>> a7912e4ff9906d10b17ccdc394cd031a1574214d
 	 */
 	public double getF() {
 		return f_scores;

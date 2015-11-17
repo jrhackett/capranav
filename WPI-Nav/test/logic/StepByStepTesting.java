@@ -33,17 +33,17 @@ public class StepByStepTesting {
 		nH = new Node("H", 8, 100, 200, 0);
 		nI = new Node("I", 9, 200, 200, 0);
 
-		nA.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nB, 1), new Edge(nD, 1))));
-		nB.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nA, 1), new Edge(nE, 1), new Edge(nF, 1))));
-		nC.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nF, 1))));
-		nD.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nA, 1))));
+		nA.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nB.getID(), 1), new Edge(nD.getID(), 1))));
+		nB.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nA.getID(), 1), new Edge(nE.getID(), 1), new Edge(nF.getID(), 1))));
+		nC.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nF.getID(), 1))));
+		nD.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nA.getID(), 1))));
 		nE.setAdjacencies(
-				new ArrayList<Edge>(Arrays.asList(new Edge(nB, 1), new Edge(nF, 1), new Edge(nG, 1), new Edge(nH, 1))));
+				new ArrayList<Edge>(Arrays.asList(new Edge(nB.getID(), 1), new Edge(nF.getID(), 1), new Edge(nG.getID(), 1), new Edge(nH.getID(), 1))));
 		nF.setAdjacencies(
-				new ArrayList<Edge>(Arrays.asList(new Edge(nB, 1), new Edge(nC, 1), new Edge(nE, 1), new Edge(nI, 1))));
-		nG.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nE, 1))));
-		nH.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nE, 1), new Edge(nI, 1))));
-		nI.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nF, 1), new Edge(nH, 1))));
+				new ArrayList<Edge>(Arrays.asList(new Edge(nB.getID(), 1), new Edge(nC.getID(), 1), new Edge(nE.getID(), 1), new Edge(nI.getID(), 1))));
+		nG.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nE.getID(), 1))));
+		nH.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nE.getID(), 1), new Edge(nI.getID(), 1))));
+		nI.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nF.getID(), 1), new Edge(nH.getID(), 1))));
 	}
 
 	// These test cases check that the directions return the correct number of
