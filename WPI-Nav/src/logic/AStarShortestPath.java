@@ -3,6 +3,7 @@ package logic;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -15,7 +16,7 @@ public class AStarShortestPath {
 	 * @param destination: final Node
 	 * @return void - path 
 	 */
-	public static ArrayList<Node> AStarSearch(Node start, Node destination) {
+	public static ArrayList<Node> AStarSearch(Node start, Node destination, HashMap<Integer, Node> map) {
 
 		Set<Node> explored = new HashSet<Node>(); // Create Set for explored
 													// nodes
@@ -66,7 +67,9 @@ public class AStarShortestPath {
 
 			// check children of current Node
 			for (Edge e : current.getAdjacencies()) {
-				Node child = e.getTarget(); // set child Node = to edge of current Node
+				Node child = map.get(e.getTarget().getID()); // set child Node =
+																// to edge of
+																// current Node
 				double movement_cost = getCost(current, e); // obtain movement_cost from edge
 				double temp_g_scores = current.getG() + movement_cost; // calculate g_scores
 				double temp_h_scores = getHeuristic(child, destination); // get heuristic cost from current node and destination node
