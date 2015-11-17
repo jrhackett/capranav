@@ -182,6 +182,7 @@ public class MapBuilderDisplay extends HBox {
         saveButton.setOnAction(e -> {
             System.out.println("save button go!");
             controller.addEdges();
+            controller.resetPotentialEdges();
             status.setText("Edges saved!");
             status.setTextFill(Color.GREEN);
             mapvisual.deselect(controller.selectedNode.getID());

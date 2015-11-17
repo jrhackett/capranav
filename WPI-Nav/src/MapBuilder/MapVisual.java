@@ -115,6 +115,9 @@ public class MapVisual extends Pane {
 
 
 
+
+
+
 	private Circle createCircle(Node v){
 
 		double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
@@ -135,11 +138,6 @@ public class MapVisual extends Pane {
 		});
 
 		circle.setOnMouseExited(e -> {
-
-
-		//popOver.hide();
-
-
 			if (controller.SELECTED && controller.selectedNode.getID() == v.getID()) {
 			} else if (EDGE && controller.SELECTED) {
 			} else {

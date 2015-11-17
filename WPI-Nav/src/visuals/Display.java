@@ -182,6 +182,7 @@ public class Display {
 		start.setOnAction(e -> {
 			if (start.getValue() != null && !start.getValue().toString().isEmpty()) {
 				logic.Node node = (logic.Node) start.getValue();
+				//mapDisplay.
 				mapDisplay.setStartNode(node.getID());
 			}
 		});

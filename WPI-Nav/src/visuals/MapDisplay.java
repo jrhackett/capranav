@@ -109,7 +109,7 @@ public class MapDisplay extends Pane {
                 coordY = pathNodes.get(i).getY();
                 line.setEndX(coordX);
                 line.setEndY(coordY);
-                line.setStroke(Color.BLUE);
+                line.setStroke(Color.web("#00CCFF", 0.7));
                 line.setStrokeWidth(2);
                 line.setStrokeDashOffset(5);
                 line.getStrokeDashArray().addAll(2d, 7d);
@@ -184,7 +184,7 @@ public class MapDisplay extends Pane {
      */
     public void setStartNode(int id){
         Circle c = id_circle.get(id);
-        highlight(c, Color.RED, Color.FIREBRICK);
+        highlight(c, Color.BLUE, Color.LIGHTBLUE);
         ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
         st.setByX(1.1f);
         st.setByY(1.1f);
@@ -199,9 +199,10 @@ public class MapDisplay extends Pane {
      * @param c
      */
     private void highlightPath(Circle c){
-        c.setFill(Color.web("#00CCFF"));
-        c.setStroke(Color.web("#0018A8"));
+        //c.setFill(Color.web("#00CCFF"));
+       // c.setStroke(Color.web("#0018A8"));
         c.setRadius(5);
+        highlight(c, Color.BLUE, Color.LIGHTBLUE);
 
         DropShadow ds = new DropShadow();
         ds.setColor(Color.WHITE);

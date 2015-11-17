@@ -32,6 +32,8 @@ public class Controller extends Application {
     private Maps maps;
     private logic.Map currentMap;
 
+    /* switches */
+    private boolean FIRST = false; //if the last thing to be set was first
 
 
     @Override
@@ -53,6 +55,7 @@ public class Controller extends Application {
 		/* basic layout */
         //s.initStyle(StageStyle.UNDECORATED);  // <-- removes the top part of the app close/open
         s.setResizable(false);
+        s.setTitle("CapraNav");
 
 		/* setup */
         this.myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, this);    //creates scene
@@ -83,16 +86,42 @@ public class Controller extends Application {
     public void nodeFromMapHandler(Node n){
         //check if we have a start or false
         if (myDisplay.start.getValue() == null){
-            System.out.println("controller start");
-            //no start, thus -> set it to n
-            myDisplay.start.setValue(n);
-            myDisplay.mapDisplay.setStartNode(n.getID());
+            if (validateNotEquality(n, (Node)myDisplay.start.getValue())) {
+                System.out.println("controller start");
+                //no start, thus -> set it to n
+                myDisplay.start.setValue(n);
+                myDisplay.mapDisplay.setStartNode(n.getID());
+            }
         } else if (myDisplay.end.getValue() == null){
-            System.out.println("controller end");
-            myDisplay.end.setValue(n);
-            myDisplay.mapDisplay.setStartNode(n.getID());
-        } else {
+            if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
+                System.out.println("controller end");
+                myDisplay.end.setValue(n);
+                myDisplay.mapDisplay.setStartNode(n.getID());
+            }
+        } else if (!FIRST){
+            if(validateNotEquality(n,(Node)myDisplay.start.getValue())) {
+                System.out.println("controller start");
+                //no start, thus -> set it to n
+                myDisplay.start.setValue(n);
+                myDisplay.mapDisplay.setStartNode(n.getID());
+                FIRST = true;
+            }
             //myDisplay.mapDisplay.mapDescriptor.setText("Refresh to Click and Choose");
+        } else {
+            if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
+                System.out.println("controller end");
+                myDisplay.end.setValue(n);
+                myDisplay.mapDisplay.setStartNode(n.getID());
+                FIRST = false;
+            }
+        }
+    }
+
+    private boolean validateNotEquality(Node n, Node m){
+        if (n.getID() == m.getID()){
+            return false;
+        } else {
+            return true;
         }
     }
 
