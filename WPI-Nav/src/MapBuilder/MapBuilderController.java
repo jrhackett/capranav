@@ -41,7 +41,7 @@ public class MapBuilderController extends   Application {
     private int currentMap;
 
     private int nextNodeID;
-    private int nextMapID  = 5;//TODO UNIQUE
+    private int nextMapID  = 3335;//TODO UNIQUE
 
 
 

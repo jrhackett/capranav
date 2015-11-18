@@ -26,7 +26,6 @@ public class Controller extends Application {
     /* information variables */
     public ArrayList<Node> pathNodes;   /* this is set then used to get instructions from logic.Directions */
 
-
     /* nodes and graphs */
     private HashMap<Integer, Node> nodes;
     private Maps maps;
@@ -42,7 +41,6 @@ public class Controller extends Application {
 		/* get information */
         nodesFromFile();
         mapsFromFile();
-
 
         /* icon */
         try {
@@ -127,8 +125,7 @@ public class Controller extends Application {
 
 
     public ArrayList<logic.Node> getPathNodes(logic.Node s, logic.Node f){
-        logic.AStarShortestPath aStarShortestPath = new AStarShortestPath();
-        this.pathNodes = aStarShortestPath.AStarSearch(s,f, nodes);
+        this.pathNodes = AStarShortestPath.AStarSearch(s,f, nodes);
         return pathNodes;
     }
 

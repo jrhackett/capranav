@@ -149,7 +149,7 @@ public class AStarShortestPath {
 		ArrayList<Node> path = new ArrayList<Node>();
 
 		for (Node node = target; node != null; node = node.getParent()) {
-			path.add(node);
+			if(!path.contains(node)) path.add(node);
 		}
 		Collections.reverse(path);
 		return path;
