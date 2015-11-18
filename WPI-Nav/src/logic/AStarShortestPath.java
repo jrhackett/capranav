@@ -60,7 +60,7 @@ public class AStarShortestPath {
 			explored.add(current);
 
 			// check if current value is the destination value
-			if (current.getName().equals(destination.getName())) {
+			if (current.getID() == (destination.getID())) {
 				found = true; // if current Node = destination Node, set found
 								// boolean to true and exit while loop when done
 			}
