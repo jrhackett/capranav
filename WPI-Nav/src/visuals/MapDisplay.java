@@ -25,6 +25,7 @@ public class MapDisplay extends Pane {
     /* Data Structures */
     private HashMap<Integer, Circle> id_circle;
     private Controller controller;
+    private ArrayList<Line> lines; /* to be able to remove/hide these */
 
     /* Visuals */
     private Image mapImage;
@@ -46,7 +47,21 @@ public class MapDisplay extends Pane {
         this.mapView = new ImageView();
         this.setMaxWidth(IMAGE_WIDTH);
         this.setMaxHeight(IMAGE_HEIGHT);
+        this.id_circle = new HashMap<>();
+        this.lines = new ArrayList<>();
     }
+
+
+    public void clearNodesEdges(){
+        id_circle.forEach((k,v) ->{
+            this.getChildren().remove(v);
+        });
+        id_circle = new HashMap<>();
+
+        this.getChildren().removeAll(lines);
+        lines = new ArrayList<>();
+    }
+
 
     /**
      * Given a MAP_NAME -> ask Controller for map name and nodes for the map
@@ -114,6 +129,7 @@ public class MapDisplay extends Pane {
                 line.setStrokeDashOffset(5);
                 line.getStrokeDashArray().addAll(2d, 7d);
                 //line.setStrokeLineCap(StrokeLineCap.BUTT);
+                lines.add(line); //adding it to array lst
                 this.getChildren().add(line);
             }
         }
