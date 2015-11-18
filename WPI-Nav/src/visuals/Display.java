@@ -127,7 +127,7 @@ public class Display {
 		sp.setTranslateX(WIDTH_BUFFER);
 
 
-		side_panel.getChildren().addAll(button_panel, input_panel, divide, options);
+		side_panel.getChildren().addAll(input_panel, options); //divide, button_panel, //TODO add buttons back
 		/* build */
         root.getChildren().addAll(side_panel, instructions, mapPane);
         scene = new Scene(root, width, height);
@@ -182,7 +182,24 @@ public class Display {
 		start.setOnAction(e -> {
 			if (start.getValue() != null && !start.getValue().toString().isEmpty()) {
 				logic.Node node = (logic.Node) start.getValue();
+				/*
+				if (controller.endNode != null){
+					mapDisplay.clearSelection(node.getID());
+				}
+				*/
+				controller.startNode = node;
+
 				mapDisplay.setStartNode(node.getID());
+
+				if (controller.FLAG) {
+					if (controller.endNode != null) {
+						mapDisplay.clearNodesEdges(node.getID(), controller.endNode.getID());
+					} else {
+						mapDisplay.clearNodesEdges(node.getID(), -1);
+					}
+				}
+
+				if (controller.startNode != null && controller.endNode != null) {findPaths();}
 
 			}
 		});
@@ -190,15 +207,37 @@ public class Display {
 		/* end */
 		this.end = new Inputs("For Destination", INPUT_WIDTH);
 		end.setOnAction(e -> {
-			if (end.getValue() != null && !end.getValue().toString().isEmpty()) {
+
+
+
+			if (end.getValue() != null && !end.getValue().toString().isEmpty() && controller.startNode != null) {
 				logic.Node node = (logic.Node) end.getValue();
+
+				/*
+				if (controller.endNode != null){
+					mapDisplay.clearSelection(node.getID());
+				}
+				*/
 				mapDisplay.setStartNode(node.getID());
+
+				if (controller.FLAG) {
+					if (controller.startNode != null) {
+						mapDisplay.clearNodesEdges(node.getID(), controller.startNode.getID());
+					} else {
+						mapDisplay.clearNodesEdges(node.getID(), -1);
+					}
+				}
+
+				controller.endNode = node;
+				if (controller.startNode != null && controller.endNode != null){findPaths();}
+
 			}
 		});
 
 		//ComboBox choose Map
 		this.chooseMap = new Inputs("maps", INPUT_WIDTH);
 		chooseMap.setItems(chooseMap.getMaps(controller.getMaps().getMaps()));
+
 		chooseMap.setOnAction(e -> {
 			if (chooseMap.getValue() != null && !chooseMap.getValue().toString().isEmpty()) {
 				logic.Map newMap = (logic.Map) chooseMap.getValue();
@@ -207,6 +246,9 @@ public class Display {
 
 				start.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
 				end.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
+
+				controller.endNode = null;
+				controller.startNode = null;
 			}
 		});
 
@@ -297,7 +339,7 @@ public class Display {
 
 		//addButton
 
-		buttonPanel.getChildren().addAll(checkButton, menuButton, questionButton);
+		buttonPanel.getChildren().addAll(checkButton); //, menuButton, questionButtonTODO add this back
 		pane.getChildren().addAll(stack_pane_background, buttonPanel);
 		buttonPanel.setAlignment(Pos.CENTER);
 		pane.setAlignment(Pos.CENTER_LEFT);
@@ -306,24 +348,10 @@ public class Display {
 	}
 
 	/**
-	 * This will kick everything off!
-	 * We can later change it so other things trigger this.
-	 * We also have to think about clearing things
+	 * find paths calls the controller
 	 */
 	private void findPaths(){
-		//validate that there are inputs for beginging and end
-		if (this.start.getValue() != null && this.end.getValue() != null){
-			logic.Node s = (logic.Node)this.start.getValue();
-			logic.Node e = (logic.Node)this.end.getValue();
-			ArrayList<logic.Node> path = this.controller.getPathNodes(s, e);
-			ArrayList<String> instructions = this.controller.getInstructions();//pass correct instructions
-
-			setInstructions(path, instructions);
-			mapDisplay.showPath(path);
-		}
-		//String name = controller.getMapName();
-		//map.setMap(name);
-		//mapDisplay.drawPath();
+		this.controller.findPaths();
 	}
 
 
@@ -446,7 +474,7 @@ public class Display {
 	/**
 	 * Call to set the instructions
 	 */
-	private void setInstructions(ArrayList<logic.Node> nodes, ArrayList<String> instructions){
+	public void setInstructions(ArrayList<logic.Node> nodes, ArrayList<String> instructions){
 		ObservableList<Instructions> data = FXCollections.observableArrayList();
 
 		for (int i = 0; i < nodes.size(); i++){

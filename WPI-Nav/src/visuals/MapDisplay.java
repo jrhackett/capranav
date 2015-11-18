@@ -55,12 +55,12 @@ public class MapDisplay extends Pane {
     }
 
 
-    public void clearNodesEdges(){
+    public void clearNodesEdges(int ids, int ide){
         id_circle.forEach((k,v) ->{
-            this.getChildren().remove(v);
+            //we have to also check
+            if (k != ids && k != ide) { normal(v); }
         });
-        id_circle = new HashMap<>();
-
+        //id_circle = new HashMap<>();
         this.getChildren().removeAll(lines);
         lines = new ArrayList<>();
     }
@@ -200,6 +200,7 @@ public class MapDisplay extends Pane {
         return circle;
     }
 
+
     /**
      * The color and effect for when a node is set as a destination
      * @param id
@@ -254,7 +255,7 @@ public class MapDisplay extends Pane {
      * default circle
      * @param c
      */
-    private void normal(Circle c) {
+    public void normal(Circle c) {
         c.setFill(Color.TRANSPARENT);
         c.setStrokeWidth(0);
         c.setRadius(5);
@@ -262,6 +263,16 @@ public class MapDisplay extends Pane {
         c.setEffect(null);
     }
 
+
+    /**
+     * clear selection
+     * @param
+     */
+    /*
+    public void clearSelection(int id){
+        normal(id_circle.get(id));
+    }
+*/
 
     private void highlightAll() {
         this.getChildren().forEach(e -> {
