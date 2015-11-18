@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Directions {
 	private static double totalDistance = 0;
@@ -11,15 +12,24 @@ public class Directions {
 	 * @param aStarPath
 	 * @return
 	 */
-	public static ArrayList<String> stepByStep(ArrayList<Node> aStarPath) {
+	public static ArrayList<String> stepByStep(ArrayList<Node> aStarPath, HashMap<Integer, Map> maps) {
 		// TODO: Implement skipping of straight path nodes
-		
+
 		
 		ArrayList<String> directions = new ArrayList<String>();
 
 		// Do special case for first node
 		double dist = Math.sqrt(Math.pow((aStarPath.get(0).getX() - aStarPath.get(1).getX()), 2)
 				+ Math.pow((aStarPath.get(0).getY() - aStarPath.get(1).getY()), 2));
+		
+		double scalar = 1;
+		
+		if(maps.containsKey(aStarPath.get(0).getID())){
+			scalar = maps.get(aStarPath.get(0).getID()).getPixel();
+			dist *= scalar;
+		} else {
+			// throw exception
+		}
 
 		totalDistance += dist;
 
@@ -66,6 +76,14 @@ public class Directions {
 
 			// get the distance to the next node and angle
 			dist = Math.sqrt(Math.pow((turn.getX() - next.getX()), 2) + Math.pow((turn.getY() - next.getY()), 2));
+			
+			if(maps.containsKey(aStarPath.get(0).getID())){
+				scalar = maps.get(aStarPath.get(0).getID()).getPixel();
+				dist *= scalar;
+			} else {
+				// throw exception
+			}
+			
 			totalDistance += dist;
 			angle = getAngle(prev, turn, next);
 			angle = angle * 180 / Math.PI - 180;
