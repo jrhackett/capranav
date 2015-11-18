@@ -242,7 +242,7 @@ public class Display {
 				mapDisplay.setMap(newMap);
 				clearInstructions();
 				start.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
-				end.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
+				end.setItems(end.convertNodes(controller.getNamedNodesOfMap()));
 
 				controller.endNode = null;
 				controller.startNode = null;

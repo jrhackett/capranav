@@ -84,6 +84,10 @@ public class Inputs extends ComboBox {
 		return dataNode.sorted();
 	}
 
+	public void addNode(logic.Node n){
+		this.dataNode.add(n);
+	}
+
 	public void addMapToMaps(logic.Map map){
 		dataMap.add(map);
 	}

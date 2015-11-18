@@ -100,6 +100,7 @@ public class Controller extends Application {
             //if (validateNotEquality(n, (Node)myDisplay.start.getValue())) {
                 //no start, thus -> set it to n
                 this.FLAG = false;
+                myDisplay.start.addNode(n);
                 myDisplay.start.setValue(n);
                 this.FLAG = true;
                 myDisplay.mapDisplay.setStartNode(n.getID(), true);
@@ -108,6 +109,7 @@ public class Controller extends Application {
         } else if (myDisplay.end.getValue() == null){
            // if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
                 this.FLAG = false;
+                myDisplay.end.addNode(n);//// TODO: 11/18/15
                 myDisplay.end.setValue(n);
                 this.FLAG = true;
                 myDisplay.mapDisplay.setStartNode(n.getID(), false);
@@ -117,6 +119,7 @@ public class Controller extends Application {
             if(validateNotEquality(n,(Node)myDisplay.start.getValue())) {
                 //no start, thus -> set it to n
                 this.FLAG = false;
+                myDisplay.start.addNode(n);//// TODO: 11/18/15
                 myDisplay.start.setValue(n);
                 this.FLAG = true;
                 myDisplay.mapDisplay.setStartNode(n.getID(), true);
@@ -127,6 +130,7 @@ public class Controller extends Application {
         } else {
             if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
                 this.FLAG = false;
+                myDisplay.end.addNode(n);//// TODO: 11/18/15  
                 myDisplay.end.setValue(n);
                 this.FLAG = true;
                 myDisplay.mapDisplay.setStartNode(n.getID(), false);
@@ -155,8 +159,7 @@ public class Controller extends Application {
      * @return an ArrayList<String?
      */
     public ArrayList<String> getInstructions(){
-        logic.Directions directions = new Directions();
-        return directions.stepByStep(this.pathNodes, this.maps.getMaps());
+        return Directions.stepByStep(this.pathNodes, this.maps.getMaps());
     }
 
 
