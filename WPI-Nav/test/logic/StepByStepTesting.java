@@ -6,12 +6,15 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 
 public class StepByStepTesting {
 	// This initializes the 9 nodes
 	Node nA, nB, nC, nD, nE, nF, nG, nH, nI;
+	Map m1;
+	HashMap<Integer, Map> maps;
 
 	// This sets up all 9 nodes with edges
 	@Before
@@ -44,6 +47,10 @@ public class StepByStepTesting {
 		nG.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nE.getID(), 1))));
 		nH.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nE.getID(), 1), new Edge(nI.getID(), 1))));
 		nI.setAdjacencies(new ArrayList<Edge>(Arrays.asList(new Edge(nF.getID(), 1), new Edge(nH.getID(), 1))));
+
+		m1 = new Map(0, 1, 1, " ", " ", 1);
+		maps.put(0, m1);
+
 	}
 
 	// These test cases check that the directions return the correct number of
@@ -52,49 +59,49 @@ public class StepByStepTesting {
 	@Test
 	public void DirectionsTestLengthOfSteps1() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nD, nA));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		assertEquals("Test length is 1 for 2 node path", path.size(), steps.size());
 	}
 
 	@Test
 	public void DirectionsTestLengthOfSteps2() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nD, nA, nB));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		assertEquals("Test length is 2 for 3 node path", path.size(), steps.size());
 	}
 
 	@Test
 	public void DirectionsTestLengthOfSteps3() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nD, nA, nB, nF));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		assertEquals("Test length is 3 for 4 node path", path.size(), steps.size());
 	}
 
 	@Test
 	public void DirectionsTestLengthOfSteps4() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nD, nA, nB, nF, nI));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		assertEquals("Test length is 4 for 5 node path", path.size(), steps.size());
 	}
 
 	@Test
 	public void DirectionsTestLengthOfSteps5() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nD, nA, nB, nF, nI, nH));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		assertEquals("Test length is 5 for 6 node path", path.size(), steps.size());
 	}
 
 	@Test
 	public void DirectionsTestLengthOfSteps6() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nD, nA, nB, nF, nI, nH, nE));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		assertEquals("Test length is 6 for 7 node path", path.size(), steps.size());
 	}
 
 	@Test
 	public void DirectionsTestLengthOfSteps7() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nD, nA, nB, nF, nI, nH, nE, nG));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		assertEquals("Test length is 7 for 8 node path", path.size(), steps.size());
 	}
 
@@ -107,7 +114,7 @@ public class StepByStepTesting {
 	@Test
 	public void FirstStringTest1() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nE, nF));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		String testPhrase = "Face " + "East";
 		assertEquals("First phrase says East", testPhrase, steps.get(0).substring(0, testPhrase.length()));
 	}
@@ -116,7 +123,7 @@ public class StepByStepTesting {
 	@Test
 	public void FirstStringTest2() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nE, nI));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		String testPhrase = "Face " + "South-East";
 		assertEquals("First phrase says East", testPhrase, steps.get(0).substring(0, testPhrase.length()));
 	}
@@ -125,7 +132,7 @@ public class StepByStepTesting {
 	@Test
 	public void FirstStringTest3() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nE, nH));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		String testPhrase = "Face " + "South";
 		assertEquals("First phrase says East", testPhrase, steps.get(0).substring(0, testPhrase.length()));
 	}
@@ -134,7 +141,7 @@ public class StepByStepTesting {
 	@Test
 	public void FirstStringTest4() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nE, nG));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		String testPhrase = "Face " + "South-West";
 		assertEquals("First phrase says East", testPhrase, steps.get(0).substring(0, testPhrase.length()));
 	}
@@ -143,7 +150,7 @@ public class StepByStepTesting {
 	@Test
 	public void FirstStringTest5() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nE, nD));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		String testPhrase = "Face " + "West";
 		assertEquals("First phrase says East", testPhrase, steps.get(0).substring(0, testPhrase.length()));
 	}
@@ -152,7 +159,7 @@ public class StepByStepTesting {
 	@Test
 	public void FirstStringTest6() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nE, nA));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		String testPhrase = "Face " + "North-West";
 		assertEquals("First phrase says East", testPhrase, steps.get(0).substring(0, testPhrase.length()));
 	}
@@ -161,7 +168,7 @@ public class StepByStepTesting {
 	@Test
 	public void FirstStringTest7() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nE, nB));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		String testPhrase = "Face " + "North";
 		assertEquals("First phrase says East", testPhrase, steps.get(0).substring(0, testPhrase.length()));
 	}
@@ -170,7 +177,7 @@ public class StepByStepTesting {
 	@Test
 	public void FirstStringTest8() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nE, nC));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		String testPhrase = "Face " + "North-East";
 		assertEquals("First phrase says East", testPhrase, steps.get(0).substring(0, testPhrase.length()));
 	}
@@ -180,7 +187,7 @@ public class StepByStepTesting {
 	@Test
 	public void CorrectStringsTest1() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(nD, nA, nB, nF, nI, nH, nE, nG));
-		ArrayList<String> steps = Directions.stepByStep(path);
+		ArrayList<String> steps = Directions.stepByStep(path, maps);
 		assertEquals("Message from Node 1 to Node 2", "Face North, and walk 100 feet.", steps.get(0));
 		assertEquals("Message from Node 2 to Node 3", "Turn hard right, and walk 100 feet.", steps.get(1));
 		assertEquals("Message from Node 3 to Node 4", "Turn right, and walk 141 feet.", steps.get(2));
