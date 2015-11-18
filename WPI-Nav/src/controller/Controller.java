@@ -90,7 +90,6 @@ public class Controller extends Application {
         //check if we have a start or false
         if (myDisplay.start.getValue() == null){
             //if (validateNotEquality(n, (Node)myDisplay.start.getValue())) {
-                System.out.println("controller start");
                 //no start, thus -> set it to n
                 this.FLAG = false;
                 myDisplay.start.setValue(n);
@@ -100,7 +99,6 @@ public class Controller extends Application {
            // }
         } else if (myDisplay.end.getValue() == null){
            // if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
-                System.out.println("controller end");
                 this.FLAG = false;
                 myDisplay.end.setValue(n);
                 this.FLAG = true;
@@ -109,7 +107,6 @@ public class Controller extends Application {
           //  }
         } else if (!FIRST){
             if(validateNotEquality(n,(Node)myDisplay.start.getValue())) {
-                System.out.println("controller start");
                 //no start, thus -> set it to n
                 this.FLAG = false;
                 myDisplay.start.setValue(n);
@@ -121,7 +118,6 @@ public class Controller extends Application {
             //myDisplay.mapDisplay.mapDescriptor.setText("Refresh to Click and Choose");
         } else {
             if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
-                System.out.println("controller end");
                 this.FLAG = false;
                 myDisplay.end.setValue(n);
                 this.FLAG = true;
@@ -200,7 +196,6 @@ public class Controller extends Application {
             //logic.Node e = (logic.Node)this.end.getValue();
             ArrayList<logic.Node> path = this.getPathNodes(startNode, endNode);
             ArrayList<String> instructions = this.getInstructions();//pass correct instructions
-
             myDisplay.setInstructions(path, instructions);
             myDisplay.mapDisplay.showPath(path);
         }

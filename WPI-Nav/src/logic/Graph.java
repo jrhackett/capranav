@@ -35,7 +35,6 @@ public class Graph implements ICollection
 		for(Node node : this.nodes.values())
 		{
 			str = str + (node.toString() + " ");
-			System.out.println(node.toString());
 		}
 		return str;
 	}

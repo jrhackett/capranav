@@ -56,12 +56,15 @@ public class MapDisplay extends Pane {
 
 
     public void clearNodesEdges(int ids, int ide){
+        int i = 0;
         id_circle.forEach((k,v) ->{
             //we have to also check
             if (k != ids && k != ide) { normal(v); }
+        //    System.out.println(k);
         });
         //id_circle = new HashMap<>();
         this.getChildren().removeAll(lines);
+
         lines = new ArrayList<>();
     }
 
@@ -184,7 +187,6 @@ public class MapDisplay extends Pane {
         });
         */
         circle.setOnMouseClicked(e -> {
-            System.out.println("node circle click handler");
             controller.nodeFromMapHandler(v);
         });
 /*

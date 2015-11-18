@@ -143,8 +143,6 @@ public class Display {
 		mapPane.setPrefWidth(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
 		mapPane.setMaxWidth(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
 		mapPane.setMinWidth(600);
-		System.out.println(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
-		System.out.println(height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER);
 		mapPane.setStyle("-fx-background-color: #eeeeee");
 		this.mapDisplay = new MapDisplay( this.controller); //(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER),
 		mapPane.getChildren().add(mapDisplay);
@@ -200,7 +198,6 @@ public class Display {
 				}
 
 				if (controller.startNode != null && controller.endNode != null) {findPaths();}
-
 			}
 		});
 
@@ -404,7 +401,6 @@ public class Display {
 	// Traditional way
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
-			System.out.println("Email: " + result.get());
 		}
 
 	// The Java 8 way

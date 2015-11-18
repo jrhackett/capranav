@@ -41,17 +41,17 @@ public class AStarShortestPath {
 		);
 
 		// cost from start
+		double savedG = start.getG();
 		start.setG(0);
 
 		queue.add(start); // add the starting Node to the priority queue
 
 		boolean found = false; // set found boolean to false, will change to
 								// true once path is found
-
+		int i = 0;
 		while ((!queue.isEmpty()) && (!found)) { // continue to loop as long as
 													// queue is not empty AND
 													// path isn't found yet
-
 			// Retrieve and remove the Node in queue with the lowest f_score
 			// value
 			Node current = queue.poll();
@@ -72,21 +72,18 @@ public class AStarShortestPath {
 																// current Node
 				double movement_cost = getCost(current, e, map); // obtain movement_cost from edge
 				double temp_g_scores = current.getG() + movement_cost; // calculate g_scores
-				double temp_h_scores = getHeuristic(child, destination); // get heuristic cost from current node and destination node
+				double temp_h_scores = 0; //getHeuristic(child, destination); // get heuristic cost from current node and destination node
 				double temp_f_scores = temp_g_scores + temp_h_scores; // get f score
-
 				// if child has been evaluated already and the new f_score is higher, skip
 				if ((explored.contains(child)) && (temp_f_scores >= child.getF())) {
 					continue; // continue through for loop
 				}
-
 				// if child is not in the queue or the new f_score is lower:
 				else if ((!queue.contains(child)) || (temp_f_scores < child.getF())) {
 					child.setParent(current); // Set child's parent to the current Node to establish path
 					child.setG(temp_g_scores); // update child's g_scores
 					child.setH(temp_h_scores); // update childs h_scores
 					child.setF(temp_f_scores); // update childs f_scores
-
 					// remove child from queue to avoid doubles
 					if (queue.contains(child)) {
 						queue.remove(child);
@@ -98,12 +95,10 @@ public class AStarShortestPath {
 			}
 
 		}
-	
 		ArrayList<Node> path = printPath(destination); // create a list of
 														// Nodes, tracing from
 														// the destination Node
 														// back to the start
-		System.out.println("Path: " + path); //print out the List of Nodes from start to finish
 		return path;
 	}
 	/**
@@ -147,9 +142,11 @@ public class AStarShortestPath {
 	 */
 	public static ArrayList<Node> printPath(Node target) {
 		ArrayList<Node> path = new ArrayList<Node>();
-
+		int i = 0;
 		for (Node node = target; node != null; node = node.getParent()) {
 			if(!path.contains(node)) path.add(node);
+			else
+				break;
 		}
 		Collections.reverse(path);
 		return path;
