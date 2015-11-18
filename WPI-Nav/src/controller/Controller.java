@@ -86,6 +86,14 @@ public class Controller extends Application {
         this.pathNodes = new ArrayList<>();
     }
 
+    public void resetStartEnd(){
+        this.startNode = null;
+        this.endNode = null;
+        this.myDisplay.start.getSelectionModel().clearSelection();
+        this.myDisplay.end.getSelectionModel().clearSelection();
+
+    }
+
     public void nodeFromMapHandler(Node n){
         //check if we have a start or false
         if (myDisplay.start.getValue() == null){
@@ -94,7 +102,7 @@ public class Controller extends Application {
                 this.FLAG = false;
                 myDisplay.start.setValue(n);
                 this.FLAG = true;
-                myDisplay.mapDisplay.setStartNode(n.getID());
+                myDisplay.mapDisplay.setStartNode(n.getID(), true);
                 this.startNode = n;
            // }
         } else if (myDisplay.end.getValue() == null){
@@ -102,7 +110,7 @@ public class Controller extends Application {
                 this.FLAG = false;
                 myDisplay.end.setValue(n);
                 this.FLAG = true;
-                myDisplay.mapDisplay.setStartNode(n.getID());
+                myDisplay.mapDisplay.setStartNode(n.getID(), false);
                 this.endNode = n;
           //  }
         } else if (!FIRST){
@@ -111,7 +119,7 @@ public class Controller extends Application {
                 this.FLAG = false;
                 myDisplay.start.setValue(n);
                 this.FLAG = true;
-                myDisplay.mapDisplay.setStartNode(n.getID());
+                myDisplay.mapDisplay.setStartNode(n.getID(), true);
                 FIRST = true;
                 this.startNode = n;
             }
@@ -121,7 +129,7 @@ public class Controller extends Application {
                 this.FLAG = false;
                 myDisplay.end.setValue(n);
                 this.FLAG = true;
-                myDisplay.mapDisplay.setStartNode(n.getID());
+                myDisplay.mapDisplay.setStartNode(n.getID(), false);
                 FIRST = false;
                 this.endNode = n;
             }

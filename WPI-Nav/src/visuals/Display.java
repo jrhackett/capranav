@@ -187,7 +187,7 @@ public class Display {
 				*/
 				controller.startNode = node;
 
-				mapDisplay.setStartNode(node.getID());
+				mapDisplay.setStartNode(node.getID(), true);
 
 				if (controller.FLAG) {
 					if (controller.endNode != null) {
@@ -215,7 +215,7 @@ public class Display {
 					mapDisplay.clearSelection(node.getID());
 				}
 				*/
-				mapDisplay.setStartNode(node.getID());
+				mapDisplay.setStartNode(node.getID(), false);
 
 				if (controller.FLAG) {
 					if (controller.startNode != null) {
@@ -240,7 +240,7 @@ public class Display {
 				logic.Map newMap = (logic.Map) chooseMap.getValue();
 				controller.setCurrentMap(newMap.getID());
 				mapDisplay.setMap(newMap);
-
+				clearInstructions();
 				start.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
 				end.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
 
@@ -460,11 +460,16 @@ public class Display {
 		instructions.setMaxWidth(TABLE_WIDTH);
 		instructions.setMinHeight(TABLE_HEIGHT);
 		instructions.setMaxHeight(TABLE_HEIGHT);
+		instructions.setPlaceholder(new Label(" "));
 		instructions.getColumns().addAll(Instructions.getColumn(instructions));
 		instructions.setColumnResizePolicy(
 	            TableView.CONSTRAINED_RESIZE_POLICY
 		        );
 		return instructions;
+	}
+
+	public void clearInstructions(){
+		this.instructions.setItems(null);
 	}
 
 	/**
