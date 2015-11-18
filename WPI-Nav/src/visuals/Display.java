@@ -182,14 +182,14 @@ public class Display {
 		start.setOnAction(e -> {
 			if (start.getValue() != null && !start.getValue().toString().isEmpty()) {
 				logic.Node node = (logic.Node) start.getValue();
-				//mapDisplay.
 				mapDisplay.setStartNode(node.getID());
 			}
 		});
+
 		/* end */
 		this.end = new Inputs("For Destination", INPUT_WIDTH);
 		end.setOnAction(e -> {
-			if (chooseMap.getValue() != null && !chooseMap.getValue().toString().isEmpty()) {
+			if (end.getValue() != null && !end.getValue().toString().isEmpty()) {
 				logic.Node node = (logic.Node) end.getValue();
 				mapDisplay.setStartNode(node.getID());
 			}
