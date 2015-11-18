@@ -56,4 +56,6 @@ public class Map {
         this.path = path;
     }
 
+    public double getPixelToFeetRatio() { return this.pixelToFeetRatio;}
+
 }

@@ -36,6 +36,8 @@ public class MapDisplay extends Pane {
 
     private boolean HIGLIGHTED = false;
 
+    private ArrayList<Node> path; //last set path
+
     /**
      * Constructor
      * @param controller
@@ -49,6 +51,7 @@ public class MapDisplay extends Pane {
         this.setMaxHeight(IMAGE_HEIGHT);
         this.id_circle = new HashMap<>();
         this.lines = new ArrayList<>();
+        this.path = new ArrayList<>();
     }
 
 
@@ -89,7 +92,8 @@ public class MapDisplay extends Pane {
                 highlightAll();
                 HIGLIGHTED = true;
             } else {
-                hidePath();
+                hideAll();
+                showPath(path);
                 HIGLIGHTED = false;
             }
         });
@@ -101,7 +105,8 @@ public class MapDisplay extends Pane {
      *
      */
     public void showPath(ArrayList<Node> path){
-        hidePath();
+        this.path = path;
+        hideAll();
         drawPaths(path);
 
         for (Node n : path){
@@ -136,9 +141,9 @@ public class MapDisplay extends Pane {
     }
 
     /**
-     * Remove path and hides all
+     * Hide all and show path
      */
-    public void hidePath(){
+    public void hideAll(){
         id_circle.forEach((k,v) -> {
             normal(v);
         });
@@ -167,6 +172,7 @@ public class MapDisplay extends Pane {
         Circle circle = new Circle(x, y, 5);
         normal(circle);
 
+        /*
         circle.setOnMouseEntered(e -> {
             last = (Color)circle.getFill();
             lastStroke = (Color)circle.getStroke();
@@ -176,7 +182,7 @@ public class MapDisplay extends Pane {
         circle.setOnMouseExited(e -> {
             highlight(circle, last, lastStroke);
         });
-
+        */
         circle.setOnMouseClicked(e -> {
             System.out.println("node circle click handler");
             controller.nodeFromMapHandler(v);
@@ -265,16 +271,6 @@ public class MapDisplay extends Pane {
         });
     }
 
-    /*
-
-    private void hideAll() {
-        this.getChildren().forEach(e -> {
-            if (e instanceof Circle) {
-                normal((Circle) e);
-            }
-        });
-    }
-    */
 }
 
 

@@ -86,18 +86,18 @@ public class Controller extends Application {
     public void nodeFromMapHandler(Node n){
         //check if we have a start or false
         if (myDisplay.start.getValue() == null){
-            if (validateNotEquality(n, (Node)myDisplay.start.getValue())) {
+            //if (validateNotEquality(n, (Node)myDisplay.start.getValue())) {
                 System.out.println("controller start");
                 //no start, thus -> set it to n
                 myDisplay.start.setValue(n);
                 myDisplay.mapDisplay.setStartNode(n.getID());
-            }
+           // }
         } else if (myDisplay.end.getValue() == null){
-            if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
+           // if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
                 System.out.println("controller end");
                 myDisplay.end.setValue(n);
                 myDisplay.mapDisplay.setStartNode(n.getID());
-            }
+          //  }
         } else if (!FIRST){
             if(validateNotEquality(n,(Node)myDisplay.start.getValue())) {
                 System.out.println("controller start");
@@ -138,7 +138,7 @@ public class Controller extends Application {
      */
     public ArrayList<String> getInstructions(){
         logic.Directions directions = new Directions();
-        return directions.stepByStep(this.pathNodes);
+        return directions.stepByStep(this.pathNodes, this.maps);
     }
 
 
