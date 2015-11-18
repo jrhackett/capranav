@@ -138,7 +138,7 @@ public class Controller extends Application {
      */
     public ArrayList<String> getInstructions(){
         logic.Directions directions = new Directions();
-        return directions.stepByStep(this.pathNodes, this.maps);
+        return directions.stepByStep(this.pathNodes, this.maps.getMaps());
     }
 
 

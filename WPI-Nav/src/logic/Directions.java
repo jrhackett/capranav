@@ -24,8 +24,8 @@ public class Directions {
 		
 		double scalar = 1;
 		
-		if(maps.containsKey(aStarPath.get(0).getID())){
-			scalar = maps.get(aStarPath.get(0).getID()).getPixel();
+		if(maps.containsKey(aStarPath.get(0).getMap_id())){
+			scalar = maps.get(aStarPath.get(0).getMap_id()).getPixelToFeetRatio();
 			dist *= scalar;
 		} else {
 			// throw exception
@@ -77,8 +77,8 @@ public class Directions {
 			// get the distance to the next node and angle
 			dist = Math.sqrt(Math.pow((turn.getX() - next.getX()), 2) + Math.pow((turn.getY() - next.getY()), 2));
 			
-			if(maps.containsKey(aStarPath.get(0).getID())){
-				scalar = maps.get(aStarPath.get(0).getID()).getPixel();
+			if(maps.containsKey(turn.getMap_id())){
+				scalar = maps.get(turn.getMap_id()).getPixelToFeetRatio();
 				dist *= scalar;
 			} else {
 				// throw exception
