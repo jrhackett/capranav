@@ -76,7 +76,11 @@ public class MapDisplay extends Pane {
      * @param map
      */
     public void setMap(logic.Map map){
+
         this.getChildren().remove(mapView);
+        //this.getChildren().removeAll(lines);
+       // path.clear();
+
 
         try {
             this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
@@ -89,6 +93,7 @@ public class MapDisplay extends Pane {
         this.getChildren().add(mapView);
         drawNodes(controller.getNodesOfMap(map.getID()));
 
+        //HIGLIGHTED = false;
 
         mapView.setOnMouseClicked(e -> {
             if (!HIGLIGHTED) {
@@ -96,7 +101,8 @@ public class MapDisplay extends Pane {
                 HIGLIGHTED = true;
             } else {
                 hideAll();
-                showPath(path);
+                //if(path.size() > 0)
+                    showPath(path);
                 HIGLIGHTED = false;
             }
         });
