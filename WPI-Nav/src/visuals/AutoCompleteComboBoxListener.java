@@ -19,7 +19,6 @@ public class AutoCompleteComboBoxListener<T> {
     public AutoCompleteComboBoxListener(ComboBox<T> comboBox) {
         this.comboBox = comboBox;
         sb = new StringBuilder();
-
         this.comboBox.setEditable(true);
         this.comboBox.setOnKeyReleased(event -> {
             // this variable is used to bypass the auto complete process if the length is the same.

@@ -1,6 +1,8 @@
 package visuals;
 
 import controller.Controller;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -43,6 +45,8 @@ public class Display {
 	/* variables */
 	public Controller controller;
 	private boolean MENU_VISIBLE = false;
+
+	final BooleanProperty firstTime = new SimpleBooleanProperty(true);
 
     /* visuals */
 	private Scene scene;
@@ -216,6 +220,22 @@ public class Display {
 		AutoCompleteComboBoxListener searchMap = new AutoCompleteComboBoxListener(chooseMap);
 		AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
 		AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
+
+		this.chooseMap.setPlaceholder(new Label("Search or Select Map"));
+		this.start.setPlaceholder(new Label("Search or Select Starting Location"));
+		this.end.setPlaceholder(new Label("Search or Select End Location"));
+
+		this.chooseMap.setPromptText("Search or Select Map");
+		this.start.setPromptText("Search or Select Map");
+		this.end.setPromptText("Search or Select Map");
+
+		this.chooseMap.focusedProperty().addListener(((observable, oldValue, newValue) -> {
+			if(newValue && firstTime.get()){
+				inputs.requestFocus();
+				firstTime.setValue(false);
+			}
+		}));
+
 
 
 		/* select start input */
