@@ -78,13 +78,14 @@ public class Display {
 	 */
 	public Scene Init(){
 
-		/* side - panel: inputs + divisor + options + divisor + buttons */
+		/*****************************************************************/
+		/** side - panel: inputs + divisor + options + divisor + buttons */
 		VBox side_panel = new VBox();
 		side_panel.setTranslateX(WIDTH_BUFFER);
 		side_panel.setTranslateY(HEIGHT_BUFFER);
 		side_panel.setSpacing(2 * GAP);
 
-		/* button panel */
+		/** button panel **/
 		StackPane button_panel = createButtonPane();
 
 		/* stack pane of back ground and vbox of buttons */
@@ -106,10 +107,6 @@ public class Display {
 		/* map */
 		this.mapPane = createMapPane();
 
-		/*
-		this.map = new Map( (width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER), this.controller);
-
-		*/
 		/* instructions */
 		this.TABLE_WIDTH = (width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
 
@@ -125,7 +122,6 @@ public class Display {
 		sp.getChildren().add(imageDisplay);
 		sp.setTranslateY(height - (HEIGHT_BUFFER + dimension));
 		sp.setTranslateX(WIDTH_BUFFER);
-
 
 		side_panel.getChildren().addAll(input_panel, options); //divide, button_panel, //TODO add buttons back
 		/* build */
@@ -177,77 +173,50 @@ public class Display {
 
 		/* start */
 		this.start = new Inputs("Search WPI Maps", INPUT_WIDTH);
-		start.setOnAction(e -> {
-			if (start.getValue() != null && !start.getValue().toString().isEmpty()) {
-				logic.Node node = (logic.Node) start.getValue();
-				/*
-				if (controller.endNode != null){
-					mapDisplay.clearSelection(node.getID());
-				}
-				*/
-				controller.startNode = node;
-
-				mapDisplay.setStartNode(node.getID(), true);
-
-				if (controller.FLAG) {
-					if (controller.endNode != null) {
-						mapDisplay.clearNodesEdges(node.getID(), controller.endNode.getID());
-					} else {
-						mapDisplay.clearNodesEdges(node.getID(), -1);
-					}
-				}
-
-				if (controller.startNode != null && controller.endNode != null) {findPaths();}
-			}
-		});
+		start.setOnAction(e -> handleInput(start, true));
 
 		/* end */
 		this.end = new Inputs("For Destination", INPUT_WIDTH);
-		end.setOnAction(e -> {
+		end.setOnAction(e ->handleInput(end, false));
 
 
+/*		private Popover<PopOver, Label> controller = new Po();
 
-			if (end.getValue() != null && !end.getValue().toString().isEmpty() && controller.startNode != null) {
-				logic.Node node = (logic.Node) end.getValue();
+		PopOver popOver = new PopOver();
+		Circle c = new Circle(5);
+		popOver.show(c);*/
 
-				/*
-				if (controller.endNode != null){
-					mapDisplay.clearSelection(node.getID());
-				}
-				*/
-				mapDisplay.setStartNode(node.getID(), false);
+		//popOver.show(circle);
+		//p//opOver.setContentNode(new Text(v.toString()));
 
-				if (controller.FLAG) {
-					if (controller.startNode != null) {
-						mapDisplay.clearNodesEdges(node.getID(), controller.startNode.getID());
-					} else {
-						mapDisplay.clearNodesEdges(node.getID(), -1);
-					}
-				}
-
-				controller.endNode = node;
-				if (controller.startNode != null && controller.endNode != null){findPaths();}
-
-			}
-		});
-
-		//ComboBox choose Map
+		//TODO: the map combo box will soon be gone
 		this.chooseMap = new Inputs("maps", INPUT_WIDTH);
-		chooseMap.setItems(chooseMap.getMaps(controller.getMaps().getMaps()));
+		chooseMap.setItems(chooseMap.convertMaps(controller.getMaps().getMaps()));
 
 		chooseMap.setOnAction(e -> {
-			if (chooseMap.getValue() != null && !chooseMap.getValue().toString().isEmpty()) {
-				logic.Map newMap = (logic.Map) chooseMap.getValue();
-				controller.setCurrentMap(newMap.getID());
-				mapDisplay.setMap(newMap);
-				clearInstructions();
-				start.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
-				end.setItems(end.convertNodes(controller.getNamedNodesOfMap()));
+			try {
+				if (chooseMap.getValue() != null && !chooseMap.getValue().toString().isEmpty()) {
+					logic.Map newMap = (logic.Map) chooseMap.getValue();
+					controller.setCurrentMap(newMap.getID());
+					mapDisplay.setMap(newMap);
+					clearInstructions();
+					start.setItems(start.convertNodes(controller.getNamedNodesOfMap()));
+					end.setItems(end.convertNodes(controller.getNamedNodesOfMap()));
 
-				controller.endNode = null;
-				controller.startNode = null;
+					controller.endNode = null;
+					controller.startNode = null;
+				}
+			} catch (ClassCastException  cce) {
+				/***   only a partial string currently -> no mapping to a node  ***/
+				System.out.println("NOT A NODE: " + start.getValue());
 			}
 		});
+
+		/***************************** Auto Complete Search *******************************/
+		AutoCompleteComboBoxListener searchMap = new AutoCompleteComboBoxListener(chooseMap);
+		AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
+		AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
+
 
 		/* select start input */
 		Label startDescriptor = new Label("Select a Starting Location!");
@@ -260,7 +229,8 @@ public class Display {
 		mapDescriptor.setMinWidth(INPUT_WIDTH);
 		mapDescriptor.setMaxWidth(INPUT_WIDTH);
 
-		this.inputs.getChildren().addAll(mapDescriptor, chooseMap, startDescriptor,start,endDescriptor, end);
+		//mapDescriptor
+		this.inputs.getChildren().addAll(mapDescriptor, chooseMap, startDescriptor, start, endDescriptor, end);
 
 		pane.getChildren().addAll( inputs); /* background taken out for now */
 
@@ -271,7 +241,40 @@ public class Display {
 		pane.setEffect(ds);
 
 		return pane;
+	}
 
+	private void handleInput(Inputs v, boolean START){
+		if (v.getValue() != null && !v.getValue().toString().isEmpty()) {
+			try {
+				logic.Node node = (logic.Node) v.getValue();
+				if (START) controller.startNode = node;
+				else controller.endNode = node;
+
+				mapDisplay.setStartNode(node.getID(), true);
+
+				if (controller.FLAG) {
+					if (controller.endNode != null) {
+						mapDisplay.clearNodesEdges(node.getID(), controller.endNode.getID());
+					} else {
+						mapDisplay.clearNodesEdges(node.getID(), -1);
+					}
+				}
+
+				if (controller.startNode != null && controller.endNode != null) {
+					findPaths();
+				}
+
+
+			} catch (ClassCastException cce) {
+				/***   only a partial string currently -> no mapping to a node  ***/
+				System.out.println("NOT A NODE: " + v.getValue());
+			}
+				/*
+				if (controller.endNode != null){
+					mapDisplay.clearSelection(node.getID());
+				}
+				*/
+		}
 	}
 
 
