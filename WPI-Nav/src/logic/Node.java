@@ -16,7 +16,6 @@ public class Node {
 	private ArrayList<Edge> adjacencies;
 	private Node parent;
 
-
 	/**
 	 * Nodes are used to represent a location and to hold the Edges to all other
 	 * locations

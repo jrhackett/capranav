@@ -130,9 +130,11 @@ public class MapVisual extends Pane {
 				lastStroke = (Color) circle.getStroke();
 				highlight(circle, Color.GOLD, Color.BLACK);
 				//TODO: POPOVER FOR NAME HERE
-
-				//popOver.show(circle);
-				//p//opOver.setContentNode(new Text(v.toString()));
+				/*
+				PopOver popOver = new PopOver();
+				popOver.show(circle);
+				popOver.setContentNode(new Text(v.toString()));
+				*/
 			}
 		});
 

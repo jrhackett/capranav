@@ -251,7 +251,11 @@ public class MapDisplay extends Pane {
             c.setRadius(5);
 
 
-            if (sts != null) sts.stop();
+            if (sts != null) {
+                sts.stop();
+             /*   if((Circle)sts.getNode() == c){ return;}//do nothing _
+                sts.*/
+            }
             ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
             st.setByX(1.1f);
             st.setByY(1.1f);
@@ -327,11 +331,6 @@ public class MapDisplay extends Pane {
      * clear selection
      * @param
      */
-    /*
-    public void clearSelection(int id){
-        normal(id_circle.get(id));
-    }
-*/
 
     private void highlightAll() {
         this.getChildren().forEach(e -> {

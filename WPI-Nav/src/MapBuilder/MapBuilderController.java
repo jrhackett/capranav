@@ -128,8 +128,20 @@ public class MapBuilderController extends   Application {
     public void setNodeName(String name){
         if (SELECTED) {
             selectedNode.setName(name);
+            changeNameToIncludeMap(selectedNode);
         }
     }
+
+    /**
+     * sets the selected node name
+     * @param n
+     */
+    public void changeNameToIncludeMap(Node n){
+        String mapPrefix = new String();
+        mapPrefix = maps.getMap(n.getMap_id()).getName();
+        n.setName(mapPrefix + " " + n.getName());
+    }
+
 
 
     /**

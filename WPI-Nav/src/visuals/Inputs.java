@@ -21,8 +21,9 @@ public class Inputs extends ComboBox {
 		super();
 		this.WIDTH = WIDTH;
 		initial = s;
-		this.setMaxWidth(WIDTH);
+		this.setMaxWidth(WIDTH); //TODO sizing here
 		this.setMinWidth(WIDTH);
+		this.setEditable(true);
 
 		//		this.setItems(getDummyLocations());
 		/*
@@ -67,7 +68,7 @@ public class Inputs extends ComboBox {
 	 * @param maps
 	 * @return
      */
-	public ObservableList<logic.Map> getMaps(HashMap<Integer, logic.Map> maps) {
+	public ObservableList<logic.Map> convertMaps(HashMap<Integer, logic.Map> maps) {
 		this.dataMap = FXCollections.observableArrayList();
 		maps.forEach((k,v) -> {dataMap.add(v);});
 		return dataMap.sorted(); //NOTE: this wont work in java 8.40

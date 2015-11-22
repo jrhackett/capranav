@@ -282,7 +282,7 @@ public class MapBuilderDisplay extends HBox {
 
         //ComboBox choose Map
         this.chooseMap = new Inputs("maps", input_width);
-        chooseMap.setItems(chooseMap.getMaps(controller.getMaps().getMaps()));
+        chooseMap.setItems(chooseMap.convertMaps(controller.getMaps().getMaps()));
         chooseMap.setOnAction(e -> {
             logic.Map newMap = (logic.Map) chooseMap.getValue();
             controller.setCurrentMap(newMap.getID());
