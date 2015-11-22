@@ -24,12 +24,12 @@ public class Controller extends Application {
     private Display myDisplay;
 
     /* information variables */
-    public ArrayList<Node> pathNodes;   /* this is set then used to get instructions from logic.Directions */
+    public ArrayList<Node> pathNodes;        /* this is set then used to get instructions from logic.Directions */
 
     /* nodes and graphs */
-    private HashMap<Integer, Node> nodes;
-    private Maps maps;
-    private logic.Map currentMap;
+    private HashMap<Integer, Node> nodes;    /* all the nodes */
+    private Maps maps;                       /* information of the maps */
+    private logic.Map currentMap;            /* current map being used */
 
     /* switches */
     private boolean FIRST = false; //if the last thing to be set was first
@@ -62,24 +62,10 @@ public class Controller extends Application {
 
 		/* setup */
         this.myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, this);    //creates scene
-
         Scene display = myDisplay.Init(); //initializes scene
         s.setScene(display); //sets scene to display
-
         s.show();   //shows scene
     }
-
-
-    /* logic methods */
-
-    /* function that gets a path, given two+ nodes */
-
-    /* function for handicap path, given two+ nodes */
-
-    /* function looking for nearest three bathrooms */
-
-    /* function that shows three paths to food */
-
 
     public void reset(){
         this.currentMap = new Map();
