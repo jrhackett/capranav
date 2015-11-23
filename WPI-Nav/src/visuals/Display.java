@@ -164,8 +164,8 @@ public class Display {
 			bar.setFill(Color.web("#eeeeee"));
 			bars.getChildren().add(bar);
 		}
-		bars.setTranslateX(8);
-		bars.setTranslateY(7);
+		//bars.setTranslateX(8);
+		//bars.setTranslateY(7);
 
 
 		dashBoardControlBox.getChildren().addAll(bars);
@@ -176,16 +176,24 @@ public class Display {
 		dashBoardControlBox.setMinWidth(CONTROL_WIDTH);
 
 
+		SlidingVBox slidingDashboard = new SlidingVBox(expandedWidth, bars, dashBoard);
+		slidingDashboard.setStyle("-fx-background-color: #333333");
+		slidingDashboard.setMaxWidth(expandedWidth);
+		slidingDashboard.setPrefWidth(expandedWidth);
+		slidingDashboard.setMinWidth(0);
 
 
-		SlidingVBox slidingDirections = new SlidingVBox(expandedWidth, bars, dashBoard);
-		slidingDirections.setStyle("-fx-background-color: #333333");
-		slidingDirections.setMaxWidth(expandedWidth);
-		slidingDirections.setPrefWidth(expandedWidth);
-		slidingDirections.setMinWidth(0);
-
-
-
+		/** STYLE BUTTON HERE **/
+		javafx.scene.control.Button button = slidingDashboard.getButton();
+		button.setId("dashboardButton");
+		button.setTranslateX(0);
+		button.setTranslateY(0);
+		/*
+		button.setStyle("-fx-padding: 0px;" +
+						"-fx-alignment: CENTER;" +
+				        "-fx-effect: dropshadow( one-pass-box , black , 8 , 0.0 , 2 , 0 );");
+		*/
+		dashBoardControlBox.getChildren().add(button);
 		/*****************************************************************/
 		/** Directions **/
 		HBox directionsTitleBox = new HBox();
@@ -205,8 +213,6 @@ public class Display {
 		directionsTitleBox.getChildren().addAll(directionsTitleLabel);
 
 		directions.getChildren().addAll(directionsTitleBox);
-
-
 		directions.setStyle("-fx-background-color: #ffffff");
 		directions.setMaxWidth(expandedWidth);
 		directions.setPrefWidth(expandedWidth);
@@ -222,14 +228,23 @@ public class Display {
 		Image directionsArrow =	new Image(getClass().getResourceAsStream("../images/forward.png"), 30, 30, true, true);
 		ImageView directionsArrowView = new ImageView(directionsArrow);
 
-		directionsControlBoxBox.getChildren().addAll(directionsArrowView);
+		//directionsControlBoxBox.getChildren().addAll(directionsArrowView);
 		directionsControlBoxBox.setStyle("-fx-background-color: #ac2738");
 		directionsControlBoxBox.setMinHeight(TITLE_HEIGHT);
 
+		/*
+		SlidingVBox slidingDirections = new SlidingVBox(expandedWidth, directionsArrowView, directions);
+		slidingDirections.setStyle("-fx-background-color: #ffffff");
+		slidingDirections.setMaxWidth(expandedWidth);
+		slidingDirections.setPrefWidth(expandedWidth);
+		slidingDirections.setMinWidth(0);
+*/
 
+		directionsControlBoxBox.getChildren().add(directionsArrowView);
 
-		directionsArrowView.setTranslateX(5);
-		directionsArrowView.setTranslateY(2);
+		//directionsArrowView.setTranslateX(5);
+		//directionsArrowView.setTranslateY(2);
+
 		directionsControlBox.getChildren().addAll(directionsControlBoxBox);
 		directionsControlBox.setMinWidth(CONTROL_WIDTH);
 		directionsControlBox.setMaxWidth(CONTROL_WIDTH);
@@ -291,8 +306,9 @@ public class Display {
 
 
 
-		dashBoardControlBox.getChildren().add(slidingDirections.getButton());
-		sections.getChildren().addAll(slidingDirections, dashBoardControlBox, directions, directionsControlBox, map);
+		sections.setStyle("-fx-background-color: #333333");
+
+		sections.getChildren().addAll(dashBoardControlBox, slidingDashboard, directions, directionsControlBox, map);
 
 
 		/*****************************************************************/

@@ -1,7 +1,6 @@
 package visuals;
 
-import javafx.animation.Animation;
-import javafx.animation.Transition;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -24,9 +23,6 @@ class SlidingVBox extends VBox {
         this.setPrefWidth(expandedWidth);
         this.setMinWidth(0);
 
-
-
-
         this.controlButton = new javafx.scene.control.Button();
         controlButton.setGraphic(buttonval);
         controlButton.setAlignment(Pos.CENTER);
@@ -38,16 +34,25 @@ class SlidingVBox extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 // create an animation to hide sidebar.
+
+
+
                 final Animation hideSidebar = new Transition() {
                     {
                         setCycleDuration(Duration.millis(250));
                     }
 
-                    protected void interpolate(double frac) {
-                        final double curWidth = expandedWidth * (1.0 - frac);
+                    protected void interpolate(double t) {
+                        final double S1 = 25.0 / 9.0;
+                        final double S3 = 10.0 / 9.0;
+                        final double S4 = 1.0 / 9.0;
+                        t = ((t < 0.2) ? S1 * t * t : S3 * t - S4);
+                        t = (t < 0.0) ? 0.0 : (t > 1.0) ? 1.0 : t;
+                        final double curWidth = expandedWidth * (1.0 - t);
                         setPrefWidth(curWidth);
                         setTranslateX(-expandedWidth + curWidth);
                     }
+
                 };
                 hideSidebar.onFinishedProperty().set(new EventHandler<ActionEvent>() {
                     @Override
@@ -64,8 +69,15 @@ class SlidingVBox extends VBox {
                         setCycleDuration(Duration.millis(250));
                     }
 
-                    protected void interpolate(double frac) {
-                        final double curWidth = expandedWidth * frac;
+                    protected void interpolate(double t) {
+                        final double S1 = 25.0 / 9.0;
+                        final double S3 = 10.0 / 9.0;
+                        final double S4 = 1.0 / 9.0;
+                        t = ((t < 0.2) ? S1 * t * t : S3 * t - S4);
+                        t = (t < 0.0) ? 0.0 : (t > 1.0) ? 1.0 : t;
+
+
+                        final double curWidth = expandedWidth * t;
                         setPrefWidth(curWidth);
                         setTranslateX(-expandedWidth + curWidth);
                     }
