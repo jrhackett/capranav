@@ -78,7 +78,7 @@ public class Display {
 	VBox dashBoard;
 	VBox directions;
 	StackPane root;
-
+	HBox dashBoardTitleBox;
 
 
 
@@ -115,7 +115,7 @@ public class Display {
 
 		/*****************************************************************/
 		/** Dashboard **/
-		HBox dashBoardTitleBox = new HBox();
+		dashBoardTitleBox = new HBox();
 		dashBoardTitleBox.setStyle("-fx-background-color: #333333");
 		dashBoardTitleBox.setMinHeight(TITLE_HEIGHT);
 		dashBoardTitleBox.setMaxHeight(TITLE_HEIGHT);
@@ -125,7 +125,10 @@ public class Display {
 		Label dashBoardTitleLabel = new Label("Dashboard");
 		dashBoardTitleLabel.setTextFill(Color.web("#eeeeee"));
 		dashBoardTitleBox.getChildren().addAll(dashBoardTitleLabel);
-		dashBoard.getChildren().addAll(dashBoardTitleBox);
+
+		Rectangle divider_1 = createDivider();
+
+		dashBoard.getChildren().addAll(dashBoardTitleBox, divider_1);
 
 		//Divider
 		//HBox
@@ -176,14 +179,14 @@ public class Display {
 		dashBoardControlBox.setMinWidth(CONTROL_WIDTH);
 
 
-		SlidingVBox slidingDashboard = new SlidingVBox(expandedWidth, bars, dashBoard);
+		SlidingVBox slidingDashboard = new SlidingVBox(expandedWidth, bars, dashBoardTitleBox, divider_1);
 		slidingDashboard.setStyle("-fx-background-color: #333333");
 		slidingDashboard.setMaxWidth(expandedWidth);
 		slidingDashboard.setPrefWidth(expandedWidth);
 		slidingDashboard.setMinWidth(0);
 
 
-		/** STYLE BUTTON HERE **/
+		/** STYLE BUTTON HERE **/ //TODO review here
 		javafx.scene.control.Button button = slidingDashboard.getButton();
 		button.setId("dashboardButton");
 		button.setTranslateX(0);
@@ -283,11 +286,9 @@ public class Display {
 
 
 		map.setMinWidth(MAP_WIDTH);
-		//map.setMaxWidth(MAP_WIDTH+MAP_BORDER*2);
 		map.setPrefWidth(MAP_WIDTH+MAP_BORDER*2);
 
 		map.setMinHeight(MAP_WIDTH+TITLE_HEIGHT);
-		//map.setMaxHeight(MAP_WIDTH+MAP_BORDER*2+TITLE_HEIGHT);
 		map.setPrefHeight(MAP_WIDTH+MAP_BORDER*2+TITLE_HEIGHT);
 
 		map.getChildren().addAll(mapTitle);
@@ -338,6 +339,15 @@ public class Display {
 	}
 
 
+	private Rectangle createDivider(){
+		Rectangle divide = new Rectangle(dashBoard.getWidth() / 2, 2);
+		divide.setArcHeight(2);
+		divide.setArcWidth(2);
+		divide.setFill(Color.web("#ffffff"));
+		divide.translateXProperty().bind((dashBoard.widthProperty().subtract(divide.widthProperty()).divide(2)));
+
+		return divide;
+	}
 
 
 
