@@ -76,6 +76,7 @@ public class Display {
 	private static final double TITLE_HEIGHT = 35;
 	//Visual Elements
 	VBox dashBoard;
+	SlidingVBox slidingDashboard;
 	VBox directions;
 	StackPane root;
 	HBox dashBoardTitleBox;
@@ -284,7 +285,6 @@ public class Display {
 		mapTitle.getChildren().add(mapTitleLabel);
 
 
-
 		map.setMinWidth(MAP_WIDTH);
 		map.setPrefWidth(MAP_WIDTH+MAP_BORDER*2);
 
@@ -340,11 +340,11 @@ public class Display {
 
 
 	private Rectangle createDivider(){
-		Rectangle divide = new Rectangle(dashBoard.getWidth() / 2, 2);
+		Rectangle divide = new Rectangle(100, 2);
 		divide.setArcHeight(2);
 		divide.setArcWidth(2);
 		divide.setFill(Color.web("#ffffff"));
-		divide.translateXProperty().bind((dashBoard.widthProperty().subtract(divide.widthProperty()).divide(2)));
+		//divide.translateXProperty().bind((slidingDashboard.widthProperty().subtract(divide.widthProperty()).divide(2)));
 
 		return divide;
 	}
