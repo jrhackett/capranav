@@ -242,8 +242,8 @@ public class Display {
 
 		directionsControlBoxBox.getChildren().add(directionsArrowView);
 
-		//directionsArrowView.setTranslateX(5);
-		//directionsArrowView.setTranslateY(2);
+		directionsArrowView.setTranslateX(5);
+		directionsArrowView.setTranslateY(2);
 
 		directionsControlBox.getChildren().addAll(directionsControlBoxBox);
 		directionsControlBox.setMinWidth(CONTROL_WIDTH);
@@ -299,18 +299,8 @@ public class Display {
 		HBox.setHgrow(dashBoard, Priority.SOMETIMES);
 		HBox.setHgrow(directions, Priority.SOMETIMES);
 
-
-
-
-
-
-
-
 		sections.setStyle("-fx-background-color: #333333");
-
-		sections.getChildren().addAll(dashBoardControlBox, slidingDashboard, directions, directionsControlBox, map);
-
-
+		sections.getChildren().addAll(dashBoardControlBox, slidingDashboard, directionsControlBox, directions, map);
 		/*****************************************************************/
 		/** Add sections to Root */
 		StackPane root = new StackPane();
