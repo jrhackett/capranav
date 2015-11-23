@@ -131,6 +131,10 @@ public class Display {
 		/** Dashboard **/
 		HBox dashBoardTitleBox = new HBox();
 		dashBoardTitleBox.setStyle("-fx-background-color: #333333");
+		dashBoardTitleBox.setMinHeight(TITLE_HEIGHT);
+		dashBoardTitleBox.setMaxHeight(TITLE_HEIGHT);
+		dashBoardTitleBox.setPrefHeight(TITLE_HEIGHT);
+		dashBoardTitleBox.setAlignment(Pos.CENTER);
 
 		Label dashBoardTitleLabel = new Label("Dashboard");
 		dashBoardTitleLabel.setFont(Font.font ("Verdana", 20));
@@ -186,7 +190,7 @@ public class Display {
 
 
 
-		directions.setStyle("-fx-background-color: #444444");
+		directions.setStyle("-fx-background-color: #ffffff");
 		directions.setMaxWidth(expandedWidth);
 		directions.setPrefWidth(expandedWidth);
 		directions.setMinWidth(0);
@@ -213,7 +217,7 @@ public class Display {
 		directionsControlBox.setMinWidth(CONTROL_WIDTH);
 		directionsControlBox.setMaxWidth(CONTROL_WIDTH);
 		directionsControlBox.setPrefWidth(CONTROL_WIDTH);
-		directionsControlBox.setStyle("-fx-background-color: #333333");
+		directionsControlBox.setStyle("-fx-background-color: #ffffff");
 
 		/*****************************************************************/
 		/** Map **/
