@@ -17,7 +17,7 @@ import java.util.HashMap;
  */
 public class Controller extends Application {
     /* visual constants */
-    private static final Double WINDOW_WIDTH = 1000.0;
+    private static final Double WINDOW_WIDTH = 1400.0;
     private static final Double WINDOW_HEIGHT = 700.0;
 
     /* visual component */
@@ -57,7 +57,7 @@ public class Controller extends Application {
 
 		/* basic layout */
         //s.initStyle(StageStyle.UNDECORATED);  // <-- removes the top part of the app close/open
-        s.setResizable(false);
+        s.setResizable(true);
         s.setTitle("CapraNav");
 
 		/* setup */
