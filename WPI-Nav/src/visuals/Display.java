@@ -13,12 +13,12 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,7 @@ public class Display {
 
     /* visuals */
 	private Scene scene;
-	private AnchorPane root;
+	//private StackPane root;
 	private VBox inputs;
 	private	OptionsMenu options;
 	private	Rectangle divide;
@@ -64,24 +64,263 @@ public class Display {
 	public Inputs end;
 
 
+	/*****************************************************************/
+	/** New Values / Variables for UI Rework **/
+
+	//Constants & Variables
+	private static final double CONTROL_WIDTH = 40;
+	private static final double expandedWidth = 150;
+	private static final double MAP_WIDTH = 700;
+	private static final double MAP_BORDER = 15;
+	private static final double TITLE_HEIGHT = 35;
+	//Visual Elements
+	VBox dashBoard;
+	VBox directions;
+	StackPane root;
+
+
+
+
+
 	/**
 	 * Basic constructor.
 	 * @param width
 	 * @param height
 	 */
 	public Display(Double width, Double height, Controller controller){
-        root = new AnchorPane();
-        this.width = width;
+        //root = new AnchorPane();
+        root = new StackPane();
+
+		this.width = width;
         this.height = height;
 		this.controller = controller;
+		this.dashBoard = new VBox();
+		this.directions = new VBox();
+
 	}
 
 	/**
 	 * This sets up the GUI interface - both visuals and interactions.
 	 * @return
 	 */
-	public Scene Init(){
+	public Scene Init() {
 
+		/*****************************************************************/
+		/** DashboardControlBox **/
+		VBox dashBoardControlBox = new VBox();
+
+		/** Creates the Menu Button */
+		VBox bars = new VBox();
+		bars.setSpacing(3);
+		for (int i = 0; i < 4; i++) {
+			Rectangle bar = new Rectangle(CONTROL_WIDTH - 10, 4);
+			bar.setArcHeight(3);
+			bar.setArcWidth(3);
+			bar.setFill(Color.web("#eeeeee"));
+			bars.getChildren().add(bar);
+		}
+		bars.setTranslateX(5);
+		bars.setTranslateY(5);
+		dashBoardControlBox.getChildren().addAll(bars);
+		dashBoardControlBox.setStyle("-fx-background-color: #333333");
+		dashBoardControlBox.setMaxWidth(CONTROL_WIDTH);
+		dashBoardControlBox.setPrefWidth(CONTROL_WIDTH);
+		dashBoardControlBox.setMinWidth(CONTROL_WIDTH);
+
+		/*****************************************************************/
+		/** Dashboard **/
+
+		//Section Title = Dashboard
+		HBox dashBoardTitleBox = new HBox();
+		dashBoardTitleBox.setStyle("-fx-background-color: #333333");
+
+		Label dashBoardTitleLabel = new Label("Dashboard");
+		dashBoardTitleLabel.setFont(Font.font ("Verdana", 20));
+		dashBoardTitleLabel.setTextFill(Color.web("#eeeeee"));
+
+		dashBoardTitleBox.getChildren().addAll(dashBoardTitleLabel);
+
+		dashBoard.getChildren().addAll(dashBoardTitleBox);
+
+		//Divider
+		//HBox
+			//icon
+			//Label = Locations
+
+		//Divider
+
+		//Section Title = Resources
+		//HBox
+			//Title = Resources
+
+		//Divider
+
+		//Divider attached to bottom of page
+		//HBox
+			//Icon
+			//Label = Change Settings  // About
+
+		dashBoard.setStyle("-fx-background-color: #444444");
+		dashBoard.setMaxWidth(expandedWidth);
+		dashBoard.setPrefWidth(expandedWidth);
+		dashBoard.setMinWidth(0);
+
+		/*****************************************************************/
+		/** Directions **/
+		HBox directionsTitleBox = new HBox();
+		directionsTitleBox.setStyle("-fx-background-color: #ac2738");
+		directionsTitleBox.setMinHeight(TITLE_HEIGHT);
+		directionsTitleBox.setMaxHeight(TITLE_HEIGHT);
+		directionsTitleBox.setPrefHeight(TITLE_HEIGHT);
+
+
+
+		Label directionsTitleLabel = new Label("Directions");
+		directionsTitleLabel.setFont(Font.font ("Helvetica Neue", 20));
+		directionsTitleLabel.setTextFill(Color.web("#eeeeee"));
+
+		directionsTitleBox.getChildren().addAll(directionsTitleLabel);
+
+		directions.getChildren().addAll(directionsTitleBox);
+
+
+
+
+
+
+		directions.setStyle("-fx-background-color: #444444");
+		directions.setMaxWidth(expandedWidth);
+		directions.setPrefWidth(expandedWidth);
+		directions.setMinWidth(0);
+
+
+
+		/*****************************************************************/
+		/** DirectionsControlBox **/
+		VBox directionsControlBox = new VBox();
+
+		Image directionsArrow =	new Image(getClass().getResourceAsStream("../images/forward.png"), 30, 30, true, true);
+		ImageView directionsArrowView = new ImageView(directionsArrow);
+
+		directionsArrowView.setTranslateX(5);
+		directionsArrowView.setTranslateY(5);
+		directionsControlBox.getChildren().addAll(directionsArrowView);
+		directionsControlBox.setMinWidth(CONTROL_WIDTH);
+		directionsControlBox.setMaxWidth(CONTROL_WIDTH);
+		directionsControlBox.setPrefWidth(CONTROL_WIDTH);
+		directionsControlBox.setStyle("-fx-background-color: #333333");
+
+		/*****************************************************************/
+		/** Map **/
+
+		VBox map = new VBox();
+		HBox mapTitle = new HBox();
+		mapTitle.setMaxHeight(TITLE_HEIGHT);
+		mapTitle.setPrefHeight(TITLE_HEIGHT);
+		mapTitle.setMinHeight(0);
+		mapTitle.setAlignment(Pos.CENTER);
+		mapTitle.setStyle("-fx-background-color: #555555");
+
+		/** Label **/
+		Label mapTitleLabel = new Label("CapraNav");
+		mapTitleLabel.setFont(Font.font ("Verdana", 20));
+		mapTitleLabel.setTextFill(Color.web("#eeeeee"));
+
+		mapTitle.getChildren().add(mapTitleLabel);
+
+		map.setMinWidth(MAP_WIDTH);
+		map.setMaxWidth(MAP_WIDTH+MAP_BORDER*2);
+		map.setPrefWidth(MAP_WIDTH+MAP_BORDER*2);
+
+		map.setMinHeight(MAP_WIDTH+TITLE_HEIGHT);
+		map.setMaxHeight(MAP_WIDTH+MAP_BORDER*2+TITLE_HEIGHT);
+		map.setPrefHeight(MAP_WIDTH+MAP_BORDER*2+TITLE_HEIGHT);
+
+		map.getChildren().addAll(mapTitle);
+
+		/*****************************************************************/
+		/** Add to the Section **/
+		HBox sections = new HBox();
+		sections.getChildren().addAll(dashBoard, dashBoardControlBox, directions, directionsControlBox, map);
+
+		/*****************************************************************/
+		/** Add sections to Root */
+		StackPane root = new StackPane();
+		root.getChildren().add(sections);
+
+		/*****************************************************************/
+		/** create scene **/
+		root.setAlignment(Pos.TOP_LEFT);
+		Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+CONTROL_WIDTH*2+expandedWidth*2, MAP_WIDTH+MAP_BORDER*2+TITLE_HEIGHT);
+		return scene;
+
+	}
+
+
+	public VBox slidingDirections(){
+
+		/*//TODO: functionality
+		// apply the animations when the button is pressed.
+		bars.setOnMouseClicked(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent actionEvent) {
+				// create an animation to hide sidebar.
+				final Animation hideSidebar = new Transition() {
+					{ setCycleDuration(Duration.millis(250)); }
+					protected void interpolate(double frac) {
+						final double curWidth = expandedWidth * (1.0 - frac);
+						setPrefWidth(curWidth);
+						setTranslateX(-expandedWidth + curWidth);
+					}
+				};
+				hideSidebar.onFinishedProperty().set(new EventHandler<ActionEvent>() {
+					@Override public void handle(ActionEvent actionEvent) {
+						setVisible(false);
+						//TODO change the look of bars here
+						//bars.getStyleClass().remove("hide-left");
+						//bars.getStyleClass().add("show-right");
+					}
+				});
+
+				final Animation showSidebar = new Transition() {
+					{ setCycleDuration(Duration.millis(250)); }
+					protected void interpolate(double frac) {
+						final double curWidth = expandedWidth * frac;
+						setPrefWidth(curWidth);
+						setTranslateX(-expandedWidth + curWidth);
+					}
+				};
+				showSidebar.onFinishedProperty().set(new EventHandler<ActionEvent>() {
+					@Override public void handle(ActionEvent actionEvent) {
+						//TODO change the look of bars here
+						//bars.getStyleClass().remove("hide-left");
+						//bars.getStyleClass().add("show-right");
+					}
+				});
+
+				if (showSidebar.statusProperty().get() == Animation.Status.STOPPED && hideSidebar.statusProperty().get() == Animation.Status.STOPPED) {
+					if (isVisible()) {
+						hideSidebar.play();
+					} else {
+						setVisible(true);
+						showSidebar.play();
+					}
+				}
+			}
+		});
+*/
+
+		//TODO: switch colors back and forth #333333 #eeeeee & vice versa
+
+
+
+		return new VBox();
+	}
+
+
+
+
+
+	public Scene oldInit() {
 		/*****************************************************************/
 		/** side - panel: inputs + divisor + options + divisor + buttons */
 		VBox side_panel = new VBox();
