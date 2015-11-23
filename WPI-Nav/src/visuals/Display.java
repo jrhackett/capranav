@@ -129,8 +129,6 @@ public class Display {
 
 		/*****************************************************************/
 		/** Dashboard **/
-
-		//Section Title = Dashboard
 		HBox dashBoardTitleBox = new HBox();
 		dashBoardTitleBox.setStyle("-fx-background-color: #333333");
 
@@ -172,7 +170,7 @@ public class Display {
 		directionsTitleBox.setMinHeight(TITLE_HEIGHT);
 		directionsTitleBox.setMaxHeight(TITLE_HEIGHT);
 		directionsTitleBox.setPrefHeight(TITLE_HEIGHT);
-
+		directionsTitleBox.setAlignment(Pos.CENTER);
 
 
 		Label directionsTitleLabel = new Label("Directions");
@@ -198,13 +196,20 @@ public class Display {
 		/*****************************************************************/
 		/** DirectionsControlBox **/
 		VBox directionsControlBox = new VBox();
+		HBox directionsControlBoxBox = new HBox();
 
 		Image directionsArrow =	new Image(getClass().getResourceAsStream("../images/forward.png"), 30, 30, true, true);
 		ImageView directionsArrowView = new ImageView(directionsArrow);
 
+		directionsControlBoxBox.getChildren().addAll(directionsArrowView);
+		directionsControlBoxBox.setStyle("-fx-background-color: #ac2738");
+		directionsControlBoxBox.setMinHeight(TITLE_HEIGHT);
+
+
+
 		directionsArrowView.setTranslateX(5);
 		directionsArrowView.setTranslateY(5);
-		directionsControlBox.getChildren().addAll(directionsArrowView);
+		directionsControlBox.getChildren().addAll(directionsControlBoxBox);
 		directionsControlBox.setMinWidth(CONTROL_WIDTH);
 		directionsControlBox.setMaxWidth(CONTROL_WIDTH);
 		directionsControlBox.setPrefWidth(CONTROL_WIDTH);
