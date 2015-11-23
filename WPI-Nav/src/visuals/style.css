@@ -1,10 +1,10 @@
 @font-face {
-    font-family: HelveticaNeue;
+    font-family: HelveticaNeueLight;
     src: url("../../WPI-Nav/resources/fonts/HelveticaNeue-Light.otf");
 }
 
 .root {
-    -fx-font-family: HelveticaNeue;
+    -fx-font-family: HelveticaNeueLight;
     -fx-font-size: 20;
 }
 
