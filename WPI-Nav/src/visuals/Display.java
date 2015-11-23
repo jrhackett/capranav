@@ -113,14 +113,14 @@ public class Display {
 		VBox bars = new VBox();
 		bars.setSpacing(3);
 		for (int i = 0; i < 4; i++) {
-			Rectangle bar = new Rectangle(CONTROL_WIDTH - 10, 4);
+			Rectangle bar = new Rectangle(CONTROL_WIDTH - 17, 3);
 			bar.setArcHeight(3);
 			bar.setArcWidth(3);
 			bar.setFill(Color.web("#eeeeee"));
 			bars.getChildren().add(bar);
 		}
-		bars.setTranslateX(5);
-		bars.setTranslateY(5);
+		bars.setTranslateX(8);
+		bars.setTranslateY(7);
 		dashBoardControlBox.getChildren().addAll(bars);
 		dashBoardControlBox.setStyle("-fx-background-color: #333333");
 		dashBoardControlBox.setMaxWidth(CONTROL_WIDTH);
@@ -163,7 +163,7 @@ public class Display {
 			//Icon
 			//Label = Change Settings  // About
 
-		dashBoard.setStyle("-fx-background-color: #444444");
+		dashBoard.setStyle("-fx-background-color: #333333");
 		dashBoard.setMaxWidth(expandedWidth);
 		dashBoard.setPrefWidth(expandedWidth);
 		dashBoard.setMinWidth(0);
@@ -213,7 +213,7 @@ public class Display {
 
 
 		directionsArrowView.setTranslateX(5);
-		directionsArrowView.setTranslateY(5);
+		directionsArrowView.setTranslateY(2);
 		directionsControlBox.getChildren().addAll(directionsControlBoxBox);
 		directionsControlBox.setMinWidth(CONTROL_WIDTH);
 		directionsControlBox.setMaxWidth(CONTROL_WIDTH);
@@ -229,7 +229,7 @@ public class Display {
 		mapTitle.setPrefHeight(TITLE_HEIGHT);
 		mapTitle.setMinHeight(0);
 		mapTitle.setAlignment(Pos.CENTER);
-		mapTitle.setStyle("-fx-background-color: #555555");
+		mapTitle.setStyle("-fx-background-color: #444444");
 
 		/** Label **/
 		Label mapTitleLabel = new Label("CapraNav");
