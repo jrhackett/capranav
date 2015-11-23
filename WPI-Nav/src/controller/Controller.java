@@ -64,6 +64,7 @@ public class Controller extends Application {
         this.myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, this);    //creates scene
         Scene display = myDisplay.Init(); //initializes scene
         s.setScene(display); //sets scene to display
+        display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
         s.show();   //shows scene
     }
 

@@ -1,3 +1,13 @@
+@font-face {
+    font-family: HelveticaNeue;
+    src: url('../../resources/fonts/HelveticaNeue-Light.otf');
+}
+
+.root {
+    -fx-font-family: HelveticaNeue;
+    -fx-font-size: 20;
+}
+
 .my_button {
     -fx-background-color: 
         rgba(0,0,0,0.08),

@@ -18,7 +18,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,12 +89,18 @@ public class Display {
 	public Display(Double width, Double height, Controller controller){
         //root = new AnchorPane();
         root = new StackPane();
+		root.setId("root");
+		root.getStylesheets().add("style.css");
+		root.applyCss();
+
+
 
 		this.width = width;
         this.height = height;
 		this.controller = controller;
 		this.dashBoard = new VBox();
 		this.directions = new VBox();
+
 
 	}
 
@@ -105,27 +110,6 @@ public class Display {
 	 */
 	public Scene Init() {
 
-		/*****************************************************************/
-		/** DashboardControlBox **/
-		VBox dashBoardControlBox = new VBox();
-
-		/** Creates the Menu Button */
-		VBox bars = new VBox();
-		bars.setSpacing(3);
-		for (int i = 0; i < 4; i++) {
-			Rectangle bar = new Rectangle(CONTROL_WIDTH - 17, 3);
-			bar.setArcHeight(3);
-			bar.setArcWidth(3);
-			bar.setFill(Color.web("#eeeeee"));
-			bars.getChildren().add(bar);
-		}
-		bars.setTranslateX(8);
-		bars.setTranslateY(7);
-		dashBoardControlBox.getChildren().addAll(bars);
-		dashBoardControlBox.setStyle("-fx-background-color: #333333");
-		dashBoardControlBox.setMaxWidth(CONTROL_WIDTH);
-		dashBoardControlBox.setPrefWidth(CONTROL_WIDTH);
-		dashBoardControlBox.setMinWidth(CONTROL_WIDTH);
 
 		/*****************************************************************/
 		/** Dashboard **/
@@ -137,8 +121,7 @@ public class Display {
 		dashBoardTitleBox.setAlignment(Pos.CENTER);
 
 		Label dashBoardTitleLabel = new Label("Dashboard");
-
-		dashBoardTitleLabel.setFont(Font.font("Helvetica Neue", 20));
+		//dashBoardTitleLabel.setStyle("-fx-font-family: Helvetica Neue; -fx-font-size: 90");
 		dashBoardTitleLabel.setTextFill(Color.web("#eeeeee"));
 
 		dashBoardTitleBox.getChildren().addAll(dashBoardTitleLabel);
@@ -169,6 +152,27 @@ public class Display {
 		dashBoard.setMinWidth(0);
 
 		/*****************************************************************/
+		/** DashboardControlBox **/
+		VBox dashBoardControlBox = new VBox();
+
+		/** Creates the Menu Button */
+		VBox bars = new VBox();
+		bars.setSpacing(3);
+		for (int i = 0; i < 4; i++) {
+			Rectangle bar = new Rectangle(CONTROL_WIDTH - 17, 3);
+			bar.setArcHeight(3);
+			bar.setArcWidth(3);
+			bar.setFill(Color.web("#eeeeee"));
+			bars.getChildren().add(bar);
+		}
+		bars.setTranslateX(8);
+		bars.setTranslateY(7);
+		dashBoardControlBox.getChildren().addAll(bars);
+		dashBoardControlBox.setStyle("-fx-background-color: #333333");
+		dashBoardControlBox.setMaxWidth(CONTROL_WIDTH);
+		dashBoardControlBox.setPrefWidth(CONTROL_WIDTH);
+		dashBoardControlBox.setMinWidth(CONTROL_WIDTH);
+		/*****************************************************************/
 		/** Directions **/
 		HBox directionsTitleBox = new HBox();
 		directionsTitleBox.setStyle("-fx-background-color: #ac2738");
@@ -179,17 +183,14 @@ public class Display {
 
 
 		Label directionsTitleLabel = new Label("Directions");
-		dashBoardTitleLabel.setFont(Font.font("Helvetica Neue", 20));
+		//dashBoardTitleLabel.setStyle("-fx-font-family: 'HelveticaNeue'; -fx-font-size: 20");
+		//directionsTitleLabel.setFont(Font.loadFont("file:resources/fonts/HelveticaNeue-Light.otf", 20));
 		//directionsTitleLabel.setFont(Font.loadFont("file:resources/fonts/HelveticaNeue-Light.otf", 20));
 		directionsTitleLabel.setTextFill(Color.web("#eeeeee"));
 
 		directionsTitleBox.getChildren().addAll(directionsTitleLabel);
 
 		directions.getChildren().addAll(directionsTitleBox);
-
-
-
-
 
 
 		directions.setStyle("-fx-background-color: #ffffff");
@@ -234,7 +235,7 @@ public class Display {
 
 		/** Label **/
 		Label mapTitleLabel = new Label("CapraNav");
-		dashBoardTitleLabel.setFont(Font.font("Helvetica Neue", 20));
+		//dashBoardTitleLabel.setStyle("-fx-font-family: Helvetica Neue; -fx-font-size: 20");
 		//mapTitleLabel.setFont(Font.loadFont("file:resources/fonts/HelveticaNeue-Light.otf", 20));
 		mapTitleLabel.setTextFill(Color.web("#eeeeee"));
 
