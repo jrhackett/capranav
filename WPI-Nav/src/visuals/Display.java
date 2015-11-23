@@ -138,7 +138,7 @@ public class Display {
 
 		Label dashBoardTitleLabel = new Label("Dashboard");
 
-		dashBoardTitleLabel.setFont(Font.loadFont("file:resources/fonts/HelveticaNeue-Light.otf", 20));
+		dashBoardTitleLabel.setFont(Font.font("Helvetica Neue", 20));
 		dashBoardTitleLabel.setTextFill(Color.web("#eeeeee"));
 
 		dashBoardTitleBox.getChildren().addAll(dashBoardTitleLabel);
@@ -163,7 +163,7 @@ public class Display {
 			//Icon
 			//Label = Change Settings  // About
 
-		dashBoard.setStyle("-fx-background-color: #444444");
+		dashBoard.setStyle("-fx-background-color: #333333");
 		dashBoard.setMaxWidth(expandedWidth);
 		dashBoard.setPrefWidth(expandedWidth);
 		dashBoard.setMinWidth(0);
@@ -179,7 +179,8 @@ public class Display {
 
 
 		Label directionsTitleLabel = new Label("Directions");
-		directionsTitleLabel.setFont(Font.loadFont("file:resources/fonts/HelveticaNeue-Light.otf", 20));
+		dashBoardTitleLabel.setFont(Font.font("Helvetica Neue", 20));
+		//directionsTitleLabel.setFont(Font.loadFont("file:resources/fonts/HelveticaNeue-Light.otf", 20));
 		directionsTitleLabel.setTextFill(Color.web("#eeeeee"));
 
 		directionsTitleBox.getChildren().addAll(directionsTitleLabel);
@@ -233,7 +234,8 @@ public class Display {
 
 		/** Label **/
 		Label mapTitleLabel = new Label("CapraNav");
-		mapTitleLabel.setFont(Font.loadFont("file:resources/fonts/HelveticaNeue-Light.otf", 20));
+		dashBoardTitleLabel.setFont(Font.font("Helvetica Neue", 20));
+		//mapTitleLabel.setFont(Font.loadFont("file:resources/fonts/HelveticaNeue-Light.otf", 20));
 		mapTitleLabel.setTextFill(Color.web("#eeeeee"));
 
 		mapTitle.getChildren().add(mapTitleLabel);
