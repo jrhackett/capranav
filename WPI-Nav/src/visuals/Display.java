@@ -137,7 +137,8 @@ public class Display {
 		dashBoardTitleBox.setAlignment(Pos.CENTER);
 
 		Label dashBoardTitleLabel = new Label("Dashboard");
-		dashBoardTitleLabel.setFont(Font.font ("Verdana", 20));
+
+		dashBoardTitleLabel.setFont(Font.loadFont("file:resources/fonts/HelveticaNeue-Light.otf", 20));
 		dashBoardTitleLabel.setTextFill(Color.web("#eeeeee"));
 
 		dashBoardTitleBox.getChildren().addAll(dashBoardTitleLabel);
@@ -178,7 +179,7 @@ public class Display {
 
 
 		Label directionsTitleLabel = new Label("Directions");
-		directionsTitleLabel.setFont(Font.font ("Helvetica Neue", 20));
+		directionsTitleLabel.setFont(Font.loadFont("file:resources/fonts/HelveticaNeue-Light.otf", 20));
 		directionsTitleLabel.setTextFill(Color.web("#eeeeee"));
 
 		directionsTitleBox.getChildren().addAll(directionsTitleLabel);
@@ -232,7 +233,7 @@ public class Display {
 
 		/** Label **/
 		Label mapTitleLabel = new Label("CapraNav");
-		mapTitleLabel.setFont(Font.font ("Verdana", 20));
+		mapTitleLabel.setFont(Font.loadFont("file:resources/fonts/HelveticaNeue-Light.otf", 20));
 		mapTitleLabel.setTextFill(Color.web("#eeeeee"));
 
 		mapTitle.getChildren().add(mapTitleLabel);
