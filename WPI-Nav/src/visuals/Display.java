@@ -144,67 +144,12 @@ public class Display {
 
 		Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+CONTROL_WIDTH*2+expandedWidth*2, MAP_WIDTH);//+MAP_BORDER*2+TITLE_HEIGHT
 
-	/*	scene.widthProperty().addListener(
-				new ChangeListener() {
-					public void changed(ObservableValue observable,
-										Object oldValue, Object newValue) {
-						Double width = (Double)newValue;
-						root.setPrefWidth(width);
-					}
-				});
-
-		scene.heightProperty().addListener(
-				new ChangeListener() {
-					public void changed(ObservableValue observable,
-										Object oldValue, Object newValue) {
-						Double height = (Double)newValue;
-						root.setPrefHeight(height);
-					}
-				});*/
-
-
-
-
 		return scene;
 
 	}
-
-	private void initDirections(){
-		/**
-		 * There should be no need to modify this into an AnchorPane, hopefully
-		 * all we need to do is add the Email Directions button and Label after the TableView
-		 * and set the tableview min height to be ~200
-		 **/
-
-		/** Title Box **/
-		HBox directionsTitleBox = new HBox();
-		directionsTitleBox.setStyle("-fx-background-color: #ac2738");
-		directionsTitleBox.setMinHeight(EDGE);
-		directionsTitleBox.setMaxHeight(EDGE);
-		directionsTitleBox.setPrefHeight(EDGE);
-		directionsTitleBox.setAlignment(Pos.CENTER_LEFT);
-		directionsTitleBox.setSpacing(GAP*3);
-
-		VBox directionsControlBox = new VBox();
-		Image directionsArrow =	new Image(getClass().getResourceAsStream("../images/forward.png"), 30, 30, true, true);
-		ImageView directionsArrowView = new ImageView(directionsArrow);
-		directionsArrowView.setTranslateX(5);
-		directionsArrowView.setTranslateY(2);
-		directionsControlBox.getChildren().addAll(directionsArrowView);
-		directionsControlBox.setStyle("-fx-background-color: #ac2738");
-		directionsControlBox.setMinHeight(TITLE_HEIGHT);
-
-
-		/** Label **/
-		Label directionsTitleLabel = new Label("Directions");
-		directionsTitleLabel.setTextFill(Color.web("#eeeeee"));
-		directionsTitleBox.getChildren().addAll(directionsControlBox, directionsTitleLabel);
-
-		directions.getChildren().addAll(directionsTitleBox);
-		directions.setStyle("-fx-background-color: #ffffff");
-		directions.setPrefWidth(expandedWidth + EDGE);
-		directions.setMinWidth(0);
-	}
+	/****************************************************************************************************************
+	          FUNCTIONS SETTING UP BASE DESIGN THAT ALSO CALL THE SPECFIC CREATION OF FURTHER VISUAL ELEMENTS
+	 ****************************************************************************************************************/
 
 	private void initSlidingDashBoard(){
 		/*****************************************************************/
@@ -250,13 +195,13 @@ public class Display {
 		infoView.visibleProperty().bind(VISIBLE);
 		gearsView.visibleProperty().bind(VISIBLE);
 
-		AnchorPane.setTopAnchor(pinView, 1 * EDGE + 5);
+		AnchorPane.setTopAnchor(pinView, 1 * EDGE + GAP + 5);
 		AnchorPane.setLeftAnchor(pinView, GAP);
 
-		AnchorPane.setTopAnchor(infoView, 3 * EDGE + 5);
+		AnchorPane.setTopAnchor(infoView, 3 * EDGE + GAP + 5);
 		AnchorPane.setLeftAnchor(infoView, GAP);
 
-		AnchorPane.setBottomAnchor(gearsView, 2 * EDGE - 20);
+		AnchorPane.setBottomAnchor(gearsView, 2 * EDGE - GAP - 20);
 		AnchorPane.setLeftAnchor(gearsView, GAP);
 
 		/*****************************************************************/
@@ -292,8 +237,68 @@ public class Display {
 		AnchorPane.setLeftAnchor(dashBoardTitleBox, EDGE);
 
 		/*****************************************************************/
+		/** Section Labels **/
+		/** Location **/
+		HBox locationLabelBox = new HBox();
+		locationLabelBox.setMinHeight(TITLE_HEIGHT);
+		locationLabelBox.setMaxHeight(TITLE_HEIGHT);
+		locationLabelBox.setPrefHeight(TITLE_HEIGHT);
+		locationLabelBox.setAlignment(Pos.CENTER_LEFT);
+
+		Label locationLabel = new Label("Locations");
+		locationLabel.setTextFill(Color.web("#eeeeee"));
+
+		locationLabelBox.getChildren().addAll(locationLabel);
+		locationLabelBox.setMinWidth(0);
+		locationLabelBox.setPrefWidth(expandedWidth);
+		locationLabelBox.setMaxWidth(expandedWidth);
+
+		AnchorPane.setTopAnchor(locationLabelBox, 1 * EDGE + GAP * .5);
+		AnchorPane.setLeftAnchor(locationLabelBox, EDGE);
+
+		/** Resources **/
+		HBox resourcesLabelBox = new HBox();
+		resourcesLabelBox.setMinHeight(TITLE_HEIGHT);
+		resourcesLabelBox.setMaxHeight(TITLE_HEIGHT);
+		resourcesLabelBox.setPrefHeight(TITLE_HEIGHT);
+		resourcesLabelBox.setAlignment(Pos.CENTER_LEFT);
+
+		Label resourcesLabel = new Label("Resources");
+		resourcesLabel.setTextFill(Color.web("#eeeeee"));
+
+		resourcesLabelBox.getChildren().addAll(resourcesLabel);
+		resourcesLabelBox.setMinWidth(0);
+		resourcesLabelBox.setPrefWidth(expandedWidth);
+		resourcesLabelBox.setMaxWidth(expandedWidth);
+
+		AnchorPane.setTopAnchor(resourcesLabelBox, 3 * EDGE + GAP * .5);
+		AnchorPane.setLeftAnchor(resourcesLabelBox, EDGE);
+
+		/*****************************************************************/
+		/** Change Settings Zone **/
+		HBox settingsLabelBox = new HBox();
+		settingsLabelBox.setMinHeight(TITLE_HEIGHT);
+		settingsLabelBox.setMaxHeight(TITLE_HEIGHT);
+		settingsLabelBox.setPrefHeight(TITLE_HEIGHT);
+		settingsLabelBox.setAlignment(Pos.CENTER_LEFT);
+
+		Label settingsLabel = new Label("Settings");
+		settingsLabel.setTextFill(Color.web("#eeeeee"));
+
+		settingsLabelBox.getChildren().addAll(settingsLabel);
+		settingsLabelBox.setMinWidth(0);
+		settingsLabelBox.setPrefWidth(expandedWidth);
+		settingsLabelBox.setMaxWidth(expandedWidth);
+
+		AnchorPane.setBottomAnchor(settingsLabelBox, 2 * EDGE - 2 * GAP - 20);
+		AnchorPane.setLeftAnchor(settingsLabelBox, EDGE);
+
+		settingsLabel.setOnMouseClicked(e -> handleSettings());
+		gearsView.setOnMouseClicked(e -> handleSettings());
+
+		/*****************************************************************/
 		/** Building of Sliding Dashboard Anchorpane  **/
-		this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0, divider_1, divider_2, divider_3, dashBoardTitleBox, pinView, infoView, gearsView); //,
+		this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0, divider_1, divider_2, divider_3, dashBoardTitleBox, pinView, infoView, gearsView, locationLabelBox, resourcesLabelBox, settingsLabelBox); //,
 		slidingDashboard.setStyle("-fx-background-color: #333333");
 
 		/** STYLE BUTTON HERE **/
@@ -306,6 +311,43 @@ public class Display {
 		AnchorPane.setLeftAnchor(button, 0.0);
 
 		slidingDashboard.getChildren().addAll(button);
+	}
+
+	private void initDirections(){
+		/**
+		 * There should be no need to modify this into an AnchorPane, hopefully
+		 * all we need to do is add the Email Directions button and Label after the TableView
+		 * and set the tableview min height to be ~200
+		 **/
+
+		/** Title Box **/
+		HBox directionsTitleBox = new HBox();
+		directionsTitleBox.setStyle("-fx-background-color: #ac2738");
+		directionsTitleBox.setMinHeight(EDGE);
+		directionsTitleBox.setMaxHeight(EDGE);
+		directionsTitleBox.setPrefHeight(EDGE);
+		directionsTitleBox.setAlignment(Pos.CENTER_LEFT);
+		directionsTitleBox.setSpacing(GAP*3);
+
+		VBox directionsControlBox = new VBox();
+		Image directionsArrow =	new Image(getClass().getResourceAsStream("../images/forward.png"), 30, 30, true, true);
+		ImageView directionsArrowView = new ImageView(directionsArrow);
+		directionsArrowView.setTranslateX(5);
+		directionsArrowView.setTranslateY(2);
+		directionsControlBox.getChildren().addAll(directionsArrowView);
+		directionsControlBox.setStyle("-fx-background-color: #ac2738");
+		directionsControlBox.setMinHeight(TITLE_HEIGHT);
+
+
+		/** Label **/
+		Label directionsTitleLabel = new Label("Directions");
+		directionsTitleLabel.setTextFill(Color.web("#eeeeee"));
+		directionsTitleBox.getChildren().addAll(directionsControlBox, directionsTitleLabel);
+
+		directions.getChildren().addAll(directionsTitleBox);
+		directions.setStyle("-fx-background-color: #ffffff");
+		directions.setPrefWidth(expandedWidth + EDGE);
+		directions.setMinWidth(0);
 	}
 
 	private void initMap(){
@@ -337,6 +379,9 @@ public class Display {
 		map.setStyle("-fx-background-color:#eeeeee ;");
 	}
 
+	/****************************************************************************************************************
+     				FUNCTIONS SETTING UP SPECIFIC VISUAL ELEMENTS AND FURTHER SUBSIDIARIES
+	****************************************************************************************************************/
 
 
 	private HBox createDivider(){
@@ -361,10 +406,45 @@ public class Display {
 
 
 
+	/****************************************************************************************************************
+	 				 						FUNCTIONS THAT HANDLE EVENTS
+	 ****************************************************************************************************************/
+
+	private void handleSettings(){
+		//TODO what do we want to happen here? A POPUP / OR WHAT??
+		//TODO add visual affects to both change settings ICON and WORDS
+					//TODO Have both flash Green on white?
+
+	}
 
 
 
-		public Scene oldInit() {
+
+
+
+
+
+
+	/****************************************************************************************************************
+	 						    FUNCTIONS THAT CONTACT THE CONTROLLER FOR INFORMATION
+	 ****************************************************************************************************************/
+
+
+
+
+
+
+
+
+
+	/****************************************************************************************************************
+	 													RELICS
+	 ****************************************************************************************************************/
+
+
+
+
+	public Scene oldInit() {
 		/*****************************************************************/
 		/** side - panel: inputs + divisor + options + divisor + buttons */
 		VBox side_panel = new VBox();
