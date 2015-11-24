@@ -7,7 +7,6 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
-import logic.*;
 
 public class AStarTesting {
 	Node t1, t2, t3, t4;
