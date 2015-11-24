@@ -23,6 +23,7 @@
 	<target name="test" depends="run, clean" />
 	
 	<target name="compile">
+		<echo message="Start Compile" />
 		<mkdir dir="${main.build.dir}"/>
 		<javac srcdir ="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false">
 			<classpath refid="classpath.base"/>
