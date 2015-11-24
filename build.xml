@@ -13,8 +13,6 @@
 		<pathelement location="WPI-Nav/util/javax.mail.jar" />
 		<pathelement location="WPI-Nav/util/slf4j-api-1.7.12.jar" />
 		<pathelement location="WPI-Nav/util/slf4j-jdk14-1.7.12.jar" />
-		<pathelement location="${testdir}" />
-		<pathelement location="${srcdir}" />
 	</path>
 	
 	<path id ="classpath.test">
@@ -25,8 +23,7 @@
 		<pathelement location="WPI-Nav/util/javax.mail.jar" />
 		<pathelement location="WPI-Nav/util/slf4j-api-1.7.12.jar" />
 		<pathelement location="WPI-Nav/util/slf4j-jdk14-1.7.12.jar" />
-		<pathelement location="${testdir}" />
-		<pathelement location="${srcdir}" />
+		<pathelement location="${main.build.dir}" />
 		<path refid="classpath.base" />
 	</path>
 	
@@ -38,9 +35,11 @@
 		<javac srcdir ="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false">
 			<classpath refid="classpath.base"/>
 		</javac>
+		<echo message="Compile done!" />
 	</target>
 	
 	<target name="build" depends="compile">
+		<echo message="Start build" />
 		<mkdir dir="${test.build.dir}"/>
 		<javac srcdir="${test.src.dir}" destdir="${test.build.dir}" includeantruntime="false">
 			<classpath refid="classpath.test"/>
