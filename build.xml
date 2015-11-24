@@ -1,31 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="wpi-nav" default="test" basedir="./WPI-Nav">
-	<property name="testdir" location = "WPI-Nav/test" />
-	<property name="srcdir" location = "WPI-Nav/src" />
-	<propety name ="full-compile" value = "true" />
+	<property name="main.build.dir" value="build/main"/>
+	<property name="main.src.dir" value="src"/>
+	<property name="test.build.dir" value="build/test"/>
+	<property name="test.src.dir" value="test" />
+	
 	<path id ="classpath.base"/>
-	<path id = "classpath.test">
-		<pathelement location="/util/junit-4.12.jar" />
+	
+	<path id ="classpath.test">
+		<pathelement location="util/junit-4.12.jar" />
+		<pathelement location="util/controlsfx-8.40.9.jar" />
+		<pathelement location="util/gson-2.4.jar" />
+		<pathelement location="util/hamcrest-core-1.3.jar" />
+		<pathelement location="util/javax.mail.jar" />
+		<pathelement location="util/slf4j-api-1.7.12.jar" />
+		<pathelement location="util/slf4j-jdk14-1.7.12.jar" />
 		<pathelement location="${testdir}" />
 		<pathelement location="${srcdir}" />
 		<path refid="classpath.base" />
 	</path>
-	<target name="clean" >
-		<delete verbose="${full-compile}">
-			<filest dir="${testdir}" includes ="**/*.class" />
-		</delete>
-	</target>
-	<target name="compile" depends="clean">
-		<javac srcdir="${srcdir}" destdir="${testdir}"
-			verbose="${full-compile}">
-			<classpath refid="classpath.test"/>
+	
+	<target name="test" depends="run, clean" />
+	
+	<target name="compile">
+		<mkdir dir="${main.build.dir}"/>
+		<javac srcdir ="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false">
+			<classpath refid="classpath.base"/>
 		</javac>
 	</target>
-	<target name="test" depends="compile">
-		<junit>
-			<classpath refid="classpath.test" />
+	
+	<target name="build" depends="compile">
+		<mkdir dir="${test.build.dir}"/>
+		<javac srcdir="${test.src.dir}" destdir="${test.build.dir}" includeantruntime="false">
+			<classpath refid="classpath.test"/>
+		</javac>
+		<echo message="Build done!"/>
+	</target>
+	
+	<!-- Test and build all -->
+	<!-- Running this in terminal: "ant" -->
+	<target name="run" depends="build">
+		<junit printsummary="on" haltonfailure="yes">
+			<classpath>
+				<path refid="classpath.test" />
+				<pathelement location="${test.build.dir}"/>
+			</classpath>
 			<formatter type="brief" usefile="false" />
-			<test name="TestMessageUtil" />
+			<!-- Test them all via batch and lots of asterisks -->
+			<batchtest>
+				<fileset dir="${test.src.dir}" includes="**/*Testing*.java" />
+			</batchtest>
 		</junit>
 	</target>
+	
+	<!-- delete all old class files -->
+	<!-- "ant clean" -->
+	<target name="clean">
+		<delete>
+			<fileset dir="${basedir}" includes="**/*.class" />
+		</delete>
+		<echo message="Clean done!" />
+	</target>
 </project>
+		
