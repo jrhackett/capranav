@@ -121,13 +121,13 @@ public class Display {
 		dashBoardTitleBox.setMinHeight(TITLE_HEIGHT);
 		dashBoardTitleBox.setMaxHeight(TITLE_HEIGHT);
 		dashBoardTitleBox.setPrefHeight(TITLE_HEIGHT);
-		dashBoardTitleBox.setAlignment(Pos.CENTER);
+		dashBoardTitleBox.setAlignment(Pos.CENTER_LEFT);
 
 		Label dashBoardTitleLabel = new Label("Dashboard");
 		dashBoardTitleLabel.setTextFill(Color.web("#eeeeee"));
 		dashBoardTitleBox.getChildren().addAll(dashBoardTitleLabel);
 
-		Rectangle divider_1 = createDivider();
+		HBox divider_1 = createDivider();
 
 		dashBoard.getChildren().addAll(dashBoardTitleBox, divider_1);
 
@@ -205,7 +205,7 @@ public class Display {
 		directionsTitleBox.setMinHeight(TITLE_HEIGHT);
 		directionsTitleBox.setMaxHeight(TITLE_HEIGHT);
 		directionsTitleBox.setPrefHeight(TITLE_HEIGHT);
-		directionsTitleBox.setAlignment(Pos.CENTER);
+		directionsTitleBox.setAlignment(Pos.CENTER_LEFT);
 
 
 		Label directionsTitleLabel = new Label("Directions");
@@ -281,7 +281,7 @@ public class Display {
 		mapTitle.setMaxHeight(TITLE_HEIGHT);
 		mapTitle.setPrefHeight(TITLE_HEIGHT);
 		mapTitle.setMinHeight(0);
-		mapTitle.setStyle("-fx-background-color: #555555");
+		mapTitle.setStyle("-fx-background-color: #444444");
 		mapTitle.getChildren().add(mapTitleLabel);
 
 
@@ -339,12 +339,22 @@ public class Display {
 	}
 
 
-	private Rectangle createDivider(){
-		Rectangle divide = new Rectangle(100, 2);
-		divide.setArcHeight(2);
-		divide.setArcWidth(2);
-		divide.setFill(Color.web("#ffffff"));
-		//divide.translateXProperty().bind((slidingDashboard.widthProperty().subtract(divide.widthProperty()).divide(2)));
+	private HBox createDivider(){
+		HBox divide = new HBox();
+		divide.setStyle("-fx-background-color: #ffffff");
+
+
+		/* setting sizes */
+		divide.setMinWidth(0);
+		divide.setMaxWidth(expandedWidth - CONTROL_WIDTH);
+		divide.setPrefWidth(expandedWidth - CONTROL_WIDTH);
+
+		divide.setMinHeight(2);
+		divide.setMaxHeight(2);
+		divide.setPrefHeight(2);
+		/* binding size */
+
+//		divide.translateXProperty().bind((slidingDashboard.widthProperty().subtract(divide.widthProperty()).divide(2)));
 
 		return divide;
 	}
