@@ -67,6 +67,25 @@ public class Controller extends Application {
         s.show();   //shows scene
     }
 
+
+    /****************************************************************************************************************
+                                    FUNCTIONS THAT ARE CALLED FROM UI AND CONTACT UI
+     ****************************************************************************************************************/
+    public void sendEmail(String email){
+        logic.Email e = new logic.Email(email);
+        System.out.println(email);
+        //e.sendEmail()
+        //TODO FILL IN WITH NEW EMAIL CODE
+    }
+
+
+
+
+
+
+
+
+
     public void reset(){
         this.currentMap = new Map();
         this.pathNodes = new ArrayList<>();

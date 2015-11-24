@@ -7,8 +7,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,11 +20,11 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 
 public class Display {
@@ -74,6 +78,7 @@ public class Display {
 	private static final double TITLE_HEIGHT = 35;
 
 	private BooleanProperty VISIBLE;
+	private boolean EMAIL = false;
 	//Visual Elements
 	VBox dashBoard;
 	SlidingAnchorPane slidingDashboard;
@@ -427,7 +432,7 @@ public class Display {
 
 		/** Email Box **/
 		HBox emailBox = new HBox();
-		emailBox.setStyle("-fx-background-color: #888888");
+		emailBox.setStyle("-fx-background-color: #ffffff");
 		emailBox.setMinHeight(EDGE);
 		emailBox.setMaxHeight(EDGE);
 		emailBox.setPrefHeight(EDGE);
@@ -440,14 +445,17 @@ public class Display {
 		emailView.setTranslateX(5);
 		emailView.setTranslateY(2);
 		emailIconBox.getChildren().addAll(emailView);
-		emailIconBox.setStyle("-fx-background-color: #888888");
+		emailIconBox.setStyle("-fx-background-color: #ffffff");
 		emailIconBox.setMinHeight(TITLE_HEIGHT);
 
 
 		/** Label **/
 		Label emailLabel = new Label("Email Me");
-		emailLabel.setTextFill(Color.web("#444444"));
+		emailLabel.setTextFill(Color.web("#888888"));
 		emailBox.getChildren().addAll(emailIconBox, emailLabel);
+
+		emailLabel.setOnMouseClicked(e -> handleEmail(emailLabel));
+		emailView.setOnMouseClicked(e -> handleEmail(emailLabel));
 
 
 		AnchorPane.setBottomAnchor(emailBox, 0.0);
@@ -561,8 +569,47 @@ public class Display {
 	private void handleSettings(){
 		//TODO what do we want to happen here? A POPUP / OR WHAT??
 		//TODO add visual affects to both change settings ICON and WORDS
-					//TODO Have both flash Green on white?
+		// TODO Have both flash Green on white?
 
+	}
+
+	private void handleEmail(Node n){
+
+		if (!EMAIL) {
+			EMAIL = true;
+			PopOver popOver = new PopOver();
+			VBox emailBox = new VBox();
+			TextField yourEmail = new TextField("Enter Email Here");
+			javafx.scene.control.Button go = new javafx.scene.control.Button("Send Directions");
+			emailBox.getChildren().addAll(yourEmail, go);
+			go.setOnAction(e -> {
+				if (yourEmail.getText() != null) {
+					if (sendEmail(yourEmail.getText())){
+						yourEmail.setText("Email Sent");
+						popOver.hide();
+						EMAIL = false;
+					} else {
+						yourEmail.setText("Invalid Email");
+					}
+				}
+			});
+			emailBox.setSpacing(GAP);
+			emailBox.setAlignment(Pos.CENTER);
+			emailBox.setMaxWidth(EDGE + expandedWidth);
+			popOver.setContentNode(emailBox);
+			popOver.setArrowLocation(PopOver.ArrowLocation.BOTTOM_CENTER);
+			//popOver.setAnchorY(EDGE*3);
+			popOver.show(n);
+			popOver.setOnAutoHide(e -> {
+				EMAIL = false;
+			});
+			popOver.setOnHidden(e -> {
+				EMAIL = false;
+			});
+			popOver.setOnCloseRequest(e -> {
+				EMAIL = false;
+			});
+		}
 	}
 
 
@@ -576,7 +623,14 @@ public class Display {
 	/****************************************************************************************************************
 	 						    FUNCTIONS THAT CONTACT THE CONTROLLER FOR INFORMATION
 	 ****************************************************************************************************************/
-
+private boolean sendEmail(String email){
+	if (!email.equals("") && !email.equals("Enter Email Here") && !email.equals("Email Sent") && !email.equals("Invalid Email") ) {
+		controller.sendEmail(email);
+		return true;
+	} else {
+		return false;
+	}
+}
 
 
 
@@ -926,7 +980,7 @@ public class Display {
 	 *
 	 */
 
-
+/*
 	private void sendEmail(){
 		TextInputDialog dialog = new TextInputDialog("Type Here");
 		dialog.setTitle("WPI Navigational App");
@@ -942,6 +996,7 @@ public class Display {
 		result.ifPresent(name -> System.out.println("Email: " + name));
 
 	}
+	*/
 	/**
 	 * Adds another input slot to inputs
 	 * If there are already  MAX_INPUTS - do nothing
