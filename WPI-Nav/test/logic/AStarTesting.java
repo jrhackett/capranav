@@ -4,15 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import logic.*;
-import controller.*;
-import images.*;
-import MapBuilder.*;
-import visuals.*;
 
 public class AStarTesting {
 	Node t1, t2, t3, t4;

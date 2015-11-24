@@ -6,10 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import logic.*;
-import controller.*;
-import images.*;
-import MapBuilder.*;
-import visuals.*;
 
 public class EmailTesting {
 
