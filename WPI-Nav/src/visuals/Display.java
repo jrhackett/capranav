@@ -124,7 +124,6 @@ public class Display {
 		divider_2.visibleProperty().bind(VISIBLE);
 		divider_3.visibleProperty().bind(VISIBLE);
 
-		//AnchorPane.setLeftAnchor(divider_0, GAP);
 		AnchorPane.setTopAnchor(divider_0, EDGE + 1);
 		AnchorPane.setLeftAnchor(divider_0, GAP);
 		AnchorPane.setRightAnchor(divider_0, GAP);
@@ -164,8 +163,6 @@ public class Display {
 		AnchorPane.setBottomAnchor(gearsView, 2 * EDGE - 20);
 		AnchorPane.setLeftAnchor(gearsView, GAP);
 
-
-
 		/*****************************************************************/
 		/** Dashboard **/
 		dashBoardTitleBox = new HBox();
@@ -183,12 +180,6 @@ public class Display {
 		dashBoardTitleBox.setPrefWidth(expandedWidth);
 		dashBoardTitleBox.setMaxWidth(expandedWidth);
 
-
-		//HBox divider_1 = createDivider();
-
-		//dashBoard.getChildren().addAll(dashBoardTitleBox, divider_1);
-
-
 		/*****************************************************************/
 		/** DashboardControlBox **/
 		VBox bars = new VBox();
@@ -201,16 +192,15 @@ public class Display {
 			bars.getChildren().add(bar);
 		}
 
-		AnchorPane.setTopAnchor(dashBoardTitleBox, 0.0); //this may be GAP
+		AnchorPane.setTopAnchor(dashBoardTitleBox, 0.0);
 		AnchorPane.setLeftAnchor(dashBoardTitleBox, EDGE);
 
+		/*****************************************************************/
+		/** Building of Sliding Dashboard Anchorpane  **/
 		SlidingAnchorPane slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0, divider_1, divider_2, divider_3, dashBoardTitleBox, pinView, infoView, gearsView); //,
 		slidingDashboard.setStyle("-fx-background-color: #333333");
-	/*	slidingDashboard.setMaxWidth(expandedWidth + ED);
-		slidingDashboard.setPrefWidth(expandedWidth);
-		slidingDashboard.setMinWidth(EDGE);*/
 
-		/** STYLE BUTTON HERE **/ //TODO review here
+		/** STYLE BUTTON HERE **/
 		javafx.scene.control.Button button = slidingDashboard.getButton();
 		button.setId("dashboardButton");
 		button.setMaxWidth(EDGE);
@@ -219,72 +209,47 @@ public class Display {
 		AnchorPane.setTopAnchor(button, 0.0);
 		AnchorPane.setLeftAnchor(button, 0.0);
 
-
-
-
 		slidingDashboard.getChildren().addAll(button);
 
-		/*
-		button.setStyle("-fx-padding: 0px;" +
-						"-fx-alignment: CENTER;" +
-				        "-fx-effect: dropshadow( one-pass-box , black , 8 , 0.0 , 2 , 0 );");
-		*/
-		//dashBoardControlBox.getChildren().add(button);
 		/*****************************************************************/
 		/** Directions **/
+		/**
+		 * There should be no need to modify this into an AnchorPane, hopefully
+		 * all we need to do is add the Email Directions button and Label after the TableView
+		 * and set the tableview min height to be ~200
+		 **/
+
+
+		/** Title Box **/
 		HBox directionsTitleBox = new HBox();
 		directionsTitleBox.setStyle("-fx-background-color: #ac2738");
-		directionsTitleBox.setMinHeight(TITLE_HEIGHT);
-		directionsTitleBox.setMaxHeight(TITLE_HEIGHT);
-		directionsTitleBox.setPrefHeight(TITLE_HEIGHT);
+		directionsTitleBox.setMinHeight(EDGE);
+		directionsTitleBox.setMaxHeight(EDGE);
+		directionsTitleBox.setPrefHeight(EDGE);
 		directionsTitleBox.setAlignment(Pos.CENTER_LEFT);
+		directionsTitleBox.setSpacing(GAP*3);
+
+		VBox directionsControlBox = new VBox();
+		Image directionsArrow =	new Image(getClass().getResourceAsStream("../images/forward.png"), 30, 30, true, true);
+		ImageView directionsArrowView = new ImageView(directionsArrow);
+		directionsArrowView.setTranslateX(5);
+		directionsArrowView.setTranslateY(2);
+		directionsControlBox.getChildren().addAll(directionsArrowView);
+		directionsControlBox.setStyle("-fx-background-color: #ac2738");
+		directionsControlBox.setMinHeight(TITLE_HEIGHT);
 
 
+		/** Label **/
 		Label directionsTitleLabel = new Label("Directions");
-		//dashBoardTitleLabel.setStyle("-fx-font-family: 'HelveticaNeue'; -fx-font-size: 20");
-		//directionsTitleLabel.setFont(Font.loadFont("file:resources/fonts/HelveticaNeue-Light.otf", 20));
-		//directionsTitleLabel.setFont(Font.loadFont("file:resources/fonts/HelveticaNeue-Light.otf", 20));
 		directionsTitleLabel.setTextFill(Color.web("#eeeeee"));
+		directionsTitleBox.getChildren().addAll(directionsControlBox, directionsTitleLabel);
 
-		directionsTitleBox.getChildren().addAll(directionsTitleLabel);
-		directionsTitleLabel.setTranslateX(GAP);
 		directions.getChildren().addAll(directionsTitleBox);
 		directions.setStyle("-fx-background-color: #ffffff");
-		directions.setMaxWidth(expandedWidth);
-		directions.setPrefWidth(expandedWidth);
+		directions.setPrefWidth(expandedWidth + EDGE);
 		directions.setMinWidth(0);
 
 
-
-		/*****************************************************************/
-		/** DirectionsControlBox **/
-		VBox directionsControlBox = new VBox();
-		HBox directionsControlBoxBox = new HBox();
-
-		Image directionsArrow =	new Image(getClass().getResourceAsStream("../images/forward.png"), 30, 30, true, true);
-		ImageView directionsArrowView = new ImageView(directionsArrow);
-
-		//directionsControlBoxBox.getChildren().addAll(directionsArrowView);
-		directionsControlBoxBox.setStyle("-fx-background-color: #ac2738");
-		directionsControlBoxBox.setMinHeight(TITLE_HEIGHT);
-
-		/*
-		SlidingAnchorPane slidingDirections = new SlidingAnchorPane(expandedWidth, directionsArrowView, directions);
-		slidingDirections.setStyle("-fx-background-color: #ffffff");
-		slidingDirections.setMaxWidth(expandedWidth);
-		slidingDirections.setPrefWidth(expandedWidth);
-		slidingDirections.setMinWidth(0);
-*/
-
-		directionsControlBoxBox.getChildren().add(directionsArrowView);
-		directionsArrowView.setTranslateX(5);
-		directionsArrowView.setTranslateY(2);
-
-		directionsControlBox.getChildren().addAll(directionsControlBoxBox);
-		directionsControlBox.setMinWidth(EDGE);
-		directionsControlBox.setMaxWidth(EDGE);
-		directionsControlBox.setPrefWidth(EDGE);
-		directionsControlBox.setStyle("-fx-background-color: #ffffff");
 
 		/*****************************************************************/
 		/** Map **/
@@ -309,9 +274,9 @@ public class Display {
 		mapTitleLabel.translateXProperty().bind((mapTitle.widthProperty().subtract(mapTitleLabel.widthProperty()).divide(2)));
 		mapTitleLabel.translateYProperty().bind((mapTitle.heightProperty().subtract(mapTitleLabel.heightProperty()).divide(2)));
 
-		mapTitle.setMaxHeight(TITLE_HEIGHT);
-		mapTitle.setPrefHeight(TITLE_HEIGHT);
-		mapTitle.setMinHeight(0);
+		mapTitle.setMaxHeight(EDGE);
+		mapTitle.setPrefHeight(EDGE);
+		mapTitle.setMinHeight(EDGE);
 		mapTitle.setStyle("-fx-background-color: #444444");
 		mapTitle.getChildren().add(mapTitleLabel);
 
@@ -332,7 +297,7 @@ public class Display {
 		HBox.setHgrow(directions, Priority.SOMETIMES);
 
 		sections.setStyle("-fx-background-color: #333333");
-		sections.getChildren().addAll(slidingDashboard, directionsControlBox, directions, map); //dashBoardControlBox
+		sections.getChildren().addAll(slidingDashboard, directions, map); //dashBoardControlBox
 		/*****************************************************************/
 		/** Add sections to Root */
 		StackPane root = new StackPane();
