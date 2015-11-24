@@ -2,7 +2,6 @@ package controller;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import logic.*;
 import visuals.Display;
@@ -48,21 +47,20 @@ public class Controller extends Application {
         mapsFromFile();
 
         /* icon */
-        try {
+      /*  try {
             s.getIcons().add(new Image(getClass().getResourceAsStream("../images/globe.png")));
         }
         catch (NullPointerException e) {
             s.getIcons().add(new Image(getClass().getResourceAsStream("/images/globe.png")));
-        }
+        }*/
 
 		/* basic layout */
         //s.initStyle(StageStyle.UNDECORATED);  // <-- removes the top part of the app close/open
         s.setResizable(true);
-        s.setTitle("CapraNav");
+       // s.setTitle("CapraNav");
 
 		/* setup */
         this.myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, this);    //creates scene
-
         Scene display = myDisplay.Init(); //initializes scene
         s.setScene(display); //sets scene to display
         display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
