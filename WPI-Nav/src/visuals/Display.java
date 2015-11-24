@@ -143,6 +143,18 @@ public class Display {
 		AnchorPane.setLeftAnchor(divider_0, GAP);
 		AnchorPane.setRightAnchor(divider_0, GAP);
 
+		AnchorPane.setTopAnchor(divider_1, 3 * EDGE + 1);
+		AnchorPane.setLeftAnchor(divider_1, GAP);
+		AnchorPane.setRightAnchor(divider_1, GAP);
+
+		AnchorPane.setTopAnchor(divider_2, 6 * EDGE + 1);
+		AnchorPane.setLeftAnchor(divider_2, GAP);
+		AnchorPane.setRightAnchor(divider_2, GAP);
+
+		AnchorPane.setBottomAnchor(divider_3, 2 * EDGE + 1);
+		AnchorPane.setLeftAnchor(divider_3, GAP);
+		AnchorPane.setRightAnchor(divider_3, GAP);
+
 		//divider_0.setTranslateX(GAP);
 
 
@@ -187,7 +199,7 @@ public class Display {
 		AnchorPane.setTopAnchor(dashBoardTitleBox, 0.0); //this may be GAP
 		AnchorPane.setLeftAnchor(dashBoardTitleBox, EDGE);
 
-		SlidingAnchorPane slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0); //dashBoardTitleBox,
+		SlidingAnchorPane slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0, divider_1, divider_2, divider_3); //dashBoardTitleBox,
 		slidingDashboard.setStyle("-fx-background-color: #333333");
 	/*	slidingDashboard.setMaxWidth(expandedWidth + ED);
 		slidingDashboard.setPrefWidth(expandedWidth);
