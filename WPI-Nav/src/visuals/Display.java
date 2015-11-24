@@ -74,6 +74,8 @@ public class Display {
 	private static final double MAP_WIDTH = 700;
 	private static final double MAP_BORDER = 15;
 	private static final double TITLE_HEIGHT = 35;
+
+	private BooleanProperty MISC_VISIBLE;
 	//Visual Elements
 	VBox dashBoard;
 	SlidingVBox slidingDashboard;
@@ -96,16 +98,12 @@ public class Display {
 		//root.getStylesheets().add("style.css");
 		//root.applyCss();
 
-
-
 		this.width = width;
         this.height = height;
 		this.controller = controller;
 		this.dashBoard = new VBox();
 		this.directions = new VBox();
-
-
-
+		this.MISC_VISIBLE.setValue(true);
 	}
 
 	/**
@@ -113,6 +111,38 @@ public class Display {
 	 * @return
 	 */
 	public Scene Init() {
+
+		/*****************************************************************/
+
+		//Stuff that is NOT visible when slid in!
+		HBox divider_0 = createDivider();
+		HBox divider_1 = createDivider();
+		HBox divider_2 = createDivider();
+		HBox divider_3 = createDivider();
+
+		Image pin =	new Image(getClass().getResourceAsStream("../images/pin.png"), 30, 30, true, true);
+		ImageView pinView = new ImageView(pin);
+
+		Image info =	new Image(getClass().getResourceAsStream("../images/info.png"), 30, 30, true, true);
+		ImageView infoView = new ImageView(info);
+
+		Image gears =	new Image(getClass().getResourceAsStream("../images/gears.png"), 30, 30, true, true);
+		ImageView gearsView = new ImageView(gears);
+
+		divider_0.visibleProperty().bind(MISC_VISIBLE);
+		divider_1.visibleProperty().bind(MISC_VISIBLE);
+		divider_2.visibleProperty().bind(MISC_VISIBLE);
+		divider_3.visibleProperty().bind(MISC_VISIBLE);
+
+		pinView.visibleProperty().bind(MISC_VISIBLE);
+		infoView.visibleProperty().bind(MISC_VISIBLE);
+		gearsView.visibleProperty().bind(MISC_VISIBLE);
+
+
+
+
+
+
 
 		/*****************************************************************/
 		/** Dashboard **/
@@ -131,28 +161,6 @@ public class Display {
 
 		dashBoard.getChildren().addAll(dashBoardTitleBox, divider_1);
 
-		//Divider
-		//HBox
-			//icon
-			//Label = Locations
-
-		//Divider
-
-		//Section Title = Resources
-		//HBox
-			//Title = Resources
-
-		//Divider
-
-		//Divider attached to bottom of page
-		//HBox
-			//Icon
-			//Label = Change Settings  // About
-/*
-		dashBoard.setStyle("-fx-background-color: #333333");
-		dashBoard.setMaxWidth(expandedWidth);
-		dashBoard.setPrefWidth(expandedWidth);
-		dashBoard.setMinWidth(0);*/
 
 		/*****************************************************************/
 		/** DashboardControlBox **/
@@ -180,7 +188,7 @@ public class Display {
 		dashBoardControlBox.setMinWidth(CONTROL_WIDTH);
 
 
-		SlidingVBox slidingDashboard = new SlidingVBox(expandedWidth, bars, dashBoardTitleBox, divider_1);
+		SlidingVBox slidingDashboard = new SlidingVBox(expandedWidth, MISC_VISIBLE, bars, dashBoardTitleBox, divider_1);
 		slidingDashboard.setStyle("-fx-background-color: #333333");
 		slidingDashboard.setMaxWidth(expandedWidth);
 		slidingDashboard.setPrefWidth(expandedWidth);
@@ -192,6 +200,7 @@ public class Display {
 		button.setId("dashboardButton");
 		button.setTranslateX(0);
 		button.setTranslateY(0);
+
 		/*
 		button.setStyle("-fx-padding: 0px;" +
 						"-fx-alignment: CENTER;" +
@@ -292,7 +301,7 @@ public class Display {
 		map.setPrefHeight(MAP_WIDTH+MAP_BORDER*2+TITLE_HEIGHT);
 
 		map.getChildren().addAll(mapTitle);
-
+		map.setStyle("-fx-background-color:#eeeeee ;");
 		/*****************************************************************/
 		/** Add to the Section **/
 		HBox sections = new HBox();

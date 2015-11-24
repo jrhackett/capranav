@@ -1,6 +1,7 @@
 package visuals;
 
 import javafx.animation.*;
+import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -17,7 +18,7 @@ class SlidingVBox extends VBox {
         return controlButton;
     }
 
-    SlidingVBox(final double expandedWidth, Node buttonval, Node... nodes) {
+    SlidingVBox(final double expandedWidth, BooleanProperty prop, Node buttonval, Node... nodes) {
 
 
         this.setPrefWidth(expandedWidth);
@@ -35,7 +36,7 @@ class SlidingVBox extends VBox {
             public void handle(ActionEvent actionEvent) {
                 // create an animation to hide sidebar.
 
-
+                prop.setValue(!prop.getValue()); //this should flip the MISC_VISIBLE
 
                 final Animation hideSidebar = new Transition() {
                     {
