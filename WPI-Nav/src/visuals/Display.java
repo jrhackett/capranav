@@ -341,7 +341,7 @@ public class Display {
 
 	private HBox createDivider(){
 		HBox divide = new HBox();
-		divide.setStyle("-fx-background-color: #ffffff");
+		divide.setStyle("-fx-background-color: #888888");
 
 
 		/* setting sizes */
@@ -349,9 +349,9 @@ public class Display {
 		divide.setMaxWidth(expandedWidth - CONTROL_WIDTH);
 		divide.setPrefWidth(expandedWidth - CONTROL_WIDTH);
 
-		divide.setMinHeight(2);
-		divide.setMaxHeight(2);
-		divide.setPrefHeight(2);
+		divide.setMinHeight(1);
+		divide.setMaxHeight(1);
+		divide.setPrefHeight(1);
 		/* binding size */
 
 //		divide.translateXProperty().bind((slidingDashboard.widthProperty().subtract(divide.widthProperty()).divide(2)));
