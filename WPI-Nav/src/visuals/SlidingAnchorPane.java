@@ -1,16 +1,17 @@
 package visuals;
 
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.Transition;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
 
-class SlidingVBox extends VBox {
+class SlidingAnchorPane extends AnchorPane {
 
     private javafx.scene.control.Button controlButton = new javafx.scene.control.Button();
 
@@ -18,11 +19,11 @@ class SlidingVBox extends VBox {
         return controlButton;
     }
 
-    SlidingVBox(final double expandedWidth, BooleanProperty prop, Node buttonval, Node... nodes) {
+    SlidingAnchorPane(final double expandedWidth, final double edge, BooleanProperty prop, Node buttonval, Node... nodes) {
 
 
-        this.setPrefWidth(expandedWidth);
-        this.setMinWidth(0);
+        this.setPrefWidth(expandedWidth + edge);
+        this.setMinWidth(edge);
 
         this.controlButton = new javafx.scene.control.Button();
         controlButton.setGraphic(buttonval);
@@ -36,7 +37,6 @@ class SlidingVBox extends VBox {
             public void handle(ActionEvent actionEvent) {
                 // create an animation to hide sidebar.
 
-                prop.setValue(!prop.getValue()); //this should flip the MISC_VISIBLE
 
                 final Animation hideSidebar = new Transition() {
                     {
@@ -49,16 +49,16 @@ class SlidingVBox extends VBox {
                         final double S4 = 1.0 / 9.0;
                         t = ((t < 0.2) ? S1 * t * t : S3 * t - S4);
                         t = (t < 0.0) ? 0.0 : (t > 1.0) ? 1.0 : t;
-                        final double curWidth = expandedWidth * (1.0 - t);
+                        final double curWidth = edge + expandedWidth * (1.0 - t);
                         setPrefWidth(curWidth);
-                        setTranslateX(-expandedWidth + curWidth);
+                        //setTranslateX(-expandedWidth + curWidth);
                     }
 
                 };
                 hideSidebar.onFinishedProperty().set(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
-                        setVisible(false);
+                        prop.setValue(!prop.getValue()); //this should flip the MISC_VISIBLE
                         //TODO change the look of bars here
                         //bars.getStyleClass().remove("hide-left");
                         //bars.getStyleClass().add("show-right");
@@ -78,14 +78,16 @@ class SlidingVBox extends VBox {
                         t = (t < 0.0) ? 0.0 : (t > 1.0) ? 1.0 : t;
 
 
-                        final double curWidth = expandedWidth * t;
+                        final double curWidth = edge + expandedWidth * t;
                         setPrefWidth(curWidth);
-                        setTranslateX(-expandedWidth + curWidth);
+                        //setTranslateX(-expandedWidth + curWidth);
                     }
                 };
                 showSidebar.onFinishedProperty().set(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
+                        prop.setValue(!prop.getValue()); //this should flip the MISC_VISIBLE
+
                         //TODO change the look of bars here
                         //bars.getStyleClass().remove("hide-left");
                         //bars.getStyleClass().add("show-right");
@@ -93,10 +95,10 @@ class SlidingVBox extends VBox {
                 });
 
                 if (showSidebar.statusProperty().get() == Animation.Status.STOPPED && hideSidebar.statusProperty().get() == Animation.Status.STOPPED) {
-                    if (isVisible()) {
+                    if (prop.getValue()) {
                         hideSidebar.play();
                     } else {
-                        setVisible(true);
+                        //setVisible(true);
                         showSidebar.play();
                     }
                 }

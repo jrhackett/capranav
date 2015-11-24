@@ -13,10 +13,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
@@ -33,7 +30,6 @@ public class Display {
 	/* constants */
 	private static final double WIDTH_BUFFER = 15;
 	private static final double HEIGHT_BUFFER = 15;
-	private static final double GAP = 5;
 	private static final double BUTTON_SIZE = 26;
 	private static double TABLE_WIDTH;
 	private static final double TABLE_HEIGHT = 150;
@@ -69,16 +65,18 @@ public class Display {
 	/** New Values / Variables for UI Rework **/
 
 	//Constants & Variables
-	private static final double CONTROL_WIDTH = 40;
+	private static final double CONTROL_WIDTH = 30;
+	private static final double GAP = 5;
+	private final double EDGE;
 	private static final double expandedWidth = 150;
 	private static final double MAP_WIDTH = 700;
 	private static final double MAP_BORDER = 15;
 	private static final double TITLE_HEIGHT = 35;
 
-	private BooleanProperty MISC_VISIBLE;
+	private BooleanProperty VISIBLE;
 	//Visual Elements
 	VBox dashBoard;
-	SlidingVBox slidingDashboard;
+	SlidingAnchorPane slidingDashboard;
 	VBox directions;
 	StackPane root;
 	HBox dashBoardTitleBox;
@@ -103,7 +101,8 @@ public class Display {
 		this.controller = controller;
 		this.dashBoard = new VBox();
 		this.directions = new VBox();
-		this.MISC_VISIBLE.setValue(true);
+		this.VISIBLE = new SimpleBooleanProperty(true);
+		this.EDGE = GAP * 2 + CONTROL_WIDTH;
 	}
 
 	/**
@@ -120,25 +119,31 @@ public class Display {
 		HBox divider_2 = createDivider();
 		HBox divider_3 = createDivider();
 
-		Image pin =	new Image(getClass().getResourceAsStream("../images/pin.png"), 30, 30, true, true);
-		ImageView pinView = new ImageView(pin);
 
-		Image info =	new Image(getClass().getResourceAsStream("../images/info.png"), 30, 30, true, true);
-		ImageView infoView = new ImageView(info);
+		Image pin =				new Image(getClass().getResourceAsStream("../images/pin.png"), 30, 30, true, true);
+		ImageView pinView = 	new ImageView(pin);
 
-		Image gears =	new Image(getClass().getResourceAsStream("../images/gears.png"), 30, 30, true, true);
-		ImageView gearsView = new ImageView(gears);
+		Image info =			new Image(getClass().getResourceAsStream("../images/info.png"), 30, 30, true, true);
+		ImageView infoView = 	new ImageView(info);
 
-		divider_0.visibleProperty().bind(MISC_VISIBLE);
-		divider_1.visibleProperty().bind(MISC_VISIBLE);
-		divider_2.visibleProperty().bind(MISC_VISIBLE);
-		divider_3.visibleProperty().bind(MISC_VISIBLE);
+		Image gears =			new Image(getClass().getResourceAsStream("../images/gears.png"), 30, 30, true, true);
+		ImageView gearsView = 	new ImageView(gears);
 
-		pinView.visibleProperty().bind(MISC_VISIBLE);
-		infoView.visibleProperty().bind(MISC_VISIBLE);
-		gearsView.visibleProperty().bind(MISC_VISIBLE);
+		divider_0.visibleProperty().bind(VISIBLE);
+		divider_1.visibleProperty().bind(VISIBLE);
+		divider_2.visibleProperty().bind(VISIBLE);
+		divider_3.visibleProperty().bind(VISIBLE);
 
+		pinView.visibleProperty().bind(VISIBLE);
+		infoView.visibleProperty().bind(VISIBLE);
+		gearsView.visibleProperty().bind(VISIBLE);
 
+		//AnchorPane.setLeftAnchor(divider_0, GAP);
+		AnchorPane.setTopAnchor(divider_0, EDGE + 1);
+		AnchorPane.setLeftAnchor(divider_0, GAP);
+		AnchorPane.setRightAnchor(divider_0, GAP);
+
+		//divider_0.setTranslateX(GAP);
 
 
 
@@ -155,58 +160,59 @@ public class Display {
 
 		Label dashBoardTitleLabel = new Label("Dashboard");
 		dashBoardTitleLabel.setTextFill(Color.web("#eeeeee"));
+
 		dashBoardTitleBox.getChildren().addAll(dashBoardTitleLabel);
+		dashBoardTitleBox.setMinWidth(0);
+		dashBoardTitleBox.setPrefWidth(expandedWidth);
+		dashBoardTitleBox.setMaxWidth(expandedWidth);
 
-		HBox divider_1 = createDivider();
 
-		dashBoard.getChildren().addAll(dashBoardTitleBox, divider_1);
+		//HBox divider_1 = createDivider();
+
+		//dashBoard.getChildren().addAll(dashBoardTitleBox, divider_1);
 
 
 		/*****************************************************************/
 		/** DashboardControlBox **/
-		VBox dashBoardControlBox = new VBox();
-
-
 		VBox bars = new VBox();
 		bars.setSpacing(3);
 		for (int i = 0; i < 4; i++) {
-			Rectangle bar = new Rectangle(CONTROL_WIDTH - 17, 3);
+			Rectangle bar = new Rectangle(CONTROL_WIDTH - 7, 3);
 			bar.setArcHeight(3);
 			bar.setArcWidth(3);
 			bar.setFill(Color.web("#eeeeee"));
 			bars.getChildren().add(bar);
 		}
-		//bars.setTranslateX(8);
-		//bars.setTranslateY(7);
 
+		AnchorPane.setTopAnchor(dashBoardTitleBox, 0.0); //this may be GAP
+		AnchorPane.setLeftAnchor(dashBoardTitleBox, EDGE);
 
-		dashBoardControlBox.getChildren().addAll(bars);
-
-		dashBoardControlBox.setStyle("-fx-background-color: #333333");
-		dashBoardControlBox.setMaxWidth(CONTROL_WIDTH);
-		dashBoardControlBox.setPrefWidth(CONTROL_WIDTH);
-		dashBoardControlBox.setMinWidth(CONTROL_WIDTH);
-
-
-		SlidingVBox slidingDashboard = new SlidingVBox(expandedWidth, MISC_VISIBLE, bars, dashBoardTitleBox, divider_1);
+		SlidingAnchorPane slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0); //dashBoardTitleBox,
 		slidingDashboard.setStyle("-fx-background-color: #333333");
-		slidingDashboard.setMaxWidth(expandedWidth);
+	/*	slidingDashboard.setMaxWidth(expandedWidth + ED);
 		slidingDashboard.setPrefWidth(expandedWidth);
-		slidingDashboard.setMinWidth(0);
-
+		slidingDashboard.setMinWidth(EDGE);*/
 
 		/** STYLE BUTTON HERE **/ //TODO review here
 		javafx.scene.control.Button button = slidingDashboard.getButton();
 		button.setId("dashboardButton");
-		button.setTranslateX(0);
-		button.setTranslateY(0);
+		button.setMaxWidth(EDGE);
+		button.setMinWidth(EDGE);
+		button.setPrefWidth(EDGE);
+		AnchorPane.setTopAnchor(button, 0.0);
+		AnchorPane.setLeftAnchor(button, 0.0);
+
+
+
+
+		slidingDashboard.getChildren().addAll(button);
 
 		/*
 		button.setStyle("-fx-padding: 0px;" +
 						"-fx-alignment: CENTER;" +
 				        "-fx-effect: dropshadow( one-pass-box , black , 8 , 0.0 , 2 , 0 );");
 		*/
-		dashBoardControlBox.getChildren().add(button);
+		//dashBoardControlBox.getChildren().add(button);
 		/*****************************************************************/
 		/** Directions **/
 		HBox directionsTitleBox = new HBox();
@@ -224,7 +230,7 @@ public class Display {
 		directionsTitleLabel.setTextFill(Color.web("#eeeeee"));
 
 		directionsTitleBox.getChildren().addAll(directionsTitleLabel);
-
+		directionsTitleLabel.setTranslateX(GAP);
 		directions.getChildren().addAll(directionsTitleBox);
 		directions.setStyle("-fx-background-color: #ffffff");
 		directions.setMaxWidth(expandedWidth);
@@ -246,7 +252,7 @@ public class Display {
 		directionsControlBoxBox.setMinHeight(TITLE_HEIGHT);
 
 		/*
-		SlidingVBox slidingDirections = new SlidingVBox(expandedWidth, directionsArrowView, directions);
+		SlidingAnchorPane slidingDirections = new SlidingAnchorPane(expandedWidth, directionsArrowView, directions);
 		slidingDirections.setStyle("-fx-background-color: #ffffff");
 		slidingDirections.setMaxWidth(expandedWidth);
 		slidingDirections.setPrefWidth(expandedWidth);
@@ -254,14 +260,13 @@ public class Display {
 */
 
 		directionsControlBoxBox.getChildren().add(directionsArrowView);
-
 		directionsArrowView.setTranslateX(5);
 		directionsArrowView.setTranslateY(2);
 
 		directionsControlBox.getChildren().addAll(directionsControlBoxBox);
-		directionsControlBox.setMinWidth(CONTROL_WIDTH);
-		directionsControlBox.setMaxWidth(CONTROL_WIDTH);
-		directionsControlBox.setPrefWidth(CONTROL_WIDTH);
+		directionsControlBox.setMinWidth(EDGE);
+		directionsControlBox.setMaxWidth(EDGE);
+		directionsControlBox.setPrefWidth(EDGE);
 		directionsControlBox.setStyle("-fx-background-color: #ffffff");
 
 		/*****************************************************************/
@@ -310,7 +315,7 @@ public class Display {
 		HBox.setHgrow(directions, Priority.SOMETIMES);
 
 		sections.setStyle("-fx-background-color: #333333");
-		sections.getChildren().addAll(dashBoardControlBox, slidingDashboard, directionsControlBox, directions, map);
+		sections.getChildren().addAll(slidingDashboard, directionsControlBox, directions, map); //dashBoardControlBox
 		/*****************************************************************/
 		/** Add sections to Root */
 		StackPane root = new StackPane();
@@ -352,18 +357,17 @@ public class Display {
 		HBox divide = new HBox();
 		divide.setStyle("-fx-background-color: #888888");
 
-
 		/* setting sizes */
-		divide.setMinWidth(0);
-		divide.setMaxWidth(expandedWidth - CONTROL_WIDTH);
-		divide.setPrefWidth(expandedWidth - CONTROL_WIDTH);
+		divide.setMinWidth(EDGE);
+		divide.setMaxWidth(expandedWidth + CONTROL_WIDTH);
+		divide.setPrefWidth(expandedWidth + CONTROL_WIDTH);
 
 		divide.setMinHeight(1);
 		divide.setMaxHeight(1);
 		divide.setPrefHeight(1);
 		/* binding size */
 
-//		divide.translateXProperty().bind((slidingDashboard.widthProperty().subtract(divide.widthProperty()).divide(2)));
+		//divide.translateXProperty().bind((slidingDashboard.widthProperty().subtract(divide.widthProperty()).divide(2)));
 
 		return divide;
 	}
