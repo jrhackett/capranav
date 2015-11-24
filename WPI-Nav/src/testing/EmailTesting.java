@@ -16,7 +16,7 @@ public class EmailTesting {
     @Before
     public void setUp() throws Exception {
         //TODO Set as your own email when testing
-        testE = new Email("");
+        testE = new Email("mjgiancola@wpi.edu");
     }
 /*
     @Test
@@ -33,9 +33,7 @@ public class EmailTesting {
         directions.add("Choose crazy Peeta instead of Chris Hemsworth");
         directions.add("Live happily ever after, the end");
 
-        String body = Email.generateBody(directions, "Fuller", "AK");
-
-        assertEquals("Send HTML Email", true, testE.sendEmail(body, true));
+        assertEquals("Send HTML Email", true, testE.sendDirections(directions, "Fuller", "AK"));
     }
 
 

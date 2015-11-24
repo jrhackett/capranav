@@ -5,6 +5,8 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 /**
+ * USAGE: new Email(<recipient_email_addr>).sendDirections(ArrayList<String> directions, String to, String from);
+ *
  * Used to facilitate the sending of emails
  * I chose to include to have the body of the email provided in the sendEmail method (as opposed to in the constructor)
  * so that the same Email object can be used to send multiple, different messages if that is desired
@@ -23,6 +25,18 @@ public class Email {
 
     public Email(String address) {
         to = address;
+    }
+
+    /**
+     * Wrapper method to streamline the sending of emails
+     * This function generates the email and sends it for you in one step
+     * @param directions List of step-by-step directions
+     * @param to         Starting location
+     * @param from       Ending location
+     * @return True if email sent successfully, false if not
+     */
+    public boolean sendDirections(ArrayList<String> directions, String to, String from) {
+        return sendEmail(generateBody(directions, to, from), true);
     }
 
     /**
