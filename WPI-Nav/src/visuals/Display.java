@@ -78,6 +78,7 @@ public class Display {
 	VBox dashBoard;
 	SlidingAnchorPane slidingDashboard;
 	VBox directions;
+	VBox map;
 	StackPane root;
 	HBox dashBoardTitleBox;
 
@@ -99,7 +100,7 @@ public class Display {
 		this.width = width;
         this.height = height;
 		this.controller = controller;
-		this.dashBoard = new VBox();
+
 		this.directions = new VBox();
 		this.VISIBLE = new SimpleBooleanProperty(true);
 		this.EDGE = GAP * 2 + CONTROL_WIDTH;
@@ -110,7 +111,102 @@ public class Display {
 	 * @return
 	 */
 	public Scene Init() {
+		/*****************************************************************/
+		/** Sliding Dashboard **/
+		initSlidingDashBoard();
 
+
+		/*****************************************************************/
+		/** Directions VBox **/
+		initDirections();
+
+		/*****************************************************************/
+		/** Map **/
+		initMap();
+
+		/*****************************************************************/
+		/** Add to the Section **/
+		HBox sections = new HBox();
+		HBox.setHgrow(map, Priority.ALWAYS);
+		HBox.setHgrow(slidingDashboard, Priority.SOMETIMES);
+		HBox.setHgrow(directions, Priority.SOMETIMES);
+
+		sections.setStyle("-fx-background-color: #333333");
+		sections.getChildren().addAll(slidingDashboard, directions, map); //dashBoardControlBox
+		/*****************************************************************/
+		/** Add sections to Root */
+		StackPane root = new StackPane();
+		root.getChildren().add(sections);
+
+		/*****************************************************************/
+		/** create scene **/
+		root.setAlignment(Pos.TOP_LEFT);
+
+		Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+CONTROL_WIDTH*2+expandedWidth*2, MAP_WIDTH);//+MAP_BORDER*2+TITLE_HEIGHT
+
+	/*	scene.widthProperty().addListener(
+				new ChangeListener() {
+					public void changed(ObservableValue observable,
+										Object oldValue, Object newValue) {
+						Double width = (Double)newValue;
+						root.setPrefWidth(width);
+					}
+				});
+
+		scene.heightProperty().addListener(
+				new ChangeListener() {
+					public void changed(ObservableValue observable,
+										Object oldValue, Object newValue) {
+						Double height = (Double)newValue;
+						root.setPrefHeight(height);
+					}
+				});*/
+
+
+
+
+		return scene;
+
+	}
+
+	private void initDirections(){
+		/**
+		 * There should be no need to modify this into an AnchorPane, hopefully
+		 * all we need to do is add the Email Directions button and Label after the TableView
+		 * and set the tableview min height to be ~200
+		 **/
+
+		/** Title Box **/
+		HBox directionsTitleBox = new HBox();
+		directionsTitleBox.setStyle("-fx-background-color: #ac2738");
+		directionsTitleBox.setMinHeight(EDGE);
+		directionsTitleBox.setMaxHeight(EDGE);
+		directionsTitleBox.setPrefHeight(EDGE);
+		directionsTitleBox.setAlignment(Pos.CENTER_LEFT);
+		directionsTitleBox.setSpacing(GAP*3);
+
+		VBox directionsControlBox = new VBox();
+		Image directionsArrow =	new Image(getClass().getResourceAsStream("../images/forward.png"), 30, 30, true, true);
+		ImageView directionsArrowView = new ImageView(directionsArrow);
+		directionsArrowView.setTranslateX(5);
+		directionsArrowView.setTranslateY(2);
+		directionsControlBox.getChildren().addAll(directionsArrowView);
+		directionsControlBox.setStyle("-fx-background-color: #ac2738");
+		directionsControlBox.setMinHeight(TITLE_HEIGHT);
+
+
+		/** Label **/
+		Label directionsTitleLabel = new Label("Directions");
+		directionsTitleLabel.setTextFill(Color.web("#eeeeee"));
+		directionsTitleBox.getChildren().addAll(directionsControlBox, directionsTitleLabel);
+
+		directions.getChildren().addAll(directionsTitleBox);
+		directions.setStyle("-fx-background-color: #ffffff");
+		directions.setPrefWidth(expandedWidth + EDGE);
+		directions.setMinWidth(0);
+	}
+
+	private void initSlidingDashBoard(){
 		/*****************************************************************/
 
 		/** dividers **/
@@ -197,7 +293,7 @@ public class Display {
 
 		/*****************************************************************/
 		/** Building of Sliding Dashboard Anchorpane  **/
-		SlidingAnchorPane slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0, divider_1, divider_2, divider_3, dashBoardTitleBox, pinView, infoView, gearsView); //,
+		this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0, divider_1, divider_2, divider_3, dashBoardTitleBox, pinView, infoView, gearsView); //,
 		slidingDashboard.setStyle("-fx-background-color: #333333");
 
 		/** STYLE BUTTON HERE **/
@@ -210,60 +306,10 @@ public class Display {
 		AnchorPane.setLeftAnchor(button, 0.0);
 
 		slidingDashboard.getChildren().addAll(button);
+	}
 
-		/*****************************************************************/
-		/** Directions **/
-		/**
-		 * There should be no need to modify this into an AnchorPane, hopefully
-		 * all we need to do is add the Email Directions button and Label after the TableView
-		 * and set the tableview min height to be ~200
-		 **/
-
-
-		/** Title Box **/
-		HBox directionsTitleBox = new HBox();
-		directionsTitleBox.setStyle("-fx-background-color: #ac2738");
-		directionsTitleBox.setMinHeight(EDGE);
-		directionsTitleBox.setMaxHeight(EDGE);
-		directionsTitleBox.setPrefHeight(EDGE);
-		directionsTitleBox.setAlignment(Pos.CENTER_LEFT);
-		directionsTitleBox.setSpacing(GAP*3);
-
-		VBox directionsControlBox = new VBox();
-		Image directionsArrow =	new Image(getClass().getResourceAsStream("../images/forward.png"), 30, 30, true, true);
-		ImageView directionsArrowView = new ImageView(directionsArrow);
-		directionsArrowView.setTranslateX(5);
-		directionsArrowView.setTranslateY(2);
-		directionsControlBox.getChildren().addAll(directionsArrowView);
-		directionsControlBox.setStyle("-fx-background-color: #ac2738");
-		directionsControlBox.setMinHeight(TITLE_HEIGHT);
-
-
-		/** Label **/
-		Label directionsTitleLabel = new Label("Directions");
-		directionsTitleLabel.setTextFill(Color.web("#eeeeee"));
-		directionsTitleBox.getChildren().addAll(directionsControlBox, directionsTitleLabel);
-
-		directions.getChildren().addAll(directionsTitleBox);
-		directions.setStyle("-fx-background-color: #ffffff");
-		directions.setPrefWidth(expandedWidth + EDGE);
-		directions.setMinWidth(0);
-
-
-
-		/*****************************************************************/
-		/** Map **/
-
-		VBox map = new VBox();
-
-		/*
-		HBox mapTitle = new HBox();
-		mapTitle.setMaxHeight(TITLE_HEIGHT);
-		mapTitle.setPrefHeight(TITLE_HEIGHT);
-		mapTitle.setMinHeight(0);
-		mapTitle.setAlignment(Pos.CENTER);
-		mapTitle.setStyle("-fx-background-color: #555555");
-		*/
+	private void initMap(){
+		this.map = new VBox();
 		HBox mapTitle = new HBox();
 
 
@@ -289,50 +335,8 @@ public class Display {
 
 		map.getChildren().addAll(mapTitle);
 		map.setStyle("-fx-background-color:#eeeeee ;");
-		/*****************************************************************/
-		/** Add to the Section **/
-		HBox sections = new HBox();
-		HBox.setHgrow(map, Priority.ALWAYS);
-		HBox.setHgrow(dashBoard, Priority.SOMETIMES);
-		HBox.setHgrow(directions, Priority.SOMETIMES);
-
-		sections.setStyle("-fx-background-color: #333333");
-		sections.getChildren().addAll(slidingDashboard, directions, map); //dashBoardControlBox
-		/*****************************************************************/
-		/** Add sections to Root */
-		StackPane root = new StackPane();
-		root.getChildren().add(sections);
-
-		/*****************************************************************/
-		/** create scene **/
-		root.setAlignment(Pos.TOP_LEFT);
-
-		Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+CONTROL_WIDTH*2+expandedWidth*2, MAP_WIDTH);//+MAP_BORDER*2+TITLE_HEIGHT
-
-	/*	scene.widthProperty().addListener(
-				new ChangeListener() {
-					public void changed(ObservableValue observable,
-										Object oldValue, Object newValue) {
-						Double width = (Double)newValue;
-						root.setPrefWidth(width);
-					}
-				});
-
-		scene.heightProperty().addListener(
-				new ChangeListener() {
-					public void changed(ObservableValue observable,
-										Object oldValue, Object newValue) {
-						Double height = (Double)newValue;
-						root.setPrefHeight(height);
-					}
-				});*/
-
-
-
-
-		return scene;
-
 	}
+
 
 
 	private HBox createDivider(){
