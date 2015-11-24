@@ -16,7 +16,7 @@ public class EmailTesting {
     @Before
     public void setUp() throws Exception {
         //TODO Set as your own email when testing
-        testE = new Email("mjgiancola@wpi.edu");
+        testE = new Email("");
     }
 /*
     @Test

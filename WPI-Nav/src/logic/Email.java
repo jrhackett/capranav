@@ -16,12 +16,10 @@ public class Email {
     private static String pass = "neinWongs"; //shh don't tell any1
     private static String port = "465";
     private static String fork = "<a href=\"https://github.com/jrhackett/cs3733-team9/\"><img style=\""
-                               + "position: absolute; top: 0; right: 0; border: 0; z-index: -1\" src=\"https://camo"
-                               + ".githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747"
-                               + "470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f"
-                               + "6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67\" alt=\""
-                               + "Fork me on GitHub\" data-canonical-src=\"https://s3.amazonaws.com/git"
-                               + "hub/ribbons/forkme_right_red_aa0000.png\"></a>"; //Could this String be longer
+                               + "position: absolute; top: 0; right: 0; border: 0; height: 12.5%; width: 12.5%;\" src=\"https://"
+                               + "users.wpi.edu/~mjgiancola/cs3733/ForkCapra.png\" alt=\"Fork me on GitHub\" data-can"
+                               + "onical-src=\"https://users.wpi.edu/~mjgiancola/cs3733/ForkCapra.png\"></a>";
+                               //Could this String be longer
 
     public Email(String address) {
         to = address;
@@ -53,7 +51,7 @@ public class Email {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("WPI Navigation Directions");
+            message.setSubject("Capra Navigation Directions");
 
             if (isHTML) message.setContent(body, "text/html"); //HTML Message
             else        message.setText(body);                 //Normal (text) Message
@@ -71,6 +69,7 @@ public class Email {
     }
 
     /**
+     * Creates an HTML-styled body for the email using the step-by-step directions
      *
      * @param directions List of directions
      * @param to         Starting Location
@@ -79,11 +78,12 @@ public class Email {
      */
     public static String generateBody(ArrayList<String> directions, String to, String from) {
         StringBuilder builder = new StringBuilder();
-        builder.append("<h2>Directions from " + to + " to " + from + fork + "</h2><hr>");
+        builder.append("<h2>Directions from " + to + " to " + from + "</h2><hr>");
         for (int i = 1; i <= directions.size(); i++) {
-            builder.append("<p>" + i + ". " + directions.get(i-1) + "</p>");
+            builder.append("<p><b>" + i + ".</b> " + directions.get(i-1) + "</p>");
         }
-        builder.append("<hr><h5>Thank you for using CapraNav by 9 Wong Productions!</h5>");
+        builder.append("<hr><h4>Thank you for using CapraNav by 9 Wong Productions!</h4>");
+        builder.append("<p>" + fork + "</p>"); //Adds Fork Me button to email
 
         return builder.toString();
     }
