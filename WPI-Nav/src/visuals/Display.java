@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.SVGPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -148,7 +149,7 @@ public class Display {
 
 	}
 	/****************************************************************************************************************
-	          FUNCTIONS SETTING UP BASE DESIGN THAT ALSO CALL THE SPECFIC CREATION OF FURTHER VISUAL ELEMENTS
+	          FUNCTIONS SETTING UP BASE DESIGN THAT ALSO CALL THE SPECIFIC CREATION OF FURTHER VISUAL ELEMENTS
 	 ****************************************************************************************************************/
 
 	private void initSlidingDashBoard(){
@@ -182,8 +183,19 @@ public class Display {
 		AnchorPane.setRightAnchor(divider_3, GAP);
 
 		/** images **/
-		Image pin =				new Image(getClass().getResourceAsStream("../images/pin.png"), 20, 20, true, true);
-		ImageView pinView = 	new ImageView(pin);
+		//Image pin =				new Image(getClass().getResourceAsStream("../images/pin.png"), 20, 20, true, true);
+		//ImageView pinView = 	new ImageView(pin);
+		SVGPath pinView = new SVGPath();
+		pinView.setContent("M233.292,0c-85.1,0-154.334,69.234-154.334,154.333c0,34.275,21.887,90.155,66.908,170.834" +
+				"c31.846,57.063,63.168,104.643,64.484,106.64l22.942,34.775l22.941-34.774c1.317-1.998,32.641-49.577,64.483-106.64" +
+				"c45.023-80.68,66.908-136.559,66.908-170.834C387.625,69.234,318.391,0,233.292,0z M233.292,233.291c-44.182,0-80-35.817-80-80" +
+				"s35.818-80,80-80c44.182,0,80,35.817,80,80S277.473,233.291,233.292,233.291z");
+		//pinView.setScaleX(.05);
+		//pinView.setScaleY(.05);
+		//pinView.setFill(Color.web("#eeeeee"));
+		pinView.setStyle("-fx-fill: #eeeeee; -fx-width: .05%; -fx-height: .05%;");
+
+
 
 		Image info =			new Image(getClass().getResourceAsStream("../images/info.png"), 20, 20, true, true);
 		ImageView infoView = 	new ImageView(info);
