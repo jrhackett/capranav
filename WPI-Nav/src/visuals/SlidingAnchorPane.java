@@ -59,6 +59,7 @@ class SlidingAnchorPane extends AnchorPane {
                     @Override
                     public void handle(ActionEvent actionEvent) {
                         prop.setValue(!prop.getValue()); //this should flip the MISC_VISIBLE
+
                         //TODO change the look of bars here
                         //bars.getStyleClass().remove("hide-left");
                         //bars.getStyleClass().add("show-right");

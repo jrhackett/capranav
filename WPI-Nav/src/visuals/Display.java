@@ -113,30 +113,16 @@ public class Display {
 
 		/*****************************************************************/
 
-		//Stuff that is NOT visible when slid in!
+		/** dividers **/
 		HBox divider_0 = createDivider();
 		HBox divider_1 = createDivider();
 		HBox divider_2 = createDivider();
 		HBox divider_3 = createDivider();
 
-
-		Image pin =				new Image(getClass().getResourceAsStream("../images/pin.png"), 30, 30, true, true);
-		ImageView pinView = 	new ImageView(pin);
-
-		Image info =			new Image(getClass().getResourceAsStream("../images/info.png"), 30, 30, true, true);
-		ImageView infoView = 	new ImageView(info);
-
-		Image gears =			new Image(getClass().getResourceAsStream("../images/gears.png"), 30, 30, true, true);
-		ImageView gearsView = 	new ImageView(gears);
-
 		divider_0.visibleProperty().bind(VISIBLE);
 		divider_1.visibleProperty().bind(VISIBLE);
 		divider_2.visibleProperty().bind(VISIBLE);
 		divider_3.visibleProperty().bind(VISIBLE);
-
-		pinView.visibleProperty().bind(VISIBLE);
-		infoView.visibleProperty().bind(VISIBLE);
-		gearsView.visibleProperty().bind(VISIBLE);
 
 		//AnchorPane.setLeftAnchor(divider_0, GAP);
 		AnchorPane.setTopAnchor(divider_0, EDGE + 1);
@@ -155,9 +141,28 @@ public class Display {
 		AnchorPane.setLeftAnchor(divider_3, GAP);
 		AnchorPane.setRightAnchor(divider_3, GAP);
 
-		//divider_0.setTranslateX(GAP);
+		/** images **/
+		Image pin =				new Image(getClass().getResourceAsStream("../images/pin.png"), 20, 20, true, true);
+		ImageView pinView = 	new ImageView(pin);
 
+		Image info =			new Image(getClass().getResourceAsStream("../images/info.png"), 20, 20, true, true);
+		ImageView infoView = 	new ImageView(info);
 
+		Image gears =			new Image(getClass().getResourceAsStream("../images/gears.png"), 20, 20, true, true);
+		ImageView gearsView = 	new ImageView(gears);
+
+		pinView.visibleProperty().bind(VISIBLE);
+		infoView.visibleProperty().bind(VISIBLE);
+		gearsView.visibleProperty().bind(VISIBLE);
+
+		AnchorPane.setTopAnchor(pinView, 1 * EDGE + 5);
+		AnchorPane.setLeftAnchor(pinView, GAP);
+
+		AnchorPane.setTopAnchor(infoView, 3 * EDGE + 5);
+		AnchorPane.setLeftAnchor(infoView, GAP);
+
+		AnchorPane.setBottomAnchor(gearsView, 2 * EDGE - 20);
+		AnchorPane.setLeftAnchor(gearsView, GAP);
 
 
 
@@ -199,7 +204,7 @@ public class Display {
 		AnchorPane.setTopAnchor(dashBoardTitleBox, 0.0); //this may be GAP
 		AnchorPane.setLeftAnchor(dashBoardTitleBox, EDGE);
 
-		SlidingAnchorPane slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0, divider_1, divider_2, divider_3); //dashBoardTitleBox,
+		SlidingAnchorPane slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0, divider_1, divider_2, divider_3, dashBoardTitleBox, pinView, infoView, gearsView); //,
 		slidingDashboard.setStyle("-fx-background-color: #333333");
 	/*	slidingDashboard.setMaxWidth(expandedWidth + ED);
 		slidingDashboard.setPrefWidth(expandedWidth);
