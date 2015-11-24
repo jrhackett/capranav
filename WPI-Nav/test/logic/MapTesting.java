@@ -4,6 +4,13 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import logic.Map;
+
+import logic.*;
+import controller.*;
+import images.*;
+import MapBuilder.*;
+import visuals.*;
+
 /**
  * Created by Henry on 11/15/2015.
  */
