@@ -72,10 +72,10 @@ public class Display {
 	private static final double CONTROL_WIDTH = 30;
 	private static final double GAP = 5;
 	private final double EDGE;
-	private static final double expandedWidth = 150;
-	private static final double MAP_WIDTH = 700;
-	private static final double MAP_BORDER = 15;
-	private static final double TITLE_HEIGHT = 35;
+	private static final double expandedWidth = 170;//150
+	private static final double MAP_WIDTH = 660;
+    private static final double MAP_HEIGHT = 495;
+    private static final double MAP_BORDER = 15;
 
 	private BooleanProperty VISIBLE;
 	private boolean EMAIL = false;
@@ -93,21 +93,16 @@ public class Display {
 
 	/**
 	 * Basic constructor.
-	 * @param width
-	 * @param height
 	 */
-	public Display(Double width, Double height, Controller controller){
-        //root = new AnchorPane();
+	public Display(Controller controller){
         root = new StackPane();
 		root.setId("root");
-		//root.getStylesheets().add("style.css");
-		//root.applyCss();
 
-		this.width = width;
-        this.height = height;
 		this.controller = controller;
-
 		this.directions = new AnchorPane();
+        this.map        = new VBox();
+        this.slidingDashboard = new SlidingAnchorPane();
+
 		this.VISIBLE = new SimpleBooleanProperty(true);
 		this.EDGE = GAP * 2 + CONTROL_WIDTH;
 	}
@@ -120,7 +115,6 @@ public class Display {
 		/*****************************************************************/
 		/** Sliding Dashboard **/
 		initSlidingDashBoard();
-
 
 		/*****************************************************************/
 		/** Directions VBox **/
@@ -137,6 +131,7 @@ public class Display {
 		HBox.setHgrow(slidingDashboard, Priority.SOMETIMES);
 		HBox.setHgrow(directions, Priority.SOMETIMES);
 
+
 		sections.setStyle("-fx-background-color: #333333");
 		sections.getChildren().addAll(slidingDashboard, directions, map); //dashBoardControlBox
 		/*****************************************************************/
@@ -148,7 +143,8 @@ public class Display {
 		/** create scene **/
 		root.setAlignment(Pos.TOP_LEFT);
 
-		Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+EDGE*2+expandedWidth*2, MAP_WIDTH + 2 * EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
+		Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 2 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
+        //Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+EDGE*2+expandedWidth*2, MAP_WIDTH + 2 * EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
 
 		return scene;
 
@@ -211,8 +207,8 @@ public class Display {
 		"S271.804,159.421,254.26,159.421z");
 		infoView.setScaleX(.05);
 		infoView.setScaleY(.05);
-		infoView.setTranslateX(-50 * 5 + 9);
-		infoView.setTranslateY(-50 * 5 + 5);
+		infoView.setTranslateX(-50 * 4.5 - 9);
+		infoView.setTranslateY(-50 * 2 - 12);
 		infoView.setId("pinView");
 
 
@@ -267,8 +263,8 @@ public class Display {
 		AnchorPane.setTopAnchor(pinView, 1 * EDGE + GAP + 5);
 		AnchorPane.setLeftAnchor(pinView, GAP);
 
-		AnchorPane.setTopAnchor(infoView, 3 * EDGE + GAP + 5);
-		AnchorPane.setLeftAnchor(infoView, GAP);
+		//AnchorPane.setTopAnchor(infoView, 3 * EDGE + GAP + 5); //<--- TODO notice this, these lines break a lot of stuff, no idea why
+		//AnchorPane.setLeftAnchor(infoView, GAP);
 
 		AnchorPane.setBottomAnchor(gearsView, 0.0 + GAP * 2);//TODO these will change with svg
 		AnchorPane.setLeftAnchor(gearsView, GAP * 2);
@@ -277,9 +273,9 @@ public class Display {
 		/** Dashboard **/
 		dashBoardTitleBox = new HBox();
 		dashBoardTitleBox.setStyle("-fx-background-color: #333333");
-		dashBoardTitleBox.setMinHeight(TITLE_HEIGHT);
-		dashBoardTitleBox.setMaxHeight(TITLE_HEIGHT);
-		dashBoardTitleBox.setPrefHeight(TITLE_HEIGHT);
+		dashBoardTitleBox.setMinHeight(EDGE);
+		dashBoardTitleBox.setMaxHeight(EDGE);
+		dashBoardTitleBox.setPrefHeight(EDGE);
 		dashBoardTitleBox.setAlignment(Pos.CENTER_LEFT);
 
 		Label dashBoardTitleLabel = new Label("Dashboard");
@@ -309,9 +305,9 @@ public class Display {
 		/** Section Labels **/
 		/** Location **/
 		HBox locationLabelBox = new HBox();
-		locationLabelBox.setMinHeight(TITLE_HEIGHT);
-		locationLabelBox.setMaxHeight(TITLE_HEIGHT);
-		locationLabelBox.setPrefHeight(TITLE_HEIGHT);
+		locationLabelBox.setMinHeight(EDGE);
+		locationLabelBox.setMaxHeight(EDGE);
+		locationLabelBox.setPrefHeight(EDGE);
 		locationLabelBox.setAlignment(Pos.CENTER_LEFT);
 
 		Label locationLabel = new Label("Locations");
@@ -325,11 +321,18 @@ public class Display {
 		AnchorPane.setTopAnchor(locationLabelBox, 1 * EDGE + GAP * .5);
 		AnchorPane.setLeftAnchor(locationLabelBox, EDGE);
 
+        /** Inputs **/
+        VBox inputs = createInput();
+        AnchorPane.setTopAnchor(inputs, 1 * EDGE + GAP * .5 + GAP * 1.5);
+        AnchorPane.setLeftAnchor(inputs, EDGE);
+
+
+
 		/** Resources **/
 		HBox resourcesLabelBox = new HBox();
-		resourcesLabelBox.setMinHeight(TITLE_HEIGHT);
-		resourcesLabelBox.setMaxHeight(TITLE_HEIGHT);
-		resourcesLabelBox.setPrefHeight(TITLE_HEIGHT);
+		resourcesLabelBox.setMinHeight(EDGE);
+		resourcesLabelBox.setMaxHeight(EDGE);
+		resourcesLabelBox.setPrefHeight(EDGE);
 		resourcesLabelBox.setAlignment(Pos.CENTER_LEFT);
 
 		Label resourcesLabel = new Label("Resources");
@@ -346,9 +349,9 @@ public class Display {
 		/*****************************************************************/
 		/** Change Settings Zone **/
 		HBox settingsLabelBox = new HBox();
-		settingsLabelBox.setMinHeight(TITLE_HEIGHT);
-		settingsLabelBox.setMaxHeight(TITLE_HEIGHT);
-		settingsLabelBox.setPrefHeight(TITLE_HEIGHT);
+		settingsLabelBox.setMinHeight(EDGE);
+		settingsLabelBox.setMaxHeight(EDGE);
+		settingsLabelBox.setPrefHeight(EDGE);
 		settingsLabelBox.setAlignment(Pos.CENTER_LEFT);
 
 		Label settingsLabel = new Label("Settings");
@@ -367,7 +370,7 @@ public class Display {
 
 		/*****************************************************************/
 		/** Building of Sliding Dashboard Anchorpane  **/
-		this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0, divider_1, divider_2, divider_3, dashBoardTitleBox, infoView, gearsView, locationLabelBox, resourcesLabelBox, settingsLabelBox, pinView); //,
+		this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0, divider_1, divider_2, divider_3, gearsView, dashBoardTitleBox,locationLabelBox, resourcesLabelBox, infoView, settingsLabelBox, pinView, inputs); //, , ,
 		slidingDashboard.setStyle("-fx-background-color: #333333");
 
 		/** STYLE BUTTON HERE **/
@@ -378,7 +381,7 @@ public class Display {
 		button.setPrefWidth(EDGE);
 		AnchorPane.setTopAnchor(button, 0.0);
 		AnchorPane.setLeftAnchor(button, 0.0);
-
+        //slidingDashboard.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + 2 * EDGE);
 		slidingDashboard.getChildren().addAll(button);
 	}
 
@@ -408,7 +411,7 @@ public class Display {
 		directionsArrowView.setTranslateY(2);
 		directionsControlBox.getChildren().addAll(directionsArrowView);
 		directionsControlBox.setStyle("-fx-background-color: #ac2738");
-		directionsControlBox.setMinHeight(TITLE_HEIGHT);
+		directionsControlBox.setMinHeight(EDGE);
 
 
 		/** Label **/
@@ -446,7 +449,7 @@ public class Display {
 		emailView.setTranslateY(2);
 		emailIconBox.getChildren().addAll(emailView);
 		emailIconBox.setStyle("-fx-background-color: #ffffff");
-		emailIconBox.setMinHeight(TITLE_HEIGHT);
+		emailIconBox.setMinHeight(EDGE);
 
 
 		/** Label **/
@@ -454,8 +457,8 @@ public class Display {
 		emailLabel.setTextFill(Color.web("#333333"));
 		emailBox.getChildren().addAll(emailIconBox, emailLabel);
 
-		emailLabel.setOnMouseClicked(e -> handleEmail(emailLabel));
-		emailView.setOnMouseClicked(e -> handleEmail(emailLabel));
+		emailLabel.setOnMouseClicked(e -> handleEmail(emailBox));
+		emailView.setOnMouseClicked(e -> handleEmail(emailBox));
 
 
 		AnchorPane.setBottomAnchor(emailBox, 0.0);
@@ -466,7 +469,7 @@ public class Display {
 		directions.setStyle("-fx-background-color: #ffffff");
 		directions.setPrefWidth(expandedWidth + EDGE);
 		directions.setMinWidth(0);
-		directions.setPrefHeight(MAP_WIDTH);
+		directions.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + EDGE);
 	}
 
 	private void initMap(){
@@ -488,13 +491,18 @@ public class Display {
 		mapTitle.getChildren().add(mapTitleLabel);
 
 
+        this.mapPane = createMapPane();
+
+        mapPane.setAlignment(Pos.CENTER);
+
+
 		map.setMinWidth(MAP_WIDTH);
 		map.setPrefWidth(MAP_WIDTH+MAP_BORDER*2);
 
-		map.setMinHeight(MAP_WIDTH+TITLE_HEIGHT);
-		map.setPrefHeight(MAP_WIDTH+MAP_BORDER*2+TITLE_HEIGHT);
+		map.setMinHeight(MAP_HEIGHT+EDGE);
+		map.setPrefHeight(MAP_HEIGHT+ MAP_BORDER * 2 + EDGE);
 
-		map.getChildren().addAll(mapTitle);
+		map.getChildren().addAll(mapTitle, mapPane);
 		map.setStyle("-fx-background-color:#eeeeee ;");
 	}
 
@@ -502,6 +510,41 @@ public class Display {
      				FUNCTIONS SETTING UP SPECIFIC VISUAL ELEMENTS AND FURTHER SUBSIDIARIES
 	****************************************************************************************************************/
 
+    private StackPane createMapPane(){
+        StackPane mapPane = new StackPane();
+        mapPane.setPrefHeight(MAP_WIDTH + MAP_BORDER * 2);
+        mapPane.setMinHeight(MAP_HEIGHT);
+
+        mapPane.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
+        mapPane.setMinWidth(MAP_WIDTH);
+
+        mapPane.setStyle("-fx-background-color: #eeeeee");
+        this.mapDisplay = new MapDisplay( this.controller); //(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER),
+        mapPane.getChildren().add(mapDisplay);
+        //mapPane.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
+        //mapPane.setTranslateY(HEIGHT_BUFFER);
+        return mapPane;
+    }
+
+    private VBox createInput(){
+
+		/* start */
+        this.start = new Inputs("Search WPI Maps", INPUT_WIDTH);
+        start.setOnAction(e -> handleInput(start, true));
+
+		/* end */
+        this.end = new Inputs("For Destination", INPUT_WIDTH);
+        end.setOnAction(e ->handleInput(end, false));
+
+        start.setId("input");
+        end.setId("input");
+
+        VBox inputs = new VBox();
+        inputs.setSpacing(GAP);
+        inputs.getChildren().addAll(start, end);
+
+        return inputs;
+    }
 
 	private HBox createDivider(){
 		HBox divide = new HBox();
@@ -550,7 +593,7 @@ public class Display {
 
 		instructions.setPlaceholder(new Label(" "));
 		instructions.setMinWidth(0);
-		instructions.setMaxWidth(expandedWidth + EDGE);
+		instructions.setMaxWidth(expandedWidth + EDGE * 2);
 		instructions.setMinHeight(0);
 		//instructions.setPrefHeight(MAP_WIDTH - EDGE * 4);
 		this.instructions.setItems(FXCollections.observableArrayList());
@@ -700,21 +743,7 @@ private boolean sendEmail(String email){
 	}
 
 
-	private StackPane createMapPane(){
-		StackPane mapPane = new StackPane();
-		mapPane.setPrefHeight((height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER));
-		mapPane.setMaxHeight((height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER));
-		mapPane.setMinHeight(450);
-		mapPane.setPrefWidth(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
-		mapPane.setMaxWidth(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
-		mapPane.setMinWidth(600);
-		mapPane.setStyle("-fx-background-color: #eeeeee");
-		this.mapDisplay = new MapDisplay( this.controller); //(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER),
-		mapPane.getChildren().add(mapDisplay);
-		mapPane.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
-		mapPane.setTranslateY(HEIGHT_BUFFER);
-		return mapPane;
-	}
+
 
 
 	/**
@@ -740,14 +769,14 @@ private boolean sendEmail(String email){
 		Label mapDescriptor = new Label("Select a map!");
 		mapDescriptor.setMinWidth(INPUT_WIDTH);
 		mapDescriptor.setMaxWidth(INPUT_WIDTH);
-
-		/* start */
+/*
+		*//* start *//*
 		this.start = new Inputs("Search WPI Maps", INPUT_WIDTH);
 		start.setOnAction(e -> handleInput(start, true));
 
-		/* end */
+		*//* end *//*
 		this.end = new Inputs("For Destination", INPUT_WIDTH);
-		end.setOnAction(e ->handleInput(end, false));
+		end.setOnAction(e ->handleInput(end, false));*/
 
 
 /*		private Popover<PopOver, Label> controller = new Po();
@@ -863,6 +892,23 @@ private boolean sendEmail(String email){
 		}
 	}
 
+    /*
+       private StackPane createMapPane(){
+        StackPane mapPane = new StackPane();
+        mapPane.setPrefHeight((height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER));
+        mapPane.setMaxHeight((height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER));
+        mapPane.setMinHeight(450);
+        mapPane.setPrefWidth(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
+        mapPane.setMaxWidth(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2);
+        mapPane.setMinWidth(600);
+        mapPane.setStyle("-fx-background-color: #eeeeee");
+        this.mapDisplay = new MapDisplay( this.controller); //(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER),
+        mapPane.getChildren().add(mapDisplay);
+        //mapPane.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
+        //mapPane.setTranslateY(HEIGHT_BUFFER);
+        return mapPane;
+    }
+     */
 
 	/**
 	 * Creates a the button panel

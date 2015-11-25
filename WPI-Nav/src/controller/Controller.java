@@ -60,7 +60,7 @@ public class Controller extends Application {
        // s.setTitle("CapraNav");
 
 		/* setup */
-        this.myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, this);    //creates scene
+        this.myDisplay = new Display(this);    //creates scene
         Scene display = myDisplay.Init(); //initializes scene
         s.setScene(display); //sets scene to display
         display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
@@ -76,6 +76,7 @@ public class Controller extends Application {
         System.out.println(email);
         //e.sendEmail()
         //TODO FILL IN WITH NEW EMAIL CODE
+
     }
 
     public void reset(){

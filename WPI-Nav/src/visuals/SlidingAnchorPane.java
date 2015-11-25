@@ -19,7 +19,8 @@ class SlidingAnchorPane extends AnchorPane {
         return controlButton;
     }
 
-    SlidingAnchorPane(final double expandedWidth, final double edge, BooleanProperty prop, Node buttonval, Node... nodes) {
+    public SlidingAnchorPane(){};
+    public SlidingAnchorPane(final double expandedWidth, final double edge, BooleanProperty prop, Node buttonval, Node... nodes) {
 
 
         this.setPrefWidth(expandedWidth + edge);
