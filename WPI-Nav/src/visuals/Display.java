@@ -451,7 +451,7 @@ public class Display {
 
 		/** Label **/
 		Label emailLabel = new Label("Email Me");
-		emailLabel.setTextFill(Color.web("#888888"));
+		emailLabel.setTextFill(Color.web("#333333"));
 		emailBox.getChildren().addAll(emailIconBox, emailLabel);
 
 		emailLabel.setOnMouseClicked(e -> handleEmail(emailLabel));
@@ -556,7 +556,7 @@ public class Display {
 		this.instructions.setItems(FXCollections.observableArrayList());
 		//instructions.setPrefHeight(TABLE_HEIGHT);
 		//instructions.getColumns().addAll(Instructions.getColumn(instructions));
-		//
+
 
 	}
 

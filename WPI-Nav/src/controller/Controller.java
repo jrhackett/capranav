@@ -78,14 +78,6 @@ public class Controller extends Application {
         //TODO FILL IN WITH NEW EMAIL CODE
     }
 
-
-
-
-
-
-
-
-
     public void reset(){
         this.currentMap = new Map();
         this.pathNodes = new ArrayList<>();
