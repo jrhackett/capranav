@@ -42,7 +42,6 @@ public class Parser
 			this.parser = new JsonStreamParser(new FileReader(filename));
 		}
 		catch (FileNotFoundException e) {
-			System.out.println("nodes.json doesn't exist (opened for reading)");
 		}
 	}
 
@@ -110,7 +109,6 @@ public class Parser
 				temp = gson.fromJson(parser.next(), Node.class);
 				graph.put(temp.getID(), temp); //Add Node to the map under its ID
 			}
-			System.out.println(new Graph(graph).toString());
 			return new Graph(graph);
 		}
 		else {

@@ -106,7 +106,6 @@ public class MapVisual extends Pane {
 		//nodeCircles.setPickOnBounds(false);
 		//this.getChildren().add(nodeCircles);
 		nodes.forEach((k,v) -> {
-			System.out.println("asdf");
 			Circle circle = createCircle(v);
 			id_circle.put(k, circle);
 			this.getChildren().add(circle); /* adding directly to stackpane */
@@ -131,9 +130,11 @@ public class MapVisual extends Pane {
 				lastStroke = (Color) circle.getStroke();
 				highlight(circle, Color.GOLD, Color.BLACK);
 				//TODO: POPOVER FOR NAME HERE
-
-				//popOver.show(circle);
-				//p//opOver.setContentNode(new Text(v.toString()));
+				/*
+				PopOver popOver = new PopOver();
+				popOver.show(circle);
+				popOver.setContentNode(new Text(v.toString()));
+				*/
 			}
 		});
 
@@ -156,7 +157,6 @@ public class MapVisual extends Pane {
 				if (!controller.SELECTED){//no node is currently selected
 					controller.SELECTED = true;
 					controller.selectedNode = v;
-					System.out.println(v.toString());
 					selected(circle);
 				} else if (controller.SELECTED && v.getID() == controller.selectedNode.getID()){
 					deselect(v.getID());
@@ -165,7 +165,6 @@ public class MapVisual extends Pane {
 				if (!controller.SELECTED){//no node is currently selected
 					controller.SELECTED = true;
 					controller.selectedNode = v;
-					System.out.println(v.toString());
 					selected(circle);
 				} else if (controller.SELECTED && v.getID() == controller.selectedNode.getID()){
 					deselect(v.getID());
@@ -237,7 +236,6 @@ public class MapVisual extends Pane {
 
 	private void highlightAll() {
 		id_circle.forEach((k,v) -> {
-			System.out.println("HIGHLIGHTING");
 			highlight((Circle) v, last, lastStroke);
 
 		});
@@ -245,7 +243,6 @@ public class MapVisual extends Pane {
 	}
 	private void hideAll() {
 		id_circle.forEach((k,v) -> {
-			System.out.println("HIGHLIGHTING");
 			normal(v);
 		});
 	}

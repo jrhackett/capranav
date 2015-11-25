@@ -66,7 +66,6 @@ public class MapBuilderDisplay extends HBox {
         options.setMinHeight(height);
         options.setStyle("-fx-background-color: #336699;");
         create_options();
-        System.out.println(width / 4);
 
         //right:
         this.map_zone = new StackPane();
@@ -180,7 +179,6 @@ public class MapBuilderDisplay extends HBox {
         //button to create the map -> writes the map to the JSON FILE
         Button saveButton = new Button("Save Edge Information!");
         saveButton.setOnAction(e -> {
-            System.out.println("save button go!");
             controller.addEdges();
             controller.resetPotentialEdges();
             status.setText("Edges saved!");
@@ -241,7 +239,6 @@ public class MapBuilderDisplay extends HBox {
         //button to create the map -> writes the map to the JSON FILE
         Button saveButton = new Button("Save Nodes Information!");
         saveButton.setOnAction(e -> {
-            System.out.println("Add !");
             controller.setNodeName(name.getText());
             mapvisual.deselect(controller.selectedNode.getID());
         });
@@ -285,7 +282,7 @@ public class MapBuilderDisplay extends HBox {
 
         //ComboBox choose Map
         this.chooseMap = new Inputs("maps", input_width);
-        chooseMap.setItems(chooseMap.getMaps(controller.getMaps().getMaps()));
+        chooseMap.setItems(chooseMap.convertMaps(controller.getMaps().getMaps()));
         chooseMap.setOnAction(e -> {
             logic.Map newMap = (logic.Map) chooseMap.getValue();
             controller.setCurrentMap(newMap.getID());

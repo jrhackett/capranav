@@ -24,15 +24,20 @@ public class Controller extends Application {
     private Display myDisplay;
 
     /* information variables */
-    public ArrayList<Node> pathNodes;   /* this is set then used to get instructions from logic.Directions */
+    public ArrayList<Node> pathNodes;        /* this is set then used to get instructions from logic.Directions */
 
     /* nodes and graphs */
-    private HashMap<Integer, Node> nodes;
-    private Maps maps;
-    private logic.Map currentMap;
+    private HashMap<Integer, Node> nodes;    /* all the nodes */
+    private Maps maps;                       /* information of the maps */
+    private logic.Map currentMap;            /* current map being used */
 
     /* switches */
     private boolean FIRST = false; //if the last thing to be set was first
+    public boolean FLAG = true;
+
+
+    public logic.Node startNode;
+    public logic.Node endNode;
 
 
     @Override
@@ -57,60 +62,66 @@ public class Controller extends Application {
 
 		/* setup */
         this.myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, this);    //creates scene
-
         Scene display = myDisplay.Init(); //initializes scene
         s.setScene(display); //sets scene to display
-
         s.show();   //shows scene
     }
-
-
-    /* logic methods */
-
-    /* function that gets a path, given two+ nodes */
-
-    /* function for handicap path, given two+ nodes */
-
-    /* function looking for nearest three bathrooms */
-
-    /* function that shows three paths to food */
-
 
     public void reset(){
         this.currentMap = new Map();
         this.pathNodes = new ArrayList<>();
     }
 
+    public void resetStartEnd(){
+        this.startNode = null;
+        this.endNode = null;
+        this.myDisplay.start.getSelectionModel().clearSelection();
+        this.myDisplay.end.getSelectionModel().clearSelection();
+
+    }
+
     public void nodeFromMapHandler(Node n){
         //check if we have a start or false
         if (myDisplay.start.getValue() == null){
             //if (validateNotEquality(n, (Node)myDisplay.start.getValue())) {
-                System.out.println("controller start");
                 //no start, thus -> set it to n
+                this.FLAG = false;
+                myDisplay.start.addNode(n);
                 myDisplay.start.setValue(n);
-                myDisplay.mapDisplay.setStartNode(n.getID());
+                this.FLAG = true;
+                myDisplay.mapDisplay.setStartNode(n.getID(), true);
+                this.startNode = n;
            // }
         } else if (myDisplay.end.getValue() == null){
            // if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
-                System.out.println("controller end");
+                this.FLAG = false;
+                myDisplay.end.addNode(n);//// TODO: 11/18/15
                 myDisplay.end.setValue(n);
-                myDisplay.mapDisplay.setStartNode(n.getID());
+                this.FLAG = true;
+                myDisplay.mapDisplay.setStartNode(n.getID(), false);
+                this.endNode = n;
           //  }
         } else if (!FIRST){
             if(validateNotEquality(n,(Node)myDisplay.start.getValue())) {
-                System.out.println("controller start");
                 //no start, thus -> set it to n
+                this.FLAG = false;
+                myDisplay.start.addNode(n);//// TODO: 11/18/15
                 myDisplay.start.setValue(n);
-                myDisplay.mapDisplay.setStartNode(n.getID());
+                this.FLAG = true;
+                myDisplay.mapDisplay.setStartNode(n.getID(), true);
                 FIRST = true;
+                this.startNode = n;
             }
             //myDisplay.mapDisplay.mapDescriptor.setText("Refresh to Click and Choose");
         } else {
             if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
-                System.out.println("controller end");
+                this.FLAG = false;
+                myDisplay.end.addNode(n);//// TODO: 11/18/15  
                 myDisplay.end.setValue(n);
-                myDisplay.mapDisplay.setStartNode(n.getID());
+                this.FLAG = true;
+                myDisplay.mapDisplay.setStartNode(n.getID(), false);
                 FIRST = false;
+                this.endNode = n;
             }
         }
     }
@@ -134,8 +145,7 @@ public class Controller extends Application {
      * @return an ArrayList<String?
      */
     public ArrayList<String> getInstructions(){
-        logic.Directions directions = new Directions();
-        return directions.stepByStep(this.pathNodes, this.maps.getMaps());
+        return Directions.stepByStep(this.pathNodes, this.maps.getMaps());
     }
 
 
@@ -170,6 +180,27 @@ public class Controller extends Application {
         });
         return value;
     }
+
+    /**
+     * This will kick everything off!
+     * We can later change it so other things trigger this.
+     * We also have to think about clearing things
+     */
+    public void findPaths(){
+        //validate that there are inputs for beginging and end
+        if (this.startNode != null && this.endNode != null){
+            //logic.Node s = (logic.Node)this.start.getValue();
+            //logic.Node e = (logic.Node)this.end.getValue();
+            ArrayList<logic.Node> path = this.getPathNodes(startNode, endNode);
+            ArrayList<String> instructions = this.getInstructions();//pass correct instructions
+            myDisplay.setInstructions(path, instructions);
+            myDisplay.mapDisplay.showPath(path);
+        }
+        //String name = controller.getMapName();
+        //map.setMap(name);
+        //mapDisplay.drawPath();
+    }
+
 
 
 

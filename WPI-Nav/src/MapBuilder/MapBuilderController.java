@@ -95,8 +95,6 @@ public class MapBuilderController extends   Application {
     public int newNodeAtLocation(MouseEvent e){
         double x = e.getX();
         double y = e.getY();
-        System.out.println("X: " + x);
-        System.out.println("Y: " + y);
         //TODO: get UNIQUE or next number - look into singelton
         Node newNode = new Node("ENTER TEXT", this.nextNodeID, x, y, 0, this.currentMap);
         nodes.put(this.nextNodeID, newNode);
@@ -130,8 +128,20 @@ public class MapBuilderController extends   Application {
     public void setNodeName(String name){
         if (SELECTED) {
             selectedNode.setName(name);
+            changeNameToIncludeMap(selectedNode);
         }
     }
+
+    /**
+     * sets the selected node name
+     * @param n
+     */
+    public void changeNameToIncludeMap(Node n){
+        String mapPrefix = new String();
+        mapPrefix = maps.getMap(n.getMap_id()).getName();
+        n.setName(mapPrefix + " " + n.getName());
+    }
+
 
 
     /**
@@ -140,7 +150,6 @@ public class MapBuilderController extends   Application {
      * @return true if it exists
      */
     private boolean validatePath(String path){
-        System.out.println("VALIDATING PATH!");
         this.maps.check(path);
 
         try {
@@ -154,7 +163,6 @@ public class MapBuilderController extends   Application {
                 Image mapI = new Image(getClass().getResourceAsStream("/images/" + path + ".png"));
             }
             catch (NullPointerException f) {
-                System.out.println(f);
                 return false;
             }
         }

@@ -1,10 +1,14 @@
 package logic;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Directions {
 	private static double totalDistance = 0;
+	private final Logger logger = LoggerFactory.getLogger(Directions.class);
 
 	/**
 	 * stepByStep takes in an arrayList of Nodes and outputs a list of
@@ -15,12 +19,17 @@ public class Directions {
 	public static ArrayList<String> stepByStep(ArrayList<Node> aStarPath, HashMap<Integer, Map> maps) {
 		// TODO: Implement skipping of straight path nodes
 
-		
 		ArrayList<String> directions = new ArrayList<String>();
 
 		// Do special case for first node
-		double dist = Math.sqrt(Math.pow((aStarPath.get(0).getX() - aStarPath.get(1).getX()), 2)
-				+ Math.pow((aStarPath.get(0).getY() - aStarPath.get(1).getY()), 2));
+		double dist;
+		try {
+			dist = Math.sqrt(Math.pow((aStarPath.get(0).getX() - aStarPath.get(1).getX()), 2)
+					+ Math.pow((aStarPath.get(0).getY() - aStarPath.get(1).getY()), 2));
+		} catch (IndexOutOfBoundsException e){
+			e.printStackTrace(); //logging doesnt work in a static context!
+			dist = 7; //LOL
+		}
 		
 		double scalar = 1;
 		
@@ -32,9 +41,13 @@ public class Directions {
 		}
 
 		totalDistance += dist;
-
-		double angle = Math.atan2((aStarPath.get(0).getY() - aStarPath.get(1).getY()),
-				(aStarPath.get(0).getX() - aStarPath.get(1).getX()));
+		double angle;
+		try {
+			angle = Math.atan2((aStarPath.get(0).getY() - aStarPath.get(1).getY()),
+					(aStarPath.get(0).getX() - aStarPath.get(1).getX()));
+		} catch (IndexOutOfBoundsException e){
+			angle = 30;
+		}
 
 		angle = Math.round(angle * 180 / Math.PI - 180);
 		if (angle < 0) {

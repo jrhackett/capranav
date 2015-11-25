@@ -37,7 +37,6 @@ public class Maps implements ICollection {
             }
             return check;
         } catch (NullPointerException e) {
-            System.out.println("EMPTY MAP FILE. CONTINUE.");
             return true;
         }
     }

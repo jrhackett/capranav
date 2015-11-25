@@ -2,6 +2,7 @@ package visuals;
 
 import controller.Controller;
 import javafx.animation.ScaleTransition;
+import javafx.animation.Transition;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,6 +29,10 @@ public class MapDisplay extends Pane {
     private ArrayList<Line> lines; /* to be able to remove/hide these */
 
     /* Visuals */
+    private Transition sts;
+    private Transition ste;
+
+
     private Image mapImage;
     private ImageView mapView;
 
@@ -52,16 +57,21 @@ public class MapDisplay extends Pane {
         this.id_circle = new HashMap<>();
         this.lines = new ArrayList<>();
         this.path = new ArrayList<>();
+        this.ste = new ScaleTransition();
+        this.sts = new ScaleTransition();
     }
 
 
-    public void clearNodesEdges(){
+    public void clearNodesEdges(int ids, int ide){
+        int i = 0;
         id_circle.forEach((k,v) ->{
-            this.getChildren().remove(v);
+            //we have to also check
+            if (k != ids && k != ide) { normal(v); }
+        //    System.out.println(k);
         });
-        id_circle = new HashMap<>();
-
+        //id_circle = new HashMap<>();
         this.getChildren().removeAll(lines);
+
         lines = new ArrayList<>();
     }
 
@@ -73,7 +83,11 @@ public class MapDisplay extends Pane {
      * @param map
      */
     public void setMap(logic.Map map){
+
         this.getChildren().remove(mapView);
+        //this.getChildren().removeAll(lines);
+       // path.clear();
+
 
         try {
             this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
@@ -86,15 +100,33 @@ public class MapDisplay extends Pane {
         this.getChildren().add(mapView);
         drawNodes(controller.getNodesOfMap(map.getID()));
 
+        HIGLIGHTED = false;
 
         mapView.setOnMouseClicked(e -> {
             if (!HIGLIGHTED) {
                 highlightAll();
                 HIGLIGHTED = true;
             } else {
+                //hack / decision
+                this.getChildren().removeAll(lines);
                 hideAll();
-                showPath(path);
+                controller.resetStartEnd();
                 HIGLIGHTED = false;
+
+                /*
+                if (controller.startNode != null && controller.endNode != null) {
+
+                    id_circle.forEach((k, v) -> {
+                        if (k != controller.startNode.getID() && k != controller.endNode.getID()) normal(v);
+                        else if (k != controller.startNode.getID()) setStartNode(k, false);
+                        else setStartNode(k, true);
+                    });
+                    showPath(path);
+                } else {
+                    hideAll();
+                }
+                HIGLIGHTED = false;
+                */
             }
         });
 
@@ -105,12 +137,18 @@ public class MapDisplay extends Pane {
      *
      */
     public void showPath(ArrayList<Node> path){
+        this.getChildren().removeAll(lines);//// TODO: 11/18/15 test this
         this.path = path;
-        hideAll();
+        //hideAll();
+        id_circle.forEach((k,v) -> {
+            if(k != controller.startNode.getID() && k != controller.endNode.getID()) normal(v);
+            else if (k != controller.startNode.getID()) setStartNode(k, false);
+            else setStartNode(k, true);
+        });
         drawPaths(path);
 
-        for (Node n : path){
-            highlightPath(id_circle.get(n.getID()));
+        for (int i = 1; i < path.size() - 1; i++){
+            highlightPath(id_circle.get(path.get(i).getID()));
         }
 
     }
@@ -184,7 +222,6 @@ public class MapDisplay extends Pane {
         });
         */
         circle.setOnMouseClicked(e -> {
-            System.out.println("node circle click handler");
             controller.nodeFromMapHandler(v);
         });
 /*
@@ -200,19 +237,47 @@ public class MapDisplay extends Pane {
         return circle;
     }
 
+
     /**
      * The color and effect for when a node is set as a destination
      * @param id
      */
-    public void setStartNode(int id){
+    public void setStartNode(int id, boolean START){
         Circle c = id_circle.get(id);
-        highlight(c, Color.BLUE, Color.LIGHTBLUE);
-        ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
-        st.setByX(1.1f);
-        st.setByY(1.1f);
-        st.setCycleCount(4);
-        st.setAutoReverse(true);
-        st.play();
+        c.setRadius(5);
+
+        if (START) {
+            highlight(c, Color.GREEN, Color.LIGHTGREEN);
+            c.setRadius(5);
+
+
+            if (sts != null) {
+                sts.stop();
+             /*   if((Circle)sts.getNode() == c){ return;}//do nothing _
+                sts.*/
+            }
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
+            st.setByX(1.1f);
+            st.setByY(1.1f);
+            st.setCycleCount(4);
+            st.setAutoReverse(true);
+            st.play();
+            sts = st;
+        }
+        else {
+            highlight(c, Color.FIREBRICK, Color.RED);
+            if (ste != null) ste.stop();
+            c.setRadius(5);
+
+
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
+            st.setByX(1.1f);
+            st.setByY(1.1f);
+            st.setCycleCount(4);
+            st.setAutoReverse(true);
+            st.play();
+            ste = st;
+        }
     }
 
 
@@ -233,7 +298,6 @@ public class MapDisplay extends Pane {
         c.setEffect(ds);
         c.setOnMouseEntered(null);
         c.setOnMouseExited(null);
-
     }
 
 
@@ -254,7 +318,7 @@ public class MapDisplay extends Pane {
      * default circle
      * @param c
      */
-    private void normal(Circle c) {
+    public void normal(Circle c) {
         c.setFill(Color.TRANSPARENT);
         c.setStrokeWidth(0);
         c.setRadius(5);
@@ -262,6 +326,11 @@ public class MapDisplay extends Pane {
         c.setEffect(null);
     }
 
+
+    /**
+     * clear selection
+     * @param
+     */
 
     private void highlightAll() {
         this.getChildren().forEach(e -> {
