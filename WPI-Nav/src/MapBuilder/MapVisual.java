@@ -1,15 +1,18 @@
 package MapBuilder;
 
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import logic.Edge;
 import logic.Node;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 //The visual component of the maps and the Nodes
@@ -20,15 +23,14 @@ public class MapVisual extends Pane {
 	private double height;
 	private double width;
 
-	public boolean MAP  = true;	 //Describes what phase we are in
+	public boolean MAP = true; // Describes what phase we are in
 	public boolean EDGE = false;
 	public boolean NODE = false;
-
-
 
 	/* Data Structures */
 	private HashMap<Integer, Circle> id_circle;
 	private MapBuilderController controller;
+	private ArrayList<Line> lines;
 
 	/* Visuals */
 	private Image mapImage;
@@ -44,82 +46,136 @@ public class MapVisual extends Pane {
 	private Color lastC = Color.TRANSPARENT;
 	private Color lastStrokeC = Color.TRANSPARENT;
 
-
 	/* this will be used to put together the map */
 	/* overlaying the nodes and fixed map image should work */
-	public MapVisual(MapBuilderController controller){
+	public MapVisual(MapBuilderController controller) {
 		super();
 		this.controller = controller;
 		this.mapView = new ImageView();
-		//this.nodeCircles = new AnchorPane();
+		// this.nodeCircles = new AnchorPane();
 
-		set_up_background(); //gray border
-		this.getChildren().addAll(); //nodeCircles
+		set_up_background(); // gray border
+		this.getChildren().addAll(); // nodeCircles
 	}
 
 	/**
-	 * Given a MAP_NAME -> ask Controller for map name and nodes for the map
-	 * Add image to map
-	 * Then add the Nodes
+	 * Given a MAP_NAME -> ask Controller for map name and nodes for the map Add
+	 * image to map Then add the Nodes
+	 * 
 	 * @param map
 	 */
-	public void setMap(logic.Map map){
+	public void setMap(logic.Map map) {
 		System.out.println("MAP PATH:  " + map.getPath());
 		this.getChildren().remove(mapView);
-		//id_circle.forEach((k,v) -> {if(v!= null){this.getChildren().remove(v); }});
+		// id_circle.forEach((k,v) -> {if(v!=
+		// null){this.getChildren().remove(v); }});
 		try {
-			this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"), 660, 495, true, true);
-		}
-		catch (NullPointerException e) {
-			this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getPath() + ".png"), 660, 495, true, true);
+			// this.mapImage = new
+			// Image(getClass().getResourceAsStream("../images/" + map.getPath()
+			// + ".png"), 660, 495, true, true);
+			this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"));
+		} catch (NullPointerException e) {
+			// this.mapImage = new
+			// Image(getClass().getResourceAsStream("/images/" + map.getPath() +
+			// ".png"), 660, 495, true, true);
+			this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getPath() + ".png"));
 		}
 
 		this.mapView = new ImageView(mapImage);
+
+		// mapView.setFitWidth(width/2);
+		mapView.setPreserveRatio(true);
+		mapView.setSmooth(true);
+		// mapView.setCache(true);
+
 		this.getChildren().add(mapView);
+		drawEdges(controller.getNodesOfMap(map.getID()));
 		drawNodes(controller.getNodesOfMap(map.getID()));
 
 		mapView.setOnMouseClicked(e -> {
 			if (NODE) {
-				int id = controller.newNodeAtLocation(e); //x & y are already relative to map
-				//create a circle for this node!!
+				int id = controller.newNodeAtLocation(e); // x & y are already
+															// relative to map
+				// create a circle for this node!!
 				Node n = controller.getNode(id);
 				Circle c = createCircle(n);
 				id_circle.put(id, c);
-				//nodeCircles.getChildren().removeAll();
-				this.getChildren().add(c);//nodeCircles
+				// nodeCircles.getChildren().removeAll();
+				this.getChildren().add(c);// nodeCircles
 			}
 		});
 	}
 
 	/**
 	 * Draws the nodes given on the map
+	 * 
 	 * @param nodes
-     */
-	public void drawNodes(HashMap<Integer, Node> nodes){
+	 */
+	public void drawNodes(HashMap<Integer, Node> nodes) {
 		this.getChildren().remove(nodeCircles);
-		//this.nodeCircles = new AnchorPane();
+		// this.nodeCircles = new AnchorPane();
 		this.id_circle = new HashMap<>();
 
-
-
-		//nodeCircles.setMouseTransparent(true);
-		//nodeCircles.setPickOnBounds(false);
-		//this.getChildren().add(nodeCircles);
-		nodes.forEach((k,v) -> {
+		// nodeCircles.setMouseTransparent(true);
+		// nodeCircles.setPickOnBounds(false);
+		// this.getChildren().add(nodeCircles);
+		nodes.forEach((k, v) -> {
 			Circle circle = createCircle(v);
 			id_circle.put(k, circle);
 			this.getChildren().add(circle); /* adding directly to stackpane */
 		});
 	}
 
+	// This draws all the edges between the circles
+	public void drawEdges(HashMap<Integer, Node> nodes) {
+		this.lines = new ArrayList<Line>();
 
+		ArrayList<Integer> nodeKeyList = new ArrayList<Integer>();
 
+		nodes.forEach((k, v) -> {
+			// Add the node to the arrayList to avoid drawing double edges
+			nodeKeyList.add(k);
 
+			// Get the x & y for the main node
+			double mainX = v.getX();
+			double mainY = v.getY();
 
+			v.getAdjacencies().forEach(e -> {
+				Integer nextKey = e.getTarget();
+				if (!nodeKeyList.contains(nextKey)) {
+					// Get the x & y for each of it's children
+					double subX = nodes.get(e.getTarget()).getX();
+					double subY = nodes.get(e.getTarget()).getY();
 
-	private Circle createCircle(Node v){
+					// Draw the line
+					Line line = new Line();
+					line.setStartX(mainX);
+					line.setStartY(mainY);
+					line.setEndX(subX);
+					line.setEndY(subY);
 
-		double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
+					createLine(line, v, nodes.get(e.getTarget()));
+
+					line.setStroke(Color.web("#00CCFF", 0.7));
+					line.setStrokeWidth(3);
+					// line.setStrokeDashOffset(5);
+					// line.getStrokeDashArray().addAll(2d, 7d);
+
+					// Add it to array list
+					lines.add(line);
+					this.getChildren().add(line);
+				}
+			});
+
+		});
+
+	}
+
+	private Circle createCircle(Node v) {
+
+		// the nodes currently have way too small X / Ys - later we'll need to
+		// somehow scale
+		double x = v.getX();
 		double y = v.getY();
 		Circle circle = new Circle(x, y, 5);
 		normal(circle);
@@ -129,12 +185,11 @@ public class MapVisual extends Pane {
 				last = (Color) circle.getFill();
 				lastStroke = (Color) circle.getStroke();
 				highlight(circle, Color.GOLD, Color.BLACK);
-				//TODO: POPOVER FOR NAME HERE
+				// TODO: POPOVER FOR NAME HERE
 				/*
-				PopOver popOver = new PopOver();
-				popOver.show(circle);
-				popOver.setContentNode(new Text(v.toString()));
-				*/
+				 * PopOver popOver = new PopOver(); popOver.show(circle);
+				 * popOver.setContentNode(new Text(v.toString()));
+				 */
 			}
 		});
 
@@ -147,35 +202,51 @@ public class MapVisual extends Pane {
 
 		});
 
-
-		//when the mouse clicks a node change color!
-		//depending on the PHASE OF THE MBT, DO SOMETHING!
+		// when the mouse clicks a node change color!
+		// depending on the PHASE OF THE MBT, DO SOMETHING!
 		circle.setOnMouseClicked(e -> {
-			if (MAP){
-				//do nothing
-			} else if (NODE){
-				if (!controller.SELECTED){//no node is currently selected
+			if (e.getButton() == MouseButton.PRIMARY) {
+				if(e.getClickCount() >= 2){
+					// set selected node to null
+					// Do special case to enter node info
+					// Change colour
+				} else {
+					// if( current selected node != null && current selected node != this node){
+					//		add edge from this node to the selected node (both ways)
+					// else {
+					//		Set this node as the selected node
+					// }
+					// update colour
+				}
+			} else if (e.getButton() == MouseButton.SECONDARY) {
+				// delete node
+				// delete edges in both directions
+			}
+
+			if (MAP) {
+				// do nothing
+			} else if (NODE) {
+				if (!controller.SELECTED) {// no node is currently selected
 					controller.SELECTED = true;
 					controller.selectedNode = v;
 					selected(circle);
-				} else if (controller.SELECTED && v.getID() == controller.selectedNode.getID()){
+				} else if (controller.SELECTED && v.getID() == controller.selectedNode.getID()) {
 					deselect(v.getID());
 				}
-			}else if (EDGE){
-				if (!controller.SELECTED){//no node is currently selected
+			} else if (EDGE) {
+				if (!controller.SELECTED) {// no node is currently selected
 					controller.SELECTED = true;
 					controller.selectedNode = v;
 					selected(circle);
-				} else if (controller.SELECTED && v.getID() == controller.selectedNode.getID()){
+				} else if (controller.SELECTED && v.getID() == controller.selectedNode.getID()) {
 					deselect(v.getID());
 					controller.resetPotentialEdges();
-				} else {//controller selected
+				} else {// controller selected
 					highlight(circle, Color.FIREBRICK, Color.WHITE);
 					controller.addPotentialEdge(v);
 				}
 			}
 		});
-
 
 		circle.setOnMousePressed(e -> {
 			if (MAP) {
@@ -197,15 +268,63 @@ public class MapVisual extends Pane {
 			}
 		});
 
-
 		return circle;
+	}
+
+	private Line createLine(Line line, Node nodeA, Node nodeB) {
+
+		line.setStroke(Color.web("#00CCFF", 0.7));
+		line.setStrokeWidth(3);
+
+		line.setOnMouseEntered(e -> {
+			line.setStroke(Color.web("#EE0000", 0.7));
+		});
+
+		line.setOnMouseExited(e -> {
+			line.setStroke(Color.web("#00CCFF", 0.7));
+		});
+
+		line.setOnMouseClicked(e -> {
+			if (e.getButton() == MouseButton.SECONDARY) {
+				// Remove the line from the animation locations
+				this.getChildren().remove(line);
+				this.lines.remove(line);
+
+				// Remove the edge from each node
+				Edge edgeToDelete = null;
+
+				for (Edge edge : nodeA.getAdjacencies()) {
+					if (edge.getTarget() == nodeB.getID()) {
+						edgeToDelete = edge;
+					}
+				}
+
+				if (edgeToDelete != null) {
+					nodeA.getAdjacencies().remove(edgeToDelete);
+				}
+
+				edgeToDelete = null;
+
+				for (Edge edge : nodeB.getAdjacencies()) {
+					if (edge.getTarget() == nodeA.getID()) {
+						edgeToDelete = edge;
+					}
+				}
+
+				if (edgeToDelete != null) {
+					nodeB.getAdjacencies().remove(edgeToDelete);
+				}
+			}
+		});
+
+		return null;
 	}
 
 	/**
 	 *
 	 * @param id:
-     */
-	public void deselect(int id){
+	 */
+	public void deselect(int id) {
 		controller.SELECTED = false;
 		controller.selectedNode = null;
 		this.last = Color.BLUE;
@@ -214,15 +333,15 @@ public class MapVisual extends Pane {
 		normal(id_circle.get(id));
 	}
 
-	private void selected(Circle circle){
+	private void selected(Circle circle) {
 
-		lastC = (Color)circle.getFill();
-		lastStrokeC = (Color)circle.getStroke();
+		lastC = (Color) circle.getFill();
+		lastStrokeC = (Color) circle.getStroke();
 		highlight(circle, Color.GOLD, Color.RED);
 		circle.setRadius(7.5);
 	}
 
-	private void highlight(Circle c, Color color, Color colorStroke ) {
+	private void highlight(Circle c, Color color, Color colorStroke) {
 		c.setFill(color);
 		c.setStroke(colorStroke);
 		c.setStrokeWidth(1);
@@ -235,18 +354,20 @@ public class MapVisual extends Pane {
 	}
 
 	private void highlightAll() {
-		id_circle.forEach((k,v) -> {
+		id_circle.forEach((k, v) -> {
 			highlight((Circle) v, last, lastStroke);
 
 		});
 
 	}
+
 	private void hideAll() {
-		id_circle.forEach((k,v) -> {
+		id_circle.forEach((k, v) -> {
 			normal(v);
 		});
 	}
-	private void set_up_background(){
+
+	private void set_up_background() {
 		default_background = new Rectangle(width, height);
 		default_background.setFill(Color.DARKBLUE);
 		default_background.setOpacity(.2);
