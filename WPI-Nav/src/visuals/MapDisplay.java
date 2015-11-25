@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
-import logic.Node;
+import logic.INode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +41,7 @@ public class MapDisplay extends Pane {
 
     private boolean HIGLIGHTED = false;
 
-    private ArrayList<Node> path; //last set path
+    private ArrayList<INode> path; //last set path
 
     /**
      * Constructor
@@ -136,7 +136,7 @@ public class MapDisplay extends Pane {
      * Show path of nodes
      *
      */
-    public void showPath(ArrayList<Node> path){
+    public void showPath(ArrayList<INode> path){
         this.getChildren().removeAll(lines);//// TODO: 11/18/15 test this
         this.path = path;
         //hideAll();
@@ -154,7 +154,7 @@ public class MapDisplay extends Pane {
     }
 
 
-    public void drawPaths(ArrayList<Node> pathNodes){
+    public void drawPaths(ArrayList<INode> pathNodes){
         if (pathNodes.size() > 0){
             double coordX = pathNodes.get(0).getX();
             double coordY = pathNodes.get(0).getY();
@@ -192,7 +192,7 @@ public class MapDisplay extends Pane {
      * Draws the nodes given on the map
      * @param nodes
      */
-    public void drawNodes(HashMap<Integer, Node> nodes){
+    public void drawNodes(HashMap<Integer, INode> nodes){
         this.id_circle = new HashMap<>();
 
         nodes.forEach((k,v) -> {
@@ -203,7 +203,7 @@ public class MapDisplay extends Pane {
     }
 
 
-    private Circle createCircle(Node v){
+    private Circle createCircle(INode v){
 
         double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
         double y = v.getY();

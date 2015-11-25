@@ -1,41 +1,44 @@
 package MapBuilder;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import visuals.Inputs;
+//TODO Fix this file
 
+/*
 public class MapBuilderDisplay extends HBox {
-    /* constants */
+    */
+/* constants *//*
+
     private static final double GAP = 5;
 
-    /* variables */
+    */
+/* variables *//*
+
     private double height;
     private double width;
     private double input_width;
 
-    /* visual forms */
+    */
+/* visual forms *//*
+
     VBox options;
     StackPane map_zone;
     public Inputs chooseMap;
 
 
-    /* options */
+    */
+/* options *//*
+
     public VBox mapMenu;
     public VBox nodeMenu;
     public VBox edgeMenu;
 
-    /* map */
+    */
+/* map *//*
+
     MapVisual mapvisual;
 
-    /* controller */
+    */
+/* controller *//*
+
     MapBuilderController controller;
 
 
@@ -344,4 +347,5 @@ public class MapBuilderDisplay extends HBox {
 
     }
 }
+*/
 

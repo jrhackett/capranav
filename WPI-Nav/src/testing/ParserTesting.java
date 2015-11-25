@@ -13,7 +13,8 @@ import java.util.HashMap;
  * Created by Henry on 11/15/2015.
  */
 public class ParserTesting {
-    Parser testParser1;
+    //TODO Fix the instances of Node pls
+    /*Parser testParser1;
     Parser testParser2;
     Node node1, node2;
     Graph graph;
@@ -32,7 +33,7 @@ public class ParserTesting {
         nodes.put(1, node2);
 
         graph = new Graph(nodes);
-    }
+    }*/
 /*
     @Test
     public void fromFileTest1() throws Exception{

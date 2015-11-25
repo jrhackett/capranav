@@ -23,10 +23,10 @@ public class Controller extends Application {
     private Display myDisplay;
 
     /* information variables */
-    public ArrayList<Node> pathNodes;        /* this is set then used to get instructions from logic.Directions */
+    public ArrayList<INode> pathNodes;        /* this is set then used to get instructions from logic.Directions */
 
     /* nodes and graphs */
-    private HashMap<Integer, Node> nodes;    /* all the nodes */
+    private HashMap<Integer, INode> nodes;    /* all the nodes */
     private Maps maps;                       /* information of the maps */
     private logic.Map currentMap;            /* current map being used */
 
@@ -35,8 +35,8 @@ public class Controller extends Application {
     public boolean FLAG = true;
 
 
-    public logic.Node startNode;
-    public logic.Node endNode;
+    public logic.INode startNode;
+    public logic.INode endNode;
 
 
     @Override
@@ -56,6 +56,7 @@ public class Controller extends Application {
 
 		/* basic layout */
         //s.initStyle(StageStyle.UNDECORATED);  // <-- removes the top part of the app close/open
+
         s.setResizable(true);
        // s.setTitle("CapraNav");
 
@@ -92,7 +93,7 @@ public class Controller extends Application {
 
     }
 
-    public void nodeFromMapHandler(Node n){
+    public void nodeFromMapHandler(INode n){
         //check if we have a start or false
         if (myDisplay.start.getValue() == null){
             //if (validateNotEquality(n, (Node)myDisplay.start.getValue())) {
@@ -114,7 +115,7 @@ public class Controller extends Application {
                 this.endNode = n;
           //  }
         } else if (!FIRST){
-            if(validateNotEquality(n,(Node)myDisplay.start.getValue())) {
+            if(validateNotEquality(n,(INode)myDisplay.start.getValue())) {
                 //no start, thus -> set it to n
                 this.FLAG = false;
                 myDisplay.start.addNode(n);//// TODO: 11/18/15
@@ -126,7 +127,7 @@ public class Controller extends Application {
             }
             //myDisplay.mapDisplay.mapDescriptor.setText("Refresh to Click and Choose");
         } else {
-            if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
+            if(validateNotEquality(n,(INode)myDisplay.end.getValue())) {
                 this.FLAG = false;
                 myDisplay.end.addNode(n);//// TODO: 11/18/15  
                 myDisplay.end.setValue(n);
@@ -138,7 +139,7 @@ public class Controller extends Application {
         }
     }
 
-    private boolean validateNotEquality(Node n, Node m){
+    private boolean validateNotEquality(INode n, INode m){
         if (n.getID() == m.getID()){
             return false;
         } else {
@@ -147,7 +148,7 @@ public class Controller extends Application {
     }
 
 
-    public ArrayList<logic.Node> getPathNodes(logic.Node s, logic.Node f){
+    public ArrayList<logic.INode> getPathNodes(logic.INode s, logic.INode f){
         this.pathNodes = AStarShortestPath.AStarSearch(s,f, nodes);
         return pathNodes;
     }
@@ -164,12 +165,13 @@ public class Controller extends Application {
     /**
      * return the HashMap of Nodes that have NAMES!!
      */
-    public HashMap<Integer, Node> getNamedNodesOfMap(){
-        HashMap<Integer, Node> value = getNodesOfMap(this.currentMap.getID());
+    public HashMap<Integer, INode> getNamedNodesOfMap(){
+        HashMap<Integer, INode> value = getNodesOfMap(this.currentMap.getID());
 
         nodes.forEach((k,v) -> {
             if (k !=0) {
-                if (v.getName().equals("ENTER TEXT") || v.getName().equals("")) {
+                //if (v.getName().equals("ENTER TEXT") || v.getName().equals("")) {
+                if(!v.isInteresting()){
                     value.remove(k, v);}}});
         return  value;
     }
@@ -181,9 +183,9 @@ public class Controller extends Application {
      * @param id
      * @return
      */
-    public HashMap<Integer, Node> getNodesOfMap(int id){
+    public HashMap<Integer, INode> getNodesOfMap(int id){
 
-        HashMap<Integer, Node> value = new HashMap<>();
+        HashMap<Integer, INode> value = new HashMap<>();
 
         nodes.forEach((k,v) -> {
             if(v.getMap_id() == id){
@@ -203,7 +205,7 @@ public class Controller extends Application {
         if (this.startNode != null && this.endNode != null){
             //logic.Node s = (logic.Node)this.start.getValue();
             //logic.Node e = (logic.Node)this.end.getValue();
-            ArrayList<logic.Node> path = this.getPathNodes(startNode, endNode);
+            ArrayList<logic.INode> path = this.getPathNodes(startNode, endNode);
             ArrayList<String> instructions = this.getInstructions();//pass correct instructions
             myDisplay.setInstructions(path, instructions);
             myDisplay.mapDisplay.showPath(path);

@@ -2,26 +2,26 @@ package logic;
 
 import java.util.ArrayList;
 
-public class Node {
+public abstract class Node implements INode{
 
-	private String name;
 	private int id;
 	private int map_id;
 	private double x_coord;
 	private double y_coord;
 	private double z_coord;
+	private double x_univ;
+	private double y_univ;
+	private double z_univ;
 	private double g_scores;
 	private double h_scores;
 	private double f_scores = 0;
 	private ArrayList<Edge> adjacencies;
-	private Node parent;
+	private INode parent;
 
 	/**
 	 * Nodes are used to represent a location and to hold the Edges to all other
 	 * locations
-	 * 
-	 * @param val:Name
-	 *            of the node
+	 *
 	 * @param id:
 	 *            identification number of the node
 	 * @param x:
@@ -32,19 +32,20 @@ public class Node {
 	 *            z-coordinate of the node
 	 * @return void
 	 */
-	public Node(String val, int id, double x, double y, double z) {
-		this.name = val;
+	public Node(int id, double x, double y, double z, double x_univ, double y_univ, double z_univ) {
 		this.id = id;
 		this.x_coord = x;
 		this.y_coord = y;
 		this.z_coord = z;
+		this.x_univ = x_univ;
+		this.y_univ = y_univ;
+		this.z_univ = z_univ;
 		this.adjacencies = new ArrayList<Edge>();
 	}
 
 	/**
 	 * Alternate Constructor: includes map_id
 	 * Nodes are used to represent a location and to hold the Edges to all other locations
-	 * @param val: Name of the node
 	 * @param id: identification number of the node
 	 * @param x: x-coordinate of the node
 	 * @param y: y-coordinate of the node
@@ -52,24 +53,18 @@ public class Node {
 	 * @param map_id: map id number
 	 * @return void
 	 */
-	public Node(String val, int id, double x, double y, double z, int map_id) {
-		this.name = val;
+	public Node(int id, double x, double y, double z, double x_univ, double y_univ, double z_univ, int map_id) {
 		this.id = id;
 		this.x_coord = x;
 		this.y_coord = y;
 		this.z_coord = z;
+		this.x_univ = x_univ;
+		this.y_univ = y_univ;
+		this.z_univ = z_univ;
 		this.map_id = map_id;
 		this.adjacencies = new ArrayList<Edge>();
 	}
 
-	/**
-	 * getName is used to return the name of the node
-	 * @param
-	 * @return String: name of the node
-	 */
-	public String getName() {
-		return this.name;
-	}
 
 	/**
 	 * getID is used to return the id of the node
@@ -89,7 +84,6 @@ public class Node {
 	public void setID(int id) {
 		this.id = id;
 	}
-
 
 
 	/**
@@ -189,7 +183,7 @@ public class Node {
 	 * 
 	 * @return Node: parent of the node
 	 */
-	public Node getParent() {
+	public INode getParent() {
 		return parent;
 	}
 
@@ -198,7 +192,7 @@ public class Node {
 	 * 
 	 * @return Node: parent of the node
 	 */
-	public void setParent(Node parent) {
+	public void setParent(INode parent) {
 		this.parent = parent;
 	}
 
@@ -212,7 +206,7 @@ public class Node {
 	 * @return String: a string describing the node
 	 */
 	//public String toString() { return String.format("%s: %f, %f, %f\n", this.name, this.x_coord, this.y_coord, this.z_coord);}
-	public String toString() {return this.name;}
+	public String toString() {return String.format("%d\n", this.id);}
 
 	/**
 	 * getMap_id is used to get the map id of the node
@@ -231,17 +225,35 @@ public class Node {
 		this.map_id = map_id;
 	}
 
-	/**
-	 * sets the name of the node
-	 * @param name
-     */
-	public void setName(String name) {this.name = name;}
+	public double getXUniv() {
+		return this.x_univ;
+	}
 
+	public double getY_univ() {
+		return y_univ;
+	}
 
-	/**
-	 * @warning do not generate hashcode/equals, it creates a Stack Overflow in
-	 *          JUnit
-	 */
+	public double getZ_univ() {
+		return z_univ;
+	}
 
+	public void setX_univ(double x_univ) {
+		this.x_univ = x_univ;
+	}
 
+	public void setY_univ(double y_univ) {
+		this.y_univ = y_univ;
+	}
+
+	public void setZ_univ(double z_univ) {
+		this.z_univ = z_univ;
+	}
+
+	public boolean isInteresting() {
+		return false;
+	}
+
+	public boolean isTransition() {
+		return false;
+	}
 }

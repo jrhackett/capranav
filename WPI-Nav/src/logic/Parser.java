@@ -20,16 +20,16 @@ public class Parser
 	private JsonWriter writer;
 	private JsonStreamParser parser;
 
-	public static void main(String args[]) {
-		Parser test = new Parser("nodes.json");
-		HashMap<Integer, Node> nodes = new HashMap<Integer, Node>();
-		Node node1 = new Node("five", 1, 1, 1, 1, 1);
-		Node node2 = new Node("two", 2, 2, 2, 2, 2);
-		nodes.put(0, node1);
-		nodes.put(1, node2);
-		Graph graph = new Graph(nodes);
-		test.toFile(graph);
-	}
+//	public static void main(String args[]) {
+//		Parser test = new Parser("nodes.json");
+//		HashMap<Integer, Node> nodes = new HashMap<Integer, Node>();
+//		Node node1 = new Node("five", 1, 1, 1, 1, 1);
+//		Node node2 = new Node("two", 2, 2, 2, 2, 2);
+//		nodes.put(0, node1);
+//		nodes.put(1, node2);
+//		Graph graph = new Graph(nodes);
+//		test.toFile(graph);
+//	}
 
     /**
      * Parser is used to communicate between the database and the rest of the program
@@ -50,7 +50,7 @@ public class Parser
      * @param node: Node to add to the database
      * @return void
      */
-	public void toFile(Node node) {
+	public void toFile(INode node) {
 		try { //Create a JsonWriter to append the file with graph nodes
 			writer = new JsonWriter(new FileWriter(filename, true));
 		}
@@ -58,7 +58,7 @@ public class Parser
 			e.printStackTrace();
 			return;
 		}
-		new Gson().toJson(node, Node.class, writer); //Write to file
+		new Gson().toJson(node, INode.class, writer); //Write to file
 		close(); //Close the writer
 	}
 
@@ -81,9 +81,9 @@ public class Parser
 		Gson gson = new Gson();
 		if(this.filename.equals("nodes.json"))
 		{
-			Collection<Node> nodes = collection.get();
-			for(Node n : nodes) {
-				gson.toJson(n, Node.class, writer); //Write to file
+			Collection<INode> nodes = collection.get();
+			for(INode n : nodes) {
+				gson.toJson(n, INode.class, writer); //Write to file
 			}
 		}
 		else {
@@ -103,10 +103,10 @@ public class Parser
 		Gson gson = new Gson();
 
 		if(this.filename.equals("nodes.json")) {
-			HashMap<Integer, Node> graph = new HashMap<Integer, Node>();
-			Node temp;
+			HashMap<Integer, INode> graph = new HashMap<Integer, INode>();
+			INode temp;
 			while(parser.hasNext()){
-				temp = gson.fromJson(parser.next(), Node.class);
+				temp = gson.fromJson(parser.next(), Room.class);	//TODO fix this room.class thing
 				graph.put(temp.getID(), temp); //Add Node to the map under its ID
 			}
 			return new Graph(graph);
