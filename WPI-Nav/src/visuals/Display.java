@@ -266,7 +266,7 @@ public class Display {
 	private void handleInput(Inputs v, boolean START){
 		if (v.getValue() != null && !v.getValue().toString().isEmpty()) {
 			try {
-				logic.Node node = (logic.Node) v.getValue();
+				logic.INode node = (logic.INode) v.getValue();
 				if (START) controller.startNode = node;
 				else controller.endNode = node;
 
@@ -498,7 +498,7 @@ public class Display {
 	/**
 	 * Call to set the instructions
 	 */
-	public void setInstructions(ArrayList<logic.Node> nodes, ArrayList<String> instructions){
+	public void setInstructions(ArrayList<logic.INode> nodes, ArrayList<String> instructions){
 		ObservableList<Instructions> data = FXCollections.observableArrayList();
 
 		for (int i = 0; i < nodes.size(); i++){

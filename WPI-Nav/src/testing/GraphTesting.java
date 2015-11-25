@@ -13,7 +13,7 @@ import java.util.LinkedList;
  * Created by Henry on 11/15/2015.
  */
 public class GraphTesting {
-    Graph testGraph1;
+   /* Graph testGraph1;
     Graph testGraph2;
     Graph freshGraph;
     HashMap<Integer, Node> hash1;
@@ -63,7 +63,7 @@ public class GraphTesting {
         assertEquals("getNodes on a non empty graph returned incorrect value", hash1, testGraph1.getNodes());
     }
 
-    /*
+    *//*
     @Test
     public void getTest1(){
         assertEquals("get on an empty graph returned incorrect value", new HashMap<Node>(), freshGraph.get());

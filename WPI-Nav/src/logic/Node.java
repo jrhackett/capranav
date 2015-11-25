@@ -16,7 +16,7 @@ public abstract class Node implements INode{
 	private double h_scores;
 	private double f_scores = 0;
 	private ArrayList<Edge> adjacencies;
-	private Node parent;
+	private INode parent;
 
 	/**
 	 * Nodes are used to represent a location and to hold the Edges to all other
@@ -183,7 +183,7 @@ public abstract class Node implements INode{
 	 * 
 	 * @return Node: parent of the node
 	 */
-	public Node getParent() {
+	public INode getParent() {
 		return parent;
 	}
 
@@ -192,7 +192,7 @@ public abstract class Node implements INode{
 	 * 
 	 * @return Node: parent of the node
 	 */
-	public void setParent(Node parent) {
+	public void setParent(INode parent) {
 		this.parent = parent;
 	}
 

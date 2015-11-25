@@ -12,10 +12,14 @@ import logic.Node;
 
 import java.util.HashMap;
 
+//TODO Fix this file
 //The visual component of the maps and the Nodes
 
+/*
 public class MapVisual extends Pane {
-	/* Constants */
+	*/
+/* Constants *//*
+
 	private static final double BORDER = 7;
 	private double height;
 	private double width;
@@ -26,17 +30,23 @@ public class MapVisual extends Pane {
 
 
 
-	/* Data Structures */
+	*/
+/* Data Structures *//*
+
 	private HashMap<Integer, Circle> id_circle;
 	private MapBuilderController controller;
 
-	/* Visuals */
+	*/
+/* Visuals *//*
+
 	private Image mapImage;
 	private ImageView mapView;
 	private Rectangle default_background;
 	private AnchorPane nodeCircles;
 
-	/* COLORS */
+	*/
+/* COLORS *//*
+
 	private boolean HIGHLIGHTED = false;
 	private boolean CLICKED = false;
 	private Color last = Color.TRANSPARENT;
@@ -45,8 +55,12 @@ public class MapVisual extends Pane {
 	private Color lastStrokeC = Color.TRANSPARENT;
 
 
-	/* this will be used to put together the map */
-	/* overlaying the nodes and fixed map image should work */
+	*/
+/* this will be used to put together the map *//*
+
+	*/
+/* overlaying the nodes and fixed map image should work *//*
+
 	public MapVisual(MapBuilderController controller){
 		super();
 		this.controller = controller;
@@ -57,12 +71,14 @@ public class MapVisual extends Pane {
 		this.getChildren().addAll(); //nodeCircles
 	}
 
-	/**
+	*/
+/**
 	 * Given a MAP_NAME -> ask Controller for map name and nodes for the map
 	 * Add image to map
 	 * Then add the Nodes
 	 * @param map
-	 */
+	 *//*
+
 	public void setMap(logic.Map map){
 		System.out.println("MAP PATH:  " + map.getPath());
 		this.getChildren().remove(mapView);
@@ -91,10 +107,12 @@ public class MapVisual extends Pane {
 		});
 	}
 
-	/**
+	*/
+/**
 	 * Draws the nodes given on the map
 	 * @param nodes
-     */
+     *//*
+
 	public void drawNodes(HashMap<Integer, Node> nodes){
 		this.getChildren().remove(nodeCircles);
 		//this.nodeCircles = new AnchorPane();
@@ -108,7 +126,9 @@ public class MapVisual extends Pane {
 		nodes.forEach((k,v) -> {
 			Circle circle = createCircle(v);
 			id_circle.put(k, circle);
-			this.getChildren().add(circle); /* adding directly to stackpane */
+			this.getChildren().add(circle); */
+/* adding directly to stackpane *//*
+
 		});
 	}
 
@@ -119,7 +139,9 @@ public class MapVisual extends Pane {
 
 	private Circle createCircle(Node v){
 
-		double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
+		double x = v.getX();  */
+/* the nodes currently have way too small X / Y s - later we'll need to somehow scale *//*
+
 		double y = v.getY();
 		Circle circle = new Circle(x, y, 5);
 		normal(circle);
@@ -130,11 +152,13 @@ public class MapVisual extends Pane {
 				lastStroke = (Color) circle.getStroke();
 				highlight(circle, Color.GOLD, Color.BLACK);
 				//TODO: POPOVER FOR NAME HERE
-				/*
+				*/
+/*
 				PopOver popOver = new PopOver();
 				popOver.show(circle);
 				popOver.setContentNode(new Text(v.toString()));
-				*/
+				*//*
+
 			}
 		});
 
@@ -201,10 +225,12 @@ public class MapVisual extends Pane {
 		return circle;
 	}
 
-	/**
+	*/
+/**
 	 *
 	 * @param id:
-     */
+     *//*
+
 	public void deselect(int id){
 		controller.SELECTED = false;
 		controller.selectedNode = null;
@@ -254,3 +280,4 @@ public class MapVisual extends Pane {
 		default_background.setArcWidth(7);
 	}
 }
+*/

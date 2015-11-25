@@ -14,7 +14,7 @@ public class Inputs extends ComboBox {
 	private double WIDTH;
 	private String initial;
 	ObservableList<logic.Map> dataMap;
-	ObservableList<logic.Node> dataNode;
+	ObservableList<logic.INode> dataNode;
 
 	@SuppressWarnings("unchecked") /* probably should remove this */
 	public Inputs(String s,double WIDTH ){
@@ -79,13 +79,13 @@ public class Inputs extends ComboBox {
 	 * @param nodes
 	 * @return
 	 */
-	public ObservableList<logic.Node> convertNodes(HashMap<Integer, logic.Node> nodes) {
+	public ObservableList<logic.INode> convertNodes(HashMap<Integer, logic.INode> nodes) {
 		this.dataNode = FXCollections.observableArrayList();
 		nodes.forEach((k,v) -> {dataNode.add(v);});
 		return dataNode.sorted();
 	}
 
-	public void addNode(logic.Node n){
+	public void addNode(logic.INode n){
 		this.dataNode.add(n);
 	}
 

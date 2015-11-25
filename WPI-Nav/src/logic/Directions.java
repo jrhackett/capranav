@@ -16,7 +16,7 @@ public class Directions {
 	 * @param aStarPath
 	 * @return
 	 */
-	public static ArrayList<String> stepByStep(ArrayList<Node> aStarPath, HashMap<Integer, Map> maps) {
+	public static ArrayList<String> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, Map> maps) {
 		// TODO: Implement skipping of straight path nodes
 
 		ArrayList<String> directions = new ArrayList<String>();
@@ -83,9 +83,9 @@ public class Directions {
 		directions.add("Face " + anglePhrase + ", and walk " + distPhrase);
 
 		for (int i = 0; i < aStarPath.size() - 2; i++) {
-			Node prev = aStarPath.get(i);
-			Node turn = aStarPath.get(i + 1);
-			Node next = aStarPath.get(i + 2);
+			INode prev = aStarPath.get(i);
+			INode turn = aStarPath.get(i + 1);
+			INode next = aStarPath.get(i + 2);
 
 			// get the distance to the next node and angle
 			dist = Math.sqrt(Math.pow((turn.getX() - next.getX()), 2) + Math.pow((turn.getY() - next.getY()), 2));
@@ -137,7 +137,7 @@ public class Directions {
 	 *            Node walking to after turn
 	 * @return angle in radians
 	 */
-	private static double getAngle(Node previous, Node turn, Node next) {
+	private static double getAngle(INode previous, INode turn, INode next) {
 		double theta1;
 		double theta2;
 		double angle;

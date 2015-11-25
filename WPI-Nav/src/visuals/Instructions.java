@@ -3,17 +3,17 @@ package visuals;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import logic.Node;
+import logic.INode;
 
 import java.util.ArrayList;
 
 public class Instructions {
 	private String instruction_string;
 	private int distance;
-	Node end;
-	Node begin;
+	INode end;
+	INode begin;
 	
-	public Instructions(String s, logic.Node d){
+	public Instructions(String s, logic.INode d){
 		this.instruction_string = s;
 		this.end = d;
 	}

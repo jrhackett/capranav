@@ -92,14 +92,14 @@ public interface INode {
      *
      * @return Node: parent of the node
      */
-    public Node getParent();
+    public INode getParent();
 
     /**
      * setParent is used to return the parent of this node
      *
      * @return Node: parent of the node
      */
-    public void setParent(Node parent);
+    public void setParent(INode parent);
 
 
     public void addEdge(Edge edge);
