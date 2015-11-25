@@ -266,7 +266,7 @@ public class Display {
 		//AnchorPane.setTopAnchor(infoView, 3 * EDGE + GAP + 5); //<--- TODO notice this, these lines break a lot of stuff, no idea why
 		//AnchorPane.setLeftAnchor(infoView, GAP);
 
-		AnchorPane.setBottomAnchor(gearsView, 0.0 + GAP * 2);//TODO these will change with svg
+		AnchorPane.setBottomAnchor(gearsView, GAP * 2);//TODO these will change with svg
 		AnchorPane.setLeftAnchor(gearsView, GAP * 2);
 
 		/*****************************************************************/
@@ -495,7 +495,6 @@ public class Display {
 
         mapPane.setAlignment(Pos.CENTER);
 
-
 		map.setMinWidth(MAP_WIDTH);
 		map.setPrefWidth(MAP_WIDTH+MAP_BORDER*2);
 
@@ -539,9 +538,14 @@ public class Display {
         start.setId("input");
         end.setId("input");
 
+        /** Add All Interesting Nodes to the List **/
+
+
         VBox inputs = new VBox();
         inputs.setSpacing(GAP);
         inputs.getChildren().addAll(start, end);
+
+
 
         return inputs;
     }

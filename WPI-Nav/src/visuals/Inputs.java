@@ -15,6 +15,7 @@ public class Inputs extends ComboBox {
 	private String initial;
 	ObservableList<logic.Map> dataMap;
 	ObservableList<logic.Node> dataNode;
+	ObservableList<InputItem> data;
 
 	@SuppressWarnings("unchecked") /* probably should remove this */
 	public Inputs(String s,double WIDTH ){
@@ -63,6 +64,34 @@ public class Inputs extends ComboBox {
 		*/
 	}
 
+
+
+
+
+	/****************************************************************************************************************
+			ConvertMaps and ConvertNodes will no longer be used - we need to convert them together.
+	 ****************************************************************************************************************/
+
+	public ObservableList<InputItem> createInputItems(HashMap<Integer, logic.Node> nodes, HashMap<Integer, logic.Map> maps){
+		this.data = FXCollections.observableArrayList();
+		nodes.forEach((k,v) -> {
+			//for each of its names
+
+
+			//for each of the nodes's maps
+					//create an item
+
+			//TODO consider what we want for floor level etc - probably for rooms we just want the building name
+			//TODO 	and if its a bathroom we want to grab the floor from the map
+
+
+
+		});
+
+		return data;
+	}
+
+
 	/**
 	 * Converts a HashMap of maps to an ObserableList
 	 * @param maps
@@ -84,6 +113,9 @@ public class Inputs extends ComboBox {
 		nodes.forEach((k,v) -> {dataNode.add(v);});
 		return dataNode.sorted();
 	}
+
+
+
 
 	public void addNode(logic.Node n){
 		this.dataNode.add(n);

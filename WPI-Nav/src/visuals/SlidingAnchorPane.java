@@ -11,7 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
 
-class SlidingAnchorPane extends AnchorPane {
+public class SlidingAnchorPane extends AnchorPane {
 
     private javafx.scene.control.Button controlButton = new javafx.scene.control.Button();
 
