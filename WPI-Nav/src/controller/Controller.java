@@ -15,25 +15,29 @@ import java.util.HashMap;
  *            And control the application
  */
 public class Controller extends Application {
-    /* visual constants */
-    private static final Double WINDOW_WIDTH = 1400.0;
-    private static final Double WINDOW_HEIGHT = 700.0;
 
     /* visual component */
     private Display myDisplay;
 
     /* information variables */
-    public ArrayList<INode> pathNodes;        /* this is set then used to get instructions from logic.Directions */
+    public ArrayList<INode> pathNodes;       /* this is set then used to get instructions from logic.Directions */
 
     /* nodes and graphs */
-    private HashMap<Integer, INode> nodes;    /* all the nodes */
-    private Maps maps;                       /* information of the maps */
-    private logic.Map currentMap;            /* current map being used */
+    private HashMap<Integer, INode> nodes;   /* all the nodes */
+    private HashMap<Integer, IMap> maps;
+
+    //Maps maps;                       /* information of the maps */
+
+    private Campus campus;
+    private logic.IMap currentMap;            /* current map being used */
+    private HashMap<Integer, Building> buildings;   /* information on organization of floors */
 
     /* switches */
     private boolean FIRST = false; //if the last thing to be set was first
     public boolean FLAG = true;
 
+    private logic.INode tempStart;
+    private logic.INode tempEnd;
 
     public logic.INode startNode;
     public logic.INode endNode;
@@ -66,6 +70,7 @@ public class Controller extends Application {
         s.setScene(display); //sets scene to display
         display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
         s.show();   //shows scene
+        defaultMap();
     }
 
 
@@ -100,13 +105,159 @@ public class Controller extends Application {
     }
 
 
+    /**
+     * This handles the values from the SEARCH BARS
+     * @param id
+     * @param START
+     */
+    public void handleSearchInput(int id, boolean START){
+        if (nodes.containsKey(id) && FLAG){ //The FLAG prevents it from setting it from clicks doubly
+            if (START) startNode = nodes.get(id);
+            else       endNode   = nodes.get(id);
+
+            myDisplay.mapDisplay.setStartNode(id, true);
+
+            if (startNode != null && endNode != null) {
+                findPaths();
+            }
+        }
+    }
+
+    /**
+     * THIS IS POST TEMP NODE CREATION
+     * We are going to either
+     *      A: Set it as the new Start Value
+     *      B: Set it as the new End Value
+     * Then change the value in the boxes
+     *
+     * @param n
+     */
+    public void handleMapClick(INode n){
+        eradicate(tempStart);
+
+        if (!FIRST){ //If the last node we added was the first
+            this.startNode = n;
+
+            if (!nodes.containsKey(n.getID())) {//its temp
+                tempStart = startNode;
+            }
+
+            myDisplay.start.addNode(n, currentMap);
+            myDisplay.start.setValue(n);
+        } else {//Else if the last node we added was the last [note, a lot of this gets wonky when we add midway points, jesus
+
+        }
+        FIRST = !FIRST;
+    }
+
+    public INode createTempRoom(double x, double y){
+        double z;
+        if(currentMap.inside()) {
+           z = ((Floor)currentMap).getFloor() * 15; //ROUGH Z value
+        } else {
+           z = 0;
+        }
+        double x2 = x;//logic.Translate();
+        double y2 = y;
+        double z2 = z;
+
+
+        Room temp = new Room(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near "+ nearestNamedNodeName(x2, y2, z2));
+        int target = nearestNodeID(x2, y2, z2);
+
+        temp.addEdge(new Edge(target, 1.0));
+
+        return temp;
+    }
+
+    /**
+     * Returns the id of the nearest node
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
+    public int nearestNodeID(double x, double y, double z){
+        double distance = Double.MAX_VALUE;
+        INode n = null;
+
+        for(HashMap.Entry<Integer, INode> cursor : nodes.entrySet()){
+            INode v = cursor.getValue();
+                if(Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y)) < distance){
+                    n = v;
+                    distance =Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y));
+                }
+            }
+
+
+        //TODO IF THIS IS TOO BAD WE CAN CHANGE IT
+        return n.getID();
+    }
+
+
+    /**
+     * Returns the name of the nearest node of the location, that is named.
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
+    public String nearestNamedNodeName(double x, double y, double z){
+        double distance = Double.MAX_VALUE;
+        INode n = null;
+
+
+        for(HashMap.Entry<Integer, INode> cursor : nodes.entrySet()){
+            INode v = cursor.getValue();
+            if(v.isInteresting()){
+                if(Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y)) < distance){
+                    n = v;
+                    distance =Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y));
+                }
+            }
+        }
+
+        return ((Interest)n).getName();
+    }
+
+
+    /**
+     * Removes this node from everything
+     * @param n
+     */
+    public void eradicate(INode n){
+        nodes.remove(n);
+        for(Edge e : n.getAdjacencies()){
+            nodes.get(e.getTarget()).removeEdge(n.getID());
+        }
+        myDisplay.start.removeNode(n.getID());
+        myDisplay.start.setValue(null);
+        myDisplay.mapDisplay.removeNode(n.getID());
+    }
+
+
+    public void defaultMap(){
+        currentMap = campus;
+        setCurrentMap(campus.getID());
+        this.myDisplay.mapDisplay.setMap(currentMap);
+
+    }
+
+    /**
+     * For the creation of search bar, get all the names of the building
+     * @param building_id
+     * @return
+     */
+    public ArrayList<String> getBuildingNames(int building_id){
+        return this.buildings.get(building_id).getNames();
+    }
 
 
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void reset(){
-        this.currentMap = new Map();
+        defaultMap(); //TODO CONSIDER THIS
         this.pathNodes = new ArrayList<>();
     }
 
@@ -124,7 +275,7 @@ public class Controller extends Application {
             //if (validateNotEquality(n, (Node)myDisplay.start.getValue())) {
                 //no start, thus -> set it to n
                 this.FLAG = false;
-                myDisplay.start.addNode(n);
+                //myDisplay.start.addNode(n);
                 myDisplay.start.setValue(n);
                 this.FLAG = true;
                 myDisplay.mapDisplay.setStartNode(n.getID(), true);
@@ -133,7 +284,7 @@ public class Controller extends Application {
         } else if (myDisplay.end.getValue() == null){
            // if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
                 this.FLAG = false;
-                myDisplay.end.addNode(n);//// TODO: 11/18/15
+               // myDisplay.end.addNode(n);//// TODO: 11/18/15
                 myDisplay.end.setValue(n);
                 this.FLAG = true;
                 myDisplay.mapDisplay.setStartNode(n.getID(), false);
@@ -143,7 +294,7 @@ public class Controller extends Application {
             if(validateNotEquality(n,(INode)myDisplay.start.getValue())) {
                 //no start, thus -> set it to n
                 this.FLAG = false;
-                myDisplay.start.addNode(n);//// TODO: 11/18/15
+                //myDisplay.start.addNode(n);//// TODO: 11/18/15
                 myDisplay.start.setValue(n);
                 this.FLAG = true;
                 myDisplay.mapDisplay.setStartNode(n.getID(), true);
@@ -154,7 +305,7 @@ public class Controller extends Application {
         } else {
             if(validateNotEquality(n,(INode)myDisplay.end.getValue())) {
                 this.FLAG = false;
-                myDisplay.end.addNode(n);//// TODO: 11/18/15  
+                //myDisplay.end.addNode(n);//// TODO: 11/18/15
                 myDisplay.end.setValue(n);
                 this.FLAG = true;
                 myDisplay.mapDisplay.setStartNode(n.getID(), false);
@@ -183,7 +334,7 @@ public class Controller extends Application {
      * @return an ArrayList<String?
      */
     public ArrayList<String> getInstructions(){
-        return Directions.stepByStep(this.pathNodes, this.maps.getMaps());
+        return Directions.stepByStep(this.pathNodes, this.maps);
     }
 
 
@@ -192,7 +343,6 @@ public class Controller extends Application {
      */
     public HashMap<Integer, INode> getNamedNodesOfMap(){
         HashMap<Integer, INode> value = getNodesOfMap(this.currentMap.getID());
-
         nodes.forEach((k,v) -> {
             if (k !=0) {
                 //if (v.getName().equals("ENTER TEXT") || v.getName().equals("")) {
@@ -244,10 +394,16 @@ public class Controller extends Application {
 
 
     public void setCurrentMap(int id){
-        this.currentMap = maps.getMap(id);
+        this.currentMap = maps.get(id);
     }
 
-    public Maps getMaps(){
+
+    /****************************************************************************************************************
+                                                  PARSING FUNCTIONS
+     ****************************************************************************************************************/
+
+
+    public HashMap<Integer, IMap> getMaps(){
         return this.maps;
     }
 
@@ -264,10 +420,37 @@ public class Controller extends Application {
     /**
      * load maps from file
      */
-    private void mapsFromFile() {
+    /*private void mapsFromFile() {
         Parser parser = new Parser("maps.json");
         this.maps = (Maps)parser.fromFile();
     }
+*/
+
+    private void mapsFromFile() {
+        maps = new HashMap<>();
+        campus = new Campus(0, "wpi-campus-map", 24);
+        maps.put(0, campus);
+
+        //TODO get this functional
+       /*
+        Parser parser = new Parser("campus.json");
+        this.campus = (Campus)parser.fromFile();
+
+        parser = new Parser("floors.json");
+        HashMap<Integer, Floor> floors = ((Floors)parser.fromFile()).getMaps();
+
+        maps.putAll(floors);
+        maps.put(0, campus);
+        */
+    }
+
+
+
+    private void campusFromFile(){
+        Parser parser = new Parser("campus.json");
+        this.campus = (Campus)parser.fromFile();
+    }
+
 
 
 

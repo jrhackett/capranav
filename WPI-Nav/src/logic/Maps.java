@@ -8,30 +8,30 @@ import java.util.HashMap;
  */
 public class Maps implements ICollection {
 
-    HashMap<Integer, Map> maps;
+    HashMap<Integer,IMap> maps;
 
-    public Maps() { this.maps = new HashMap<Integer, Map>(); }
+    public Maps() { this.maps = new HashMap<Integer, IMap>(); }
 
-    public Maps(HashMap<Integer, Map> maps) { this.maps = maps; }
+    public Maps(HashMap<Integer, IMap> maps) { this.maps = maps; }
 
-    public HashMap<Integer, Map> getMaps() {
+    public HashMap<Integer, IMap> getMaps() {
         return this.maps;
     }
 
-    public Collection<Map> get() {
+    public Collection<IMap> get() {
         return this.maps.values();
     }
 
-    public void addMap(Map map) {
+    public void addMap(IMap map) {
         this.maps.put(map.getID(), map);
     }
 
-    public Map getMap(int id) {return this.maps.get(id);}
+    public IMap getMap(int id) {return this.maps.get(id);}
 
     public boolean check(String path) {
         boolean check = true;
         try {
-            for (Map m : this.maps.values()) {
+            for (IMap m : this.maps.values()) {
                 if (m.getPath().equals(path))
                     return false;
             }

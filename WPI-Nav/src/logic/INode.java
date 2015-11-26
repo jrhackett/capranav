@@ -139,7 +139,8 @@ public interface INode {
 
     public boolean isInteresting();
 
-    /** TODO IF THIS IS BAD OO CHANGE IT LATER **/
     public ArrayList<String> getNames();
+
+    public void removeEdge(int id);
 
 }

@@ -1,20 +1,22 @@
 package testing;
-import static org.junit.Assert.assertEquals;
 
+import logic.Campus;
+import logic.IMap;
 import org.junit.Before;
 import org.junit.Test;
-import logic.Map;
+
+import static org.junit.Assert.assertEquals;
 /**
  * Created by Henry on 11/15/2015.
  */
 public class MapTesting {
-    Map newMap;
-    Map copyMap;
+    IMap newMap;
+    IMap copyMap;
 
     @Before
     public void setUp() throws Exception {
-        newMap = new Map(1, 22.5, 21.5, "New Map", "dir/dir/dir", 2.0);
-        copyMap = new Map(newMap);
+        newMap = new Campus(0, "dir/dir/dir", 2.0);
+        copyMap = new Campus(newMap);
     }
 
     @Test

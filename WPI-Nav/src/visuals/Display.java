@@ -529,23 +529,30 @@ public class Display {
     private VBox createInput(){
 
 		/* start */
-        this.start = new Inputs("Search WPI Maps", INPUT_WIDTH);
-        start.setOnAction(e -> handleInput(start, true));
+        this.start = new Inputs("Search WPI Maps", INPUT_WIDTH, controller);
+        start.setOnAction(e -> handleSearchInput(start, true));
 
 		/* end */
-        this.end = new Inputs("For Destination", INPUT_WIDTH);
-        end.setOnAction(e ->handleInput(end, false));
+        this.end = new Inputs("For Destination", INPUT_WIDTH, controller);
+        end.setOnAction(e ->handleSearchInput(end, false));
 
-        start.setId("input");
-        end.setId("input");
+//        start.getStyleClass().add("combo-box");
+
+  //      end.getStyleClass().add("combo-box");
+
+        //start.applyCss();
+        //end.applyCss();
 
         /** Add All Interesting Nodes to the List **/
 
 
         start.createInputItems(this.getNodes(), this.getMaps());
         start.setItems(start.data);
+        //start.getStyleClass().add("combobox");
         end.createInputItems(this.getNodes(), this.getMaps());
         end.setItems(end.data);
+        //end.getStyleClass().add("combobox");
+
 
         AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
         AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
@@ -553,9 +560,6 @@ public class Display {
         VBox inputs = new VBox();
         inputs.setSpacing(GAP);
         inputs.getChildren().addAll(start, end);
-
-
-
 
         return inputs;
     }
@@ -669,8 +673,15 @@ public class Display {
 		}
 	}
 
+    private void handleSearchInput(Inputs v, boolean START){
+        if (v.getValue() != null && !v.getValue().toString().isEmpty())
+            try {
+                controller.handleSearchInput(((InputItem) v.getValue()).getId(), START);
+            } catch (ClassCastException cce){
+                logger.error("INPUT VALUE IS NOT YET A FULL INPUT: ", cce);
+            }
 
-
+    }
 
 
 
@@ -697,7 +708,7 @@ public class Display {
         return controller.getNodes();
     }
 
-    private HashMap<Integer, logic.Map> getMaps(){ return controller.getMaps().getMaps();}
+    private HashMap<Integer, logic.IMap> getMaps(){ return controller.getMaps();}
 
 
 
@@ -794,15 +805,15 @@ public class Display {
 		Label mapDescriptor = new Label("Select a map!");
 		mapDescriptor.setMinWidth(INPUT_WIDTH);
 		mapDescriptor.setMaxWidth(INPUT_WIDTH);
-/*
-		*//* start *//*
-		this.start = new Inputs("Search WPI Maps", INPUT_WIDTH);
-		start.setOnAction(e -> handleInput(start, true));
+//*
+		/**///**//**//* start *//**//**//**//*
+//		this.start = new Inputs("Search WPI Maps", INPUT_WIDTH);
+		//start.setOnAction(e -> handleInput(start, true));
 
-		*//* end *//*
-		this.end = new Inputs("For Destination", INPUT_WIDTH);
-		end.setOnAction(e ->handleInput(end, false));*/
-
+		//**//**//**//* end *//**//**//**//*
+		//this.end = new Inp*/uts("For Destination", INPUT_WIDTH);
+//		end.setOnAction(e ->handleInput(end, false));*//*
+//*/
 
 /*		private Popover<PopOver, Label> controller = new Po();
 
@@ -814,7 +825,7 @@ public class Display {
 		//p//opOver.setContentNode(new Text(v.toString()));
 
 		//TODO: the map combo box will soon be gone
-		this.chooseMap = new Inputs("maps", INPUT_WIDTH);
+		/*this.chooseMap = new Inputs("maps", INPUT_WIDTH);
 		chooseMap.setItems(chooseMap.convertMaps(controller.getMaps().getMaps()));
 
 		chooseMap.setOnAction(e -> {
@@ -831,10 +842,10 @@ public class Display {
 					controller.startNode = null;
 				}
 			} catch (ClassCastException  cce) {
-				/***   only a partial string currently -> no mapping to a node  ***/
+				*//***   only a partial string currently -> no mapping to a node  ***//*
 				System.out.println("NOT A NODE: " + start.getValue());
 			}
-		});
+		});*/
 
 		/***************************** Auto Complete Search *******************************/
 		AutoCompleteComboBoxListener searchMap = new AutoCompleteComboBoxListener(chooseMap);
@@ -882,7 +893,7 @@ public class Display {
 
 		return pane;
 	}
-
+/*
 	private void handleInput(Inputs v, boolean START){
 		if (v.getValue() != null && !v.getValue().toString().isEmpty()) {
 			try {
@@ -907,15 +918,15 @@ public class Display {
 
 			} catch (ClassCastException cce) {
 				/***   only a partial string currently -> no mapping to a node  ***/
-				System.out.println("NOT A NODE: " + v.getValue());
-			}
+			//	System.out.println("NOT A NODE: " + v.getValue());
+		//	}
 				/*
 				if (controller.endNode != null){
 					mapDisplay.clearSelection(node.getID());
 				}
 				*/
-		}
-	}
+	//	}
+	//}
 
     /*
        private StackPane createMapPane(){

@@ -16,7 +16,7 @@ public class Directions {
 	 * @param aStarPath
 	 * @return
 	 */
-	public static ArrayList<String> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, Map> maps) {
+	public static ArrayList<String> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps) {
 		// TODO: Implement skipping of straight path nodes
 
 		ArrayList<String> directions = new ArrayList<String>();

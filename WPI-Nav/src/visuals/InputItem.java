@@ -16,4 +16,5 @@ public class InputItem {
 
     public int getId(){ return  this.node_id; }
     public String toString() {return  this.value; }
+    public boolean equals(InputItem ii) {return this.toString().equals(ii.toString());}
 }

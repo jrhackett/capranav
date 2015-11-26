@@ -111,8 +111,8 @@ public class Parser
 			}
 			return new Graph(graph);
 		}
-		else {
-			HashMap<Integer, Map> maps = new HashMap<Integer, Map>();
+		else {//TODO this won't work (separate floor and campus) + also building
+			HashMap<Integer, IMap> maps = new HashMap<Integer, IMap>();
 			Map temp;
 			while(parser.hasNext()){
 				temp = gson.fromJson(parser.next(), Map.class);
