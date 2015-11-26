@@ -11,12 +11,14 @@ public class Interest  extends Node{
 
     public Interest(int id, double x, double y, double z, double x1, double y1, double z1, String name){
         super(id, x, y, z, x1, y1, z1);
-        this.names.indexOf(name);
+        this.names = new ArrayList<>();
+        this.names.add(name);
     }
 
     public Interest(int id, double x, double y, double z, double x1, double y1, double z1, int map_id, String name){
         super(id, x, y, z, x1, y1, z1, map_id);
-        this.names.indexOf(name);
+        this.names = new ArrayList<>();
+        this.names.add(name);
     }
 
     public boolean isInteresting() {
