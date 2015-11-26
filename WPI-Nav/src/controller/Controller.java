@@ -80,6 +80,31 @@ public class Controller extends Application {
 
     }
 
+    public HashMap<Integer, INode> getNodes(){
+        return nodes;
+    }
+
+
+    /**
+     * This begins replaces getNamedNodes, it returns all 'named' nodes
+     * @return
+     */
+    public HashMap<Integer, INode> getInterestingNodes(){
+        HashMap<Integer, INode> value = new HashMap<>();
+
+        nodes.forEach((k,v) -> {
+             if(v.isInteresting()){
+                 value.put(k, v);}});
+
+        return value;
+    }
+
+
+
+
+
+
+
     public void reset(){
         this.currentMap = new Map();
         this.pathNodes = new ArrayList<>();

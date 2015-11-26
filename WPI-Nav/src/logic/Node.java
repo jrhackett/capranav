@@ -256,4 +256,6 @@ public abstract class Node implements INode{
 	public boolean isTransition() {
 		return false;
 	}
+
+	public ArrayList<String> getNames() {return new ArrayList<>();}
 }

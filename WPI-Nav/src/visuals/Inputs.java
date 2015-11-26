@@ -73,24 +73,28 @@ public class Inputs extends ComboBox {
 			ConvertMaps and ConvertNodes will no longer be used - we need to convert them together.
 	 ****************************************************************************************************************/
 
-	public ObservableList<InputItem> createInputItems(HashMap<Integer, logic.Node> nodes, HashMap<Integer, logic.Map> maps){
+	public ObservableList<InputItem> createInputItems(HashMap<Integer, logic.INode> nodes, HashMap<Integer, logic.Map> maps){
 		this.data = FXCollections.observableArrayList();
-		nodes.forEach((k,v) -> {
-			//for each of its names
-
-
-			//for each of the nodes's maps
-					//create an item
-
-			//TODO consider what we want for floor level etc - probably for rooms we just want the building name
-			//TODO 	and if its a bathroom we want to grab the floor from the map
-
-
-
+		nodes.forEach((k,v) -> { //For each node
+			if(v.isInteresting()) {
+				for (String s : v.getNames()) {//For each of its names
+					for (String m : maps.get(v.getMap_id()).getNames()) {
+						if (v.getMap_id() > 0) { //if not the campus map [janky fix]
+							InputItem item = new InputItem(k, m + " " + s);
+							data.add(item);
+						} else {
+							InputItem item = new InputItem(k, s);
+							data.add(item);
+						}
+					}
+				}
+			}
 		});
 
 		return data;
 	}
+
+
 
 
 	/**

@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Display {
@@ -541,9 +542,15 @@ public class Display {
         /** Add All Interesting Nodes to the List **/
 
 
+        start.createInputItems(this.getNodes(), this.getMaps());
+        start.setItems(start.data);
+        end.createInputItems(this.getNodes(), this.getMaps());
+        end.setItems(end.data);
+
         VBox inputs = new VBox();
         inputs.setSpacing(GAP);
         inputs.getChildren().addAll(start, end);
+
 
 
 
@@ -670,14 +677,25 @@ public class Display {
 	/****************************************************************************************************************
 	 						    FUNCTIONS THAT CONTACT THE CONTROLLER FOR INFORMATION
 	 ****************************************************************************************************************/
-private boolean sendEmail(String email){
-	if (!email.equals("") && !email.equals("Enter Email Here") && !email.equals("Email Sent") && !email.equals("Invalid Email") ) {
-		controller.sendEmail(email);
-		return true;
-	} else {
-		return false;
-	}
-}
+    private boolean sendEmail(String email){
+        if (!email.equals("") && !email.equals("Enter Email Here") && !email.equals("Email Sent") && !email.equals("Invalid Email") ) {
+            controller.sendEmail(email);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private HashMap<Integer, logic.INode> getInterestingNodes(){
+        return controller.getInterestingNodes();
+    }
+
+    private HashMap<Integer, logic.INode> getNodes(){
+        return controller.getNodes();
+    }
+
+    private HashMap<Integer, logic.Map> getMaps(){ return controller.getMaps().getMaps();}
+
 
 
 
