@@ -2,7 +2,6 @@ package controller;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import logic.*;
 import visuals.Display;
@@ -17,7 +16,7 @@ import java.util.HashMap;
  */
 public class Controller extends Application {
     /* visual constants */
-    private static final Double WINDOW_WIDTH = 1000.0;
+    private static final Double WINDOW_WIDTH = 1400.0;
     private static final Double WINDOW_HEIGHT = 700.0;
 
     /* visual component */
@@ -48,23 +47,36 @@ public class Controller extends Application {
         mapsFromFile();
 
         /* icon */
-        try {
+      /*  try {
             s.getIcons().add(new Image(getClass().getResourceAsStream("../images/globe.png")));
         }
         catch (NullPointerException e) {
             s.getIcons().add(new Image(getClass().getResourceAsStream("/images/globe.png")));
-        }
+        }*/
 
 		/* basic layout */
         //s.initStyle(StageStyle.UNDECORATED);  // <-- removes the top part of the app close/open
-        s.setResizable(false);
-        s.setTitle("CapraNav");
+        s.setResizable(true);
+       // s.setTitle("CapraNav");
 
 		/* setup */
-        this.myDisplay = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, this);    //creates scene
+        this.myDisplay = new Display(this);    //creates scene
         Scene display = myDisplay.Init(); //initializes scene
         s.setScene(display); //sets scene to display
+        display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
         s.show();   //shows scene
+    }
+
+
+    /****************************************************************************************************************
+                                    FUNCTIONS THAT ARE CALLED FROM UI AND CONTACT UI
+     ****************************************************************************************************************/
+    public void sendEmail(String email){
+        logic.Email e = new logic.Email(email);
+        System.out.println(email);
+        //e.sendEmail()
+        //TODO FILL IN WITH NEW EMAIL CODE
+
     }
 
     public void reset(){

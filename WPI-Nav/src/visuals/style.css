@@ -1,3 +1,42 @@
+@font-face {
+    font-family: HelveticaNeueLight;
+    src: url("../../WPI-Nav/resources/fonts/HelveticaNeue-Light.otf");
+}
+
+.root {
+    -fx-font-family: HelveticaNeueLight;
+    -fx-font-size: 20;
+}
+
+#dashboardButton  {
+    -fx-background-color:#333;
+    -fx-text-fill:#eee;
+    -fx-padding: 8 8;
+}
+
+#pinView {
+    -fx-fill: #eeeeee;
+}
+
+#input {
+    -fx-font-family: HelveticaNeueLight;
+    -fx-font-size: 12;
+    -fx-padding: 0;
+
+}
+
+#lion {
+    -fx-background-color:
+            rgba(0,0,0,0.08),
+            linear-gradient(#9a9a9a, #909090),
+            linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);
+    -fx-background-insets: 0 0 -1 0,0,1;
+    -fx-background-radius: 5,5,4;
+    -fx-padding: 3 3 3 3;
+    -fx-text-fill: #242d35;
+    -fx-font-size: 14px;
+}
+
 .my_button {
     -fx-background-color: 
         rgba(0,0,0,0.08),
