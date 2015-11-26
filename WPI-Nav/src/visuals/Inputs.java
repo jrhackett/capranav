@@ -91,7 +91,7 @@ public class Inputs extends ComboBox {
 			}
 		});
 
-		return data;
+		return data.sorted();
 	}
 
 

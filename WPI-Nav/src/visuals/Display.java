@@ -547,6 +547,9 @@ public class Display {
         end.createInputItems(this.getNodes(), this.getMaps());
         end.setItems(end.data);
 
+        AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
+        AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
+
         VBox inputs = new VBox();
         inputs.setSpacing(GAP);
         inputs.getChildren().addAll(start, end);
