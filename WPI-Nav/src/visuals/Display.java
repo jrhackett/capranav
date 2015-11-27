@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Display {
@@ -266,7 +267,7 @@ public class Display {
 		//AnchorPane.setTopAnchor(infoView, 3 * EDGE + GAP + 5); //<--- TODO notice this, these lines break a lot of stuff, no idea why
 		//AnchorPane.setLeftAnchor(infoView, GAP);
 
-		AnchorPane.setBottomAnchor(gearsView, 0.0 + GAP * 2);//TODO these will change with svg
+		AnchorPane.setBottomAnchor(gearsView, GAP * 2);//TODO these will change with svg
 		AnchorPane.setLeftAnchor(gearsView, GAP * 2);
 
 		/*****************************************************************/
@@ -495,7 +496,6 @@ public class Display {
 
         mapPane.setAlignment(Pos.CENTER);
 
-
 		map.setMinWidth(MAP_WIDTH);
 		map.setPrefWidth(MAP_WIDTH+MAP_BORDER*2);
 
@@ -529,19 +529,54 @@ public class Display {
     private VBox createInput(){
 
 		/* start */
-        this.start = new Inputs("Search WPI Maps", INPUT_WIDTH);
-        start.setOnAction(e -> handleInput(start, true));
+        this.start = new Inputs("Search WPI Maps", INPUT_WIDTH, controller);
+        start.setOnAction(e -> handleSearchInput(start, true));
 
 		/* end */
-        this.end = new Inputs("For Destination", INPUT_WIDTH);
-        end.setOnAction(e ->handleInput(end, false));
+        this.end = new Inputs("For Destination", INPUT_WIDTH, controller);
+        end.setOnAction(e ->handleSearchInput(end, false));
 
-        start.setId("input");
-        end.setId("input");
+//        start.getStyleClass().add("combo-box");
+
+  //      end.getStyleClass().add("combo-box");
+
+        //start.applyCss();
+        //end.applyCss();
+
+        /** Add All Interesting Nodes to the List **/
+
+
+        start.createInputItems(this.getNodes(), this.getMaps());
+        start.setItems(start.data);
+        //start.getStyleClass().add("combobox");
+        end.createInputItems(this.getNodes(), this.getMaps());
+        end.setItems(end.data);
+        //end.getStyleClass().add("combobox");
+
 
         VBox inputs = new VBox();
         inputs.setSpacing(GAP);
         inputs.getChildren().addAll(start, end);
+
+        //this.start.setPlaceholder(new Label("Search or Select Starting Location"));
+        //this.end.setPlaceholder(new Label("Search or Select End Location"));
+
+        this.start.setPromptText("Search or Select Start");
+        this.end.setPromptText("Search or Select Destination");
+
+        this.start.focusedProperty().addListener(((observable, oldValue, newValue) -> {
+            if(newValue && firstTime.get()){
+                inputs.requestFocus();//<-- this could cause null
+                firstTime.setValue(false);
+            }
+        }));
+
+
+
+        AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
+        AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
+
+
 
         return inputs;
     }
@@ -641,7 +676,7 @@ public class Display {
 			emailBox.setMaxWidth(EDGE + expandedWidth);
 			popOver.setContentNode(emailBox);
 			popOver.setArrowLocation(PopOver.ArrowLocation.BOTTOM_CENTER);
-			//popOver.setAnchorY(EDGE*3);
+            popOver.setDetachable(false);
 			popOver.show(n);
 			popOver.setOnAutoHide(e -> {
 				EMAIL = false;
@@ -655,8 +690,15 @@ public class Display {
 		}
 	}
 
+    private void handleSearchInput(Inputs v, boolean START){
+        if (v.getValue() != null && !v.getValue().toString().isEmpty())
+            try {
+                controller.handleSearchInput(((InputItem) v.getValue()).getId(), START);
+            } catch (ClassCastException cce){
+                logger.error("INPUT VALUE IS NOT YET A FULL INPUT: ", cce);
+            }
 
-
+    }
 
 
 
@@ -666,14 +708,25 @@ public class Display {
 	/****************************************************************************************************************
 	 						    FUNCTIONS THAT CONTACT THE CONTROLLER FOR INFORMATION
 	 ****************************************************************************************************************/
-private boolean sendEmail(String email){
-	if (!email.equals("") && !email.equals("Enter Email Here") && !email.equals("Email Sent") && !email.equals("Invalid Email") ) {
-		controller.sendEmail(email);
-		return true;
-	} else {
-		return false;
-	}
-}
+    private boolean sendEmail(String email){
+        if (!email.equals("") && !email.equals("Enter Email Here") && !email.equals("Email Sent") && !email.equals("Invalid Email") ) {
+            controller.sendEmail(email);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private HashMap<Integer, logic.INode> getInterestingNodes(){
+        return controller.getInterestingNodes();
+    }
+
+    private HashMap<Integer, logic.INode> getNodes(){
+        return controller.getNodes();
+    }
+
+    private HashMap<Integer, logic.IMap> getMaps(){ return controller.getMaps();}
+
 
 
 
@@ -769,15 +822,15 @@ private boolean sendEmail(String email){
 		Label mapDescriptor = new Label("Select a map!");
 		mapDescriptor.setMinWidth(INPUT_WIDTH);
 		mapDescriptor.setMaxWidth(INPUT_WIDTH);
-/*
-		*//* start *//*
-		this.start = new Inputs("Search WPI Maps", INPUT_WIDTH);
-		start.setOnAction(e -> handleInput(start, true));
+//*
+		/**///**//**//* start *//**//**//**//*
+//		this.start = new Inputs("Search WPI Maps", INPUT_WIDTH);
+		//start.setOnAction(e -> handleInput(start, true));
 
-		*//* end *//*
-		this.end = new Inputs("For Destination", INPUT_WIDTH);
-		end.setOnAction(e ->handleInput(end, false));*/
-
+		//**//**//**//* end *//**//**//**//*
+		//this.end = new Inp*/uts("For Destination", INPUT_WIDTH);
+//		end.setOnAction(e ->handleInput(end, false));*//*
+//*/
 
 /*		private Popover<PopOver, Label> controller = new Po();
 
@@ -789,7 +842,7 @@ private boolean sendEmail(String email){
 		//p//opOver.setContentNode(new Text(v.toString()));
 
 		//TODO: the map combo box will soon be gone
-		this.chooseMap = new Inputs("maps", INPUT_WIDTH);
+		/*this.chooseMap = new Inputs("maps", INPUT_WIDTH);
 		chooseMap.setItems(chooseMap.convertMaps(controller.getMaps().getMaps()));
 
 		chooseMap.setOnAction(e -> {
@@ -806,10 +859,10 @@ private boolean sendEmail(String email){
 					controller.startNode = null;
 				}
 			} catch (ClassCastException  cce) {
-				/***   only a partial string currently -> no mapping to a node  ***/
+				*//***   only a partial string currently -> no mapping to a node  ***//*
 				System.out.println("NOT A NODE: " + start.getValue());
 			}
-		});
+		});*/
 
 		/***************************** Auto Complete Search *******************************/
 		AutoCompleteComboBoxListener searchMap = new AutoCompleteComboBoxListener(chooseMap);
@@ -857,7 +910,7 @@ private boolean sendEmail(String email){
 
 		return pane;
 	}
-
+/*
 	private void handleInput(Inputs v, boolean START){
 		if (v.getValue() != null && !v.getValue().toString().isEmpty()) {
 			try {
@@ -882,15 +935,15 @@ private boolean sendEmail(String email){
 
 			} catch (ClassCastException cce) {
 				/***   only a partial string currently -> no mapping to a node  ***/
-				System.out.println("NOT A NODE: " + v.getValue());
-			}
+			//	System.out.println("NOT A NODE: " + v.getValue());
+		//	}
 				/*
 				if (controller.endNode != null){
 					mapDisplay.clearSelection(node.getID());
 				}
 				*/
-		}
-	}
+	//	}
+	//}
 
     /*
        private StackPane createMapPane(){

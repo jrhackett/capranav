@@ -138,4 +138,9 @@ public interface INode {
     public boolean isTransition();
 
     public boolean isInteresting();
+
+    public ArrayList<String> getNames();
+
+    public void removeEdge(int id);
+
 }

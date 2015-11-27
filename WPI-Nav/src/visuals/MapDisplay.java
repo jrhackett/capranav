@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
+import logic.IMap;
 import logic.INode;
 
 import java.util.ArrayList;
@@ -76,17 +77,19 @@ public class MapDisplay extends Pane {
     }
 
 
+
     /**
      * Given a MAP_NAME -> ask Controller for map name and nodes for the map
      * Add image to map
      * Then add the Nodes
      * @param map
      */
+  /*
     public void setMap(logic.Map map){
 
         this.getChildren().remove(mapView);
         //this.getChildren().removeAll(lines);
-       // path.clear();
+        // path.clear();
 
 
         try {
@@ -126,9 +129,77 @@ public class MapDisplay extends Pane {
                     hideAll();
                 }
                 HIGLIGHTED = false;
-                */
+                *//*
             }
         });
+
+    }
+*/
+
+
+    /**
+     * Given a MAP_NAME -> ask Controller for map name and nodes for the map [NEW VERSION]
+     * Add image to map
+     * Then add the Nodes
+     * @param map
+     */
+    public void setMap(IMap map) {
+
+        this.getChildren().remove(mapView);
+
+        try {
+            this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
+        } catch (NullPointerException e) {
+            this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
+        }
+
+        this.mapView = new ImageView(mapImage);
+        this.getChildren().add(mapView);
+        drawNodes(controller.getNodesOfMap(map.getID()));
+
+        // HIGLIGHTED = false;
+
+        mapView.setOnMouseClicked(e -> {
+            //CREATE TEMPORARY POINT ->
+            INode temp = controller.createTempRoom(e.getX(), e.getY());
+            Circle c = createCircle(temp);
+            controller.handleMapClick(temp);
+        });
+    }
+
+
+
+
+    public void removeNode(int id){
+        if(id_circle.containsKey(id)){
+            normal(id_circle.get(id));
+            id_circle.remove(id);
+        }
+    }
+        /*    if (!HIGLIGHTED) {
+                highlightAll();
+                HIGLIGHTED = true;
+            } else {
+                //hack / decision
+                this.getChildren().removeAll(lines);
+                hideAll();
+                controller.resetStartEnd();
+                HIGLIGHTED = false;*/
+
+                /*
+                if (controller.startNode != null && controller.endNode != null) {
+
+                    id_circle.forEach((k, v) -> {
+                        if (k != controller.startNode.getID() && k != controller.endNode.getID()) normal(v);
+                        else if (k != controller.startNode.getID()) setStartNode(k, false);
+                        else setStartNode(k, true);
+                    });
+                    showPath(path);
+                } else {
+                    hideAll();
+                }
+                HIGLIGHTED = false;
+
 
     }
 

@@ -1,9 +1,13 @@
 package visuals;
 
+import controller.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
+import logic.Floor;
+import logic.IMap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -11,18 +15,17 @@ import java.util.HashMap;
  * Looking into alternate/advanced/accurate options
  */
 public class Inputs extends ComboBox {
-	private double WIDTH;
 	private String initial;
-	ObservableList<logic.Map> dataMap;
-	ObservableList<logic.INode> dataNode;
+	ObservableList<InputItem> data;
+	Controller controller;
 
 	@SuppressWarnings("unchecked") /* probably should remove this */
-	public Inputs(String s,double WIDTH ){
+	public Inputs(String s,double WIDTH, Controller controller ){
 		super();
-		this.WIDTH = WIDTH;
 		initial = s;
+		this.controller = controller;
 		this.setMaxWidth(WIDTH); //TODO sizing here
-		this.setMinWidth(WIDTH);
+		this.setMinWidth(0);
 		this.setEditable(true);
 
 		//		this.setItems(getDummyLocations());
@@ -63,36 +66,47 @@ public class Inputs extends ComboBox {
 		*/
 	}
 
-	/**
-	 * Converts a HashMap of maps to an ObserableList
-	 * @param maps
-	 * @return
-     */
-	public ObservableList<logic.Map> convertMaps(HashMap<Integer, logic.Map> maps) {
-		this.dataMap = FXCollections.observableArrayList();
-		maps.forEach((k,v) -> {dataMap.add(v);});
-		return dataMap.sorted(); //NOTE: this wont work in java 8.40
+
+
+	/****************************************************************************************************************
+			ConvertMaps and ConvertNodes will no longer be used - we need to convert them together.
+	 ****************************************************************************************************************/
+
+	public ObservableList<InputItem> createInputItems(HashMap<Integer, logic.INode> nodes, HashMap<Integer, logic.IMap> maps){
+		this.data = FXCollections.observableArrayList();
+		nodes.forEach((k,v) -> { //For each node
+			addNode(v, maps.get(v.getMap_id()));
+		});
+
+		return data.sorted();
 	}
 
-	/**
-	 * Converts a HashMap of Nodes to an ObservableList
-	 * @param nodes
-	 * @return
-	 */
-	public ObservableList<logic.INode> convertNodes(HashMap<Integer, logic.INode> nodes) {
-		this.dataNode = FXCollections.observableArrayList();
-		nodes.forEach((k,v) -> {dataNode.add(v);});
-		return dataNode.sorted();
+
+	public void addNode(logic.INode v, IMap map) {
+		if(v.isInteresting()) {
+			for (String s : v.getNames()) {//For each of its names
+				if (map.inside()){//FOOD should probably also not have map extensions
+					for (String m : getNames(((Floor)map).getBuildingID())) {//TODO we should just do buildings and campus separately
+							InputItem item = new InputItem(v.getID(), m + " " + s);
+							if(!data.contains(item)) data.add(item); //TODO this work around will probably not work
+						}
+				} else	{
+					InputItem item = new InputItem(v.getID(), s);
+					data.add(item);
+				}
+			}
+		}
 	}
 
-	public void addNode(logic.INode n){
-		this.dataNode.add(n);
+	public void removeNode(int id) {
+		for (InputItem ii : data){
+			if (ii.getId() == id){
+				data.remove(ii);
+			}
+		}
 	}
 
-	public void addMapToMaps(logic.Map map){
-		dataMap.add(map);
+	public ArrayList<String> getNames(int building_id){
+		return controller.getBuildingNames(building_id);
 	}
-
-	
-	
 }

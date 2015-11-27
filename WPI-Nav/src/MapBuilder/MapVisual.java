@@ -1,17 +1,6 @@
 package MapBuilder;
 
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import logic.Node;
-
-import java.util.HashMap;
-
 //TODO Fix this file
 //The visual component of the maps and the Nodes
 

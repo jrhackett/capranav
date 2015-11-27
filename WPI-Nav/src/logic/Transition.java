@@ -13,7 +13,6 @@ public class Transition extends Node {
         super(id, x, y, z, x1, y1, z1, map_id);
     }
 
-
     public boolean isTransition() {
         return true;
     }

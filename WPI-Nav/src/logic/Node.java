@@ -256,4 +256,15 @@ public abstract class Node implements INode{
 	public boolean isTransition() {
 		return false;
 	}
+
+	public ArrayList<String> getNames() {return new ArrayList<>();}
+
+	public void removeEdge(int id){
+		for(Edge e : adjacencies){
+			if (e.getTarget() == id){
+				adjacencies.remove(e);
+			}
+		}
+	}
+
 }

@@ -88,6 +88,8 @@ public class AutoCompleteComboBoxListener<T> {
     private void selectClosestResultBasedOnTextFieldValue(boolean affect, boolean inFocus) {
         ObservableList items = AutoCompleteComboBoxListener.this.comboBox.getItems();
         boolean found = false;
+        if (this.comboBox.getValue() == null || this.comboBox.getValue() == "") return;
+
         for (int i=0; i<items.size(); i++) {
             if (AutoCompleteComboBoxListener.this.comboBox.getEditor().getText().toLowerCase().equals(items.get(i).toString().toLowerCase())) {
                 try {
