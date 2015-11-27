@@ -133,18 +133,24 @@ public class Controller extends Application {
      * @param n
      */
     public void handleMapClick(INode n){
-        eradicate(tempStart);
+        /**
+         * This function SHOULD make it so there are up to two temporary nodes at a time
+         * both start/end. But, it won't remove them til more are requested even if maps are
+         * switched.
+         */
 
         if (!FIRST){ //If the last node we added was the first
+            eradicate(tempStart);
             this.startNode = n;
 
-            if (!nodes.containsKey(n.getID())) {//its temp
+            if (!nodes.containsKey(n.getID())) {//TODO double check this works, ie that isn't already added
                 tempStart = startNode;
             }
 
             myDisplay.start.addNode(n, currentMap);
             myDisplay.start.setValue(n);
         } else {//Else if the last node we added was the last [note, a lot of this gets wonky when we add midway points, jesus
+            eradicate(tempEnd);
 
         }
         FIRST = !FIRST;
@@ -226,13 +232,15 @@ public class Controller extends Application {
      * @param n
      */
     public void eradicate(INode n){
-        nodes.remove(n);
-        for(Edge e : n.getAdjacencies()){
-            nodes.get(e.getTarget()).removeEdge(n.getID());
+        if( n != null) {
+            nodes.remove(n);
+            for (Edge e : n.getAdjacencies()) {
+                nodes.get(e.getTarget()).removeEdge(n.getID());
+            }
+            myDisplay.start.removeNode(n.getID());
+            myDisplay.start.setValue(null);
+            myDisplay.mapDisplay.removeNode(n.getID());
         }
-        myDisplay.start.removeNode(n.getID());
-        myDisplay.start.setValue(null);
-        myDisplay.mapDisplay.removeNode(n.getID());
     }
 
 

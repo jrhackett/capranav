@@ -554,12 +554,29 @@ public class Display {
         //end.getStyleClass().add("combobox");
 
 
-        AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
-        AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
-
         VBox inputs = new VBox();
         inputs.setSpacing(GAP);
         inputs.getChildren().addAll(start, end);
+
+        //this.start.setPlaceholder(new Label("Search or Select Starting Location"));
+        //this.end.setPlaceholder(new Label("Search or Select End Location"));
+
+        this.start.setPromptText("Search or Select Start");
+        this.end.setPromptText("Search or Select Destination");
+
+        this.start.focusedProperty().addListener(((observable, oldValue, newValue) -> {
+            if(newValue && firstTime.get()){
+                inputs.requestFocus();//<-- this could cause null
+                firstTime.setValue(false);
+            }
+        }));
+
+
+
+        AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
+        AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
+
+
 
         return inputs;
     }
@@ -659,7 +676,7 @@ public class Display {
 			emailBox.setMaxWidth(EDGE + expandedWidth);
 			popOver.setContentNode(emailBox);
 			popOver.setArrowLocation(PopOver.ArrowLocation.BOTTOM_CENTER);
-			//popOver.setAnchorY(EDGE*3);
+            popOver.setDetachable(false);
 			popOver.show(n);
 			popOver.setOnAutoHide(e -> {
 				EMAIL = false;
