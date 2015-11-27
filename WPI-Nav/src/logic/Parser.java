@@ -10,67 +10,44 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Arrays;
 
-/* A Parser object is used to do translations from JSON files and Nodes.
- * Be sure to use "nodes.json" as the filename upon instantiation.
+// TODO IMPORTANT: A few things need to be done before this is useable : check TODOs below
+// TODO IMPORTANT: Also notice that the method names changed - sorry, couldn't really avoid it. Make sure other files are updated
+
+/* A Parser object is used to do translations from JSON files and Nodes/Maps.
+ *
+ * USAGE: Struct should be either INode or Map (determines what you're iterating over)
+ * 		  new Parser().fromFileGraph();                - Returns Graph
+ * 		  new Parser().fromFileMap();                  - Returns Map
+ * 		  new Parser().toFile(ICollection collection); - Stores into files based on type
+ *
  */
-public class Parser
+public class Parser<Struct>
 {
-	private String filename;        //File for reading/writing Nodes
-	private JsonWriter writer;
+	//Don't need to set any of these anymore - empty constructor
+	private String           filename; //File for reading/writing Nodes
+	private JsonWriter       writer;
 	private JsonStreamParser parser;
 
+	//TODO Fill in with all Node types (these arrays must be in parallel !!!)
+	private static final Class[]  types = { Map.class, Node.class, Room.class };
+	private static final String[] names = { "maps.json", "nodes.json", "rooms.json" };
+
 //	public static void main(String args[]) {
-//		Parser test = new Parser("nodes.json");
-//		HashMap<Integer, Node> nodes = new HashMap<Integer, Node>();
-//		Node node1 = new Node("five", 1, 1, 1, 1, 1);
-//		Node node2 = new Node("two", 2, 2, 2, 2, 2);
-//		nodes.put(0, node1);
-//		nodes.put(1, node2);
-//		Graph graph = new Graph(nodes);
-//		test.toFile(graph);
+	//TODO Test Parsing
 //	}
 
-    /**
-     * Parser is used to communicate between the database and the rest of the program
-     * @param name: filename of the database to observe
-     * @return void
-     */
-	public Parser(String name) {
-		this.filename = name;
-		try {
-			this.parser = new JsonStreamParser(new FileReader(filename));
-		}
-		catch (FileNotFoundException e) {
-		}
-	}
-
-    /**
-     * toFile(Node) is used to append a single node to the JSON database file
-     * @param node: Node to add to the database
-     * @return void
-     */
-	public void toFile(INode node) {
-		try { //Create a JsonWriter to append the file with graph nodes
-			writer = new JsonWriter(new FileWriter(filename, true));
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-		new Gson().toJson(node, INode.class, writer); //Write to file
-		close(); //Close the writer
-	}
-
+	public Parser () {}
 
 	/**
-	 * toFile(Graph) is used to write an entire graph out to a JSON database file
-	 * WARNING: This version will OVERWRITE the given file
+	 * toFile() is used to write an entire Graph/Maps out to a JSON database file
+	 * WARNING: This will OVERWRITE the given file
 	 *
-	 * @param collection: Graph to write to the database
+	 * @param collection: Graph/Maps to write to the database
      */
-
 	public void toFile(ICollection collection) {
+		Gson gson = new Gson();
 		try { //Create a JsonWriter to append the file with graph nodes
 			writer = new JsonWriter(new FileWriter(filename, false));
 		}
@@ -78,48 +55,54 @@ public class Parser
 			e.printStackTrace();
 			return;
 		}
-		Gson gson = new Gson();
-		if(this.filename.equals("nodes.json"))
-		{
-			Collection<INode> nodes = collection.get();
-			for(INode n : nodes) {
-				gson.toJson(n, INode.class, writer); //Write to file
-			}
+
+		Collection<Struct> collect = collection.get();
+		for (Struct s : collect) {
+			int i = Arrays.asList(types).indexOf(s.getClass());
+			filename = names[i];
+			gson.toJson(s, s.getClass(), writer);
 		}
-		else {
-			Collection<Map> maps = collection.get();
-			for(Map n : maps) {
-				gson.toJson(n, Map.class, writer); //Write to file
-			}
-		}
+
 		close(); //Close the writer
 	}
 
-    /**
-     * fromFile reads in all Nodes or Maps from database file nodes.json or maps.json
-     * @return ICollection - either a Graph or a Maps
-     */
-	public ICollection fromFile() {
+	/**
+	 * @return A Maps object
+	 */
+	//TODO Is this okay? (There was a previous comment about this not working)
+	public Maps fromFileMap() {
 		Gson gson = new Gson();
+		HashMap<Integer, IMap> maps = new HashMap<>();
+		Map temp;
 
-		if(this.filename.equals("nodes.json")) {
-			HashMap<Integer, INode> graph = new HashMap<Integer, INode>();
-			INode temp;
-			while(parser.hasNext()){
-				temp = gson.fromJson(parser.next(), Room.class);	//TODO fix this room.class thing
-				graph.put(temp.getID(), temp); //Add Node to the map under its ID
-			}
-			return new Graph(graph);
+		try { parser = new JsonStreamParser(new FileReader("maps.json")); }
+		catch (FileNotFoundException e) { return null; } //This is bad - don't let this happen
+
+		while(parser.hasNext()) {
+			temp = gson.fromJson(parser.next(), Map.class);
+			maps.put(temp.getID(), temp);
 		}
-		else {//TODO this won't work (separate floor and campus) + also building
-			HashMap<Integer, IMap> maps = new HashMap<Integer, IMap>();
-			Map temp;
-			while(parser.hasNext()){
-				temp = gson.fromJson(parser.next(), Map.class);
-				maps.put(temp.getID(), temp); //Add Node to the map under its ID
+		return new Maps(maps);
+	}
+
+	/**
+	 * @return A complete Graph of all nodes from all graph files
+     */
+	public Graph fromFileGraph() {
+		Gson gson = new Gson();
+		HashMap<Integer, INode> graph = new HashMap<>();
+		INode temp;
+
+		for (int i = 0; i < types.length; i++) {
+			try { parser = new JsonStreamParser(new FileReader(names[i])); }
+			catch (FileNotFoundException e) { return null; } //This is bad - don't let this happen
+
+			while(parser.hasNext()) {
+				temp = (INode)gson.fromJson(parser.next(), types[i]);
+				graph.put(temp.getID(), temp);
 			}
-			return new Maps(maps);
 		}
+		return new Graph(graph);
 	}
 
     /**
