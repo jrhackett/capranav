@@ -79,6 +79,7 @@ public class Display {
     private static final double MAP_BORDER = 15;
 
 	private BooleanProperty VISIBLE;
+    private BooleanProperty SETTINGS_VISIBLE;
 	private boolean EMAIL = false;
 	//Visual Elements
 	VBox dashBoard;
@@ -105,6 +106,8 @@ public class Display {
         this.slidingDashboard = new SlidingAnchorPane();
 
 		this.VISIBLE = new SimpleBooleanProperty(true);
+        this.SETTINGS_VISIBLE = new SimpleBooleanProperty(true);
+
 		this.EDGE = GAP * 2 + CONTROL_WIDTH;
 	}
 
@@ -180,9 +183,10 @@ public class Display {
 		AnchorPane.setLeftAnchor(divider_2, GAP);
 		AnchorPane.setRightAnchor(divider_2, GAP);
 
-		AnchorPane.setBottomAnchor(divider_3, EDGE - 1);
-		AnchorPane.setLeftAnchor(divider_3, GAP);
-		AnchorPane.setRightAnchor(divider_3, GAP);
+//		AnchorPane.setBottomAnchor(divider_3, EDGE - 1);
+        //AnchorPane.setTopAnchor(divider_3, 0.0);
+		//AnchorPane.setLeftAnchor(divider_3, GAP);
+		//AnchorPane.setRightAnchor(divider_3, GAP);
 
 		/** images **/
 		//Image pin =				new Image(getClass().getResourceAsStream("../images/pin.png"), 20, 20, true, true);
@@ -268,8 +272,8 @@ public class Display {
 		//AnchorPane.setTopAnchor(infoView, 3 * EDGE + GAP + 5); //<--- TODO notice this, these lines break a lot of stuff, no idea why
 		//AnchorPane.setLeftAnchor(infoView, GAP);
 
-		AnchorPane.setBottomAnchor(gearsView, GAP * 2);//TODO these will change with svg
-		AnchorPane.setLeftAnchor(gearsView, GAP * 2);
+		//AnchorPane.setBottomAnchor(gearsView, GAP * 2);//TODO these will change with svg
+		//AnchorPane.setLeftAnchor(gearsView, GAP * 2);
 
 		/*****************************************************************/
 		/** Dashboard **/
@@ -352,27 +356,48 @@ public class Display {
 		/** Change Settings Zone **/
 		HBox settingsLabelBox = new HBox();
 		settingsLabelBox.setMinHeight(EDGE);
-		settingsLabelBox.setMaxHeight(EDGE);
+		settingsLabelBox.setMaxHeight(expandedWidth); //change this to whatever height
 		settingsLabelBox.setPrefHeight(EDGE);
 		settingsLabelBox.setAlignment(Pos.CENTER_LEFT);
 
 		Label settingsLabel = new Label("Settings");
 		settingsLabel.setTextFill(Color.web("#eeeeee"));
 
-		settingsLabelBox.getChildren().addAll(settingsLabel);
+		//settingsLabelBox.getChildren().addAll(settingsLabel);
 		settingsLabelBox.setMinWidth(0);
 		settingsLabelBox.setPrefWidth(expandedWidth);
 		settingsLabelBox.setMaxWidth(expandedWidth);
 
-		AnchorPane.setBottomAnchor(settingsLabelBox, 0.0);// 2 * EDGE - 2 * GAP - 20);
-		AnchorPane.setLeftAnchor(settingsLabelBox, EDGE);
-
 		settingsLabel.setOnMouseClicked(e -> handleSettings());
 		gearsView.setOnMouseClicked(e -> handleSettings());
 
-		/*****************************************************************/
+        //settings a sliding pane!
+        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, false, SETTINGS_VISIBLE, gearsView);
+        slidingSettings.setStyle("-fx-background-color: #333333");
+
+        javafx.scene.control.Button slidingButton = slidingSettings.getButton();
+        slidingButton.setId("dashboardButton");
+        slidingButton.setMaxWidth(EDGE);
+        slidingButton.setMinWidth(EDGE);
+        slidingButton.setPrefWidth(EDGE);
+        //AnchorPane.setBottomAnchor(slidingButton, 0.0);
+        //AnchorPane.setLeftAnchor(slidingButton, 0.0);
+        settingsLabelBox.getChildren().addAll(slidingButton, settingsLabel);
+
+        VBox settingsVbox = new VBox();
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox);
+
+
+        AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
+        AnchorPane.setLeftAnchor(slidingSettings, 0.0);
+        slidingSettings.getChildren().addAll(settingsVbox);
+
+        //VBOX: Divider - seetingsLabelBox - actual settings
+
+
+        /*****************************************************************/
 		/** Building of Sliding Dashboard Anchorpane  **/
-		this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0, divider_1, divider_2, divider_3, gearsView, dashBoardTitleBox,locationLabelBox, resourcesLabelBox, infoView, settingsLabelBox, pinView, inputs); //, , ,
+		this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, true, VISIBLE, bars, divider_0, divider_1, divider_2, dashBoardTitleBox,locationLabelBox, resourcesLabelBox, infoView, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3,
 		slidingDashboard.setStyle("-fx-background-color: #333333");
 
 		/** STYLE BUTTON HERE **/
