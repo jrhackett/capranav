@@ -185,6 +185,8 @@ public class Controller extends Application {
                 System.out.println("IT LOOKS LIKE IT WORKED START");
                 tempStart = n;
                 nodes.put(n.getID(), n);
+            } else {
+                if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode.getID());
             }
 
             this.FLAG = true;//this is set in attempts to avoid triggering stuff twice
@@ -198,6 +200,8 @@ public class Controller extends Application {
                 System.out.println("IT LOOKS LIKE IT WORKED END");
                 tempEnd = n;
                 nodes.put(n.getID(), n);
+            } else {
+                if (endNode != null) this.myDisplay.mapDisplay.hideLast(endNode.getID());
             }
 
             this.FLAG = true;
