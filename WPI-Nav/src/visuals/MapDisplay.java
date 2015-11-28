@@ -156,6 +156,12 @@ public class MapDisplay extends Pane {
         mapView.setOnMouseClicked(e -> createTempLandmark(e));
     }
 
+
+
+
+
+
+
     private void createTempLandmark(MouseEvent e){
         //CREATE TEMPORARY POINT ->
         INode temp = controller.createTempLandmark(e.getX(), e.getY());

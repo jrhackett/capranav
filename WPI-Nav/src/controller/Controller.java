@@ -132,6 +132,7 @@ public class Controller extends Application {
                 this.startNode = nodes.get(id);
             } else {
                 if (!FLAG) {//if not from a click on the map hide the last
+                    System.out.println("FLAG FALSE!");
                     if (endNode != null) this.myDisplay.mapDisplay.hideLast(endNode.getID());
                 }
 
@@ -144,10 +145,12 @@ public class Controller extends Application {
             }
 
             if (startNode != null) {
+                System.out.printf("Setting STARTNODE: %d\n", startNode.getID());
                 myDisplay.mapDisplay.setStartNode(startNode.getID(), true);
             }
 
             if (endNode != null) {
+                System.out.printf("Setting ENDNODE: %d\n", endNode.getID());
                 myDisplay.mapDisplay.setStartNode(endNode.getID(), false);
             }
 
@@ -202,7 +205,7 @@ public class Controller extends Application {
 
         }
 
-        FIRST = !FIRST;
+        //FIRST = !FIRST;//what if FIRST IS GETTING DOUBLY RESET!! WHOOO! THIS WAS IT BOYS!
         this.FLAG = false;//this should prevent some double triggering of events
         //myDisplay.mapDisplay.setStartNode(n.getID(), FIRST);//this correctly highlights the new node //todo check this
     }
@@ -221,16 +224,21 @@ public class Controller extends Application {
         double y2 = y;
         double z2 = z;
 
-        //TODO -1 and -2 for tempstart and tempend
         Landmark temp;
 
         if(!FIRST) {
-            if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode.getID()); //hide the last start
+            if (startNode != null){//have to delete old before creating new one (with same ID)
+                System.out.println("Hiding old start node");
+                this.myDisplay.mapDisplay.hideLast(startNode.getID()); //hide the last start
+            }
             eradicate(tempStart, true); //completely get rid of the last start
             System.out.println("-1");
             temp = new Landmark(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
         } else {
-            if (endNode != null) this.myDisplay.mapDisplay.hideLast(endNode.getID()); //hide the last end
+            if (endNode != null){
+                System.out.println("Hiding old end node");
+                this.myDisplay.mapDisplay.hideLast(endNode.getID()); //hide the last end
+            }
             eradicate(tempEnd, false); //completely get rid of the last temp
             System.out.println("-2");
             temp = new Landmark(-2, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
@@ -307,13 +315,16 @@ public class Controller extends Application {
             }
 
             if (start) {
-                myDisplay.start.removeNode(n.getID()); //remove it from the observable list
+                System.out.printf("Removing from options tempstart id:%d (should be -1)!\n", tempStart.getID());
                 myDisplay.start.setValue(null);        //set the list value to empty [this won't last very long]
+                myDisplay.start.removeNode(n.getID()); //remove it from the observable list
             } else {
-                myDisplay.end.removeNode(n.getID());
+                System.out.printf("Removing from options tempend id:%d (should be -2)!\n", tempStart.getID());
                 myDisplay.end.setValue(null);
+                myDisplay.end.removeNode(n.getID());
             }
 
+            System.out.printf("Removing node  %d from mapdisplay: %d", n.getID(),n.getID());
             myDisplay.mapDisplay.removeNode(n.getID()); //remove it from the map, visually and from the list
         }
     }
