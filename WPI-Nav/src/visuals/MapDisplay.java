@@ -6,6 +6,7 @@ import javafx.animation.Transition;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -77,13 +78,6 @@ public class MapDisplay extends Pane {
     }
 
 
-
-    /**
-     * Given a MAP_NAME -> ask Controller for map name and nodes for the map
-     * Add image to map
-     * Then add the Nodes
-     * @param map
-     */
   /*
     public void setMap(logic.Map map){
 
@@ -159,48 +153,35 @@ public class MapDisplay extends Pane {
 
         // HIGLIGHTED = false;
 
-        mapView.setOnMouseClicked(e -> {
-            //CREATE TEMPORARY POINT ->
-            INode temp = controller.createTempRoom(e.getX(), e.getY());
-            Circle c = createCircle(temp);
-            controller.handleMapClick(temp);
-        });
+        mapView.setOnMouseClicked(e -> createTempLandmark(e));
+    }
+
+    private void createTempLandmark(MouseEvent e){
+        //CREATE TEMPORARY POINT ->
+        INode temp = controller.createTempLandmark(e.getX(), e.getY());
+        Circle c = createCircle(temp);
+        id_circle.put(temp.getID(), c);
+        this.getChildren().add(c);
+        controller.handleMapClick(temp);
     }
 
 
 
-
+    /**
+     * remove node completely from map pane
+     * (this is for temporary nodes)
+     * @param id
+     */
     public void removeNode(int id){
         if(id_circle.containsKey(id)){
-            normal(id_circle.get(id));
+            normal(id_circle.get(id));//hideLast(id)
+            this.getChildren().remove(id_circle.remove(id));
             id_circle.remove(id);
         }
     }
-        /*    if (!HIGLIGHTED) {
-                highlightAll();
-                HIGLIGHTED = true;
-            } else {
-                //hack / decision
-                this.getChildren().removeAll(lines);
-                hideAll();
-                controller.resetStartEnd();
-                HIGLIGHTED = false;*/
 
-                /*
-                if (controller.startNode != null && controller.endNode != null) {
-
-                    id_circle.forEach((k, v) -> {
-                        if (k != controller.startNode.getID() && k != controller.endNode.getID()) normal(v);
-                        else if (k != controller.startNode.getID()) setStartNode(k, false);
-                        else setStartNode(k, true);
-                    });
-                    showPath(path);
-                } else {
-                    hideAll();
-                }
-                HIGLIGHTED = false;
-
-
+    public void hideLast(int id){
+        normal(id_circle.get(id));
     }
 
     /**
@@ -293,7 +274,7 @@ public class MapDisplay extends Pane {
         });
         */
         circle.setOnMouseClicked(e -> {
-            controller.nodeFromMapHandler(v);
+            controller.handleMapClick(v);
         });
 /*
         circle.setOnMousePressed(e -> {
@@ -390,7 +371,7 @@ public class MapDisplay extends Pane {
      * @param c
      */
     public void normal(Circle c) {
-        c.setFill(Color.TRANSPARENT);
+        c.setFill(Color.BLUE);
         c.setStrokeWidth(0);
         c.setRadius(5);
         c.setOpacity(1);

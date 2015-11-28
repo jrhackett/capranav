@@ -11,8 +11,7 @@ public class Instructions {
 	private String instruction_string;
 	private int distance;
 	INode end;
-	INode begin;
-	
+
 	public Instructions(String s, logic.INode d){
 		this.instruction_string = s;
 		this.end = d;

@@ -1,5 +1,7 @@
 package logic;
 
+import javafx.scene.image.ImageView;
+
 import java.util.ArrayList;
 
 /**
@@ -143,4 +145,9 @@ public interface INode {
 
     public void removeEdge(int id);
 
-}
+    public ImageView getIcon();
+
+
+
+
+    }

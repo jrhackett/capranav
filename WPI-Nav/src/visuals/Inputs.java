@@ -20,7 +20,7 @@ public class Inputs extends ComboBox {
 	Controller controller;
 
 	@SuppressWarnings("unchecked") /* probably should remove this */
-	public Inputs(String s,double WIDTH, Controller controller ){
+	public Inputs(String s, double WIDTH, Controller controller) {
 		super();
 		initial = s;
 		this.controller = controller;
@@ -67,14 +67,13 @@ public class Inputs extends ComboBox {
 	}
 
 
-
 	/****************************************************************************************************************
-			ConvertMaps and ConvertNodes will no longer be used - we need to convert them together.
+	 * ConvertMaps and ConvertNodes will no longer be used - we need to convert them together.
 	 ****************************************************************************************************************/
 
-	public ObservableList<InputItem> createInputItems(HashMap<Integer, logic.INode> nodes, HashMap<Integer, logic.IMap> maps){
+	public ObservableList<InputItem> createInputItems(HashMap<Integer, logic.INode> nodes, HashMap<Integer, logic.IMap> maps) {
 		this.data = FXCollections.observableArrayList();
-		nodes.forEach((k,v) -> { //For each node
+		nodes.forEach((k, v) -> { //For each node
 			addNode(v, maps.get(v.getMap_id()));
 		});
 
@@ -82,31 +81,35 @@ public class Inputs extends ComboBox {
 	}
 
 
-	public void addNode(logic.INode v, IMap map) {
-		if(v.isInteresting()) {
+	public InputItem addNode(logic.INode v, IMap map) {
+		InputItem item = null;
+		if (v.isInteresting()) {
 			for (String s : v.getNames()) {//For each of its names
-				if (map.inside()){//FOOD should probably also not have map extensions
-					for (String m : getNames(((Floor)map).getBuildingID())) {//TODO we should just do buildings and campus separately
-							InputItem item = new InputItem(v.getID(), m + " " + s);
-							if(!data.contains(item)) data.add(item); //TODO this work around will probably not work
-						}
-				} else	{
-					InputItem item = new InputItem(v.getID(), s);
+				if (map.inside()) {//FOOD should probably also not have map extensions
+					for (String m : getNames(((Floor) map).getBuildingID())) {//TODO we should just do buildings and campus separately
+						item = new InputItem(v.getID(), m + " " + s);
+						if (!data.contains(item)) data.add(item); //TODO this work around will probably not work
+					}
+				} else {
+					item = new InputItem(v.getID(), s);
 					data.add(item);
 				}
 			}
 		}
+		return item;
 	}
 
 	public void removeNode(int id) {
-		for (InputItem ii : data){
-			if (ii.getId() == id){
-				data.remove(ii);
+		InputItem iii = null;
+		for (InputItem ii : data) {
+			if (ii.getId() == id) {
+				iii = ii;
 			}
 		}
+		data.remove(iii);
 	}
 
-	public ArrayList<String> getNames(int building_id){
+	public ArrayList<String> getNames(int building_id) {
 		return controller.getBuildingNames(building_id);
 	}
 }
