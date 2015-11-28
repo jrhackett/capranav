@@ -18,6 +18,11 @@
     -fx-fill: #eeeeee;
 }
 
+#gearsView {
+    -fx-fill: #eeeeee;
+}
+
+
 .combo-box{
     -fx-font-family: HelveticaNeueLight;
     -fx-font-size: 12;

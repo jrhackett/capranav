@@ -214,7 +214,8 @@ public class Display {
 
 
 		Image gears =			new Image(getClass().getResourceAsStream("../images/gears.png"), 20, 20, true, true);
-		ImageView gearsView = 	new ImageView(gears);
+		ImageView gearsView = new ImageView(gears);
+        //gearsView.setStyle("-fx-fill: #eeeeee;");
 		//SVGPath gearsView = new SVGPath();
 		/*
 		gearsView.setContent("M61.2,341.538c4.9,16.8,11.7,33,20.3,48.2l-24.5,30.9c-8,10.1-7.1,24.5,1.9,33.6l42.2,42.2c9.1,9.1,23.5,9.899,33.6,1.899" +
@@ -534,7 +535,7 @@ public class Display {
 
 		/* end */
         this.end = new Inputs("For Destination", INPUT_WIDTH, controller);
-        end.setOnAction(e ->handleSearchInput(end, false));
+        end.setOnAction(e -> handleSearchInput(end, false));
 
 //        start.getStyleClass().add("combo-box");
 
@@ -695,7 +696,7 @@ public class Display {
             try {
                 controller.handleSearchInput(((InputItem) v.getValue()).getId(), START);
             } catch (ClassCastException cce){
-                logger.error("INPUT VALUE IS NOT YET A FULL INPUT: ", cce);
+                logger.error("INPUT VALUE IS NOT YET A FULL INPUT, IT IS JUST A STRING: {}",v.getValue());
             }
 
     }
@@ -1035,7 +1036,7 @@ public class Display {
 	/**
 	 * find paths calls the controller
 	 */
-	private void findPaths(){
+	private void findPaths(){//THIS IS A RELIC NOT CURRENTLY USED
 		this.controller.findPaths();
 	}
 

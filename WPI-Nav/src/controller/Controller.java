@@ -34,7 +34,7 @@ public class Controller extends Application {
 
     /* switches */
     private boolean FIRST = false; //if the last thing to be set was first
-    public boolean FLAG = true;
+    public boolean FLAG = false;
 
     private logic.INode tempStart;
     private logic.INode tempEnd;
@@ -45,7 +45,6 @@ public class Controller extends Application {
 
     @Override
     public void start(Stage s) throws Exception {
-
 		/* get information */
         nodesFromFile();
         mapsFromFile();
@@ -110,18 +109,54 @@ public class Controller extends Application {
      * @param id
      * @param START
      */
-    public void handleSearchInput(int id, boolean START){
-        if (nodes.containsKey(id) && FLAG){ //The FLAG prevents it from setting it from clicks doubly
-            if (START) startNode = nodes.get(id);
-            else       endNode   = nodes.get(id);
+    public void handleSearchInput(int id, boolean START) {
+        FIRST = START; //Set START so when / if map clicked properly sets start/end node
 
-            myDisplay.mapDisplay.setStartNode(id, true);
+        if (nodes.containsKey(id)) {
+
+            if (START) {//setting start
+                System.out.println("START TRUE!");
+
+                if (!FLAG) {//if not from a click on the map hide the last
+                    System.out.println("FLAG FALSE!");
+                    if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode.getID());
+                }
+
+                if (endNode != null && id == endNode.getID()) {//if end and start will be the same remove the other
+                    System.out.println("IDS SAME!");
+
+                    endNode = null;
+                    this.myDisplay.end.setValue(null);
+                }
+
+                this.startNode = nodes.get(id);
+            } else {
+                if (!FLAG) {//if not from a click on the map hide the last
+                    if (endNode != null) this.myDisplay.mapDisplay.hideLast(endNode.getID());
+                }
+
+                if (startNode != null && id == startNode.getID()) {//if end and start will be the same remove the other
+                    startNode = null;
+                    this.myDisplay.start.setValue(null);
+                }
+
+                this.endNode = nodes.get(id);
+            }
+
+            if (startNode != null) {
+                myDisplay.mapDisplay.setStartNode(startNode.getID(), true);
+            }
+
+            if (endNode != null) {
+                myDisplay.mapDisplay.setStartNode(endNode.getID(), false);
+            }
 
             if (startNode != null && endNode != null) {
                 findPaths();
             }
         }
     }
+
 
     /**
      * THIS IS POST TEMP NODE CREATION
@@ -140,37 +175,68 @@ public class Controller extends Application {
          */
 
         if (!FIRST){ //If the last node we added was the first
-            eradicate(tempStart);
-            this.startNode = n;
+            //if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode.getID()); //hide the last start
+            //this.startNode = n;
 
             if (!nodes.containsKey(n.getID())) {//TODO double check this works, ie that isn't already added
-                tempStart = startNode;
+                System.out.println("IT LOOKS LIKE IT WORKED START");
+                tempStart = n;
+                nodes.put(n.getID(), n);
             }
 
-            myDisplay.start.addNode(n, currentMap);
-            myDisplay.start.setValue(n);
+            this.FLAG = true;//this is set in attempts to avoid triggering stuff twice
+            myDisplay.start.setValue(myDisplay.start.addNode(n, currentMap));
+
+
         } else {//Else if the last node we added was the last [note, a lot of this gets wonky when we add midway points, jesus
-            eradicate(tempEnd);
+            //this.endNode = n;
+
+            if (!nodes.containsKey(n.getID())) {//TODO double check this works, ie that isn't already added
+                System.out.println("IT LOOKS LIKE IT WORKED END");
+                tempEnd = n;
+                nodes.put(n.getID(), n);
+            }
+
+            this.FLAG = true;
+            myDisplay.end.setValue(myDisplay.end.addNode(n, currentMap));
 
         }
+
         FIRST = !FIRST;
+        this.FLAG = false;//this should prevent some double triggering of events
+        //myDisplay.mapDisplay.setStartNode(n.getID(), FIRST);//this correctly highlights the new node //todo check this
     }
 
-    public INode createTempRoom(double x, double y){
+    public INode createTempLandmark(double x, double y){
+
         double z;
+
         if(currentMap.inside()) {
            z = ((Floor)currentMap).getFloor() * 15; //ROUGH Z value
         } else {
            z = 0;
         }
-        double x2 = x;//logic.Translate();
+
+        double x2 = x;//TODO ADD TRANSLATE HERE
         double y2 = y;
         double z2 = z;
 
+        //TODO -1 and -2 for tempstart and tempend
+        Landmark temp;
 
-        Room temp = new Room(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near "+ nearestNamedNodeName(x2, y2, z2));
+        if(!FIRST) {
+            if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode.getID()); //hide the last start
+            eradicate(tempStart, true); //completely get rid of the last start
+            System.out.println("-1");
+            temp = new Landmark(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
+        } else {
+            if (endNode != null) this.myDisplay.mapDisplay.hideLast(endNode.getID()); //hide the last end
+            eradicate(tempEnd, false); //completely get rid of the last temp
+            System.out.println("-2");
+            temp = new Landmark(-2, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
+        }
+
         int target = nearestNodeID(x2, y2, z2);
-
         temp.addEdge(new Edge(target, 1.0));
 
         return temp;
@@ -215,8 +281,8 @@ public class Controller extends Application {
 
         for(HashMap.Entry<Integer, INode> cursor : nodes.entrySet()){
             INode v = cursor.getValue();
-            if(v.isInteresting()){
-                if(Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y)) < distance){
+            if(v.isInteresting() && cursor.getKey() != -1 && cursor.getKey() != -2){ //we dont want the name Near Near Stratton Hall
+                if(Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y)) < distance ){
                     n = v;
                     distance =Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y));
                 }
@@ -231,15 +297,24 @@ public class Controller extends Application {
      * Removes this node from everything
      * @param n
      */
-    public void eradicate(INode n){
+    public void eradicate(INode n, boolean start){
         if( n != null) {
-            nodes.remove(n);
+            nodes.remove(n); //remove node froms nodes [the hashmap]
+
+            //remove references of this node in other nodes
             for (Edge e : n.getAdjacencies()) {
                 nodes.get(e.getTarget()).removeEdge(n.getID());
             }
-            myDisplay.start.removeNode(n.getID());
-            myDisplay.start.setValue(null);
-            myDisplay.mapDisplay.removeNode(n.getID());
+
+            if (start) {
+                myDisplay.start.removeNode(n.getID()); //remove it from the observable list
+                myDisplay.start.setValue(null);        //set the list value to empty [this won't last very long]
+            } else {
+                myDisplay.end.removeNode(n.getID());
+                myDisplay.end.setValue(null);
+            }
+
+            myDisplay.mapDisplay.removeNode(n.getID()); //remove it from the map, visually and from the list
         }
     }
 
@@ -277,6 +352,7 @@ public class Controller extends Application {
 
     }
 
+    /*
     public void nodeFromMapHandler(INode n){
         //check if we have a start or false
         if (myDisplay.start.getValue() == null){
@@ -322,6 +398,7 @@ public class Controller extends Application {
             }
         }
     }
+    */
 
     private boolean validateNotEquality(INode n, INode m){
         if (n.getID() == m.getID()){
@@ -384,15 +461,24 @@ public class Controller extends Application {
      * We also have to think about clearing things
      */
     public void findPaths(){
+        //Rework code: //TODO update this with the new direction rework
+        /*
+        ArrayList<ArrayList<Instruction>> path = getInstructions(this.getPathNodes(startNode, endNode));
+        myDisplay.setInstructions(path, instructions); //TODO UPDATE setInstructions
+        myDisplay.mapDisplay.showPath(path); //TODO UPDATE showPath
+        */
+        System.out.println("FIND PATHS CURRENTLY NOT SET UP~");
+
+
         //validate that there are inputs for beginging and end
-        if (this.startNode != null && this.endNode != null){
+       /* if (this.startNode != null && this.endNode != null){
             //logic.Node s = (logic.Node)this.start.getValue();
             //logic.Node e = (logic.Node)this.end.getValue();
             ArrayList<logic.INode> path = this.getPathNodes(startNode, endNode);
             ArrayList<String> instructions = this.getInstructions();//pass correct instructions
             myDisplay.setInstructions(path, instructions);
             myDisplay.mapDisplay.showPath(path);
-        }
+        }*/
         //String name = controller.getMapName();
         //map.setMap(name);
         //mapDisplay.drawPath();

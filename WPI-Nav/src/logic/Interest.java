@@ -1,5 +1,7 @@
 package logic;
 
+import javafx.scene.image.ImageView;
+
 import java.util.ArrayList;
 
 /**
@@ -43,5 +45,9 @@ public class Interest  extends Node{
      */
     public void addNames(ArrayList<String> toAdd) {
         names.addAll(toAdd);
+    }
+
+    public ImageView getIcon(){ //This will be removed and implemented individually in each specific Node type
+        return new ImageView();
     }
 }

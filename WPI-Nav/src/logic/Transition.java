@@ -1,5 +1,7 @@
 package logic;
 
+import javafx.scene.image.ImageView;
+
 /**
  * Created by jacobhackett on 11/24/15.
  */
@@ -16,4 +18,9 @@ public class Transition extends Node {
     public boolean isTransition() {
         return true;
     }
+
+    public ImageView getIcon(){ //TODO implement
+        return new ImageView();
+    }
+
 }

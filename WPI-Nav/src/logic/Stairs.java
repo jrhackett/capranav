@@ -1,5 +1,7 @@
 package logic;
 
+import javafx.scene.image.ImageView;
+
 /**
  * Created by jacobhackett on 11/24/15.
  */
@@ -13,5 +15,7 @@ public class Stairs extends Node{
         super(id, x, y, z, x1, y1, z1, map_id);
     }
 
-
+    public ImageView getIcon(){ //TODO implement
+        return new ImageView();
+    }
 }
