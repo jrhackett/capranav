@@ -1,10 +1,14 @@
 package controller;
 
+import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import logic.*;
 import visuals.Display;
+import visuals.Instructions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +25,8 @@ public class Controller extends Application {
 
     /* information variables */
     public ArrayList<INode> pathNodes;       /* this is set then used to get instructions from logic.Directions */
+    public ArrayList<ArrayList<Instructions>> currentInstructions;
+
 
     /* nodes and graphs */
     private HashMap<Integer, INode> nodes;   /* all the nodes */
@@ -28,6 +34,8 @@ public class Controller extends Application {
 
     //Maps maps;                       /* information of the maps */
 
+    private int currentBuilding;
+    private int currentFloor;
     private Campus campus;
     private logic.IMap currentMap;            /* current map being used */
     private HashMap<Integer, Building> buildings;   /* information on organization of floors */
@@ -45,24 +53,19 @@ public class Controller extends Application {
 
     @Override
     public void start(Stage s) throws Exception {
-		/* get information */
+        /* load up svg converter */
+        SvgImageLoaderFactory.install();
+
+
+        /* get information */
         nodesFromFile();
         mapsFromFile();
-
-        /* icon */
-      /*  try {
-            s.getIcons().add(new Image(getClass().getResourceAsStream("../images/globe.png")));
-        }
-        catch (NullPointerException e) {
-            s.getIcons().add(new Image(getClass().getResourceAsStream("/images/globe.png")));
-        }*/
+        buildingsFromFile();
 
 		/* basic layout */
-        //s.initStyle(StageStyle.UNDECORATED);  // <-- removes the top part of the app close/open
+        s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
 
         s.setResizable(true);
-       // s.setTitle("CapraNav");
-
 		/* setup */
         this.myDisplay = new Display(this);    //creates scene
         Scene display = myDisplay.Init(); //initializes scene
@@ -70,18 +73,61 @@ public class Controller extends Application {
         display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
         s.show();   //shows scene
         defaultMap();
+        showNodeImage(new Room(0,0.0,0.0,0.0,0.0,0.0,0.0,"hradfg"));
     }
 
 
     /****************************************************************************************************************
                                     FUNCTIONS THAT ARE CALLED FROM UI AND CONTACT UI
      ****************************************************************************************************************/
+    public void showNodeImage(INode n){
+        //we need a way of getting the image
+
+        StackPane imageStack = new StackPane();
+        imageStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+        imageStack.setOnMouseClicked(e -> {
+            myDisplay.root.getChildren().remove(imageStack);
+        });
+
+       //add image to stack pane -> if no image return void
+        //TODO ADD IMAGES / change node content if needed
+
+        this.myDisplay.root.getChildren().add(imageStack);
+    }
+
+
     public void sendEmail(String email){
+        //TODO FILL THIS OUT
+        INode end = null;
+        String startString = null;
+        String endString = null;
+        ArrayList<String> simplifiedInstruction = new ArrayList<>();
+        for (ArrayList<Instructions> il : currentInstructions){
+            for (Instructions i : il){
+                simplifiedInstruction.add(i.getInstruction_string());
+                end = i.getNode();
+            }
+        }
+
+        if (currentInstructions != null) {
+            INode start = currentInstructions.get(0).get(0).getNode();
+            if (start.isInteresting()) {
+                startString = start.getNames().get(0);
+            } else if (start.isTransition()) {
+                startString = start.toString();
+            }
+            if (end != null && end.isInteresting()) {
+                endString = start.getNames().get(0);
+            } else if (start.isTransition()) {
+                endString = start.toString();
+            }
+        }
         logic.Email e = new logic.Email(email);
         System.out.println(email);
-        //e.sendEmail()
         //TODO FILL IN WITH NEW EMAIL CODE
-
+        if(simplifiedInstruction.size() != 0 && startString != null && endString != null)
+        e.sendDirections(simplifiedInstruction, startString, endString);
+        //TODO DO WE NEED TO DO SOMETHING MORE??
     }
 
     public HashMap<Integer, INode> getNodes(){
@@ -132,6 +178,7 @@ public class Controller extends Application {
                 this.startNode = nodes.get(id);
             } else {
                 if (!FLAG) {//if not from a click on the map hide the last
+                    System.out.println("FLAG FALSE!");
                     if (endNode != null) this.myDisplay.mapDisplay.hideLast(endNode.getID());
                 }
 
@@ -144,10 +191,12 @@ public class Controller extends Application {
             }
 
             if (startNode != null) {
+                System.out.printf("Setting STARTNODE: %d\n", startNode.getID());
                 myDisplay.mapDisplay.setStartNode(startNode.getID(), true);
             }
 
             if (endNode != null) {
+                System.out.printf("Setting ENDNODE: %d\n", endNode.getID());
                 myDisplay.mapDisplay.setStartNode(endNode.getID(), false);
             }
 
@@ -155,6 +204,87 @@ public class Controller extends Application {
                 findPaths();
             }
         }
+    }
+
+//TODO MEGAIMPORTANT DO THIS YES DO
+    public void handleEnterBuilding(Transition t){
+        System.out.println("Entered handle Enter Building");
+        //remove it from the ends and start??
+
+        //switch to the map it was referencing via the building via the map
+        switchMapSetting(t.getBuildingID(), t.getToFloor());
+
+    }
+
+    private void switchMapSetting(int buildingID, int startingFLOOR){
+        if (buildingID == 0){
+            //remove the current building info/pane/whatever
+            hideBuildingPane();//ONLY SLIDES UP BUILDING VIEW //TODO STILL UNTESTED
+            //switch to campus map
+            defaultMap();
+        } else {
+            this.currentBuilding = buildingID;
+            showBuildingPane();//ONLY SLIDE DOWN BUILDING VIEW //TODO STILL UNTESTED
+            switchToBuildingView(buildingID, startingFLOOR);
+        }
+    }
+
+    private void switchToBuildingView(int buildingID, int startingFLOOR){
+        //the arrows should already be correctly mapped to controller
+
+        //set the Building Name
+        myDisplay.setBuildingName(buildings.get(buildingID).getName());
+
+        //set the correct floor
+        setFloor(startingFLOOR);
+
+        //set building info arrows / tab
+
+        // this.myDisplay.populateShowAddBuildingPanel(buildings.get(buildingID));
+
+        //switch to correct view
+
+        //this.myDisplay.setFloorShowing(startingFLOOR);
+//TODO right here
+    }
+
+    public void handleIncreaseFloorButton(){
+        if (buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)){
+            setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(++currentFloor));
+        }
+    }
+
+    public void handleDecreaseFloorButton(){
+        if (buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)){
+            setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(--currentFloor));
+        }
+    }
+
+
+    public void setFloor(int i){
+        if (buildings.get(currentBuilding).getFloorMap().containsKey(i)){
+            setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(i));
+            this.currentFloor = i;
+            this.myDisplay.setBuildingNumber(i);
+        }
+    }
+
+    public void hideBuildingPane(){
+        if (this.myDisplay.BUILDING_VISIBLE.getValue()){
+            myDisplay.slidingBuilding.playHidePane();
+            this.myDisplay.BUILDING_VISIBLE.setValue(false);
+        }
+    }
+    public void showBuildingPane(){
+        if (!this.myDisplay.BUILDING_VISIBLE.getValue()){
+            myDisplay.slidingBuilding.playShowPane();
+            this.myDisplay.BUILDING_VISIBLE.setValue(true);
+        }
+    }
+
+    public void setCurrentMap(int id){
+        this.currentMap = maps.get(id);
+        this.myDisplay.mapDisplay.setMap(maps.get(id));
     }
 
 
@@ -182,6 +312,8 @@ public class Controller extends Application {
                 System.out.println("IT LOOKS LIKE IT WORKED START");
                 tempStart = n;
                 nodes.put(n.getID(), n);
+            } else {
+                if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode.getID());
             }
 
             this.FLAG = true;//this is set in attempts to avoid triggering stuff twice
@@ -195,6 +327,8 @@ public class Controller extends Application {
                 System.out.println("IT LOOKS LIKE IT WORKED END");
                 tempEnd = n;
                 nodes.put(n.getID(), n);
+            } else {
+                if (endNode != null) this.myDisplay.mapDisplay.hideLast(endNode.getID());
             }
 
             this.FLAG = true;
@@ -202,7 +336,7 @@ public class Controller extends Application {
 
         }
 
-        FIRST = !FIRST;
+        //FIRST = !FIRST;//what if FIRST IS GETTING DOUBLY RESET!! WHOOO! THIS WAS IT BOYS!
         this.FLAG = false;//this should prevent some double triggering of events
         //myDisplay.mapDisplay.setStartNode(n.getID(), FIRST);//this correctly highlights the new node //todo check this
     }
@@ -221,16 +355,21 @@ public class Controller extends Application {
         double y2 = y;
         double z2 = z;
 
-        //TODO -1 and -2 for tempstart and tempend
         Landmark temp;
 
         if(!FIRST) {
-            if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode.getID()); //hide the last start
+            if (startNode != null){//have to delete old before creating new one (with same ID)
+                System.out.println("Hiding old start node");
+                this.myDisplay.mapDisplay.hideLast(startNode.getID()); //hide the last start
+            }
             eradicate(tempStart, true); //completely get rid of the last start
             System.out.println("-1");
             temp = new Landmark(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
         } else {
-            if (endNode != null) this.myDisplay.mapDisplay.hideLast(endNode.getID()); //hide the last end
+            if (endNode != null){
+                System.out.println("Hiding old end node");
+                this.myDisplay.mapDisplay.hideLast(endNode.getID()); //hide the last end
+            }
             eradicate(tempEnd, false); //completely get rid of the last temp
             System.out.println("-2");
             temp = new Landmark(-2, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
@@ -307,22 +446,25 @@ public class Controller extends Application {
             }
 
             if (start) {
-                myDisplay.start.removeNode(n.getID()); //remove it from the observable list
+                System.out.printf("Removing from options tempstart id:%d (should be -1)!\n", tempStart.getID());
                 myDisplay.start.setValue(null);        //set the list value to empty [this won't last very long]
+                myDisplay.start.removeNode(n.getID()); //remove it from the observable list
             } else {
-                myDisplay.end.removeNode(n.getID());
+                System.out.printf("Removing from options tempend id:%d (should be -2)!\n", tempStart.getID());
                 myDisplay.end.setValue(null);
+                myDisplay.end.removeNode(n.getID());
             }
 
+            System.out.printf("Removing node  %d from mapdisplay: %d", n.getID(),n.getID());
             myDisplay.mapDisplay.removeNode(n.getID()); //remove it from the map, visually and from the list
         }
     }
 
 
     public void defaultMap(){
-        currentMap = campus;
+        //currentMap = campus;
         setCurrentMap(campus.getID());
-        this.myDisplay.mapDisplay.setMap(currentMap);
+        //this.myDisplay.mapDisplay.setMap(currentMap);
 
     }
 
@@ -452,6 +594,8 @@ public class Controller extends Application {
                 value.put(k,v);
             }
         });
+
+
         return value;
     }
 
@@ -487,9 +631,7 @@ public class Controller extends Application {
 
 
 
-    public void setCurrentMap(int id){
-        this.currentMap = maps.get(id);
-    }
+
 
 
     /****************************************************************************************************************
@@ -509,6 +651,12 @@ public class Controller extends Application {
         Parser test = new Parser("nodes.json");
         Graph graph = (Graph)test.fromFile();
         this.nodes = graph.getNodes();
+
+        TStairs tStairs = new TStairs(77, 45, 45, 45, 45, 45, 45, 0);
+        tStairs.setToFloor(1);
+        tStairs.setBuildingID(1);
+        this.nodes.put(77, tStairs); //TODO REMOVE THIS
+
     }
 
     /**
@@ -520,10 +668,38 @@ public class Controller extends Application {
     }
 */
 
+
+    private void buildingsFromFile(){
+        buildings = new HashMap<>();
+        Building stratton = new Building(1, 4);
+        stratton.addFloor(1, 1);
+        stratton.addFloor(0, 2);
+        stratton.addFloor(2, 3);
+        stratton.addFloor(3, 4);
+        stratton.addName("Stratton Hall");
+        stratton.addName("Stratton");
+        stratton.addName("sh");
+        buildings.put(1, stratton);
+    }
+
     private void mapsFromFile() {
         maps = new HashMap<>();
         campus = new Campus(0, "wpi-campus-map", 24);
+
+        Floor stratton1 = new Floor(1, "sh1", 0.13, 1, 1);
+        Floor stratton0 = new Floor(2, "sh0", 0.13, 1, 0);
+        Floor stratton2 = new Floor(3, "sh2", 0.13, 1, 2);
+        Floor stratton3 = new Floor(4, "sh3", 0.13, 1, 3);
+
+
         maps.put(0, campus);
+        maps.put(1, stratton1);
+        maps.put(2, stratton0);
+        maps.put(3, stratton2);
+        maps.put(4, stratton3);
+
+
+
 
         //TODO get this functional
        /*

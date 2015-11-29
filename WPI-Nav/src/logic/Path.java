@@ -1,5 +1,6 @@
 package logic;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
@@ -15,8 +16,9 @@ public class Path extends Node {
         super(id, x, y, z, x1, x2, x3, mapID);
     }
 
-    public ImageView getIcon(){ //Path nodes have no image
-        return new ImageView();
+    public ImageView getIcon(){
+        Image image = new Image(getClass().getResourceAsStream("../images/pin56_small.svg"), 20, 20, true, true);
+        ImageView imageView = new ImageView(image);
+        return imageView;
     }
-
 }

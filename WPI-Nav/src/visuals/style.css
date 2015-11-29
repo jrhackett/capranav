@@ -18,10 +18,29 @@
     -fx-fill: #eeeeee;
 }
 
-#gearsView {
+#pinView:hover {
+    -fx-fill: #ac2738;
+}
+
+#pinView:pressed {
+    -fx-fill: #274abe;
+    -fx-scale-x: 6%;
+    -fx-scale-y: 6%;
+}
+
+#emailView {
+    -fx-fill: #ac2738;
+}
+
+#emailView:hover {
     -fx-fill: #eeeeee;
 }
 
+#emailView:pressed {
+    -fx-fill: #274abe;
+    -fx-scale-x: 6%;
+    -fx-scale-y: 6%;
+}
 
 .combo-box{
     -fx-font-family: HelveticaNeueLight;

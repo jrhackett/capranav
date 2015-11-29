@@ -74,7 +74,7 @@ public class Inputs extends ComboBox {
 	public ObservableList<InputItem> createInputItems(HashMap<Integer, logic.INode> nodes, HashMap<Integer, logic.IMap> maps) {
 		this.data = FXCollections.observableArrayList();
 		nodes.forEach((k, v) -> { //For each node
-			addNode(v, maps.get(v.getMap_id()));
+			 addNode(v, maps.get(v.getMap_id()));
 		});
 
 		return data.sorted();
@@ -95,7 +95,19 @@ public class Inputs extends ComboBox {
 					data.add(item);
 				}
 			}
+		} else if(v.isTransition()) {
+			if (map.inside()) {//FOOD should probably also not have map extensions
+				for (String m : getNames(((Floor) map).getBuildingID())) {//TODO we should just do buildings and campus separately
+					item = new InputItem(v.getID(), m + " " + v.toString());
+					if (!data.contains(item)) data.add(item); //TODO this work around will probably not work
+				}
+			} else {
+				item = new InputItem(v.getID(), v.toString());
+				data.add(item);
+			}
+
 		}
+
 		return item;
 	}
 

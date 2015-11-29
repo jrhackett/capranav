@@ -33,13 +33,24 @@ public class Bathroom extends Interest {
 
     public ImageView getIcon(){
         //TODO FILL THIS IN
+        Image image;
+        ImageView imageView;
         switch (bathroomType){
-            case GENERAL:
             case MENS:
+                 image = new Image(getClass().getResourceAsStream("../images/female105.svg"), 20, 20, true, true);
+                 imageView = new ImageView(image);
+                return imageView;
             case WOMAN:
+                 image = new Image(getClass().getResourceAsStream("../images/female105.svg"), 20, 20, true, true);
+                 imageView = new ImageView(image);
+                return imageView;
             case HANDICAP:
-                default:
-                    return new ImageView(new Image(getClass().getResourceAsStream("../images/forward.svg"), 20, 20, true, true));
+            case GENERAL:
+            default:
+                     image = new Image(getClass().getResourceAsStream("../images/female105.svg"), 20, 20, true, true);
+                     imageView = new ImageView(image);
+                    return imageView;
+                }
         }
     }
-}
+

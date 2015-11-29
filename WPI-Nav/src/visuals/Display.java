@@ -20,6 +20,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import javafx.scene.text.Text;
 import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,18 +79,24 @@ public class Display {
     private static final double MAP_HEIGHT = 495;
     private static final double MAP_BORDER = 15;
 
-	private BooleanProperty VISIBLE;
+	private BooleanProperty DASHBOARD_VISIBLE;
+    private BooleanProperty SETTINGS_VISIBLE;
+    public BooleanProperty BUILDING_VISIBLE;
 	private boolean EMAIL = false;
 	//Visual Elements
 	VBox dashBoard;
 	SlidingAnchorPane slidingDashboard;
+    public SlidingAnchorPane slidingBuilding;
 	AnchorPane directions;
 	VBox map;
-	StackPane root;
+	public StackPane root;
 	HBox dashBoardTitleBox;
 	private ListView<Instructions> instructions;
+    javafx.scene.control.Button hiddenHandler;
 
 
+    private Label buildingName;
+    private Label buildingNumber;
 
 
 	/**
@@ -104,7 +111,10 @@ public class Display {
         this.map        = new VBox();
         this.slidingDashboard = new SlidingAnchorPane();
 
-		this.VISIBLE = new SimpleBooleanProperty(true);
+		this.DASHBOARD_VISIBLE = new SimpleBooleanProperty(true);
+        this.SETTINGS_VISIBLE = new SimpleBooleanProperty(true);
+        this.BUILDING_VISIBLE = new SimpleBooleanProperty(false);
+
 		this.EDGE = GAP * 2 + CONTROL_WIDTH;
 	}
 
@@ -134,10 +144,10 @@ public class Display {
 
 
 		sections.setStyle("-fx-background-color: #333333");
-		sections.getChildren().addAll(slidingDashboard, directions, map); //dashBoardControlBox
+		sections.getChildren().addAll(slidingDashboard, directions, map); //dashBoardControlBox //, directions, map
 		/*****************************************************************/
 		/** Add sections to Root */
-		StackPane root = new StackPane();
+        root = new StackPane();
 		root.getChildren().add(sections);
 
 		/*****************************************************************/
@@ -163,10 +173,10 @@ public class Display {
 		HBox divider_2 = createDivider();
 		HBox divider_3 = createDivider();
 
-		divider_0.visibleProperty().bind(VISIBLE);
-		divider_1.visibleProperty().bind(VISIBLE);
-		divider_2.visibleProperty().bind(VISIBLE);
-		divider_3.visibleProperty().bind(VISIBLE);
+		divider_0.visibleProperty().bind(DASHBOARD_VISIBLE);
+		divider_1.visibleProperty().bind(DASHBOARD_VISIBLE);
+		divider_2.visibleProperty().bind(DASHBOARD_VISIBLE);
+		divider_3.visibleProperty().bind(DASHBOARD_VISIBLE);
 
 		AnchorPane.setTopAnchor(divider_0, EDGE + 1);
 		AnchorPane.setLeftAnchor(divider_0, GAP);
@@ -180,9 +190,10 @@ public class Display {
 		AnchorPane.setLeftAnchor(divider_2, GAP);
 		AnchorPane.setRightAnchor(divider_2, GAP);
 
-		AnchorPane.setBottomAnchor(divider_3, EDGE - 1);
-		AnchorPane.setLeftAnchor(divider_3, GAP);
-		AnchorPane.setRightAnchor(divider_3, GAP);
+//		AnchorPane.setBottomAnchor(divider_3, EDGE - 1);
+        //AnchorPane.setTopAnchor(divider_3, 0.0);
+		//AnchorPane.setLeftAnchor(divider_3, GAP);
+		//AnchorPane.setRightAnchor(divider_3, GAP);
 
 		/** images **/
 		//Image pin =				new Image(getClass().getResourceAsStream("../images/pin.png"), 20, 20, true, true);
@@ -200,7 +211,8 @@ public class Display {
 
 		//Image info =			new Image(getClass().getResourceAsStream("../images/info.png"), 20, 20, true, true);
 		//ImageView infoView = 	new ImageView(info);
-		SVGPath infoView = new SVGPath();
+		//the real infoview
+        SVGPath infoView = new SVGPath();
 		infoView.setContent("M254.26,0C113.845,0,0,113.845,0,254.26s113.845,254.26,254.26,254.26"+
 		"s254.26-113.845,254.26-254.26S394.675,0,254.26,0z M286.042,381.39c0,17.544-14.239,31.782-31.782,31.782"+
 		"s-31.782-14.239-31.782-31.782V222.477c0-17.544,14.239-31.782,31.782-31.782s31.782,14.239,31.782,31.782V381.39z"+
@@ -211,6 +223,15 @@ public class Display {
 		infoView.setTranslateX(-50 * 4.5 - 9);
 		infoView.setTranslateY(-50 * 2 - 12);
 		infoView.setId("pinView");
+
+
+
+
+
+
+
+
+
 
 
 		Image gears =			new Image(getClass().getResourceAsStream("../images/gears.png"), 20, 20, true, true);
@@ -258,9 +279,9 @@ public class Display {
 		//gearsView.setId("pinView");
 
 
-		pinView.visibleProperty().bind(VISIBLE);
-		infoView.visibleProperty().bind(VISIBLE);
-		gearsView.visibleProperty().bind(VISIBLE);
+		pinView.visibleProperty().bind(DASHBOARD_VISIBLE);
+		infoView.visibleProperty().bind(DASHBOARD_VISIBLE);
+		gearsView.visibleProperty().bind(DASHBOARD_VISIBLE);
 
 		AnchorPane.setTopAnchor(pinView, 1 * EDGE + GAP + 5);
 		AnchorPane.setLeftAnchor(pinView, GAP);
@@ -268,8 +289,8 @@ public class Display {
 		//AnchorPane.setTopAnchor(infoView, 3 * EDGE + GAP + 5); //<--- TODO notice this, these lines break a lot of stuff, no idea why
 		//AnchorPane.setLeftAnchor(infoView, GAP);
 
-		AnchorPane.setBottomAnchor(gearsView, GAP * 2);//TODO these will change with svg
-		AnchorPane.setLeftAnchor(gearsView, GAP * 2);
+		//AnchorPane.setBottomAnchor(gearsView, GAP * 2);//TODO these will change with svg
+		//AnchorPane.setLeftAnchor(gearsView, GAP * 2);
 
 		/*****************************************************************/
 		/** Dashboard **/
@@ -352,27 +373,48 @@ public class Display {
 		/** Change Settings Zone **/
 		HBox settingsLabelBox = new HBox();
 		settingsLabelBox.setMinHeight(EDGE);
-		settingsLabelBox.setMaxHeight(EDGE);
+		settingsLabelBox.setMaxHeight(expandedWidth); //change this to whatever height
 		settingsLabelBox.setPrefHeight(EDGE);
 		settingsLabelBox.setAlignment(Pos.CENTER_LEFT);
 
 		Label settingsLabel = new Label("Settings");
 		settingsLabel.setTextFill(Color.web("#eeeeee"));
 
-		settingsLabelBox.getChildren().addAll(settingsLabel);
+		//settingsLabelBox.getChildren().addAll(settingsLabel);
 		settingsLabelBox.setMinWidth(0);
 		settingsLabelBox.setPrefWidth(expandedWidth);
 		settingsLabelBox.setMaxWidth(expandedWidth);
 
-		AnchorPane.setBottomAnchor(settingsLabelBox, 0.0);// 2 * EDGE - 2 * GAP - 20);
-		AnchorPane.setLeftAnchor(settingsLabelBox, EDGE);
-
 		settingsLabel.setOnMouseClicked(e -> handleSettings());
 		gearsView.setOnMouseClicked(e -> handleSettings());
 
-		/*****************************************************************/
+        //settings a sliding pane!
+        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView);
+        slidingSettings.setStyle("-fx-background-color: #333333");
+
+        javafx.scene.control.Button slidingButton = slidingSettings.getButton();
+        slidingButton.setId("dashboardButton");
+        slidingButton.setMaxWidth(EDGE);
+        slidingButton.setMinWidth(EDGE);
+        slidingButton.setPrefWidth(EDGE);
+        //AnchorPane.setBottomAnchor(slidingButton, 0.0);
+        //AnchorPane.setLeftAnchor(slidingButton, 0.0);
+        settingsLabelBox.getChildren().addAll(slidingButton, settingsLabel);
+
+        VBox settingsVbox = new VBox();
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox);
+
+
+        AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
+        AnchorPane.setLeftAnchor(slidingSettings, 0.0);
+        slidingSettings.getChildren().addAll(settingsVbox);
+
+        //VBOX: Divider - seetingsLabelBox - actual settings
+
+
+        /*****************************************************************/
 		/** Building of Sliding Dashboard Anchorpane  **/
-		this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, VISIBLE, bars, divider_0, divider_1, divider_2, divider_3, gearsView, dashBoardTitleBox,locationLabelBox, resourcesLabelBox, infoView, settingsLabelBox, pinView, inputs); //, , ,
+		this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, divider_2, dashBoardTitleBox,locationLabelBox, resourcesLabelBox, infoView, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3,
 		slidingDashboard.setStyle("-fx-background-color: #333333");
 
 		/** STYLE BUTTON HERE **/
@@ -444,13 +486,35 @@ public class Display {
 		emailBox.setAlignment(Pos.CENTER_LEFT);
 		emailBox.setSpacing(GAP*3);
 
+      /*  SVGPath emailView = new SVGPath();
+        emailView.setContent("M356.92,57.712H15.525C6.986,57.712,0,64.7,0,73.236v225.971c0,8.539,6.986,15.525,15.525,15.525H356.92"+
+                "c8.538,0,15.524-6.986,15.524-15.525V73.236C372.444,64.699,365.458,57.712,356.92,57.712z M242.954,197.005"+
+                "c28.809,19.424,103.25,77.049,103.25,77.049c2.965,2.009,3.177,7.16,1.693,10.229c-1.483,3.07-6.122,4.938-9.087,2.93"+
+                "c0,0-79.24-57.212-109.561-77.969c-1.678-1.148-3.164,0.23-3.164,0.23l-33.247,26.527c-1.818,1.492-4.215,2.314-6.745,2.314"+
+                "s-4.926-0.822-6.746-2.314l-33.629-26.838c0,0-1.158-1.009-2.475-0.096c-29.972,20.805-108.867,78.145-108.867,78.145"+
+                "c-2.964,2.009-8.604,0.141-10.087-2.93c-1.483-3.068-1.271-8.22,1.693-10.229c0,0,74.535-57.445,102.884-76.768"+
+                "c1.619-1.104-0.08-2.727-0.08-2.727L23.662,99.908c-3.822-3.133-4.966-8.744-2.605-12.775c1.402-2.398,3.872-3.83,6.604-3.83"+
+                "c1.924,0,3.865,0.723,5.466,2.035l149.502,131.025c0.883,0.723,2.145,1.139,3.464,1.139s2.581-0.416,3.465-1.139L339.059,85.338"+
+                "c1.601-1.313,3.542-2.035,5.467-2.035c2.732,0,5.201,1.432,6.604,3.83c2.36,4.031,1.216,9.643-2.604,12.775l-105.404,94.945"+
+                "C243.121,194.854,241.636,196.114,242.954,197.005z");
+
+        emailView.setScaleX(.05);
+        emailView.setScaleY(.05);
+        emailView.setTranslateX(-50*3 - 15);
+        emailView.setTranslateY(-50 + 8);*/
+        Image emailImage = new Image(getClass().getResourceAsStream("../images/email109_small.svg"), 30, 30, true, true);
+        ImageView emailView = new ImageView(emailImage);
+       // emailImage.
+
 		VBox emailIconBox = new VBox();
-		Image email =	new Image(getClass().getResourceAsStream("../images/email109.png"), 30, 30, true, true);
-		ImageView emailView = new ImageView(email);
+		//Image email =	new Image(getClass().getResourceAsStream("../images/email109.png"), 30, 30, true, true);
+		//ImageView emailView = new ImageView(email);
 		emailView.setTranslateX(5);
-		emailView.setTranslateY(2);
+		emailView.setTranslateY(10);
 		emailIconBox.getChildren().addAll(emailView);
-		emailIconBox.setStyle("-fx-background-color: #ffffff");
+		emailIconBox.setMaxWidth(20);
+        emailIconBox.setMaxHeight(20);
+        emailIconBox.setStyle("-fx-background-color: #ffffff");
 		emailIconBox.setMinHeight(EDGE);
 
 
@@ -479,6 +543,17 @@ public class Display {
 		HBox mapTitle = new HBox();
 
 
+        /** Hidden Sliding Panel **/
+        slidingBuilding = new SlidingAnchorPane(EDGE, GAP, Direction.DOWN, BUILDING_VISIBLE, new Text("hidden"));
+        HBox buildingBox = createBuildingBox();
+        slidingBuilding.getChildren().addAll(buildingBox);
+        slidingBuilding.setMaxHeight(EDGE);
+        slidingBuilding.setMinHeight(0);
+        //send this a mouse event to trigger the slide
+        //hiddenHandler = slidingBuilding.getButton();
+
+
+
 		/** Label **/
 		Label mapTitleLabel = new Label("CapraNav");
 		mapTitleLabel.setTextFill(Color.web("#eeeeee"));
@@ -503,8 +578,9 @@ public class Display {
 		map.setMinHeight(MAP_HEIGHT+EDGE);
 		map.setPrefHeight(MAP_HEIGHT+ MAP_BORDER * 2 + EDGE);
 
-		map.getChildren().addAll(mapTitle, mapPane);
+		map.getChildren().addAll(mapTitle, buildingBox, mapPane);
 		map.setStyle("-fx-background-color:#eeeeee ;");
+
 	}
 
 	/****************************************************************************************************************
@@ -525,6 +601,32 @@ public class Display {
         //mapPane.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
         //mapPane.setTranslateY(HEIGHT_BUFFER);
         return mapPane;
+    }
+
+    //TODO THIS IS START OF BUILDING BOX PANE!
+    private HBox createBuildingBox(){ //its going to be an HBox with stuff inside of the sliding anchorpane
+        HBox box = new HBox();
+        javafx.scene.control.Button left = new javafx.scene.control.Button("<");
+        javafx.scene.control.Button right = new javafx.scene.control.Button(">");
+        buildingName = new Label();
+        buildingNumber = new Label();
+
+        left.setOnMouseClicked(e -> controller.handleDecreaseFloorButton());
+        right.setOnMouseClicked(e -> controller.handleIncreaseFloorButton());
+
+        box.setMaxHeight(EDGE);
+        box.setMinHeight(0);
+        box.getChildren().addAll(left, right, buildingName, buildingNumber);
+        return box;
+    }
+
+    public void setBuildingName(String s){
+        this.buildingName.setText(s);
+    }
+
+    public void setBuildingNumber(int i){
+        //TODO ADD FLICKERING ANIMATION
+        this.buildingNumber.setText(Integer.toString(i));
     }
 
     private VBox createInput(){
@@ -572,12 +674,8 @@ public class Display {
             }
         }));
 
-
-
         AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
         AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
-
-
 
         return inputs;
     }
@@ -699,6 +797,10 @@ public class Display {
                 logger.error("INPUT VALUE IS NOT YET A FULL INPUT, IT IS JUST A STRING: {}",v.getValue());
             }
 
+    }
+
+    public void hitHiddenHandler(){
+        hiddenHandler.fire();
     }
 
 
