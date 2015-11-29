@@ -165,6 +165,36 @@ public class Controller extends Application {
         }
     }
 
+//TODO MEGAIMPORTANT DO THIS YES DO
+    public void handleEnterBuilding(Transition t){
+        //remove it from the ends and start??
+
+        //switch to the map it was referencing via the building via the map
+        switchMapSetting(t.getBuildingID(), t.getToFloor());
+
+    }
+
+    private void switchMapSetting(int buildingID, int startingFLOOR){
+        if (buildingID == 0){
+            //remove the current building info/pane/whatever
+
+            //switch to campus map
+            defaultMap();
+
+        } else {
+            switchToBuildingView(buildingID, startingFLOOR);
+        }
+    }
+
+    private void switchToBuildingView(int buildingID, int startingFLOOR){
+        //set building info arrows / tab
+       // this.myDisplay.populateShowAddBuildingPanel(buildings.get(buildingID));
+        //switch to correct view
+        //this.myDisplay.setFloorShowing(startingFLOOR);
+//TODO right here
+    }
+
+
 
     /**
      * THIS IS POST TEMP NODE CREATION
@@ -472,6 +502,8 @@ public class Controller extends Application {
                 value.put(k,v);
             }
         });
+
+
         return value;
     }
 
@@ -529,6 +561,9 @@ public class Controller extends Application {
         Parser test = new Parser("nodes.json");
         Graph graph = (Graph)test.fromFile();
         this.nodes = graph.getNodes();
+
+        TStairs tStairs = new TStairs(77, 45, 45, 45, 45, 45, 45, 0);
+        this.nodes.put(77, tStairs); //TODO REMOVE THIS
     }
 
     /**

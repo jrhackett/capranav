@@ -20,4 +20,7 @@ public class TStairs  extends Transition {
         ImageView imageView = new ImageView(image);
         return imageView;
     }
+    public String toString(){
+        return "Stairs";
+    }
 }

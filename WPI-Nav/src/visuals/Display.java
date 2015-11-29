@@ -536,6 +536,11 @@ public class Display {
 		HBox mapTitle = new HBox();
 
 
+
+
+
+
+
 		/** Label **/
 		Label mapTitleLabel = new Label("CapraNav");
 		mapTitleLabel.setTextFill(Color.web("#eeeeee"));
@@ -562,6 +567,7 @@ public class Display {
 
 		map.getChildren().addAll(mapTitle, mapPane);
 		map.setStyle("-fx-background-color:#eeeeee ;");
+
 	}
 
 	/****************************************************************************************************************

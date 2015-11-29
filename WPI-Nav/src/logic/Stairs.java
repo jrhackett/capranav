@@ -20,5 +20,7 @@ public class Stairs extends Node{
         ImageView imageView = new ImageView(image);
         return imageView;
     }
-
+    public String toString(){
+        return "Stairs";
+    }
 }

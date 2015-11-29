@@ -6,6 +6,7 @@ import javafx.animation.Transition;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -131,9 +132,28 @@ public class MapDisplay extends Pane {
         double y = v.getY();
         Circle circle = new Circle(x, y, 5);
         normal(circle);
-        circle.setOnMouseClicked(e -> {
-            controller.handleMapClick(v);
-        });
+
+        /** this is some trash trash trash, we'll do it better when we set up svgs better"*/
+        if (v instanceof logic.Transition){
+            circle.setOnMouseClicked(e -> {
+                if (e.getButton().equals(MouseButton.SECONDARY) && e.getClickCount() >= 2){
+                    //enter building
+                    System.out.println("Double Click");
+                    controller.handleEnterBuilding(v);
+                } else if( e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1){
+                    System.out.println("HANDLE Click");
+
+                    controller.handleMapClick(v);
+                }
+            });
+        } else {
+            circle.setOnMouseClicked(e -> {
+                if ( e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1){
+                    controller.handleMapClick(v);
+                }
+            });
+        }
+
         return circle;
     }
 
@@ -142,7 +162,7 @@ public class MapDisplay extends Pane {
      * @param c
      */
     public void normal(Circle c) {
-        c.setFill(Color.TRANSPARENT);
+        c.setFill(Color.BLUE);
         c.setStrokeWidth(0);
         c.setRadius(5);
         c.setOpacity(1);
@@ -229,6 +249,69 @@ public class MapDisplay extends Pane {
         }
     }
 
+    /**
+     * The color and effect for when a node is set as a destination
+     * @param id
+     */
+    public void setStartNode(int id, boolean START){
+        Circle c = id_circle.get(id);
+        c.setRadius(5);
+
+        if (START) {
+            highlight(c, Color.GREEN, Color.LIGHTGREEN);
+            c.setRadius(5);
+
+
+            if (sts != null) {
+                sts.stop();
+             /*   if((Circle)sts.getNode() == c){ return;}//do nothing _
+                sts.*/
+            }
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
+            st.setByX(1.1f);
+            st.setByY(1.1f);
+            st.setCycleCount(4);
+            st.setAutoReverse(true);
+            st.play();
+            sts = st;
+        }
+        else {
+            highlight(c, Color.FIREBRICK, Color.RED);
+            if (ste != null) ste.stop();
+            c.setRadius(5);
+
+
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
+            st.setByX(1.1f);
+            st.setByY(1.1f);
+            st.setCycleCount(4);
+            st.setAutoReverse(true);
+            st.play();
+            ste = st;
+        }
+    }
+
+
+
+
+    /**
+     * remove node completely from map pane
+     * (this is for temporary nodes)
+     * @param id
+     */
+    public void removeNode(int id){
+        if(id_circle.containsKey(id)){
+            normal(id_circle.get(id));//hideLast(id)
+            this.getChildren().remove(id_circle.remove(id));
+            id_circle.remove(id);
+        }
+    }
+
+    public void hideLast(int id){
+        normal(id_circle.get(id));
+    }
+
+
 
     /****************************************************************************************************************
                                                         ICON CODE
@@ -285,79 +368,6 @@ public class MapDisplay extends Pane {
     }*/
 
 
-    /**
-     * The color and effect for when a node is set as a destination
-     * @param id
-     */
-    public void setStartNode(int id, boolean START){
-        Circle c = id_circle.get(id);
-        c.setRadius(5);
-
-        if (START) {
-            highlight(c, Color.GREEN, Color.LIGHTGREEN);
-            c.setRadius(5);
-
-
-            if (sts != null) {
-                sts.stop();
-             /*   if((Circle)sts.getNode() == c){ return;}//do nothing _
-                sts.*/
-            }
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
-            st.setByX(1.1f);
-            st.setByY(1.1f);
-            st.setCycleCount(4);
-            st.setAutoReverse(true);
-            st.play();
-            sts = st;
-        }
-        else {
-            highlight(c, Color.FIREBRICK, Color.RED);
-            if (ste != null) ste.stop();
-            c.setRadius(5);
-
-
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
-            st.setByX(1.1f);
-            st.setByY(1.1f);
-            st.setCycleCount(4);
-            st.setAutoReverse(true);
-            st.play();
-            ste = st;
-        }
-    }
-
-
-
-    /**
-     * highlights a circle
-     * @param c
-     * @param color
-     */
-    private void highlight(ImageView c, String color) {
-        c.setStyle("-fx-background-color: " + color);
-        /*c.setFill(color);
-        c.setStroke(colorStroke);
-        c.setStrokeWidth(1);*/
-    }
-
-
-    /**
-     * remove node completely from map pane
-     * (this is for temporary nodes)
-     * @param id
-     */
-    public void removeNode(int id){
-        if(id_circle.containsKey(id)){
-            normal(id_circle.get(id));//hideLast(id)
-            this.getChildren().remove(id_circle.remove(id));
-            id_circle.remove(id);
-        }
-    }
-
-    public void hideLast(int id){
-        normal(id_circle.get(id));
-    }
 
 
 
