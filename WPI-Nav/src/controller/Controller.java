@@ -3,7 +3,9 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import logic.*;
 import visuals.Display;
 
@@ -56,20 +58,11 @@ public class Controller extends Application {
         nodesFromFile();
         mapsFromFile();
 
-        /* icon */
-      /*  try {
-            s.getIcons().add(new Image(getClass().getResourceAsStream("../images/globe.png")));
-        }
-        catch (NullPointerException e) {
-            s.getIcons().add(new Image(getClass().getResourceAsStream("/images/globe.png")));
-        }*/
 
 		/* basic layout */
-        //s.initStyle(StageStyle.UNDECORATED);  // <-- removes the top part of the app close/open
+        s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
 
         s.setResizable(true);
-       // s.setTitle("CapraNav");
-
 		/* setup */
         this.myDisplay = new Display(this);    //creates scene
         Scene display = myDisplay.Init(); //initializes scene
@@ -77,12 +70,29 @@ public class Controller extends Application {
         display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
         s.show();   //shows scene
         defaultMap();
+        showNodeImage(new Room(0,0.0,0.0,0.0,0.0,0.0,0.0,"hradfg"));
     }
 
 
     /****************************************************************************************************************
                                     FUNCTIONS THAT ARE CALLED FROM UI AND CONTACT UI
      ****************************************************************************************************************/
+    public void showNodeImage(INode n){
+        //we need a way of getting the image
+
+        StackPane imageStack = new StackPane();
+        imageStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+        imageStack.setOnMouseClicked(e -> {
+            myDisplay.root.getChildren().remove(imageStack);
+        });
+
+       //add image to stack pane -> if no image return void
+
+
+        this.myDisplay.root.getChildren().add(imageStack);
+    }
+
+
     public void sendEmail(String email){
         logic.Email e = new logic.Email(email);
         System.out.println(email);
@@ -240,6 +250,11 @@ public class Controller extends Application {
             myDisplay.slidingBuilding.playShowPane();
             this.myDisplay.BUILDING_VISIBLE.setValue(true);
         }
+    }
+
+    public void setCurrentMap(int id){
+        this.currentMap = maps.get(id);
+        this.myDisplay.mapDisplay.setMap(maps.get(id));
     }
 
 
@@ -417,9 +432,9 @@ public class Controller extends Application {
 
 
     public void defaultMap(){
-        currentMap = campus;
+        //currentMap = campus;
         setCurrentMap(campus.getID());
-        this.myDisplay.mapDisplay.setMap(currentMap);
+        //this.myDisplay.mapDisplay.setMap(currentMap);
 
     }
 
@@ -586,10 +601,7 @@ public class Controller extends Application {
 
 
 
-    public void setCurrentMap(int id){
-        this.currentMap = maps.get(id);
-        this.myDisplay.mapDisplay.setMap(maps.get(id));
-    }
+
 
 
     /****************************************************************************************************************

@@ -89,7 +89,7 @@ public class Display {
     public SlidingAnchorPane slidingBuilding;
 	AnchorPane directions;
 	VBox map;
-	StackPane root;
+	public StackPane root;
 	HBox dashBoardTitleBox;
 	private ListView<Instructions> instructions;
     javafx.scene.control.Button hiddenHandler;
@@ -147,7 +147,7 @@ public class Display {
 		sections.getChildren().addAll(slidingDashboard, directions, map); //dashBoardControlBox //, directions, map
 		/*****************************************************************/
 		/** Add sections to Root */
-		StackPane root = new StackPane();
+        root = new StackPane();
 		root.getChildren().add(sections);
 
 		/*****************************************************************/
