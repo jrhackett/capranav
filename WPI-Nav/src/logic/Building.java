@@ -2,6 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 
+//These will be mapped to transition nodes somehow!!?
 public class Building {
     int id;
     int floors;

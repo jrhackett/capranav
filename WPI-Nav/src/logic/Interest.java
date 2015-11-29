@@ -1,5 +1,6 @@
 package logic;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
@@ -47,7 +48,9 @@ public class Interest  extends Node{
         names.addAll(toAdd);
     }
 
-    public ImageView getIcon(){ //This will be removed and implemented individually in each specific Node type
-        return new ImageView();
+    public ImageView getIcon(){
+        Image image = new Image(getClass().getResourceAsStream("../images/pin56_small.svg"), 20, 20, true, true);
+        ImageView imageView = new ImageView(image);
+        return imageView;
     }
 }

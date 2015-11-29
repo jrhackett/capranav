@@ -1,5 +1,6 @@
 package controller;
 
+import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -45,7 +46,11 @@ public class Controller extends Application {
 
     @Override
     public void start(Stage s) throws Exception {
-		/* get information */
+        /* load up svg converter */
+        SvgImageLoaderFactory.install();
+
+
+        /* get information */
         nodesFromFile();
         mapsFromFile();
 

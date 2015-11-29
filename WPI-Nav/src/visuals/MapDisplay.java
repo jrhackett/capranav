@@ -45,6 +45,10 @@ public class MapDisplay extends Pane {
 
     private ArrayList<INode> path; //last set path
 
+    //////////////////////// ICON CODE ///////////////////////////
+    private HashMap<Integer, ImageView> id_ICON;
+
+
     /**
      * Constructor
      * @param controller
@@ -64,71 +68,25 @@ public class MapDisplay extends Pane {
     }
 
 
-    public void clearNodesEdges(int ids, int ide){
-        int i = 0;
-        id_circle.forEach((k,v) ->{
-            //we have to also check
-            if (k != ids && k != ide) { normal(v); }
-        //    System.out.println(k);
-        });
-        //id_circle = new HashMap<>();
-        this.getChildren().removeAll(lines);
+    /****************************************************************************************************************
+                                                    WORKING CIRCLE CODE
+     ****************************************************************************************************************/
 
-        lines = new ArrayList<>();
+
+    /**
+     * Draws the nodes given on the map
+     * @param nodes
+     */
+    public void drawNodes(HashMap<Integer, INode> nodes){
+        this.id_circle = new HashMap<>();
+
+        nodes.forEach((k,v) -> {
+            Circle svgPath = createCircle(v);
+            id_circle.put(k, svgPath);
+            this.getChildren().add(svgPath);
+        });
     }
 
-
-  /*
-    public void setMap(logic.Map map){
-
-        this.getChildren().remove(mapView);
-        //this.getChildren().removeAll(lines);
-        // path.clear();
-
-
-        try {
-            this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
-        }
-        catch (NullPointerException e) {
-            this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
-        }
-
-        this.mapView = new ImageView(mapImage);
-        this.getChildren().add(mapView);
-        drawNodes(controller.getNodesOfMap(map.getID()));
-
-        HIGLIGHTED = false;
-
-        mapView.setOnMouseClicked(e -> {
-            if (!HIGLIGHTED) {
-                highlightAll();
-                HIGLIGHTED = true;
-            } else {
-                //hack / decision
-                this.getChildren().removeAll(lines);
-                hideAll();
-                controller.resetStartEnd();
-                HIGLIGHTED = false;
-
-                /*
-                if (controller.startNode != null && controller.endNode != null) {
-
-                    id_circle.forEach((k, v) -> {
-                        if (k != controller.startNode.getID() && k != controller.endNode.getID()) normal(v);
-                        else if (k != controller.startNode.getID()) setStartNode(k, false);
-                        else setStartNode(k, true);
-                    });
-                    showPath(path);
-                } else {
-                    hideAll();
-                }
-                HIGLIGHTED = false;
-                *//*
-            }
-        });
-
-    }
-*/
 
 
     /**
@@ -157,11 +115,6 @@ public class MapDisplay extends Pane {
     }
 
 
-
-
-
-
-
     private void createTempLandmark(MouseEvent e){
         //CREATE TEMPORARY POINT ->
         INode temp = controller.createTempLandmark(e.getX(), e.getY());
@@ -172,23 +125,63 @@ public class MapDisplay extends Pane {
     }
 
 
+    private Circle createCircle(INode v){
+
+        double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
+        double y = v.getY();
+        Circle circle = new Circle(x, y, 5);
+        normal(circle);
+        circle.setOnMouseClicked(e -> {
+            controller.handleMapClick(v);
+        });
+        return circle;
+    }
 
     /**
-     * remove node completely from map pane
-     * (this is for temporary nodes)
-     * @param id
+     * default circle
+     * @param c
      */
-    public void removeNode(int id){
-        if(id_circle.containsKey(id)){
-            normal(id_circle.get(id));//hideLast(id)
-            this.getChildren().remove(id_circle.remove(id));
-            id_circle.remove(id);
-        }
+    public void normal(Circle c) {
+        c.setFill(Color.TRANSPARENT);
+        c.setStrokeWidth(0);
+        c.setRadius(5);
+        c.setOpacity(1);
+        c.setEffect(null);
     }
 
-    public void hideLast(int id){
-        normal(id_circle.get(id));
+
+
+  /**
+     * highlights a circle
+     * @param c
+     * @param color
+     * @param colorStroke
+     */
+    private void highlight(Circle c, Color color, Color colorStroke ) {
+        c.setFill(color);
+        c.setStroke(colorStroke);
+        c.setStrokeWidth(1);
     }
+
+    /**
+     * Highlights the path of nodes.
+     * @param c
+     */
+    private void highlightPath(Circle c){
+        //c.setFill(Color.web("#00CCFF"));
+        // c.setStroke(Color.web("#0018A8"));
+        c.setRadius(5);
+        // highlight(c, Color.BLUE, Color.LIGHTBLUE);
+
+        DropShadow ds = new DropShadow();
+        ds.setColor(Color.WHITE);
+        ds.setOffsetX(2.0);
+        ds.setOffsetY(2.0);
+        c.setEffect(ds);
+        c.setOnMouseEntered(null);
+        c.setOnMouseExited(null);
+    }
+
 
     /**
      * Show path of nodes
@@ -236,64 +229,60 @@ public class MapDisplay extends Pane {
         }
     }
 
-    /**
-     * Hide all and show path
-     */
-    public void hideAll(){
-        id_circle.forEach((k,v) -> {
-            normal(v);
-        });
-    }
+
+    /****************************************************************************************************************
+                                                        ICON CODE
+     ****************************************************************************************************************/
 
 
     /**
-     * Draws the nodes given on the map
-     * @param nodes
+     * Creates an SVGPath icon (dependent on the node type)
+     * @param v
+     * @return
      */
-    public void drawNodes(HashMap<Integer, INode> nodes){
-        this.id_circle = new HashMap<>();
-
-        nodes.forEach((k,v) -> {
-            Circle circle = createCircle(v);
-            id_circle.put(k, circle);
-            this.getChildren().add(circle);
-        });
-    }
-
-
-    private Circle createCircle(INode v){
+    private ImageView createNodeIcon(INode v){
 
         double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
         double y = v.getY();
-        Circle circle = new Circle(x, y, 5);
-        normal(circle);
 
-        /*
-        circle.setOnMouseEntered(e -> {
-            last = (Color)circle.getFill();
-            lastStroke = (Color)circle.getStroke();
-            highlight(circle, Color.BLUE, Color.BLACK);
-        });
-
-        circle.setOnMouseExited(e -> {
-            highlight(circle, last, lastStroke);
-        });
-        */
-        circle.setOnMouseClicked(e -> {
+        ImageView icon = v.getIcon();
+        //Circle circle = new Circle(x, y, 5);
+        icon.setTranslateX(x);
+        icon.setTranslateY(y);
+        icon.setScaleX(.67);
+        icon.setScaleY(.67);
+        //normal(v);
+        icon.setOnMouseClicked(e -> {
             controller.handleMapClick(v);
         });
-/*
-        circle.setOnMousePressed(e -> {
-
-        });
-
-        circle.setOnMouseReleased(e -> {
-
-        });
-        */
-
-        return circle;
+        return icon;
     }
+
+
+    /**
+     * hides the icon
+     * @param c
+     */
+    public void hideICON(ImageView c) {
+        c.setVisible(false);
+        //c.setScaleX(.67);
+        //c.setScaleY(.67);
+        //c.setStrokeWidth(0);
+        //c.setRadius(5);
+        c.setOpacity(1);
+        c.setEffect(null);
+    }
+
+
+
+/*    private void createTempLandmark(MouseEvent e){
+        //CREATE TEMPORARY POINT ->
+        INode temp = controller.createTempLandmark(e.getX(), e.getY());
+        ImageView c = createNodeIcon(temp);
+        id_ICON.put(temp.getID(), c);
+        this.getChildren().add(c);
+        controller.handleMapClick(temp);
+    }*/
 
 
     /**
@@ -339,51 +328,109 @@ public class MapDisplay extends Pane {
     }
 
 
-    /**
-     * Highlights the path of nodes.
-     * @param c
-     */
-    private void highlightPath(Circle c){
-        //c.setFill(Color.web("#00CCFF"));
-       // c.setStroke(Color.web("#0018A8"));
-        c.setRadius(5);
-        highlight(c, Color.BLUE, Color.LIGHTBLUE);
-
-        DropShadow ds = new DropShadow();
-        ds.setColor(Color.WHITE);
-        ds.setOffsetX(2.0);
-        ds.setOffsetY(2.0);
-        c.setEffect(ds);
-        c.setOnMouseEntered(null);
-        c.setOnMouseExited(null);
-    }
-
 
     /**
      * highlights a circle
      * @param c
      * @param color
-     * @param colorStroke
      */
-    private void highlight(Circle c, Color color, Color colorStroke ) {
-        c.setFill(color);
+    private void highlight(ImageView c, String color) {
+        c.setStyle("-fx-background-color: " + color);
+        /*c.setFill(color);
         c.setStroke(colorStroke);
-        c.setStrokeWidth(1);
+        c.setStrokeWidth(1);*/
     }
 
 
     /**
-     * default circle
-     * @param c
+     * remove node completely from map pane
+     * (this is for temporary nodes)
+     * @param id
      */
-    public void normal(Circle c) {
-        c.setFill(Color.BLUE);
-        c.setStrokeWidth(0);
-        c.setRadius(5);
-        c.setOpacity(1);
-        c.setEffect(null);
+    public void removeNode(int id){
+        if(id_circle.containsKey(id)){
+            normal(id_circle.get(id));//hideLast(id)
+            this.getChildren().remove(id_circle.remove(id));
+            id_circle.remove(id);
+        }
     }
 
+    public void hideLast(int id){
+        normal(id_circle.get(id));
+    }
+
+
+
+    /****************************************************************************************************************
+                                      CIRCLE  / NOT UPDATED CODE BELOW
+     ****************************************************************************************************************/
+
+
+
+
+    public void clearNodesEdges(int ids, int ide){
+        int i = 0;
+        id_circle.forEach((k,v) ->{
+            //we have to also check
+            if (k != ids && k != ide) { normal(v); }
+        //    System.out.println(k);
+        });
+        //id_circle = new HashMap<>();
+        this.getChildren().removeAll(lines);
+
+        lines = new ArrayList<>();
+    }
+
+
+
+
+
+/*
+    private void createTempLandmark(MouseEvent e){
+        //CREATE TEMPORARY POINT ->
+        INode temp = controller.createTempLandmark(e.getX(), e.getY());
+        Circle c = createCircle(temp);
+        id_circle.put(temp.getID(), c);
+        this.getChildren().add(c);
+        controller.handleMapClick(temp);
+    }
+*/
+
+
+
+
+   /* public void hideLast(int id){
+        normal(id_circle.get(id));
+    }*/
+
+
+    /**
+     * Hide all and show path
+     */
+    public void hideAll(){
+        id_circle.forEach((k,v) -> {
+            normal(v);
+        });
+    }
+
+/*
+
+    */
+/**
+     * Draws the nodes given on the map
+     * @param
+     *//*
+
+    public void drawNodes(HashMap<Integer, INode> nodes){
+        this.id_circle = new HashMap<>();
+
+        nodes.forEach((k,v) -> {
+            Circle circle = createCircle(v);
+            id_circle.put(k, circle);
+            this.getChildren().add(circle);
+        });
+    }
+*/
 
     /**
      * clear selection
@@ -393,7 +440,7 @@ public class MapDisplay extends Pane {
     private void highlightAll() {
         this.getChildren().forEach(e -> {
             if (e instanceof Circle) {
-                highlight((Circle) e, Color.GOLD, Color.RED);
+                //highlight((Circle) e, Color.GOLD, Color.RED);
             }
         });
     }

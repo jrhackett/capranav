@@ -1,5 +1,6 @@
 package logic;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
@@ -19,8 +20,9 @@ public class Transition extends Node {
         return true;
     }
 
-    public ImageView getIcon(){ //TODO implement
-        return new ImageView();
+    public ImageView getIcon(){
+        Image image = new Image(getClass().getResourceAsStream("../images/exit21.svg"), 20, 20, true, true);
+        ImageView imageView = new ImageView(image);
+        return imageView;
     }
-
 }
