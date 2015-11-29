@@ -382,7 +382,7 @@ public class Display {
 		gearsView.setOnMouseClicked(e -> handleSettings());
 
         //settings a sliding pane!
-        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, false, SETTINGS_VISIBLE, gearsView);
+        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView);
         slidingSettings.setStyle("-fx-background-color: #333333");
 
         javafx.scene.control.Button slidingButton = slidingSettings.getButton();
@@ -407,7 +407,7 @@ public class Display {
 
         /*****************************************************************/
 		/** Building of Sliding Dashboard Anchorpane  **/
-		this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, true, VISIBLE, bars, divider_0, divider_1, divider_2, dashBoardTitleBox,locationLabelBox, resourcesLabelBox, infoView, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3,
+		this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, VISIBLE, bars, divider_0, divider_1, divider_2, dashBoardTitleBox,locationLabelBox, resourcesLabelBox, infoView, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3,
 		slidingDashboard.setStyle("-fx-background-color: #333333");
 
 		/** STYLE BUTTON HERE **/
@@ -588,6 +588,20 @@ public class Display {
         //mapPane.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
         //mapPane.setTranslateY(HEIGHT_BUFFER);
         return mapPane;
+    }
+
+    //TODO THIS IS START OF BUILDING BOX PANE!
+    private HBox createBuildingBox(){ //its going to be an HBox with stuff inside of the sliding anchorpane
+        HBox box = new HBox();
+        javafx.scene.control.Button left = new javafx.scene.control.Button("<");
+        javafx.scene.control.Button right = new javafx.scene.control.Button(">");
+        Label buildingName = new Label();
+        Label buildingNumber = new Label();
+
+        box.getChildren().addAll(left, right, buildingName, buildingNumber);
+
+
+        return box;
     }
 
     private VBox createInput(){

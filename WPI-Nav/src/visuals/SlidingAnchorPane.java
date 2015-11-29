@@ -20,7 +20,7 @@ public class SlidingAnchorPane extends AnchorPane {
     }
 
     public SlidingAnchorPane(){};
-    public SlidingAnchorPane(final double expandedWidth, final double edge, boolean WIDTH, BooleanProperty prop, Node buttonval, Node... nodes) {
+    public SlidingAnchorPane(final double expandedWidth, final double edge, Direction direction, BooleanProperty prop, Node buttonval, Node... nodes) {
 
 
         this.setPrefWidth(expandedWidth + edge);
@@ -50,14 +50,22 @@ public class SlidingAnchorPane extends AnchorPane {
                         final double S4 = 1.0 / 9.0;
                         t = ((t < 0.2) ? S1 * t * t : S3 * t - S4);
                         t = (t < 0.0) ? 0.0 : (t > 1.0) ? 1.0 : t;
-                        if (WIDTH) {
-                            final double curWidth = edge + expandedWidth * (1.0 - t);
-                            setPrefWidth(curWidth);
-                        } else {
-                            final double curHeight = edge + expandedWidth * t;
-                            setPrefHeight(curHeight);
+                        switch (direction){//note that this changes depending on if you want it closed or opened first
+                            case RIGHT:
+                                break;
+                            case LEFT://to the right visible first, slides left
+                                final double curWidth = edge + expandedWidth * (1.0 - t);
+                                setPrefWidth(curWidth);
+                                break;
+                            case UP://down not visible, click down
+                                final double curHeight = edge + expandedWidth * t;
+                                setPrefHeight(curHeight);
+                                break;
+                            case DOWN:
+                                break;
+
                         }
-                        //setTranslateX(-expandedWidth + curWidth);
+
                     }
 
                 };
@@ -84,14 +92,22 @@ public class SlidingAnchorPane extends AnchorPane {
                         t = ((t < 0.2) ? S1 * t * t : S3 * t - S4);
                         t = (t < 0.0) ? 0.0 : (t > 1.0) ? 1.0 : t;
 
-                        if (WIDTH) {
-                            final double curWidth = edge + expandedWidth * t;
-                            setPrefWidth(curWidth);
-                        } else {
-                            final double curHeight = edge + expandedWidth * (1.0 - t);
-                            setPrefHeight(curHeight);
+
+                        switch (direction){//note that this changes depending on if you want it closed or opened first
+                            case RIGHT:
+                                break;
+                            case LEFT://to the right visible first, slides left
+                                final double curWidth = edge + expandedWidth * t;
+                                setPrefWidth(curWidth);
+                                break;
+                            case UP://down not visible, click down
+                                final double curHeight = edge + expandedWidth * (1.0 - t);
+                                setPrefHeight(curHeight);
+                                break;
+                            case DOWN:
+                                break;
+
                         }
-                        //setTranslateX(-expandedWidth + curWidth);
                     }
                 };
                 showSidebar.onFinishedProperty().set(new EventHandler<ActionEvent>() {
