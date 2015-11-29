@@ -23,18 +23,22 @@ public class TranslationTesting {
 
     @Before
     public void setUp() throws Exception {
-        A1_L = new Landmark(0,0,0,0,0,0,0,"origin");
-        B1_L = new Landmark(0,0,0,0,0,0,0,"origin");
-        A1_U = new Landmark(0,0,0,0,0,0,0,"origin");
-        B1_U = new Landmark(0,0,0,0,0,0,0,"origin");
+        A1_L = new Landmark(0,0,0,0,0,0,0,"origin1");
+        B1_L = new Landmark(1,0,0,0,0,0,0,"origin2");
+        A1_U = new Landmark(2,0,0,0,0,0,0,"origin3");
+        B1_U = new Landmark(3,0,0,0,0,0,0,"origin4");
 
         set1.put(A1_L.getID(), A1_L);
+        set1.put(B1_L.getID(), B1_L);
+        set1.put(A1_U.getID(), A1_U);
+        set1.put(B1_U.getID(), B1_U);
 
     }
 
     @Test
-    public void testName() throws Exception {
+    public void testInitial() throws Exception {
+        HashMap<Integer,INode> testMap1 = set1;
         Translate p = new Translate(A1_L, B1_L, A1_U, B1_U);
-        p.setUniversalCoordinates(set1);
+        assertEquals("Initial zeros test",testMap1,p.setUniversalCoordinates(set1));
     }
 }

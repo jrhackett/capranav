@@ -31,7 +31,7 @@ public class Translate {
 
         // calculate and set resize constant
         double length_L = AStarShortestPath.getHeuristic(local_A, local_B);
-        double length_U = AStarShortestPath.getHeuristic(universal_A, universal_B); // TODO: double check this?
+        double length_U = AStarShortestPath.getHeuristic(universal_A, universal_B); // TODO: double check that z coord won't interfere in this calculation
         k = length_U / length_L;
 
         // set rotate angle
@@ -51,10 +51,9 @@ public class Translate {
 
     }
 
-    public void setUniversalCoordinates(HashMap<Integer, INode> local_coord){
-        //name.forEach((key, v)->{};
-        local_coord.forEach((k, v) -> { // for each Node in ArrayList<Node>
-            // local_coord
+    public HashMap<Integer, INode> setUniversalCoordinates(HashMap<Integer, INode> local_coord){
+        HashMap<Integer, INode> universal = local_coord;
+        universal.forEach((k, v) -> { // for each Node in ArrayList<Node>
             // get the local x,y,z coordinates for Node v
             x_local = v.getX();
             y_local = v.getY();
@@ -69,7 +68,9 @@ public class Translate {
             v.setX_univ(x_universal);
             v.setY_univ(y_universal);
             v.setZ_univ(z_universal);
+
         });
+        return universal;
     }
 
     private void resizeCoordinates() {
