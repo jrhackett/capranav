@@ -20,6 +20,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import javafx.scene.text.Text;
 import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,18 +79,20 @@ public class Display {
     private static final double MAP_HEIGHT = 495;
     private static final double MAP_BORDER = 15;
 
-	private BooleanProperty VISIBLE;
+	private BooleanProperty DASHBOARD_VISIBLE;
     private BooleanProperty SETTINGS_VISIBLE;
+    public BooleanProperty BUILDING_VISIBLE;
 	private boolean EMAIL = false;
 	//Visual Elements
 	VBox dashBoard;
 	SlidingAnchorPane slidingDashboard;
+    public SlidingAnchorPane slidingBuilding;
 	AnchorPane directions;
 	VBox map;
 	StackPane root;
 	HBox dashBoardTitleBox;
 	private ListView<Instructions> instructions;
-
+    javafx.scene.control.Button hiddenHandler;
 
 
 
@@ -105,8 +108,9 @@ public class Display {
         this.map        = new VBox();
         this.slidingDashboard = new SlidingAnchorPane();
 
-		this.VISIBLE = new SimpleBooleanProperty(true);
+		this.DASHBOARD_VISIBLE = new SimpleBooleanProperty(true);
         this.SETTINGS_VISIBLE = new SimpleBooleanProperty(true);
+        this.BUILDING_VISIBLE = new SimpleBooleanProperty(false);
 
 		this.EDGE = GAP * 2 + CONTROL_WIDTH;
 	}
@@ -166,10 +170,10 @@ public class Display {
 		HBox divider_2 = createDivider();
 		HBox divider_3 = createDivider();
 
-		divider_0.visibleProperty().bind(VISIBLE);
-		divider_1.visibleProperty().bind(VISIBLE);
-		divider_2.visibleProperty().bind(VISIBLE);
-		divider_3.visibleProperty().bind(VISIBLE);
+		divider_0.visibleProperty().bind(DASHBOARD_VISIBLE);
+		divider_1.visibleProperty().bind(DASHBOARD_VISIBLE);
+		divider_2.visibleProperty().bind(DASHBOARD_VISIBLE);
+		divider_3.visibleProperty().bind(DASHBOARD_VISIBLE);
 
 		AnchorPane.setTopAnchor(divider_0, EDGE + 1);
 		AnchorPane.setLeftAnchor(divider_0, GAP);
@@ -272,9 +276,9 @@ public class Display {
 		//gearsView.setId("pinView");
 
 
-		pinView.visibleProperty().bind(VISIBLE);
-		infoView.visibleProperty().bind(VISIBLE);
-		gearsView.visibleProperty().bind(VISIBLE);
+		pinView.visibleProperty().bind(DASHBOARD_VISIBLE);
+		infoView.visibleProperty().bind(DASHBOARD_VISIBLE);
+		gearsView.visibleProperty().bind(DASHBOARD_VISIBLE);
 
 		AnchorPane.setTopAnchor(pinView, 1 * EDGE + GAP + 5);
 		AnchorPane.setLeftAnchor(pinView, GAP);
@@ -407,7 +411,7 @@ public class Display {
 
         /*****************************************************************/
 		/** Building of Sliding Dashboard Anchorpane  **/
-		this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, VISIBLE, bars, divider_0, divider_1, divider_2, dashBoardTitleBox,locationLabelBox, resourcesLabelBox, infoView, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3,
+		this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, divider_2, dashBoardTitleBox,locationLabelBox, resourcesLabelBox, infoView, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3,
 		slidingDashboard.setStyle("-fx-background-color: #333333");
 
 		/** STYLE BUTTON HERE **/
@@ -536,8 +540,14 @@ public class Display {
 		HBox mapTitle = new HBox();
 
 
-
-
+        /** Hidden Sliding Panel **/
+        slidingBuilding = new SlidingAnchorPane(EDGE, GAP, Direction.DOWN, BUILDING_VISIBLE, new Text("hidden"));
+        HBox buildingBox = createBuildingBox();
+        slidingBuilding.getChildren().addAll(buildingBox);
+        slidingBuilding.setMaxHeight(EDGE);
+        slidingBuilding.setMinHeight(0);
+        //send this a mouse event to trigger the slide
+        //hiddenHandler = slidingBuilding.getButton();
 
 
 
@@ -565,7 +575,7 @@ public class Display {
 		map.setMinHeight(MAP_HEIGHT+EDGE);
 		map.setPrefHeight(MAP_HEIGHT+ MAP_BORDER * 2 + EDGE);
 
-		map.getChildren().addAll(mapTitle, mapPane);
+		map.getChildren().addAll(buildingBox, mapTitle, mapPane);
 		map.setStyle("-fx-background-color:#eeeeee ;");
 
 	}
@@ -598,9 +608,12 @@ public class Display {
         Label buildingName = new Label();
         Label buildingNumber = new Label();
 
+        left.setOnMouseClicked(e -> {});
+        right.setOnMouseClicked(e -> {});
+
+        box.setMaxHeight(EDGE);
+        box.setMinHeight(0);
         box.getChildren().addAll(left, right, buildingName, buildingNumber);
-
-
         return box;
     }
 
@@ -649,12 +662,8 @@ public class Display {
             }
         }));
 
-
-
         AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
         AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
-
-
 
         return inputs;
     }
@@ -776,6 +785,10 @@ public class Display {
                 logger.error("INPUT VALUE IS NOT YET A FULL INPUT, IT IS JUST A STRING: {}",v.getValue());
             }
 
+    }
+
+    public void hitHiddenHandler(){
+        hiddenHandler.fire();
     }
 
 

@@ -177,11 +177,12 @@ public class Controller extends Application {
     private void switchMapSetting(int buildingID, int startingFLOOR){
         if (buildingID == 0){
             //remove the current building info/pane/whatever
-
+            hideBuildingPane();//ONLY SLIDES UP BUILDING VIEW //TODO STILL UNTESTED
             //switch to campus map
             defaultMap();
 
         } else {
+            showBuildingPane();//ONLY SLIDE DOWN BUILDING VIEW
             switchToBuildingView(buildingID, startingFLOOR);
         }
     }
@@ -194,6 +195,18 @@ public class Controller extends Application {
 //TODO right here
     }
 
+    public void hideBuildingPane(){
+        if (this.myDisplay.BUILDING_VISIBLE.getValue()){
+            myDisplay.slidingBuilding.playHidePane();
+            this.myDisplay.BUILDING_VISIBLE.setValue(false);
+        }
+    }
+    public void showBuildingPane(){
+        if (!this.myDisplay.BUILDING_VISIBLE.getValue()){
+            myDisplay.slidingBuilding.playShowPane();
+            this.myDisplay.BUILDING_VISIBLE.setValue(true);
+        }
+    }
 
 
     /**
