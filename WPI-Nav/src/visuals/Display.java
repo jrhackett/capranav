@@ -95,6 +95,9 @@ public class Display {
     javafx.scene.control.Button hiddenHandler;
 
 
+    private Label buildingName;
+    private Label buildingNumber;
+
 
 	/**
 	 * Basic constructor.
@@ -605,8 +608,8 @@ public class Display {
         HBox box = new HBox();
         javafx.scene.control.Button left = new javafx.scene.control.Button("<");
         javafx.scene.control.Button right = new javafx.scene.control.Button(">");
-        Label buildingName = new Label();
-        Label buildingNumber = new Label();
+        buildingName = new Label();
+        buildingNumber = new Label();
 
         left.setOnMouseClicked(e -> controller.handleDecreaseFloorButton());
         right.setOnMouseClicked(e -> controller.handleIncreaseFloorButton());
@@ -615,6 +618,15 @@ public class Display {
         box.setMinHeight(0);
         box.getChildren().addAll(left, right, buildingName, buildingNumber);
         return box;
+    }
+
+    public void setBuildingName(String s){
+        this.buildingName.setText(s);
+    }
+
+    public void setBuildingNumber(int i){
+        //TODO ADD FLICKERING ANIMATION
+        this.buildingNumber.setText(Integer.toString(i));
     }
 
     private VBox createInput(){

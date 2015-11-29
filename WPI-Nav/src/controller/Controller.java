@@ -193,7 +193,7 @@ public class Controller extends Application {
         //the arrows should already be correctly mapped to controller
 
         //set the Building Name
-        setBuildingName(buildings.get(buildingID).getName());
+        myDisplay.setBuildingName(buildings.get(buildingID).getName());
 
         //set the correct floor
         setFloor(startingFLOOR);
@@ -225,7 +225,7 @@ public class Controller extends Application {
         if (buildings.get(currentBuilding).getFloorMap().containsKey(i)){
             setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(i));
             this.currentFloor = i;
-            this.myDisplay.setFloorNumber(i);
+            this.myDisplay.setBuildingNumber(i);
         }
     }
 
