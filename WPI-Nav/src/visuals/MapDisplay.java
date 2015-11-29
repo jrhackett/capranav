@@ -139,7 +139,7 @@ public class MapDisplay extends Pane {
                 if (e.getButton().equals(MouseButton.SECONDARY) && e.getClickCount() >= 2){
                     //enter building
                     System.out.println("Double Click");
-                    controller.handleEnterBuilding(v);
+                    controller.handleEnterBuilding((logic.Transition)v);
                 } else if( e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1){
                     System.out.println("HANDLE Click");
 
