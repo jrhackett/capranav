@@ -12,11 +12,11 @@ public class Building {
 
     ArrayList<String> names;
 
-
-
     public Building(int id, int floors){
         this.id = id;
         this.floors = floors;
+        this.floorMap = new HashMap<>();
+        this.names = new ArrayList<>();
     };
 
     public String getName(){ return this.names.get(0);}
@@ -26,4 +26,12 @@ public class Building {
     public HashMap<Integer, Integer> getFloorMap(){
         return floorMap;
     }
+
+    public void addFloor(int floor, int mapid){
+        floorMap.put(floor, mapid);
+    }
+    public void setNames(ArrayList<String> names){
+        this.names = names;
+    }
+
 }

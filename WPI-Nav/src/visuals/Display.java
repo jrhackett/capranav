@@ -578,7 +578,7 @@ public class Display {
 		map.setMinHeight(MAP_HEIGHT+EDGE);
 		map.setPrefHeight(MAP_HEIGHT+ MAP_BORDER * 2 + EDGE);
 
-		map.getChildren().addAll(buildingBox, mapTitle, mapPane);
+		map.getChildren().addAll(mapTitle, buildingBox, mapPane);
 		map.setStyle("-fx-background-color:#eeeeee ;");
 
 	}

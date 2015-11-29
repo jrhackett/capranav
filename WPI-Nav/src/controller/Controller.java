@@ -60,7 +60,7 @@ public class Controller extends Application {
         /* get information */
         nodesFromFile();
         mapsFromFile();
-
+        buildingsFromFile();
 
 		/* basic layout */
         s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
@@ -208,6 +208,7 @@ public class Controller extends Application {
 
 //TODO MEGAIMPORTANT DO THIS YES DO
     public void handleEnterBuilding(Transition t){
+        System.out.println("Entered handle Enter Building");
         //remove it from the ends and start??
 
         //switch to the map it was referencing via the building via the map
@@ -652,7 +653,10 @@ public class Controller extends Application {
         this.nodes = graph.getNodes();
 
         TStairs tStairs = new TStairs(77, 45, 45, 45, 45, 45, 45, 0);
+        tStairs.setToFloor(1);
+        tStairs.setBuildingID(1);
         this.nodes.put(77, tStairs); //TODO REMOVE THIS
+
     }
 
     /**
@@ -664,10 +668,38 @@ public class Controller extends Application {
     }
 */
 
+
+    private void buildingsFromFile(){
+        buildings = new HashMap<>();
+        Building stratton = new Building(1, 4);
+        stratton.addFloor(1, 1);
+        stratton.addFloor(0, 2);
+        stratton.addFloor(2, 3);
+        stratton.addFloor(3, 4);
+        stratton.addName("Stratton Hall");
+        stratton.addName("Stratton");
+        stratton.addName("sh");
+        buildings.put(1, stratton);
+    }
+
     private void mapsFromFile() {
         maps = new HashMap<>();
         campus = new Campus(0, "wpi-campus-map", 24);
+
+        Floor stratton1 = new Floor(1, "sh1", 0.13, 1, 1);
+        Floor stratton0 = new Floor(2, "sh0", 0.13, 1, 0);
+        Floor stratton2 = new Floor(3, "sh2", 0.13, 1, 2);
+        Floor stratton3 = new Floor(4, "sh3", 0.13, 1, 3);
+
+
         maps.put(0, campus);
+        maps.put(1, stratton1);
+        maps.put(2, stratton0);
+        maps.put(3, stratton2);
+        maps.put(4, stratton3);
+
+
+
 
         //TODO get this functional
        /*
