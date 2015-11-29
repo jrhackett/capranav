@@ -154,6 +154,17 @@ public class MapDisplay extends Pane {
             });
         }
 
+        //POPOVER HERE // TODO POPOVER !!!!!
+        //things you can do:
+        //interesting nodes have names
+        //transition nodes have a tostring method
+        //all nodes have an svg ICON as an ImageView you can get via
+        //                    v.getIcon()
+        //                    think about when we want to trigger the picture screen?
+        //                    double click the popover icon?
+        //                    double click instructions
+        //                    some version of click on the nodeitself, but its kinda complicated on that count already
+
         return circle;
     }
 

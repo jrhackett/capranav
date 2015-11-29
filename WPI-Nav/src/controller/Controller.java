@@ -29,6 +29,8 @@ public class Controller extends Application {
 
     //Maps maps;                       /* information of the maps */
 
+    private int currentBuilding;
+    private int currentFloor;
     private Campus campus;
     private logic.IMap currentMap;            /* current map being used */
     private HashMap<Integer, Building> buildings;   /* information on organization of floors */
@@ -180,19 +182,51 @@ public class Controller extends Application {
             hideBuildingPane();//ONLY SLIDES UP BUILDING VIEW //TODO STILL UNTESTED
             //switch to campus map
             defaultMap();
-
         } else {
-            showBuildingPane();//ONLY SLIDE DOWN BUILDING VIEW
+            this.currentBuilding = buildingID;
+            showBuildingPane();//ONLY SLIDE DOWN BUILDING VIEW //TODO STILL UNTESTED
             switchToBuildingView(buildingID, startingFLOOR);
         }
     }
 
     private void switchToBuildingView(int buildingID, int startingFLOOR){
+        //the arrows should already be correctly mapped to controller
+
+        //set the Building Name
+        setBuildingName(buildings.get(buildingID).getName());
+
+        //set the correct floor
+        setFloor(startingFLOOR);
+
         //set building info arrows / tab
-       // this.myDisplay.populateShowAddBuildingPanel(buildings.get(buildingID));
+
+        // this.myDisplay.populateShowAddBuildingPanel(buildings.get(buildingID));
+
         //switch to correct view
+
         //this.myDisplay.setFloorShowing(startingFLOOR);
 //TODO right here
+    }
+
+    public void handleIncreaseFloorButton(){
+        if (buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)){
+            setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(++currentFloor));
+        }
+    }
+
+    public void handleDecreaseFloorButton(){
+        if (buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)){
+            setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(--currentFloor));
+        }
+    }
+
+
+    public void setFloor(int i){
+        if (buildings.get(currentBuilding).getFloorMap().containsKey(i)){
+            setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(i));
+            this.currentFloor = i;
+            this.myDisplay.setFloorNumber(i);
+        }
     }
 
     public void hideBuildingPane(){
@@ -554,6 +588,7 @@ public class Controller extends Application {
 
     public void setCurrentMap(int id){
         this.currentMap = maps.get(id);
+        this.myDisplay.mapDisplay.setMap(maps.get(id));
     }
 
 

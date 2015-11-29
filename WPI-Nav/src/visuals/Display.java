@@ -608,8 +608,8 @@ public class Display {
         Label buildingName = new Label();
         Label buildingNumber = new Label();
 
-        left.setOnMouseClicked(e -> {});
-        right.setOnMouseClicked(e -> {});
+        left.setOnMouseClicked(e -> controller.handleDecreaseFloorButton());
+        right.setOnMouseClicked(e -> controller.handleIncreaseFloorButton());
 
         box.setMaxHeight(EDGE);
         box.setMinHeight(0);
