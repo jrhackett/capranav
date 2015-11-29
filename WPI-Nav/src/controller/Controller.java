@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import logic.*;
 import visuals.Display;
+import visuals.Instructions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,8 @@ public class Controller extends Application {
 
     /* information variables */
     public ArrayList<INode> pathNodes;       /* this is set then used to get instructions from logic.Directions */
+    public ArrayList<ArrayList<Instructions>> currentInstructions;
+
 
     /* nodes and graphs */
     private HashMap<Integer, INode> nodes;   /* all the nodes */
@@ -87,18 +90,44 @@ public class Controller extends Application {
         });
 
        //add image to stack pane -> if no image return void
-
+        //TODO ADD IMAGES / change node content if needed
 
         this.myDisplay.root.getChildren().add(imageStack);
     }
 
 
     public void sendEmail(String email){
+        //TODO FILL THIS OUT
+        INode end = null;
+        String startString = null;
+        String endString = null;
+        ArrayList<String> simplifiedInstruction = new ArrayList<>();
+        for (ArrayList<Instructions> il : currentInstructions){
+            for (Instructions i : il){
+                simplifiedInstruction.add(i.getInstruction_string());
+                end = i.getNode();
+            }
+        }
+
+        if (currentInstructions != null) {
+            INode start = currentInstructions.get(0).get(0).getNode();
+            if (start.isInteresting()) {
+                startString = start.getNames().get(0);
+            } else if (start.isTransition()) {
+                startString = start.toString();
+            }
+            if (end != null && end.isInteresting()) {
+                endString = start.getNames().get(0);
+            } else if (start.isTransition()) {
+                endString = start.toString();
+            }
+        }
         logic.Email e = new logic.Email(email);
         System.out.println(email);
-        //e.sendEmail()
         //TODO FILL IN WITH NEW EMAIL CODE
-
+        if(simplifiedInstruction.size() != 0 && startString != null && endString != null)
+        e.sendDirections(simplifiedInstruction, startString, endString);
+        //TODO DO WE NEED TO DO SOMETHING MORE??
     }
 
     public HashMap<Integer, INode> getNodes(){

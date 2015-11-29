@@ -10,11 +10,11 @@ import java.util.ArrayList;
 public class Instructions {
 	private String instruction_string;
 	private int distance;
-	INode end;
+	INode node;
 
 	public Instructions(String s, logic.INode d){
 		this.instruction_string = s;
-		this.end = d;
+		this.node = d;
 	}
 
 	public String getInstruction_string() {
@@ -53,6 +53,7 @@ public class Instructions {
 	/* For images -> Nodes should have image ids/paths to images, and if it exists we show the image,
 	 * or pass is the id/path of the image
 	 */
+	public INode getNode(){ return this.node;}
 
 
 
