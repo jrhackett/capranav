@@ -8,7 +8,6 @@ public class Floor extends Map {
     private int buildingID;
 
     public Floor(int id, String path, double pixelToFeetRatio, int buildingID, int floor){
-
         super(id, path, pixelToFeetRatio);
         this.floor = floor;
         this.buildingID = buildingID;
