@@ -256,4 +256,43 @@ public abstract class Node implements INode{
 	public boolean isTransition() {
 		return false;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Node)) return false;
+
+		Node node = (Node) o;
+
+		if (id != node.id) return false;
+		if (getMap_id() != node.getMap_id()) return false;
+		if (Double.compare(node.x_coord, x_coord) != 0) return false;
+		if (Double.compare(node.y_coord, y_coord) != 0) return false;
+		if (Double.compare(node.z_coord, z_coord) != 0) return false;
+		if (Double.compare(node.getX_univ(), getX_univ()) != 0) return false;
+		if (Double.compare(node.getY_univ(), getY_univ()) != 0) return false;
+		return Double.compare(node.getZ_univ(), getZ_univ()) == 0;
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result;
+		long temp;
+		result = id;
+		result = 31 * result + getMap_id();
+		temp = Double.doubleToLongBits(x_coord);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(y_coord);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(z_coord);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(getX_univ());
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(getY_univ());
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(getZ_univ());
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
 }

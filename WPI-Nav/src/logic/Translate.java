@@ -30,8 +30,16 @@ public class Translate {
     public Translate(INode local_A, INode local_B, INode universal_A, INode universal_B) {
 
         // calculate and set resize constant
-        double length_L = AStarShortestPath.getHeuristic(local_A, local_B);
-        double length_U = AStarShortestPath.getHeuristic(universal_A, universal_B); // TODO: double check that z coord won't interfere in this calculation
+        double x1 = local_A.getX();
+        double x2 = local_B.getX();
+        double y1 = local_A.getY();
+        double y2 = local_B.getY();
+        double length_L = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) );
+        x1 = universal_A.getX();
+        x2 = universal_B.getX();
+        y1 = universal_A.getY();
+        y2 = universal_B.getY();
+        double length_U = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) ); // TODO: double check that z coord won't interfere in this calculation
         k = length_U / length_L;
 
         // set rotate angle
