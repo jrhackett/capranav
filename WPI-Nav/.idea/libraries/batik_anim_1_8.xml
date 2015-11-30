@@ -1,0 +1,28 @@
+<component name="libraryTable">
+  <library name="batik-anim-1.8">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-anim-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-awt-util-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-bridge-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-codec-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-css-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-dom-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-ext-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-extension-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-gui-util-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-gvt-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-parser-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-script-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-svg-dom-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-svggen-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-swing-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-transcoder-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-util-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/batik-xml-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/fop-transcoder-allinone-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/batik-1.8/lib/js.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
