@@ -50,6 +50,10 @@ public class Parser<Struct>
 		Stairs s = new Stairs(47, 48.0, 49.0, 50.0, 51.0, 52.0, 53.0);
 		TStairs t = new TStairs(54, 55.0, 56.0, 57.0, 58.0, 59.0, 60.0);
 
+		Building build = new Building(7, 100);
+		HashMap<Integer, Building> buildh = new HashMap<>();
+		buildh.put(build.getID(), build);
+
 		HashMap<Integer, Campus> ch = new HashMap<>();
 		ch.put(c.getID(), c);
 
@@ -79,7 +83,7 @@ public class Parser<Struct>
 
 		HashMap<Integer, TStairs> th = new HashMap<>();
 		th.put(t.getID(), t);
-		/*
+/*
 		new Parser<Campus>().toFile(ch);
 		new Parser<Floor>().toFile(fh);
 		new Parser<Bathroom>().toFile(bh);
@@ -91,10 +95,12 @@ public class Parser<Struct>
 		new Parser<Stairs>().toFile(sh);
 		new Parser<TStairs>().toFile(th);*/
 
+		new Parser<Building>().toFile(buildh);
+/*
 		HashMap<Integer, IMap> maps = new Parser<>().fromFileMap();
 		HashMap<Integer, INode> nodes = new Parser<>().fromFileGraph();
 		System.out.println(maps.toString());
-		System.out.println(nodes.toString());
+		System.out.println(nodes.toString());*/
 		System.out.println("SUCCESS !");
 	}
 
