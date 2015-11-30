@@ -413,8 +413,22 @@ public class Display {
 
         walkingSpeedBox.setOnAction(e -> handleWalkingInput(walkingSpeedBox, true));    //TODO finish handleWalkingInput
 
+        TextField emailTextField = new TextField();
+        emailTextField.setPromptText("Enter your email");
+        emailTextField.setMaxWidth(INPUT_WIDTH);
+        emailTextField.setMaxHeight(walkingSpeedBox.getMaxHeight());
+        emailTextField.setTranslateX(8);
+        emailTextField.setTranslateY(8);
+        emailTextField.setId("text-field");
+
+        Label setEmailLabel = new Label("Set your email:");
+        setEmailLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        setEmailLabel.setTextFill(Color.web("#eeeeee"));
+
+        emailTextField.setOnAction(e -> handleEmailInput(emailTextField, true));    //TODO finish handleWalkingInput
+
         VBox settingsVbox = new VBox();
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
@@ -904,7 +918,13 @@ public class Display {
 
     }
 
+    //TODO finish this
     private void handleWalkingInput(Inputs v, boolean START) {
+
+    }
+
+    //TODO finish this
+    private void handleEmailInput(TextField v, boolean START) {
 
     }
 
