@@ -533,6 +533,7 @@ public class Display {
         directions.setPrefWidth(expandedWidth + EDGE);
         directions.setMinWidth(0);
         directions.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + EDGE);
+
     }
 
     private void initMap() {
