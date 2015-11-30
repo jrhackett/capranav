@@ -403,10 +403,13 @@ public class Display {
 
         settingsWalkingBox.getChildren().addAll(settingsWalkingLabel);
 
+        ArrayList<Walking> walkingArrayList = new ArrayList<>();
+        //TODO add things to arraylist
         Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller); //TODO finish this shit
+        walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
 
         VBox settingsVbox = new VBox();
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);

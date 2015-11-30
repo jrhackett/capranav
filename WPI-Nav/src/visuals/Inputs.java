@@ -17,6 +17,7 @@ import java.util.HashMap;
 public class Inputs extends ComboBox {
 	private String initial;
 	ObservableList<InputItem> data;
+	ObservableList<Walking> walking;
 	Controller controller;
 
 	@SuppressWarnings("unchecked") /* probably should remove this */
@@ -79,6 +80,13 @@ public class Inputs extends ComboBox {
 
 		return data.sorted();
 	}
+
+	public ObservableList<Walking> createWalkingItems(ArrayList<Walking> walkingArrayList) {
+		this.walking = FXCollections.observableArrayList();
+		this.walking.addAll(walkingArrayList);
+		return this.walking;
+	}
+
 
 
 	public InputItem addNode(logic.INode v, IMap map) {
