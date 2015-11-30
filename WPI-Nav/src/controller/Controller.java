@@ -47,7 +47,7 @@ public class Controller extends Application {
     public void start(Stage s) throws Exception {
 
 		/* get information */
-        nodesFromFile();
+        //nodesFromFile();
         mapsFromFile();
 
         /* icon */
@@ -410,12 +410,12 @@ public class Controller extends Application {
     /**
      * Load nodes to file
      * @param
-     */
+     *//*
     private void nodesFromFile(){
         Parser test = new Parser("nodes.json");
         Graph graph = (Graph)test.fromFile();
         this.nodes = graph.getNodes();
-    }
+    }*/
 
     /**
      * load maps from file
@@ -445,11 +445,11 @@ public class Controller extends Application {
     }
 
 
-
+/*
     private void campusFromFile(){
         Parser parser = new Parser("campus.json");
         this.campus = (Campus)parser.fromFile();
-    }
+    }*/
 
 
 

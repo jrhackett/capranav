@@ -6,7 +6,7 @@ import java.util.HashMap;
 /**
  * Created by jacobhackett on 11/14/15.
  */
-public class Maps implements ICollection {
+public class Maps {
 
     HashMap<Integer,IMap> maps;
 
