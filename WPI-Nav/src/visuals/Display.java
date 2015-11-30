@@ -404,9 +404,14 @@ public class Display {
         settingsWalkingBox.getChildren().addAll(settingsWalkingLabel);
 
         ArrayList<Walking> walkingArrayList = new ArrayList<>();
-        //TODO add things to arraylist
-        Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller); //TODO finish this shit
+        walkingArrayList.add(new Walking("Walking with your grandmother (slow)", 0.5));
+        walkingArrayList.add(new Walking("Normal walking pace (medium)", 1.0));
+        walkingArrayList.add(new Walking("Walking to class when late (fast)", 1.5));
+        Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller);
+        walkingSpeedBox.setTranslateX(8);  //TODO fix width of this?
         walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
+
+        walkingSpeedBox.setOnAction(e -> handleWalkingInput(walkingSpeedBox, true));    //TODO finish handleWalkingInput
 
         VBox settingsVbox = new VBox();
         settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox);
@@ -896,6 +901,10 @@ public class Display {
             } catch (ClassCastException cce) {
                 logger.error("INPUT VALUE IS NOT YET A FULL INPUT, IT IS JUST A STRING: {}", v.getValue());
             }
+
+    }
+
+    private void handleWalkingInput(Inputs v, boolean START) {
 
     }
 

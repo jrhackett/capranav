@@ -19,4 +19,6 @@ public class Walking {
     public double getWalkingSpeed() {
         return walkingSpeed;
     }
+
+    public String toString() { return this.description; }
 }
