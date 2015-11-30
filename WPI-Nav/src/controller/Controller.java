@@ -3,6 +3,8 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -85,17 +87,28 @@ public class Controller extends Application {
         //we need a way of getting the image
 
         StackPane imageStack = new StackPane();
-        imageStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+        StackPane shadowStack = new StackPane();
+        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+
         imageStack.setOnMouseClicked(e -> {
-            myDisplay.root.getChildren().remove(imageStack);
+            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
         });
 
        //add image to stack pane -> if no image return void
-        //TODO ADD IMAGES / change node content if needed
+        Image image = new Image(getClass().getResourceAsStream("../images/Riley.png"));
+        ImageView iv = new ImageView(image);
 
-        this.myDisplay.root.getChildren().add(imageStack);
+        imageStack.getChildren().add(iv);
+
+
+
+        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
     }
 
+    public void updateNodeInformation(ImageView i, String s){
+        this.myDisplay.updateNodeIcon(i);
+        this.myDisplay.updateNodeTitle(s);
+    }
 
     public void sendEmail(String email){
         //TODO FILL THIS OUT

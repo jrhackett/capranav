@@ -88,7 +88,7 @@ public class Display {
     private SlidingAnchorPane slidingDashboard;
     public SlidingAnchorPane slidingBuilding;
     private AnchorPane directions;
-    private VBox map;
+    private AnchorPane map; //VBox
     public StackPane root;
     private HBox dashBoardTitleBox;
     private ListView<String> instructions; //ListView<Instruction>
@@ -97,6 +97,9 @@ public class Display {
 
     private Label buildingName;
     private Label buildingNumber;
+
+    private Label nodeTitle;
+    private ImageView nodeView;
 
 
     /**
@@ -108,7 +111,7 @@ public class Display {
 
         this.controller = controller;
         this.directions = new AnchorPane();
-        this.map = new VBox();
+        this.map = new AnchorPane();
         this.slidingDashboard = new SlidingAnchorPane();
 
         this.DASHBOARD_VISIBLE = new SimpleBooleanProperty(true);
@@ -142,6 +145,7 @@ public class Display {
         HBox.setHgrow(map, Priority.ALWAYS);
         HBox.setHgrow(slidingDashboard, Priority.SOMETIMES);
         HBox.setHgrow(directions, Priority.SOMETIMES);
+
 
 
         sections.setStyle("-fx-background-color: #333333");
@@ -192,10 +196,12 @@ public class Display {
         AnchorPane.setLeftAnchor(divider_2, GAP);
         AnchorPane.setRightAnchor(divider_2, GAP);
 
-//		AnchorPane.setBottomAnchor(divider_3, EDGE - 1);
-        //AnchorPane.setTopAnchor(divider_3, 0.0);
-        //AnchorPane.setLeftAnchor(divider_3, GAP);
-        //AnchorPane.setRightAnchor(divider_3, GAP);
+       // divider_3.setTranslateX(GAP);
+		//AnchorPane.setBottomAnchor(divider_3, EDGE - 1);
+        divider_3.setTranslateX(GAP);
+        AnchorPane.setTopAnchor(divider_3, 0.0);
+        AnchorPane.setLeftAnchor(divider_3, GAP);
+        AnchorPane.setRightAnchor(divider_3, GAP);
 
         /** images **/
         //Image pin =				new Image(getClass().getResourceAsStream("../images/pin.png"), 20, 20, true, true);
@@ -518,7 +524,6 @@ public class Display {
         emailLabel.setOnMouseClicked(e -> handleEmail(emailBox));
         emailView.setOnMouseClicked(e -> handleEmail(emailBox));
 
-
         AnchorPane.setBottomAnchor(emailBox, 0.0);
         AnchorPane.setLeftAnchor(emailBox, 0.0);
         AnchorPane.setRightAnchor(emailBox, 0.0);
@@ -532,23 +537,10 @@ public class Display {
     }
 
     private void initMap() {
-        this.map = new VBox();
+        this.map = new AnchorPane();
+
+        /** Title **/
         HBox mapTitle = new HBox();
-
-
-        /** Hidden Sliding Panel **/
-        slidingBuilding  = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, BUILDING_VISIBLE, new Text("hidden"));
-        HBox nodeBox     = createNodeBox();
-        HBox buildingBox = createBuildingBox();
-
-        slidingBuilding.getChildren().addAll(nodeBox, buildingBox);
-        slidingBuilding.setMaxHeight(EDGE);
-        slidingBuilding.setMinHeight(0);
-        //send this a mouse event to trigger the slide
-        //hiddenHandler = slidingBuilding.getButton();
-
-
-        /** Label **/
         Label mapTitleLabel = new Label("CapraNav");
         mapTitleLabel.setTextFill(Color.web("#eeeeee"));
         //ATTENTION: below is some nice trixksz! it binds the location of the title to the center
@@ -561,10 +553,36 @@ public class Display {
         mapTitle.setStyle("-fx-background-color: #444444");
         mapTitle.getChildren().add(mapTitleLabel);
 
+        AnchorPane.setTopAnchor(mapTitle, 0.0);
+        AnchorPane.setLeftAnchor(mapTitle, 0.0);
+        AnchorPane.setRightAnchor(mapTitle, 0.0);
+
+        /** Hidden Sliding Panel **/
+        slidingBuilding  = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, BUILDING_VISIBLE, new Text("hidden"));
+        HBox nodeBox     = createNodeBox();
+        HBox buildingBox = createBuildingBox();
+        buildingBox.visibleProperty().bind(BUILDING_VISIBLE);
+
+        slidingBuilding.getChildren().addAll(nodeBox, buildingBox);//buildingBox
+        slidingBuilding.setMaxHeight(EDGE);
+        slidingBuilding.setMinHeight(0);
+
+        AnchorPane.setBottomAnchor(slidingBuilding, 0.0);
+        AnchorPane.setLeftAnchor(slidingBuilding, 0.0);
+        AnchorPane.setRightAnchor(slidingBuilding, 0.0);
+
+
+
 
         this.mapPane = createMapPane();
-
         mapPane.setAlignment(Pos.CENTER);
+
+        AnchorPane.setTopAnchor(mapPane, EDGE + MAP_BORDER);//
+        AnchorPane.setLeftAnchor(mapPane, MAP_BORDER);
+        AnchorPane.setRightAnchor(mapPane, MAP_BORDER);
+        AnchorPane.setBottomAnchor(mapPane, MAP_BORDER);
+
+
 
         map.setMinWidth(MAP_WIDTH);
         map.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
@@ -572,7 +590,7 @@ public class Display {
         map.setMinHeight(MAP_HEIGHT + EDGE);
         map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE + EDGE); // + EDGE for NODE INFO
 
-        map.getChildren().addAll(mapTitle, mapPane, buildingBox);
+        map.getChildren().addAll(mapTitle, mapPane, slidingBuilding);
         map.setStyle("-fx-background-color:#eeeeee ;");
 
     }
@@ -583,7 +601,7 @@ public class Display {
 
     private StackPane createMapPane() {
         StackPane mapPane = new StackPane();
-        mapPane.setPrefHeight(MAP_HEIGHT);// + MAP_BORDER * 2);
+        mapPane.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2);
         mapPane.setMinHeight(MAP_HEIGHT);
 
         mapPane.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
@@ -597,13 +615,15 @@ public class Display {
         return mapPane;
     }
 
+
     private HBox createNodeBox(){
         HBox hbox = new HBox();
 
-        ImageView imageView = new ImageView();
-        Label nodeTitle = new Label();
+        nodeView = new ImageView();
+        nodeTitle = new Label();
 
-        hbox.getChildren().addAll(imageView, nodeTitle);
+
+        hbox.getChildren().addAll(nodeView, nodeTitle);
         hbox.setMaxHeight(EDGE);
         hbox.setMinHeight(EDGE);
         hbox.setAlignment(Pos.CENTER);
@@ -611,6 +631,14 @@ public class Display {
 
         return hbox;
 
+    }
+
+    public void updateNodeTitle(String s){
+        this.nodeTitle.setText(s);
+    }
+
+    public void updateNodeIcon(ImageView i){
+        this.nodeView = i;
     }
 
     //TODO THIS IS START OF BUILDING BOX PANE!
@@ -627,6 +655,8 @@ public class Display {
 
         box.setMaxHeight(EDGE);
         box.setMinHeight(0);
+        box.setPrefHeight(0);
+
         //TODO set min widths
         box.setAlignment(Pos.CENTER);
         box.setSpacing(GAP);
@@ -848,11 +878,6 @@ public class Display {
             }
 
     }
-
-    public void hitHiddenHandler() {
-        hiddenHandler.fire();
-    }
-
 
     /****************************************************************************************************************
      * FUNCTIONS THAT CONTACT THE CONTROLLER FOR INFORMATION
