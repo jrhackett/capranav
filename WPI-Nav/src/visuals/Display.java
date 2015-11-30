@@ -19,7 +19,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
-import javafx.scene.text.Text;
 import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -558,18 +557,24 @@ public class Display {
         AnchorPane.setRightAnchor(mapTitle, 0.0);
 
         /** Hidden Sliding Panel **/
-        slidingBuilding  = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, BUILDING_VISIBLE, new Text("hidden"));
+        //slidingBuilding  = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, BUILDING_VISIBLE, new Text("hidden"));
         HBox nodeBox     = createNodeBox();
         HBox buildingBox = createBuildingBox();
         buildingBox.visibleProperty().bind(BUILDING_VISIBLE);
 
-        slidingBuilding.getChildren().addAll(nodeBox, buildingBox);//buildingBox
-        slidingBuilding.setMaxHeight(EDGE);
-        slidingBuilding.setMinHeight(0);
+        //slidingBuilding.getChildren().addAll(nodeBox, buildingBox);//buildingBox
+        //slidingBuilding.setMaxHeight(EDGE);
+        //slidingBuilding.setMinHeight(0);
 
-        AnchorPane.setBottomAnchor(slidingBuilding, 0.0);
-        AnchorPane.setLeftAnchor(slidingBuilding, 0.0);
-        AnchorPane.setRightAnchor(slidingBuilding, 0.0);
+        VBox information = new VBox();
+        information.getChildren().addAll(nodeBox, buildingBox);
+
+
+        AnchorPane.setBottomAnchor(information, 0.0);
+        AnchorPane.setLeftAnchor(information, 0.0);
+        AnchorPane.setRightAnchor(information, 0.0);
+
+
 
 
 
@@ -590,7 +595,7 @@ public class Display {
         map.setMinHeight(MAP_HEIGHT + EDGE);
         map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE + EDGE); // + EDGE for NODE INFO
 
-        map.getChildren().addAll(mapTitle, mapPane, slidingBuilding);
+        map.getChildren().addAll(mapTitle, mapPane, information);
         map.setStyle("-fx-background-color:#eeeeee ;");
 
     }
