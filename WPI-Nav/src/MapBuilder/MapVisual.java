@@ -233,7 +233,9 @@ public class MapVisual extends Pane {
 		});
 
 		circle.setOnMouseExited(e -> {
-			if (!controller.isNodeSelected() && controller.getSelectedNode().getID() == v.getID()) {
+			if (!controller.isNodeSelected()) {
+				normal(circle);
+			} else if(controller.getSelectedNode().getID() != v.getID()) {
 				normal(circle);
 			}
 
@@ -305,12 +307,15 @@ public class MapVisual extends Pane {
 	}
 
 	/**
-	 * This creates a line object for each edge.
-	 * The here is where the mouse events are added
+	 * This creates a line object for each edge. The here is where the mouse
+	 * events are added
 	 * 
-	 * @param line Pre-created line with x and y coordinates already 
-	 * @param nodeA One of the ends of the edge
-	 * @param nodeB The other end of the edge
+	 * @param line
+	 *            Pre-created line with x and y coordinates already
+	 * @param nodeA
+	 *            One of the ends of the edge
+	 * @param nodeB
+	 *            The other end of the edge
 	 * @return
 	 */
 	private Line createLine(Line line, Node nodeA, Node nodeB) {
@@ -388,16 +393,14 @@ public class MapVisual extends Pane {
 		normal(id_circle.get(id));
 	}
 
-	
-	/*private void selected(Circle circle) {
+	/*
+	 * private void selected(Circle circle) {
+	 * 
+	 * lastC = (Color) circle.getFill(); lastStrokeC = (Color)
+	 * circle.getStroke(); highlight(circle, Color.GOLD, Color.RED);
+	 * circle.setRadius(7.5); }
+	 */
 
-		lastC = (Color) circle.getFill();
-		lastStrokeC = (Color) circle.getStroke();
-		highlight(circle, Color.GOLD, Color.RED);
-		circle.setRadius(7.5);
-	}*/
-
-	
 	private void highlight(Circle c, Color color, Color colorStroke) {
 		c.setFill(color);
 		c.setStroke(colorStroke);
