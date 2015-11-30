@@ -27,8 +27,8 @@ public class InterestAndTransitionTesting {
 
     @Before
     public void setUp() throws Exception {
-        i1 = new Interest(0, 1, 2, 3, 4, 5, 6, "Generic Interest");
-        i2 = new Interest(1, 2, 3, 4, 5, 6, 7, 8, "Generic ID'd Interest");
+        i1 = new Food(0, 1, 2, 3, 4, 5, 6, "Generic Interest");
+        i2 = new Food(1, 2, 3, 4, 5, 6, 7, 8, "Generic ID'd Interest");
         b1 = new Bathroom(2, 3, 4, 5, 6, 7, 8, "Bathroom");
         b2 = new Bathroom(3, 4, 5, 6, 7, 8, 9, 10, "ID'd Bathroom");
 

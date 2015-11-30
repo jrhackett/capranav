@@ -15,8 +15,8 @@ public class EdgeTesting {
 
     @Before
     public void setUp() throws Exception {
-        n1 = new Interest(0, 1, 2, 3, 4, 5, 6, "Generic Interest");
-        n2 = new Interest(1, 2, 3, 4, 5, 6, 7, 99, "Generic ID'd Interest");
+        n1 = new Food(0, 1, 2, 3, 4, 5, 6, "Generic Interest");
+        n2 = new Food(1, 2, 3, 4, 5, 6, 7, 99, "Generic ID'd Interest");
         e1 = new Edge(n1.getID(), 55);
         e2 = new Edge(n2.getID(), 25);
     }

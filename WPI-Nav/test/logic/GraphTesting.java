@@ -21,10 +21,10 @@ public class GraphTesting {
 
     @Before
     public void setUp() throws Exception {
-        node1 = new Interest(0, 1, 2, 3, 4, 5, 6, "Generic Interest");
-        node2 = new Interest(1, 1, 2, 3, 4, 5, 6, 99, "Generic ID'd Interest");
-        node3 = new Interest(2, 1, 2, 3, 4, 5, 6, "Generic Interest 2");
-        node4 = new Interest(3, 1, 2, 3, 4, 5, 6, 99, "Generic ID'd Interest 2");
+        node1 = new Food(0, 1, 2, 3, 4, 5, 6, "Generic Interest");
+        node2 = new Food(1, 1, 2, 3, 4, 5, 6, 99, "Generic ID'd Interest");
+        node3 = new Food(2, 1, 2, 3, 4, 5, 6, "Generic Interest 2");
+        node4 = new Food(3, 1, 2, 3, 4, 5, 6, 99, "Generic ID'd Interest 2");
 
         hash1 = new HashMap<Integer, INode>();
         hash1.put(1, node1);

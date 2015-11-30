@@ -22,8 +22,8 @@ public class NodeTesting {
 
     @Before
     public void setUp() throws Exception {
-        i1 = new Interest(0, 1, 2, 3, 4, 5, 6, "Generic Interest");
-        i2 = new Interest(1, 2, 3, 4, 5, 6, 7, 77, "Generic ID'd Interest");
+        i1 = new Food(0, 1, 2, 3, 4, 5, 6, "Generic Interest");
+        i2 = new Food(1, 2, 3, 4, 5, 6, 7, 77, "Generic ID'd Interest");
 
         t1 = new Transition(1, 2, 3, 4, 5, 6, 7);
         t2 = new Transition(2, 3, 4, 5, 6, 7, 8, 77);

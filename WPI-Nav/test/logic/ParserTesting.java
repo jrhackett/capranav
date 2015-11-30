@@ -22,17 +22,19 @@ public class ParserTesting {
 
     @Before
     public void setUp() throws Exception {
-        testParser1 = new Parser("nodes.json");
-        testParser2 = new Parser("nodes.json");
 
-        nodes = new HashMap<Integer, INode>();
-        node1 = new Interest(0, 1, 2, 3, 4, 5, 6, "Generic Interest");
-        node2 = new Interest(0, 1, 2, 3, 4, 5, 6, "Generic Interest 2");
+        Campus c = new Campus(1, "Path", 0.13);
+        Floor f = new Floor(2, "Floor", 0.13, 3, 4);
+        
+        HashMap<Integer, Campus> ch = new HashMap<>();
+        ch.put(c.getID(), c);
 
-        nodes.put(0, node1);
-        nodes.put(1, node2);
+        HashMap<Integer, Floor> fh = new HashMap<>();
+        fh.put(f.getID(), f);
 
-        graph = new Graph(nodes);
+        testParser1 = new Parser<Campus>();
+        testParser2 = new Parser<Floor>();
+
     }
 
     @Test
