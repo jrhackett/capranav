@@ -571,6 +571,8 @@ public class Display {
         this.mapPane = createMapPane();
         mapPane.setAlignment(Pos.CENTER);
 
+        AnchorPane.setTopAnchor(mapPane, EDGE + MAP_BORDER);//
+
         map.setMinWidth(MAP_WIDTH);
         map.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
 
