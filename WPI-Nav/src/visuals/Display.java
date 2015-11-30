@@ -8,10 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -398,8 +395,20 @@ public class Display {
         //AnchorPane.setLeftAnchor(slidingButton, 0.0);
         settingsLabelBox.getChildren().addAll(slidingButton, settingsLabel);
 
+        HBox settingsWalkingBox = new HBox();
+        Label settingsWalkingLabel = new Label("Set walking speed:");
+        settingsWalkingLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        settingsWalkingLabel.setTextFill(Color.web("#eeeeee"));
+
+        settingsWalkingBox.getChildren().addAll(settingsWalkingLabel);
+
+        ArrayList<Walking> walkingArrayList = new ArrayList<>();
+        //TODO add things to arraylist
+        Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller); //TODO finish this shit
+        walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
+
         VBox settingsVbox = new VBox();
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
