@@ -51,21 +51,31 @@
 {
     -fx-background: #333;
     -fx-background-color: #333;
-    -fx-border-width: 1;
+    -fx-border-width: 0;
+    -fx-border-radius:0;
     -fx-border-color: #333;
     -fx-text-fill: #eee;
 }
 ​
+.combo-box-base
+{
+    -fx-background-color: #333333;
+    -fx-border-radius: 0;
+    -fx-border-color:#333333;
+    -fx-mark-color: #333;
+}
+
+.combo-box-base:hover
+{
+    -fx-background-color: #888;
+}
+
 .combo-box-base > .arrow-button
 {
     -fx-background-color: #333;
     -fx-border-radius: 0;
 }
-​
-.combo-box-base
-{
-    -fx-mark-color: #eee;
-}
+
 ​
 .combo-box .list-cell
 {
