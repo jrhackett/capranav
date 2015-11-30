@@ -560,7 +560,7 @@ public class Controller extends Application {
      * gets the instructions by via pathNodes set by getPathNodes
      * @return an ArrayList<String?
      */
-    public ArrayList<String> getInstructions(){
+    public ArrayList<ArrayList<Instructions>> getInstructions(){
         return Directions.stepByStep(this.pathNodes, this.maps);
     }
 
