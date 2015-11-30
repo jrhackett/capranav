@@ -5,13 +5,13 @@ import java.util.HashMap;
 public class Graph implements ICollection
 {
 	//MG: Changed to private, did this break anything?
-	private HashMap<Integer, Node> nodes;
+	private HashMap<Integer, INode> nodes;
 
 	/**
 	 * Simple constructor : Empty Hashmap
 	 */
 	public Graph() {
-		this.nodes = new HashMap<Integer, Node>();
+		this.nodes = new HashMap<Integer, INode>();
 	}
 
 	/**
@@ -19,7 +19,7 @@ public class Graph implements ICollection
 	 * @param nodes: a hashmap of nodes, keyed by an integer id
 	 * @return void
 	 */
-	public Graph(HashMap<Integer, Node> nodes)
+	public Graph(HashMap<Integer, INode> nodes)
 	{
 		this.nodes = nodes;
 	}
@@ -32,19 +32,18 @@ public class Graph implements ICollection
 	public String toString()
 	{
 		String str = "";
-		for(Node node : this.nodes.values())
+		for(INode node : this.nodes.values())
 		{
 			str = str + (node.toString() + " ");
-			System.out.println(node.toString());
 		}
 		return str;
 	}
 
-	public HashMap<Integer, Node> getNodes() {
+	public HashMap<Integer, INode> getNodes() {
 		return nodes;
 	}
 
-	public Collection<Node> get() {
+	public Collection<INode> get() {
 		return this.nodes.values();
 	}
 }

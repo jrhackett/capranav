@@ -1,28 +1,161 @@
-.my_button {
-    -fx-background-color: 
-        rgba(0,0,0,0.08),
-        linear-gradient(#5a61af, #51536d),
-        linear-gradient(#e4fbff 0%,#cee6fb 10%, #a5d3fb 50%, #88c6fb 51%, #d5faff 100%);
-    -fx-background-radius: 5,5,4;
-    -fx-text-fill: #242d35;
-    -fx-font-size: 20px;
-    -fx-padding: 0 0 3 7;
- 	
+@font-face {
+    font-family: HelveticaNeueLight;
+    src: url("../../WPI-Nav/resources/fonts/HelveticaNeue-Light.otf");
 }
 
-.my_button:hover {
-	-fx-background-color: linear-gradient(#215058, #61a2b1);
-    -fx-text-fill: #ffffff;
-	
+.root {
+    -fx-font-family: HelveticaNeueLight;
+    -fx-font-size: 20;
 }
-.my_button:focused  {
-    -fx-background-color: 
-        rgba(0,0,0,0.08),
-        linear-gradient(#eb8517 0%, #e3582a 100%),
-        linear-gradient(#e4fbff 0%,#cee6fb 10%, #a5d3fb 50%, #88c6fb 51%, #d5faff 100%);
-    -fx-background-insets: 0 0 -1 0,0,1;
-    -fx-background-radius: 5,5,4;
-    -fx-padding: 3 30 3 30;
-    -fx-text-fill: #242d35;
-    -fx-font-size: 14px;
+
+#dashboardButton  {
+    -fx-background-color:#333;
+    -fx-text-fill:#eee;
+    -fx-padding: 8 8;
+}
+
+#pinView {
+    -fx-fill: #eeeeee;
+}
+
+#pinView:hover {
+    -fx-fill: #ac2738;
+}
+
+#pinView:pressed {
+    -fx-fill: #274abe;
+    -fx-scale-x: 6%;
+    -fx-scale-y: 6%;
+}
+
+#emailView {
+    -fx-fill: #ac2738;
+}
+
+#emailView:hover {
+    -fx-fill: #eeeeee;
+}
+
+#emailView:pressed {
+    -fx-fill: #274abe;
+    -fx-scale-x: 6%;
+    -fx-scale-y: 6%;
+}
+
+.combo-box{
+    -fx-font-family: HelveticaNeueLight;
+    -fx-font-size: 12;
+    -fx-padding: 0;
+}
+.combo-box .text-input
+{
+    -fx-background: #333;
+    -fx-background-color: #333;
+    -fx-border-width: 0;
+    -fx-border-radius:0;
+    -fx-border-color: #333;
+    -fx-text-fill: #eee;
+}
+​
+.combo-box-base
+{
+    -fx-background-color: #333333;
+    -fx-border-radius: 0;
+    -fx-border-color:#333333;
+    -fx-mark-color: #333;
+}
+
+.combo-box-base:hover
+{
+    -fx-background-color: #888;
+}
+
+.combo-box-base > .arrow-button
+{
+    -fx-background-color: #333;
+    -fx-border-radius: 0;
+}
+
+​
+.combo-box .list-cell
+{
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-text-color: #eee;
+    -fx-padding: 3 0 2 7;
+    -fx-cell-size: 1.66667em;
+}
+​
+.combo-box-popup .list-view
+{
+    -fx-background-color: white, white;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
+}
+​
+.combo-box-popup .list-view .list-cell
+{
+    -fx-padding: 4 0 4 5;
+    -fx-background-color: white;
+}
+​
+.combo-box-popup .list-view .list-cell:filled:selected, .combo-box-popup .list-view .list-cell:filled:selected:hover
+{
+    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;
+    -fx-text-fill: -fx-selection-bar-text;
+}
+​
+.combo-box-popup .list-view .list-cell:filled:hover
+{
+    -fx-background-color: white;
+    -fx-text-fill: -fx-text-inner-color;
+}
+​
+    /*.combo-box-base
+    {
+        -fx-skin: "com.sun.javafx.scene.control.skin.ComboBoxBaseSkin";
+        -fx-background-color: white, white, white, white;
+        -fx-background-radius: 5, 5, 4, 3;
+        -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+        -fx-padding: 0;
+    }*/
+​
+.combo-box-base:hover
+{
+    -fx-color: -fx-hover-base;
+}
+​
+.combo-box-base:showing
+{
+    -fx-color: -fx-pressed-base;
+}
+​
+.combo-box-base:focused {
+    -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-radius: 6.4, 4, 5, 3;
+    -fx-background-insets: -1.4, 0, 1, 2;
+}
+​
+.combo-box-base:disabled {
+    -fx-opacity: .4;
+}
+
+.list-cell
+{
+    -fx-font-family: HelveticaNeueLight;
+    -fx-font-size: 14;
+    -fx-padding: 5;
+    -fx-font-color:#333;
+}
+
+.list-cell:odd
+{
+    -fx-background-color:#eee;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
+    -fx-text-fill: white;
 }

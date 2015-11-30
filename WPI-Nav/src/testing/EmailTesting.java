@@ -4,29 +4,36 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import logic.Email;
+
+import java.util.ArrayList;
+
 /**
  * Created by Henry on 11/14/2015.
  */
 public class EmailTesting {
     Email testE;
-/*
-    public EmailTesting(){
-        try{
-            this.setUp();
-        }catch(Exception e){
 
-        }
-
-    }
-*/
     @Before
     public void setUp() throws Exception {
-        testE = new Email("hjwheelermackta@wpi.edu");
+        //TODO Set as your own email when testing
+        testE = new Email("mjgiancola@wpi.edu");
     }
-
+/*
     @Test
-    public void emailTest1() {
-        assertEquals("Failure to send email", true, testE.sendEmail("This is a test email!"));
+    public void sendBasicEmail() {
+        assertEquals("Send Basic Text Email", true, testE.sendEmail("This is a test email!", false));
+    }
+*/
+    @Test
+    public void sendHTMLEmail() {
+        ArrayList<String> directions = new ArrayList<>();
+        directions.add("Go west 1000 kilometers");
+        directions.add("Take a hop and a skip");
+        directions.add("Apply to hogwarts");
+        directions.add("Choose crazy Peeta instead of Chris Hemsworth");
+        directions.add("Live happily ever after, the end");
+
+        assertEquals("Send HTML Email", true, testE.sendDirections(directions, "Fuller", "AK"));
     }
 
 

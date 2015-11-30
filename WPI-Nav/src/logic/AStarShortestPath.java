@@ -16,15 +16,15 @@ public class AStarShortestPath {
 	 * @param destination: final Node
 	 * @return void - path 
 	 */
-	public static ArrayList<Node> AStarSearch(Node start, Node destination, HashMap<Integer, Node> map) {
+	public static ArrayList<INode> AStarSearch(INode start, INode destination, HashMap<Integer, INode> map) {
 
-		Set<Node> explored = new HashSet<Node>(); // Create Set for explored
+		Set<INode> explored = new HashSet<INode>(); // Create Set for explored
 													// nodes
 
-		PriorityQueue<Node> queue = new PriorityQueue<Node>(10, // Create PriorityQueue for nodes, initial capacity of 10
-				new Comparator<Node>() { // compare nodes based on comparator function
+		PriorityQueue<INode> queue = new PriorityQueue<INode>(10, // Create PriorityQueue for nodes, initial capacity of 10
+				new Comparator<INode>() { // compare nodes based on comparator function
 					@Override
-					public int compare(Node o1, Node o2) { // compare two nodes based on f_scores
+					public int compare(INode o1, INode o2) { // compare two nodes based on f_scores
 						if (o1.getF() > o2.getF()) {
 							return 1; // return 1 if i is greater than j
 						}
@@ -41,52 +41,49 @@ public class AStarShortestPath {
 		);
 
 		// cost from start
+		double savedG = start.getG();
 		start.setG(0);
 
 		queue.add(start); // add the starting Node to the priority queue
 
 		boolean found = false; // set found boolean to false, will change to
 								// true once path is found
-
+		int i = 0;
 		while ((!queue.isEmpty()) && (!found)) { // continue to loop as long as
 													// queue is not empty AND
 													// path isn't found yet
-
 			// Retrieve and remove the Node in queue with the lowest f_score
 			// value
-			Node current = queue.poll();
+			INode current = queue.poll();
 
 			// add current Node to explored queue
 			explored.add(current);
 
 			// check if current value is the destination value
-			if (current.getName().equals(destination.getName())) {
+			if (current.getID() == (destination.getID())) {
 				found = true; // if current Node = destination Node, set found
 								// boolean to true and exit while loop when done
 			}
 
 			// check children of current Node
 			for (Edge e : current.getAdjacencies()) {
-				Node child = map.get(e.getTarget()); // set child Node =
+				INode child = map.get(e.getTarget()); // set child Node =
 																// to edge of
 																// current Node
 				double movement_cost = getCost(current, e, map); // obtain movement_cost from edge
 				double temp_g_scores = current.getG() + movement_cost; // calculate g_scores
-				double temp_h_scores = getHeuristic(child, destination); // get heuristic cost from current node and destination node
+				double temp_h_scores = 0; //getHeuristic(child, destination); // get heuristic cost from current node and destination node
 				double temp_f_scores = temp_g_scores + temp_h_scores; // get f score
-
 				// if child has been evaluated already and the new f_score is higher, skip
 				if ((explored.contains(child)) && (temp_f_scores >= child.getF())) {
 					continue; // continue through for loop
 				}
-
 				// if child is not in the queue or the new f_score is lower:
 				else if ((!queue.contains(child)) || (temp_f_scores < child.getF())) {
 					child.setParent(current); // Set child's parent to the current Node to establish path
 					child.setG(temp_g_scores); // update child's g_scores
 					child.setH(temp_h_scores); // update childs h_scores
 					child.setF(temp_f_scores); // update childs f_scores
-
 					// remove child from queue to avoid doubles
 					if (queue.contains(child)) {
 						queue.remove(child);
@@ -98,12 +95,10 @@ public class AStarShortestPath {
 			}
 
 		}
-	
-		ArrayList<Node> path = printPath(destination); // create a list of
+		ArrayList<INode> path = printPath(destination); // create a list of
 														// Nodes, tracing from
 														// the destination Node
 														// back to the start
-		System.out.println("Path: " + path); //print out the List of Nodes from start to finish
 		return path;
 	}
 	/**
@@ -112,8 +107,8 @@ public class AStarShortestPath {
 	 * @param adjacentEdge - one of the current Node's edges
 	 * @return the movement cost between two adjacent nodes
 	 */
-	public static double getCost(Node currentNode, Edge adjacentEdge, HashMap<Integer, Node> map) {
-		Node child = map.get(adjacentEdge.getTarget());
+	public static double getCost(INode currentNode, Edge adjacentEdge, HashMap<Integer, INode> map) {
+		INode child = map.get(adjacentEdge.getTarget());
 		double multiplier = adjacentEdge.getWeight();
 		double cost = Math.sqrt(
 				Math.pow((child.getX() - currentNode.getX()), 2) + Math.pow((child.getY() - currentNode.getY()), 2)
@@ -128,7 +123,7 @@ public class AStarShortestPath {
 	 * @param endNode - destination Node
 	 * @return heuristic value, AKA as the crow flies distance between Nodes
 	 */
-	public static double getHeuristic(Node currentNode, Node endNode) {
+	public static double getHeuristic(INode currentNode, INode endNode) {
 		double x1 = currentNode.getX();
 		double x2 = endNode.getX();
 		double y1 = currentNode.getY();
@@ -145,11 +140,13 @@ public class AStarShortestPath {
 	 * @return path - a List of Nodes from start to finish
 	 * @warning only run inside AStarSearch
 	 */
-	public static ArrayList<Node> printPath(Node target) {
-		ArrayList<Node> path = new ArrayList<Node>();
-
-		for (Node node = target; node != null; node = node.getParent()) {
+	public static ArrayList<INode> printPath(INode target) {
+		ArrayList<INode> path = new ArrayList<INode>();
+		int i = 0;
+		for (INode node = target; node != null; node = node.getParent()) {
 			if(!path.contains(node)) path.add(node);
+			else
+				break;
 		}
 		Collections.reverse(path);
 		return path;

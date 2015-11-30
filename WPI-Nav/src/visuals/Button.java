@@ -14,12 +14,22 @@ import javafx.scene.text.Text;
  */
 public class Button extends StackPane{
 
+
+
+
+
+
+
+
+
+
     /**
      * Constructor for button
      * @param content = string of content - 1 character.
      * @param size = size of the button.
      */
     public Button(String content, double size) {
+
         /* background of button */
         Rectangle background = new Rectangle(size, size, Color.web("#638CA6", .3));
         background.setArcWidth(5);
@@ -36,14 +46,14 @@ public class Button extends StackPane{
 
         /* effects: */
 
-            /* shadow */
+        /* shadow */
         DropShadow ds = new DropShadow();
         ds.setOffsetX(.3);
         ds.setOffsetY(.3);
         ds.setColor(Color.LIGHTGRAY);
         this.setEffect(ds);
 
-            /* user interaction: */
+        /* user interaction: */
         this.setOnMouseEntered(e -> {
             background.setFill(Color.web("#638CA6", 1));
             background.setStroke(Color.web("#BFD4D9", 1));
@@ -67,7 +77,6 @@ public class Button extends StackPane{
             ds.setColor(Color.WHITE);
             this.setEffect(ds);
         });
-
         this.setOnMouseReleased(e -> {
             background.setFill(Color.web("#638CA6", .3));
             background.setStroke(Color.web("#BFD4D9", .3));
