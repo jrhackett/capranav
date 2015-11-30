@@ -76,7 +76,7 @@ public class Controller extends Application {
         display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
         s.show();   //shows scene
         defaultMap();
-        showNodeImage(new Room(0,0.0,0.0,0.0,0.0,0.0,0.0,"hradfg"));
+        //showNodeImage(new Room(0,0.0,0.0,0.0,0.0,0.0,0.0,"hradfg"));
     }
 
 
@@ -95,7 +95,7 @@ public class Controller extends Application {
         });
 
        //add image to stack pane -> if no image return void
-        Image image = new Image(getClass().getResourceAsStream("../images/Team.jpg"));
+        Image image = new Image(getClass().getResourceAsStream("../images/Riley.png"));
         ImageView iv = new ImageView(image);
 
         imageStack.getChildren().add(iv);
