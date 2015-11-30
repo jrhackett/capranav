@@ -148,8 +148,11 @@ public class MapDisplay extends Pane {
             });
         } else {
             circle.setOnMouseClicked(e -> {
-                if ( e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1){
+                if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() >= 2){
+                    controller.showNodeImage(v);
+                } else if ( e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1){
                     controller.handleMapClick(v);
+                    controller.updateNodeInformation(v.getIcon(), v.toString());
                 }
             });
         }

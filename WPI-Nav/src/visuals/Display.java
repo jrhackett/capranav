@@ -98,6 +98,9 @@ public class Display {
     private Label buildingName;
     private Label buildingNumber;
 
+    private Label nodeTitle;
+    private ImageView nodeView;
+
 
     /**
      * Basic constructor.
@@ -142,6 +145,7 @@ public class Display {
         HBox.setHgrow(map, Priority.ALWAYS);
         HBox.setHgrow(slidingDashboard, Priority.SOMETIMES);
         HBox.setHgrow(directions, Priority.SOMETIMES);
+
 
 
         sections.setStyle("-fx-background-color: #333333");
@@ -556,8 +560,9 @@ public class Display {
         slidingBuilding  = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, BUILDING_VISIBLE, new Text("hidden"));
         HBox nodeBox     = createNodeBox();
         HBox buildingBox = createBuildingBox();
+        buildingBox.visibleProperty().bind(BUILDING_VISIBLE);
 
-        slidingBuilding.getChildren().addAll(nodeBox, buildingBox);
+        slidingBuilding.getChildren().addAll(nodeBox, buildingBox);//buildingBox
         slidingBuilding.setMaxHeight(EDGE);
         slidingBuilding.setMinHeight(0);
 
@@ -572,6 +577,11 @@ public class Display {
         mapPane.setAlignment(Pos.CENTER);
 
         AnchorPane.setTopAnchor(mapPane, EDGE + MAP_BORDER);//
+        AnchorPane.setLeftAnchor(mapPane, MAP_BORDER);
+        AnchorPane.setRightAnchor(mapPane, MAP_BORDER);
+        AnchorPane.setBottomAnchor(mapPane, MAP_BORDER);
+
+
 
         map.setMinWidth(MAP_WIDTH);
         map.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
@@ -579,7 +589,7 @@ public class Display {
         map.setMinHeight(MAP_HEIGHT + EDGE);
         map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE + EDGE); // + EDGE for NODE INFO
 
-        map.getChildren().addAll(mapTitle, mapPane, buildingBox);
+        map.getChildren().addAll(mapTitle, mapPane, slidingBuilding);
         map.setStyle("-fx-background-color:#eeeeee ;");
 
     }
@@ -604,13 +614,15 @@ public class Display {
         return mapPane;
     }
 
+
     private HBox createNodeBox(){
         HBox hbox = new HBox();
 
-        ImageView imageView = new ImageView();
-        Label nodeTitle = new Label();
+        nodeView = new ImageView();
+        nodeTitle = new Label();
 
-        hbox.getChildren().addAll(imageView, nodeTitle);
+
+        hbox.getChildren().addAll(nodeView, nodeTitle);
         hbox.setMaxHeight(EDGE);
         hbox.setMinHeight(EDGE);
         hbox.setAlignment(Pos.CENTER);
@@ -618,6 +630,14 @@ public class Display {
 
         return hbox;
 
+    }
+
+    public void updateNodeTitle(String s){
+        this.nodeTitle.setText(s);
+    }
+
+    public void updateNodeIcon(ImageView i){
+        this.nodeView = i;
     }
 
     //TODO THIS IS START OF BUILDING BOX PANE!

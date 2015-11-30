@@ -3,6 +3,7 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -92,9 +93,15 @@ public class Controller extends Application {
        //add image to stack pane -> if no image return void
         //TODO ADD IMAGES / change node content if needed
 
+
+
         this.myDisplay.root.getChildren().add(imageStack);
     }
 
+    public void updateNodeInformation(ImageView i, String s){
+        this.myDisplay.updateNodeIcon(i);
+        this.myDisplay.updateNodeTitle(s);
+    }
 
     public void sendEmail(String email){
         //TODO FILL THIS OUT
