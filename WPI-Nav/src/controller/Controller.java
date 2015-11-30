@@ -13,6 +13,7 @@ import visuals.Display;
 import visuals.Instructions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 
@@ -59,7 +60,7 @@ public class Controller extends Application {
         SvgImageLoaderFactory.install();
 
 
-        /* get information */
+		/* get information */
         nodesFromFile();
         mapsFromFile();
         buildingsFromFile();
@@ -664,77 +665,29 @@ public class Controller extends Application {
      * @param
      */
     private void nodesFromFile(){
-        Parser test = new Parser("nodes.json");
-        Graph graph = (Graph)test.fromFile();
-        this.nodes = graph.getNodes();
-
-        TStairs tStairs = new TStairs(77, 45, 45, 45, 45, 45, 45, 0);
-        tStairs.setToFloor(1);
-        tStairs.setBuildingID(1);
-        this.nodes.put(77, tStairs); //TODO REMOVE THIS
-
+        nodes = new Parser<INode>().fromFileGraph();
     }
-
-    /**
-     * load maps from file
-     */
-    /*private void mapsFromFile() {
-        Parser parser = new Parser("maps.json");
-        this.maps = (Maps)parser.fromFile();
-    }
-*/
-
 
     private void buildingsFromFile(){
-        buildings = new HashMap<>();
-        Building stratton = new Building(1, 4);
-        stratton.addFloor(1, 1);
-        stratton.addFloor(0, 2);
-        stratton.addFloor(2, 3);
-        stratton.addFloor(3, 4);
-        stratton.addName("Stratton Hall");
-        stratton.addName("Stratton");
-        stratton.addName("sh");
-        buildings.put(1, stratton);
+        buildings = new Parser<Building>().fromFileBuilding();
     }
 
     private void mapsFromFile() {
-        maps = new HashMap<>();
-        campus = new Campus(0, "wpi-campus-map", 24);
-
-        Floor stratton1 = new Floor(1, "sh1", 0.13, 1, 1);
-        Floor stratton0 = new Floor(2, "sh0", 0.13, 1, 0);
-        Floor stratton2 = new Floor(3, "sh2", 0.13, 1, 2);
-        Floor stratton3 = new Floor(4, "sh3", 0.13, 1, 3);
+        maps = new Parser<IMap>().fromFileMap();
 
 
-        maps.put(0, campus);
-        maps.put(1, stratton1);
-        maps.put(2, stratton0);
-        maps.put(3, stratton2);
-        maps.put(4, stratton3);
-
-
-
-
-        //TODO get this functional
-       /*
-        Parser parser = new Parser("campus.json");
-        this.campus = (Campus)parser.fromFile();
-
-        parser = new Parser("floors.json");
-        HashMap<Integer, Floor> floors = ((Floors)parser.fromFile()).getMaps();
-
-        maps.putAll(floors);
-        maps.put(0, campus);
-        */
     }
 
-
-
     private void campusFromFile(){
-        Parser parser = new Parser("campus.json");
-        this.campus = (Campus)parser.fromFile();
+        HashMap<Integer, IMap> temp = new Parser<Building>().fromFileMap();
+        Collection<IMap> maps = temp.values();
+
+        for(IMap m : maps) {
+            if (m instanceof Campus) {
+                campus = (Campus)m;
+                break;
+            }
+        }
     }
 
 

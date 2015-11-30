@@ -19,6 +19,7 @@ public class Building {
         this.names = new ArrayList<>();
     };
 
+    public int getID() { return id; }
     public String getName(){ return this.names.get(0);}
     public ArrayList<String> getNames(){ return this.names;}
 
