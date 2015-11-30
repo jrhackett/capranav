@@ -34,7 +34,7 @@ public class Controller extends Application {
 
     //Maps maps;                       /* information of the maps */
 
-    private int currentBuilding;
+    private int currentBuilding = 0;
     private int currentFloor;
     private Campus campus;
     private logic.IMap currentMap;            /* current map being used */
@@ -249,13 +249,13 @@ public class Controller extends Application {
     }
 
     public void handleIncreaseFloorButton(){
-        if (buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)){
+        if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)){
             setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(++currentFloor));
         }
     }
 
     public void handleDecreaseFloorButton(){
-        if (buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)){
+        if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)){
             setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(--currentFloor));
         }
     }

@@ -537,9 +537,11 @@ public class Display {
 
 
         /** Hidden Sliding Panel **/
-        slidingBuilding = new SlidingAnchorPane(EDGE, GAP, Direction.DOWN, BUILDING_VISIBLE, new Text("hidden"));
+        slidingBuilding  = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, BUILDING_VISIBLE, new Text("hidden"));
+        HBox nodeBox     = createNodeBox();
         HBox buildingBox = createBuildingBox();
-        slidingBuilding.getChildren().addAll(buildingBox);
+
+        slidingBuilding.getChildren().addAll(nodeBox, buildingBox);
         slidingBuilding.setMaxHeight(EDGE);
         slidingBuilding.setMinHeight(0);
         //send this a mouse event to trigger the slide
@@ -568,9 +570,9 @@ public class Display {
         map.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
 
         map.setMinHeight(MAP_HEIGHT + EDGE);
-        map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE);
+        map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE + EDGE); // + EDGE for NODE INFO
 
-        map.getChildren().addAll(mapTitle, buildingBox, mapPane);
+        map.getChildren().addAll(mapTitle, mapPane, buildingBox);
         map.setStyle("-fx-background-color:#eeeeee ;");
 
     }
@@ -581,7 +583,7 @@ public class Display {
 
     private StackPane createMapPane() {
         StackPane mapPane = new StackPane();
-        mapPane.setPrefHeight(MAP_WIDTH + MAP_BORDER * 2);
+        mapPane.setPrefHeight(MAP_HEIGHT);// + MAP_BORDER * 2);
         mapPane.setMinHeight(MAP_HEIGHT);
 
         mapPane.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
@@ -595,8 +597,25 @@ public class Display {
         return mapPane;
     }
 
+    private HBox createNodeBox(){
+        HBox hbox = new HBox();
+
+        ImageView imageView = new ImageView();
+        Label nodeTitle = new Label();
+
+        hbox.getChildren().addAll(imageView, nodeTitle);
+        hbox.setMaxHeight(EDGE);
+        hbox.setMinHeight(EDGE);
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setSpacing(EDGE);//TODO MAKE SURE THIS LOOKS GOOD
+
+        return hbox;
+
+    }
+
     //TODO THIS IS START OF BUILDING BOX PANE!
     private HBox createBuildingBox() { //its going to be an HBox with stuff inside of the sliding anchorpane
+
         HBox box = new HBox();
         javafx.scene.control.Button left = new javafx.scene.control.Button("<");
         javafx.scene.control.Button right = new javafx.scene.control.Button(">");
@@ -608,7 +627,10 @@ public class Display {
 
         box.setMaxHeight(EDGE);
         box.setMinHeight(0);
-        box.getChildren().addAll(left, right, buildingName, buildingNumber);
+        //TODO set min widths
+        box.setAlignment(Pos.CENTER);
+        box.setSpacing(GAP);
+        box.getChildren().addAll(left, buildingName, buildingNumber, right);
         return box;
     }
 

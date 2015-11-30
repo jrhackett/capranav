@@ -84,7 +84,7 @@ public class SlidingAnchorPane extends AnchorPane {
                     setPrefHeight(curHeight);
                     break;
                 case DOWN:
-                    curHeight = expanded * (1.0 - t);
+                    curHeight =  edge + expanded * (1.0 - t);
                     setPrefHeight(curHeight);
                     break;
 
@@ -120,8 +120,8 @@ public class SlidingAnchorPane extends AnchorPane {
                 this.setMinHeight(edge);
                 break;
             case DOWN: //down is set up to not be visible at all then slide down
-                this.setPrefHeight(0);
-                this.setMinHeight(0);
+                this.setPrefHeight(edge);
+                this.setMinHeight(edge);
                 this.setMaxHeight(expanded);
         }
 
