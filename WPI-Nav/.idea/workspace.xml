@@ -21,10 +21,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="GraphTesting.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GraphTesting.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/logic/GraphTesting.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.36419752">
+            <state vertical-scroll-proportion="0.0">
               <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
               <folding />
             </state>
@@ -83,13 +83,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NodeTesting.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="NodeTesting.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/logic/NodeTesting.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.55864197">
+              <caret line="64" column="75" selection-start-line="64" selection-start-column="75" selection-end-line="64" selection-end-column="75" />
               <folding>
-                <element signature="e#2283#2289#0" expanded="true" />
+                <element signature="e#2286#2292#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -177,12 +177,12 @@
         <option value="$PROJECT_DIR$/src/logic/Elevator.java" />
         <option value="$PROJECT_DIR$/test/logic/InterestTesting.java" />
         <option value="$PROJECT_DIR$/test/logic/InterestAndTransitionTesting.java" />
-        <option value="$PROJECT_DIR$/test/logic/NodeTesting.java" />
         <option value="$PROJECT_DIR$/test/logic/EdgeTesting.java" />
         <option value="$PROJECT_DIR$/src/logic/Graph.java" />
         <option value="$PROJECT_DIR$/test/logic/MapsTesting.java" />
         <option value="$PROJECT_DIR$/test/logic/ParserTesting.java" />
         <option value="$PROJECT_DIR$/test/logic/GraphTesting.java" />
+        <option value="$PROJECT_DIR$/test/logic/NodeTesting.java" />
       </list>
     </option>
   </component>
@@ -310,59 +310,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.GraphTesting.toStringTest2">
-    <configuration default="false" name="ParserTesting.dummyTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="logic.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="WPI-Nav" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="logic" />
-      <option name="MAIN_CLASS_NAME" value="logic.ParserTesting" />
-      <option name="METHOD_NAME" value="dummyTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration default="false" name="GraphTesting.getTest2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="logic.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="WPI-Nav" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="logic" />
-      <option name="MAIN_CLASS_NAME" value="logic.GraphTesting" />
-      <option name="METHOD_NAME" value="getTest2" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="JUnit.NodeTesting.toStringTest">
     <configuration default="false" name="GraphTesting.getNodesTest2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -428,6 +376,58 @@
       <option name="PACKAGE_NAME" value="logic" />
       <option name="MAIN_CLASS_NAME" value="logic.GraphTesting" />
       <option name="METHOD_NAME" value="toStringTest2" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="NodeTesting.equalsTest3" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="logic.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="WPI-Nav" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="logic" />
+      <option name="MAIN_CLASS_NAME" value="logic.NodeTesting" />
+      <option name="METHOD_NAME" value="equalsTest3" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="NodeTesting.toStringTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="logic.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="WPI-Nav" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="logic" />
+      <option name="MAIN_CLASS_NAME" value="logic.NodeTesting" />
+      <option name="METHOD_NAME" value="toStringTest" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -686,19 +686,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.ParserTesting.dummyTest" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.GraphTesting.getTest2" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.GraphTesting.getNodesTest2" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.GraphTesting.getNodesTest1" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.GraphTesting.toStringTest2" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.GraphTesting.getNodesTest2" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.GraphTesting.getNodesTest1" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.GraphTesting.toStringTest2" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.NodeTesting.equalsTest3" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.NodeTesting.toStringTest" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.GraphTesting.toStringTest2" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.GraphTesting.getNodesTest1" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.GraphTesting.getNodesTest2" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.GraphTesting.getTest2" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.ParserTesting.dummyTest" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.NodeTesting.toStringTest" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.NodeTesting.equalsTest3" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.GraphTesting.toStringTest2" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.GraphTesting.getNodesTest1" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.GraphTesting.getNodesTest2" />
       </list>
     </recent_temporary>
   </component>
@@ -728,17 +728,17 @@
     <history-entry file="GraphTesting_toStringTest2 - 2015.11.29 at 21h 28m 17s.xml">
       <configuration name="GraphTesting.toStringTest2" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="NodeTesting_equalsTest3 - 2015.11.29 at 21h 32m 31s.xml">
+      <configuration name="NodeTesting.equalsTest3" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="NodeTesting_toStringTest - 2015.11.29 at 21h 33m 17s.xml">
+      <configuration name="NodeTesting.toStringTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="NodeTesting_toStringTest - 2015.11.29 at 21h 33m 33s.xml">
+      <configuration name="NodeTesting.toStringTest" configurationId="JUnit" />
+    </history-entry>
     <history-entry file="ParserTesting_dummyTest - 2015.11.29 at 16h 48m 15s.xml">
       <configuration name="ParserTesting.dummyTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ParserTesting_fromFileTest1 - 2015.11.29 at 16h 44m 17s.xml">
-      <configuration name="ParserTesting.fromFileTest1" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ParserTesting_fromFileTest1 - 2015.11.29 at 16h 44m 26s.xml">
-      <configuration name="ParserTesting.fromFileTest1" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ParserTesting_fromFileTest1 - 2015.11.29 at 16h 45m 09s.xml">
-      <configuration name="ParserTesting.fromFileTest1" configurationId="JUnit" />
     </history-entry>
     <history-entry file="ParserTesting_fromFileTest1 - 2015.11.29 at 16h 46m 18s.xml">
       <configuration name="ParserTesting.fromFileTest1" configurationId="JUnit" />
@@ -790,6 +790,12 @@
           <properties class="logic.EdgeTesting" method="edgeTargetTest1" />
           <option name="timeStamp" value="6" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/test/logic/NodeTesting.java</url>
+          <line>63</line>
+          <properties class="logic.NodeTesting" method="toStringTest" />
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/test/logic/ParserTesting.java</url>
           <line>44</line>
@@ -797,7 +803,7 @@
           <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="8" />
+      <option name="time" value="9" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1163,16 +1169,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/logic/NodeTesting.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-          <folding>
-            <element signature="e#2283#2289#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/logic/Parser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1215,9 +1211,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/logic/GraphTesting.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36419752">
+        <state vertical-scroll-proportion="0.0">
           <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/logic/NodeTesting.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.55864197">
+          <caret line="64" column="75" selection-start-line="64" selection-start-column="75" selection-end-line="64" selection-end-column="75" />
+          <folding>
+            <element signature="e#2286#2292#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
