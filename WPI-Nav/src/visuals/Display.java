@@ -95,7 +95,7 @@ public class Display {
     private Label buildingNumber;
 
     private Label nodeTitle;
-    private ImageView nodeView;
+    private StackPane nodeViewHolder;
 
 
     /**
@@ -155,7 +155,7 @@ public class Display {
         /** create scene **/
         root.setAlignment(Pos.TOP_LEFT);
 
-        Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 2 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
+        Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 2 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE * 3);//+MAP_BORDER*2+TITLE_HEIGHT
         //Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+EDGE*2+expandedWidth*2, MAP_WIDTH + 2 * EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
 
         return scene;
@@ -578,8 +578,9 @@ public class Display {
         VBox information = new VBox();
         information.getChildren().addAll(nodeBox, buildingBox);
         information.setAlignment(Pos.CENTER);
+        information.setSpacing(GAP * 4); //play with this
 
-        AnchorPane.setBottomAnchor(information, 0.0);
+        AnchorPane.setBottomAnchor(information, GAP * 5);
         AnchorPane.setLeftAnchor(information, 0.0);
         AnchorPane.setRightAnchor(information, 0.0);
 
@@ -591,10 +592,10 @@ public class Display {
         this.mapPane = createMapPane();
         mapPane.setAlignment(Pos.CENTER);
 
-        AnchorPane.setTopAnchor(mapPane, EDGE + MAP_BORDER);//
-        AnchorPane.setLeftAnchor(mapPane, MAP_BORDER);
-        AnchorPane.setRightAnchor(mapPane, MAP_BORDER);
-        AnchorPane.setBottomAnchor(mapPane, MAP_BORDER);
+        AnchorPane.setTopAnchor(mapPane, EDGE);//
+        AnchorPane.setLeftAnchor(mapPane, 0.0);
+        AnchorPane.setRightAnchor(mapPane, 0.0);
+        AnchorPane.setBottomAnchor(mapPane, EDGE * 2); //+ GAP + 2 * EDGE
 
 
 
@@ -633,15 +634,15 @@ public class Display {
     private HBox createNodeBox(){
         HBox hbox = new HBox();
 
-        nodeView = new ImageView();
+        nodeViewHolder = new StackPane();
         nodeTitle = new Label();
 
 
-        hbox.getChildren().addAll(nodeView, nodeTitle);
+        hbox.getChildren().addAll(nodeViewHolder, nodeTitle);
         hbox.setMaxHeight(EDGE);
         hbox.setMinHeight(EDGE);
         hbox.setAlignment(Pos.CENTER);
-        hbox.setSpacing(EDGE);//TODO MAKE SURE THIS LOOKS GOOD
+        hbox.setSpacing(GAP);//TODO MAKE SURE THIS LOOKS GOOD
 
         return hbox;
 
@@ -652,7 +653,9 @@ public class Display {
     }
 
     public void updateNodeIcon(ImageView i){
-        this.nodeView = i;
+        System.out.println("node view icon");
+        this.nodeViewHolder.getChildren().removeAll();
+        this.nodeViewHolder.getChildren().add(i); //= i;
     }
 
     //TODO THIS IS START OF BUILDING BOX PANE!
@@ -684,6 +687,7 @@ public class Display {
 
     public void setBuildingNumber(int i) {
         //TODO ADD FLICKERING ANIMATION
+        System.out.println("building number set called");
         this.buildingNumber.setText(Integer.toString(i));
     }
 
@@ -723,7 +727,7 @@ public class Display {
         //this.end.setPlaceholder(new Label("Search or Select End Location"));
 
         this.start.setPromptText("Search or Select Start");
-        this.end.setPromptText("Search or Select Destination");
+        this.end.setPromptText("Search or Select End");
 
         this.start.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue && firstTime.get()) {

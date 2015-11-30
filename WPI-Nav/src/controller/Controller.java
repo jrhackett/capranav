@@ -267,13 +267,15 @@ public class Controller extends Application {
 
     public void handleIncreaseFloorButton(){
         if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)){
-            setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(++currentFloor));
+            //setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(++currentFloor));
+            setFloor(++currentFloor);
         }
     }
 
     public void handleDecreaseFloorButton(){
         if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)){
-            setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(--currentFloor));
+            //setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(--currentFloor));
+            setFloor(--currentFloor);
         }
     }
 
