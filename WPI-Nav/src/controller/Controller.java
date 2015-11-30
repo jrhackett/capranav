@@ -209,16 +209,27 @@ public class Controller extends Application {
 
             if (startNode != null) {
                 System.out.printf("Setting STARTNODE: %d\n", startNode.getID());
+                //TODO if current map contains it, play, if it doesn't - switch and play
+                if (startNode.getMap_id() != currentMap.getID()) {
+                    //gotta switch maps
+                    switchMapSetting(startNode.getMap_id());
+                }
                 myDisplay.mapDisplay.setStartNode(startNode.getID(), true);
             }
 
             if (endNode != null) {
-                System.out.printf("Setting ENDNODE: %d\n", endNode.getID());
-                myDisplay.mapDisplay.setStartNode(endNode.getID(), false);
+                //TODO if current map contains it, play, if it doesn't - dont play, just set and color
+                if (startNode.getMap_id() == currentMap.getID()) {
+                    myDisplay.mapDisplay.setStartNode(endNode.getID(), false);
+                } else {
+                    myDisplay.mapDisplay.setEndNode(endNode.getID());
+                }
+                //TODO
             }
 
             if (startNode != null && endNode != null) {
                 findPaths();
+                //TODO
             }
         }
     }
@@ -231,6 +242,20 @@ public class Controller extends Application {
         //switch to the map it was referencing via the building via the map
         switchMapSetting(t.getBuildingID(), t.getToFloor());
 
+    }
+
+    private void switchMapSetting(int mapId){
+        if (maps.get(mapId).getID() == 0){
+            hideBuildingPane();//ONLY SLIDES UP BUILDING VIEW //TODO STILL UNTESTED
+            defaultMap();
+            this.currentMap = campus;
+        } else {
+            this.currentMap = maps.get(mapId);
+            this.currentBuilding = currentMap.getBuildingID();
+            this.currentFloor = currentMap.getFloor();
+            showBuildingPane();//ONLY SLIDE DOWN BUILDING VIEW //TODO STILL UNTESTED
+            switchToBuildingView(currentBuilding, currentFloor);
+        }
     }
 
     private void switchMapSetting(int buildingID, int startingFLOOR){
@@ -327,10 +352,9 @@ public class Controller extends Application {
             //if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode.getID()); //hide the last start
             //this.startNode = n;
 
-            if (!nodes.containsKey(n.getID())) {//TODO double check this works, ie that isn't already added
-                System.out.println("IT LOOKS LIKE IT WORKED START");
+            if (!nodes.containsKey(n.getID())) {
                 tempStart = n;
-                nodes.put(n.getID(), n);
+                nodes.put(n.getID(), n);//puts the node in the map!
             } else {
                 if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode.getID());
             }
@@ -342,8 +366,7 @@ public class Controller extends Application {
         } else {//Else if the last node we added was the last [note, a lot of this gets wonky when we add midway points, jesus
             //this.endNode = n;
 
-            if (!nodes.containsKey(n.getID())) {//TODO double check this works, ie that isn't already added
-                System.out.println("IT LOOKS LIKE IT WORKED END");
+            if (!nodes.containsKey(n.getID())) {
                 tempEnd = n;
                 nodes.put(n.getID(), n);
             } else {
@@ -355,9 +378,7 @@ public class Controller extends Application {
 
         }
 
-        //FIRST = !FIRST;//what if FIRST IS GETTING DOUBLY RESET!! WHOOO! THIS WAS IT BOYS!
         this.FLAG = false;//this should prevent some double triggering of events
-        //myDisplay.mapDisplay.setStartNode(n.getID(), FIRST);//this correctly highlights the new node //todo check this
     }
 
     public INode createTempLandmark(double x, double y){
@@ -481,10 +502,7 @@ public class Controller extends Application {
 
 
     public void defaultMap(){
-        //currentMap = campus;
         setCurrentMap(campus.getID());
-        //this.myDisplay.mapDisplay.setMap(currentMap);
-
     }
 
     /**

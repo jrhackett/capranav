@@ -14,4 +14,8 @@ package logic;
      double getPixelToFeetRatio();
 
      boolean inside();
+
+     int getBuildingID();
+
+     int getFloor();
 }
