@@ -17,7 +17,6 @@ public class GraphTesting {
     Graph testGraph2;
     Graph freshGraph;
     HashMap<Integer, INode> hash1;
-    LinkedList<Interest> nodes2 = new LinkedList<Interest>();
     Interest node1, node2, node3, node4;
 
     @Before
@@ -32,11 +31,6 @@ public class GraphTesting {
         hash1.put(2, node2);
         hash1.put(3, node3);
         hash1.put(4, node4);
-
-        nodes2.add(node1);
-        nodes2.add(node2);
-        nodes2.add(node3);
-        nodes2.add(node4);
 
         freshGraph = new Graph();
         testGraph1 = new Graph(hash1);
@@ -66,7 +60,7 @@ public class GraphTesting {
 
     @Test
     public void getTest2(){
-        assertEquals("get on a non empty graph returned incorrect value", nodes2, testGraph1.get());
+        assertEquals("get on a non empty graph returned incorrect value", hash1.values(), testGraph1.get());
     }
 
 }
