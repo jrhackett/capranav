@@ -62,7 +62,7 @@ public class NodeTesting {
 
     @Test
     public void toStringTest() throws Exception {
-        assertEquals("toString should return the node id as a string", "0\n", i1.toString());
+        assertEquals("toString should return the node id as a string", "Generic Interest", i1.toString());
     }
 
     @Test
