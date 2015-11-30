@@ -28,7 +28,7 @@ public class Graph implements ICollection
 	 * toString is used to print the graph in a readable format
 	 * @return String: a string describing the graph
 	 */
-	//HW: Made this actually return something
+
 	public String toString()
 	{
 		String str = "";

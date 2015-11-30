@@ -1,4 +1,4 @@
-package testing;
+package logic;
 import static org.junit.Assert.assertEquals;
 
 import logic.Maps;
@@ -40,6 +40,12 @@ public class MapsTesting {
         assertEquals("add map failed", true, testMaps1.get().contains(testMap4));
     }
 
+    @Test
+    public void getMapTest(){
+        assertEquals("GetMap returned wrong map", testMap1, testMaps.get(1));
+        assertEquals("GetMap returned wrong map", testMap2, testMaps.get(2));
+        assertEquals("GetMap returned wrong map", testMap3, testMaps.get(3));
+    }
     @Test
     public void checkTest1(){
         assertEquals("check test failed", false, testMaps1.check("dir/dir/dir"));
