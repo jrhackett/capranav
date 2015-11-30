@@ -1,5 +1,8 @@
 package logic;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 import java.util.ArrayList;
 
 /**
@@ -43,5 +46,11 @@ public abstract class Interest extends Node {
      */
     public void addNames(ArrayList<String> toAdd) {
         names.addAll(toAdd);
+    }
+
+    public ImageView getIcon(){
+        Image image = new Image(getClass().getResourceAsStream("../images/pin56_small.svg"), 20, 20, true, true);
+        ImageView imageView = new ImageView(image);
+        return imageView;
     }
 }

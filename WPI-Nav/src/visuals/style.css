@@ -18,6 +18,30 @@
     -fx-fill: #eeeeee;
 }
 
+#pinView:hover {
+    -fx-fill: #ac2738;
+}
+
+#pinView:pressed {
+    -fx-fill: #274abe;
+    -fx-scale-x: 6%;
+    -fx-scale-y: 6%;
+}
+
+#emailView {
+    -fx-fill: #ac2738;
+}
+
+#emailView:hover {
+    -fx-fill: #eeeeee;
+}
+
+#emailView:pressed {
+    -fx-fill: #274abe;
+    -fx-scale-x: 6%;
+    -fx-scale-y: 6%;
+}
+
 .combo-box{
     -fx-font-family: HelveticaNeueLight;
     -fx-font-size: 12;
@@ -27,21 +51,31 @@
 {
     -fx-background: #333;
     -fx-background-color: #333;
-    -fx-border-width: 1;
+    -fx-border-width: 0;
+    -fx-border-radius:0;
     -fx-border-color: #333;
     -fx-text-fill: #eee;
 }
 ​
+.combo-box-base
+{
+    -fx-background-color: #333333;
+    -fx-border-radius: 0;
+    -fx-border-color:#333333;
+    -fx-mark-color: #333;
+}
+
+.combo-box-base:hover
+{
+    -fx-background-color: #888;
+}
+
 .combo-box-base > .arrow-button
 {
     -fx-background-color: #333;
     -fx-border-radius: 0;
 }
-​
-.combo-box-base
-{
-    -fx-mark-color: #eee;
-}
+
 ​
 .combo-box .list-cell
 {
@@ -106,4 +140,22 @@
 ​
 .combo-box-base:disabled {
     -fx-opacity: .4;
+}
+
+.list-cell
+{
+    -fx-font-family: HelveticaNeueLight;
+    -fx-font-size: 14;
+    -fx-padding: 5;
+    -fx-font-color:#333;
+}
+
+.list-cell:odd
+{
+    -fx-background-color:#eee;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
+    -fx-text-fill: white;
 }
