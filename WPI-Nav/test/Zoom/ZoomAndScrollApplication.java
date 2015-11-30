@@ -36,6 +36,8 @@ public class ZoomAndScrollApplication extends Application {
         // create sample nodes which can be dragged
         //NodeGestures nodeGestures = new NodeGestures( canvas);
 
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         Label label1 = new Label("Draggable node 1");
         label1.setTranslateX(10);
         label1.setTranslateY(10);
@@ -69,6 +71,7 @@ public class ZoomAndScrollApplication extends Application {
         //rect1.addEventFilter( MouseEvent.MOUSE_DRAGGED, nodeGestures.getOnMouseDraggedEventHandler());
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         canvas.getChildren().addAll(label1, label2, label3, circle1, rect1);
 
         group.getChildren().add(canvas);
