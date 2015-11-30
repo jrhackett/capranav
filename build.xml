@@ -13,6 +13,7 @@
 		<pathelement location="WPI-Nav/util/javax.mail.jar" />
 		<pathelement location="WPI-Nav/util/slf4j-api-1.7.12.jar" />
 		<pathelement location="WPI-Nav/util/slf4j-jdk14-1.7.12.jar" />
+		<pathelement location="WPI-Nav/util/batik-1.8/lib/batik-transcoder-1.8.jar" />
 	</path>
 	
 	<path id ="classpath.test">
@@ -24,6 +25,7 @@
 		<pathelement location="WPI-Nav/util/slf4j-api-1.7.12.jar" />
 		<pathelement location="WPI-Nav/util/slf4j-jdk14-1.7.12.jar" />
 		<pathelement location="${main.build.dir}" />
+		<pathelement location="WPI-Nav/util/batik-1.8/lib/batik-transcoder-1.8.jar" />
 		<path refid="classpath.base" />
 	</path>
 	
