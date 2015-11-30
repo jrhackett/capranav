@@ -96,6 +96,7 @@ public class Display {
 
     private Label nodeTitle;
     private StackPane nodeViewHolder;
+    private ImageView nodeView;
 
 
     /**
@@ -654,8 +655,9 @@ public class Display {
 
     public void updateNodeIcon(ImageView i){
         System.out.println("node view icon");
-        this.nodeViewHolder.getChildren().removeAll();
+        this.nodeViewHolder.getChildren().remove(nodeView);
         this.nodeViewHolder.getChildren().add(i); //= i;
+        this.nodeView = i;
     }
 
     //TODO THIS IS START OF BUILDING BOX PANE!

@@ -136,7 +136,7 @@ public class MapDisplay extends Pane {
         /** this is some trash trash trash, we'll do it better when we set up svgs better"*/
         if (v instanceof logic.Transition){
             circle.setOnMouseClicked(e -> {
-                if (e.getButton().equals(MouseButton.SECONDARY) && e.getClickCount() >= 2){
+                if (e.getButton().equals(MouseButton.SECONDARY) && e.getClickCount() == 1){
                     //enter building
                     System.out.println("Double Click");
                     controller.handleEnterBuilding((logic.Transition)v);
@@ -148,7 +148,7 @@ public class MapDisplay extends Pane {
             });
         } else {
             circle.setOnMouseClicked(e -> {
-                if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() >= 2){
+                if (e.getButton().equals(MouseButton.SECONDARY) && e.getClickCount() == 1){
                     controller.showNodeImage(v);
                 } else if ( e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1){
                     controller.handleMapClick(v);
