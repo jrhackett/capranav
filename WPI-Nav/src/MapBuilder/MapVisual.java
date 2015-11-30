@@ -103,7 +103,74 @@ public class MapVisual extends Pane {
 				controller.deselectNode();
 			} else {
 				// create new node if possible
-				controller.newNodeAtLocation(e.getX(), e.getY());
+				double tolerance = 15.0;
+
+				double minDist = tolerance;
+				
+				// Iterate through all the existing nodes to find the minimum distance to one
+				for(Integer k : controller.getCurrentNodeList().keySet()){
+					Node v = controller.getCurrentNodeList().get(k);
+					double dist = Math.sqrt(Math.pow((v.getX() - e.getX()), 2) + Math.pow((v.getY() - e.getY()), 2));
+					if (dist < minDist) {
+						minDist = dist;
+					}
+				}
+				
+				// If the mouse click is far enough away from existing nodes
+				// Make a new node
+				if(minDist >= tolerance){
+					double xyTolerance = 5;
+					
+					Node closestX = null;
+					double minXDist = xyTolerance;
+					Node closestY = null;
+					double minYDist = xyTolerance;
+					
+					
+					boolean selectedNode = false;
+					
+					for(Integer k : controller.getCurrentNodeList().keySet()){
+						Node v = controller.getCurrentNodeList().get(k);
+						
+						if(!selectedNode){
+							closestX = v;
+							closestY = v;
+							selectedNode = true;
+						}
+						
+						double distX = Math.abs(v.getX() - e.getX());
+						double distY = Math.abs(v.getY() - e.getY());
+						
+						if(distX < minXDist){
+							minXDist = distX;
+							closestX = v;
+						}
+						
+						if(distY < minYDist){
+							minYDist = distY;
+							closestY = v;
+						}
+					}
+					
+					double newNodeX = e.getX();
+					double newNodeY = e.getY();
+					
+					if(minXDist < xyTolerance){
+						newNodeX = closestX.getX();
+					}
+					
+					if(minYDist < xyTolerance){
+						newNodeY = closestY.getY();
+					}
+					
+					
+					controller.newNodeAtLocation(newNodeX, newNodeY);
+				} else {
+					//System.out.println("To Close to an existing node");
+					//System.out.println("Distance: " + minDist);
+				}
+
+				
 			}
 
 			// Redraw the nodes and edges
@@ -235,7 +302,7 @@ public class MapVisual extends Pane {
 		circle.setOnMouseExited(e -> {
 			if (!controller.isNodeSelected()) {
 				normal(circle);
-			} else if(controller.getSelectedNode().getID() != v.getID()) {
+			} else if (controller.getSelectedNode().getID() != v.getID()) {
 				normal(circle);
 			}
 
