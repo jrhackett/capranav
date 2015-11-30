@@ -495,7 +495,7 @@ public class Display {
         emailView.setScaleY(.05);
         emailView.setTranslateX(-50*3 - 15);
         emailView.setTranslateY(-50 + 8);*/
-        Image emailImage = new Image(getClass().getResourceAsStream("../images/email109_small.svg"), 30, 30, true, true);
+        Image emailImage = new Image(getClass().getResourceAsStream("../images/email109.png"), 30, 30, true, true);
         ImageView emailView = new ImageView(emailImage);
         // emailImage.
 
