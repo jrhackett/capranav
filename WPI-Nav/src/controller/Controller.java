@@ -66,6 +66,7 @@ public class Controller extends Application {
         s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
 
         s.setResizable(true);
+
 		/* setup */
         this.myDisplay = new Display(this);    //creates scene
         Scene display = myDisplay.Init(); //initializes scene
