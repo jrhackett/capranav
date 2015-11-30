@@ -17,7 +17,7 @@ public class Room extends Interest {
     }
 
     public ImageView getIcon(){
-        Image image = new Image(getClass().getResourceAsStream("../images/pin56_small.svg"), 10, 10, true, true);
+        Image image = new Image(getClass().getResourceAsStream("../images/pin56_small.svg"), 20, 20, true, true);
         ImageView imageView = new ImageView(image);
         return imageView;
     }

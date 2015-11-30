@@ -2,7 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 
-public abstract class Node implements INode{
+public abstract class Node implements INode {
 
 	private int id;
 	private int map_id;

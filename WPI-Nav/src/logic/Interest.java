@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by jacobhackett on 11/24/15.
  */
-public class Interest  extends Node{
+public abstract class Interest extends Node {
 
     private ArrayList<String> names;
 

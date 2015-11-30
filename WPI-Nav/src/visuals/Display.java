@@ -8,10 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,7 +16,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
-import javafx.scene.text.Text;
 import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,6 +95,7 @@ public class Display {
     private Label buildingNumber;
 
     private Label nodeTitle;
+    private StackPane nodeViewHolder;
     private ImageView nodeView;
 
 
@@ -159,7 +156,7 @@ public class Display {
         /** create scene **/
         root.setAlignment(Pos.TOP_LEFT);
 
-        Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 2 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
+        Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 2 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE * 3);//+MAP_BORDER*2+TITLE_HEIGHT
         //Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+EDGE*2+expandedWidth*2, MAP_WIDTH + 2 * EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
 
         return scene;
@@ -399,8 +396,25 @@ public class Display {
         //AnchorPane.setLeftAnchor(slidingButton, 0.0);
         settingsLabelBox.getChildren().addAll(slidingButton, settingsLabel);
 
+        HBox settingsWalkingBox = new HBox();
+        Label settingsWalkingLabel = new Label("Set walking speed:");
+        settingsWalkingLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        settingsWalkingLabel.setTextFill(Color.web("#eeeeee"));
+
+        settingsWalkingBox.getChildren().addAll(settingsWalkingLabel);
+
+        ArrayList<Walking> walkingArrayList = new ArrayList<>();
+        walkingArrayList.add(new Walking("Walking with your grandmother (slow)", 0.5));
+        walkingArrayList.add(new Walking("Normal walking pace (medium)", 1.0));
+        walkingArrayList.add(new Walking("Walking to class when late (fast)", 1.5));
+        Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller);
+        walkingSpeedBox.setTranslateX(8);  //TODO fix width of this?
+        walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
+
+        walkingSpeedBox.setOnAction(e -> handleWalkingInput(walkingSpeedBox, true));    //TODO finish handleWalkingInput
+
         VBox settingsVbox = new VBox();
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
@@ -558,18 +572,25 @@ public class Display {
         AnchorPane.setRightAnchor(mapTitle, 0.0);
 
         /** Hidden Sliding Panel **/
-        slidingBuilding  = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, BUILDING_VISIBLE, new Text("hidden"));
+        //slidingBuilding  = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, BUILDING_VISIBLE, new Text("hidden"));
         HBox nodeBox     = createNodeBox();
         HBox buildingBox = createBuildingBox();
         buildingBox.visibleProperty().bind(BUILDING_VISIBLE);
 
-        slidingBuilding.getChildren().addAll(nodeBox, buildingBox);//buildingBox
-        slidingBuilding.setMaxHeight(EDGE);
-        slidingBuilding.setMinHeight(0);
+        //slidingBuilding.getChildren().addAll(nodeBox, buildingBox);//buildingBox
+        //slidingBuilding.setMaxHeight(EDGE);
+        //slidingBuilding.setMinHeight(0);
 
-        AnchorPane.setBottomAnchor(slidingBuilding, 0.0);
-        AnchorPane.setLeftAnchor(slidingBuilding, 0.0);
-        AnchorPane.setRightAnchor(slidingBuilding, 0.0);
+        VBox information = new VBox();
+        information.getChildren().addAll(nodeBox, buildingBox);
+        information.setAlignment(Pos.CENTER);
+        information.setSpacing(GAP * 4); //play with this
+
+        AnchorPane.setBottomAnchor(information, GAP * 5);
+        AnchorPane.setLeftAnchor(information, 0.0);
+        AnchorPane.setRightAnchor(information, 0.0);
+
+
 
 
 
@@ -577,10 +598,10 @@ public class Display {
         this.mapPane = createMapPane();
         mapPane.setAlignment(Pos.CENTER);
 
-        AnchorPane.setTopAnchor(mapPane, EDGE + MAP_BORDER);//
-        AnchorPane.setLeftAnchor(mapPane, MAP_BORDER);
-        AnchorPane.setRightAnchor(mapPane, MAP_BORDER);
-        AnchorPane.setBottomAnchor(mapPane, MAP_BORDER);
+        AnchorPane.setTopAnchor(mapPane, EDGE);//
+        AnchorPane.setLeftAnchor(mapPane, 0.0);
+        AnchorPane.setRightAnchor(mapPane, 0.0);
+        AnchorPane.setBottomAnchor(mapPane, EDGE * 2); //+ GAP + 2 * EDGE
 
 
 
@@ -590,7 +611,7 @@ public class Display {
         map.setMinHeight(MAP_HEIGHT + EDGE);
         map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE + EDGE); // + EDGE for NODE INFO
 
-        map.getChildren().addAll(mapTitle, mapPane, slidingBuilding);
+        map.getChildren().addAll(mapTitle, mapPane, information);
         map.setStyle("-fx-background-color:#eeeeee ;");
 
     }
@@ -619,15 +640,15 @@ public class Display {
     private HBox createNodeBox(){
         HBox hbox = new HBox();
 
-        nodeView = new ImageView();
+        nodeViewHolder = new StackPane();
         nodeTitle = new Label();
 
 
-        hbox.getChildren().addAll(nodeView, nodeTitle);
+        hbox.getChildren().addAll(nodeViewHolder, nodeTitle);
         hbox.setMaxHeight(EDGE);
         hbox.setMinHeight(EDGE);
         hbox.setAlignment(Pos.CENTER);
-        hbox.setSpacing(EDGE);//TODO MAKE SURE THIS LOOKS GOOD
+        hbox.setSpacing(GAP);//TODO MAKE SURE THIS LOOKS GOOD
 
         return hbox;
 
@@ -638,6 +659,9 @@ public class Display {
     }
 
     public void updateNodeIcon(ImageView i){
+        System.out.println("node view icon");
+        this.nodeViewHolder.getChildren().remove(nodeView);
+        this.nodeViewHolder.getChildren().add(i); //= i;
         this.nodeView = i;
     }
 
@@ -670,6 +694,7 @@ public class Display {
 
     public void setBuildingNumber(int i) {
         //TODO ADD FLICKERING ANIMATION
+        System.out.println("building number set called");
         this.buildingNumber.setText(Integer.toString(i));
     }
 
@@ -709,7 +734,7 @@ public class Display {
         //this.end.setPlaceholder(new Label("Search or Select End Location"));
 
         this.start.setPromptText("Search or Select Start");
-        this.end.setPromptText("Search or Select Destination");
+        this.end.setPromptText("Search or Select End");
 
         this.start.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue && firstTime.get()) {
@@ -876,6 +901,10 @@ public class Display {
             } catch (ClassCastException cce) {
                 logger.error("INPUT VALUE IS NOT YET A FULL INPUT, IT IS JUST A STRING: {}", v.getValue());
             }
+
+    }
+
+    private void handleWalkingInput(Inputs v, boolean START) {
 
     }
 
