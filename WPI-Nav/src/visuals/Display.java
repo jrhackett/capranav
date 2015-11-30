@@ -404,12 +404,31 @@ public class Display {
         settingsWalkingBox.getChildren().addAll(settingsWalkingLabel);
 
         ArrayList<Walking> walkingArrayList = new ArrayList<>();
-        //TODO add things to arraylist
-        Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller); //TODO finish this shit
+        walkingArrayList.add(new Walking("Walking with your grandmother (slow)", 0.5));
+        walkingArrayList.add(new Walking("Normal walking pace (medium)", 1.0));
+        walkingArrayList.add(new Walking("Walking to class when late (fast)", 1.5));
+        Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller);
+        walkingSpeedBox.setTranslateX(8);  //TODO fix width of this?
         walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
 
+        walkingSpeedBox.setOnAction(e -> handleWalkingInput(walkingSpeedBox, true));    //TODO finish handleWalkingInput
+
+        TextField emailTextField = new TextField();
+        emailTextField.setPromptText("Enter your email");
+        emailTextField.setMaxWidth(INPUT_WIDTH);
+        emailTextField.setMaxHeight(walkingSpeedBox.getMaxHeight());
+        emailTextField.setTranslateX(8);
+        emailTextField.setTranslateY(8);
+        emailTextField.setId("text-field");
+
+        Label setEmailLabel = new Label("Set your email:");
+        setEmailLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        setEmailLabel.setTextFill(Color.web("#eeeeee"));
+
+        emailTextField.setOnAction(e -> handleEmailInput(emailTextField, true));    //TODO finish handleWalkingInput
+
         VBox settingsVbox = new VBox();
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
@@ -896,6 +915,16 @@ public class Display {
             } catch (ClassCastException cce) {
                 logger.error("INPUT VALUE IS NOT YET A FULL INPUT, IT IS JUST A STRING: {}", v.getValue());
             }
+
+    }
+
+    //TODO finish this
+    private void handleWalkingInput(Inputs v, boolean START) {
+
+    }
+
+    //TODO finish this
+    private void handleEmailInput(TextField v, boolean START) {
 
     }
 

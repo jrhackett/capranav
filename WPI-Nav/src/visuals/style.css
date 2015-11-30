@@ -77,7 +77,7 @@
 }
 
 ​
-.combo-box .list-cell
+/*.combo-box .list-cell
 {
     -fx-background: transparent;
     -fx-background-color: transparent;
@@ -98,20 +98,20 @@
 {
     -fx-padding: 4 0 4 5;
     -fx-background-color: white;
-}
+}*/
 ​
-.combo-box-popup .list-view .list-cell:filled:selected, .combo-box-popup .list-view .list-cell:filled:selected:hover
+/*.combo-box-popup .list-view .list-cell:filled:selected, .combo-box-popup .list-view .list-cell:filled:selected:hover
 {
     -fx-background: -fx-accent;
     -fx-background-color: -fx-selection-bar;
     -fx-text-fill: -fx-selection-bar-text;
-}
+}*/
 ​
-.combo-box-popup .list-view .list-cell:filled:hover
+/*.combo-box-popup .list-view .list-cell:filled:hover
 {
     -fx-background-color: white;
     -fx-text-fill: -fx-text-inner-color;
-}
+}*/
 ​
     /*.combo-box-base
     {
@@ -122,7 +122,7 @@
         -fx-padding: 0;
     }*/
 ​
-.combo-box-base:hover
+/*.combo-box-base:hover
 {
     -fx-color: -fx-hover-base;
 }
@@ -130,13 +130,15 @@
 .combo-box-base:showing
 {
     -fx-color: -fx-pressed-base;
+    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
+    -fx-text-fill: white;
 }
 ​
 .combo-box-base:focused {
     -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
     -fx-background-radius: 6.4, 4, 5, 3;
     -fx-background-insets: -1.4, 0, 1, 2;
-}
+}*/
 ​
 .combo-box-base:disabled {
     -fx-opacity: .4;
@@ -147,7 +149,7 @@
     -fx-font-family: HelveticaNeueLight;
     -fx-font-size: 14;
     -fx-padding: 5;
-    -fx-font-color:#333;
+    -fx-text-fill:#333;
 }
 
 .list-cell:odd
@@ -155,22 +157,36 @@
     -fx-background-color:#eee;
 }
 
-.list-cell:filled:selected:focused, .list-cell:filled:selected {
+.list-cell:filled:selected:focused, .list-cell:filled:selected, .list-cell:filled:hover {
     -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
     -fx-text-fill: white;
 }
+
 .button
 {
     -fx-background-color: #888;
 }
+
 .button:hover
 {
     -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
 }
+
 .button:pressed
 {
     -fx-background-color: #eee;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
 
+}
+
+#text-field
+{
+    -fx-background-color:#333;
+    -fx-text-fill:#eee;
+    -fx-border-width:1;
+    -fx-border-color:#eee;
+    -fx-border-radius:3;
+    -fx-padding:3 3;
+    -fx-font-size:12;
 }
 

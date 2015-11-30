@@ -79,14 +79,23 @@ public class MapDisplay extends Pane {
      * @param nodes
      */
     public void drawNodes(HashMap<Integer, INode> nodes){
-        this.id_circle = new HashMap<>();
+        //this.id_circle = new HashMap<>(); <-- dont want this
 
         nodes.forEach((k,v) -> {
-            Circle svgPath = createCircle(v);
-            id_circle.put(k, svgPath);
-            this.getChildren().add(svgPath);
+            if (id_circle.containsKey(k)) {
+                Circle c = id_circle.get(k);
+                this.getChildren().add(c);
+            } else {
+                Circle c = createCircle(v);
+                id_circle.put(k, c);
+                this.getChildren().add(c);
+            }
         });
     }
+
+
+
+
 
 
 
@@ -98,7 +107,7 @@ public class MapDisplay extends Pane {
      */
     public void setMap(IMap map) {
 
-        this.getChildren().remove(mapView);
+        this.getChildren().remove(0, this.getChildren().size());
 
         try {
             this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
@@ -109,8 +118,6 @@ public class MapDisplay extends Pane {
         this.mapView = new ImageView(mapImage);
         this.getChildren().add(mapView);
         drawNodes(controller.getNodesOfMap(map.getID()));
-
-        // HIGLIGHTED = false;
 
         mapView.setOnMouseClicked(e -> createTempLandmark(e));
     }
@@ -268,6 +275,9 @@ public class MapDisplay extends Pane {
      * @param id
      */
     public void setStartNode(int id, boolean START){
+        //NOW WE HAVE TO CHECK IF NODE IS ON THIS MAP
+        //I think we should keep all circles
+
         Circle c = id_circle.get(id);
         c.setRadius(5);
 
@@ -303,6 +313,14 @@ public class MapDisplay extends Pane {
             st.play();
             ste = st;
         }
+    }
+
+
+    public void setEndNode(int id){
+        Circle c = id_circle.get(id);
+        c.setRadius(5);
+        highlight(c, Color.FIREBRICK, Color.RED);
+        //TODO may have to put back
     }
 
 
