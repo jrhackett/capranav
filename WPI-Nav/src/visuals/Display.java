@@ -3,7 +3,6 @@ package visuals;
 import controller.Controller;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -92,7 +91,7 @@ public class Display {
     private VBox map;
     public StackPane root;
     private HBox dashBoardTitleBox;
-    private ListView<Instructions> instructions;
+    private ListView<String> instructions; //ListView<Instruction>
     private javafx.scene.control.Button hiddenHandler;
 
 
@@ -715,6 +714,43 @@ public class Display {
 
 
     private void createInstructionListView() {
+        this.instructions = new ListView<String>();
+        instructions.setCellFactory((ListView<String> lv) ->
+                new ListCell<String>() {
+                    @Override
+                    public void updateItem(String in, boolean empty) {
+                        super.updateItem(in, empty);
+                        if (empty) {
+                            setText(null);
+                        } else {
+                            // use whatever data you need from the album
+                            // object to get the correct displayed value:
+                            setText(in.toString());
+                        }
+                    }
+                }
+        );
+
+   /*     instructions.getSelectionModel().selectedItemProperty()
+                .addListener((ObservableValue<? extends Instructions> obs, Instructions oldAlbum, Instructions selectedAlbum) -> {
+                    if (selectedAlbum != null) {
+                        // do something with selectedAlbum
+                    }
+                });
+*/
+        instructions.setPlaceholder(new Label(" "));
+        instructions.setMinWidth(0);
+        instructions.setMaxWidth(expandedWidth + EDGE * 2);
+        instructions.setMinHeight(0);
+        //instructions.setPrefHeight(MAP_WIDTH - EDGE * 4);
+        this.instructions.setItems(FXCollections.observableArrayList());
+        //instructions.setPrefHeight(TABLE_HEIGHT);
+        //instructions.getColumns().addAll(Instructions.getColumn(instructions));
+
+
+    }
+/* REAL VERSION
+    private void createInstructionListView() {
         this.instructions = new ListView<Instructions>();
         instructions.setCellFactory((ListView<Instructions> lv) ->
                 new ListCell<Instructions>() {
@@ -749,7 +785,7 @@ public class Display {
         //instructions.getColumns().addAll(Instructions.getColumn(instructions));
 
 
-    }
+    }*/
 
 
     /****************************************************************************************************************
@@ -1267,11 +1303,27 @@ public class Display {
     /**
      * Call to set the instructions
      */
-    public void setInstructions(ArrayList<logic.INode> nodes, ArrayList<String> instructions) {
-        ObservableList<Instructions> data = FXCollections.observableArrayList();
+    public void setInstructions(){ //ArrayList<logic.INode> nodes, ArrayList<String> instructions) {
+        ObservableList<String> data = FXCollections.observableArrayList();
 
+       /*
         for (int i = 0; i < nodes.size(); i++) {
             data.add(new Instructions(instructions.get(i), nodes.get(i)));
+        }
+        */
+        ArrayList<String> path = new ArrayList<>();
+        path.add("HELLO");
+        path.add("HI");
+        path.add("....sdfa");path.add("HELLO");
+        path.add("HI");
+        path.add("....sdfa");path.add("HELLO");
+        path.add("HI");
+        path.add("....sdfa");path.add("HELLO");
+        path.add("HI");
+        path.add("....sdfa");
+
+        for(String s : path){
+            data.add(s);
         }
 
         this.instructions.setItems(data);

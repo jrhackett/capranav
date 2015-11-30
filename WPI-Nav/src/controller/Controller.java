@@ -606,11 +606,13 @@ public class Controller extends Application {
      */
     public void findPaths(){
         //Rework code: //TODO update this with the new direction rework
-        /*
-        ArrayList<ArrayList<Instruction>> path = getInstructions(this.getPathNodes(startNode, endNode));
-        myDisplay.setInstructions(path, instructions); //TODO UPDATE setInstructions
-        myDisplay.mapDisplay.showPath(path); //TODO UPDATE showPath
-        */
+
+       // ArrayList<ArrayList<Instruction>> path = getInstructions(this.getPathNodes(startNode, endNode));
+
+
+       myDisplay.setInstructions(); //TODO UPDATE setInstructions
+        //myDisplay.mapDisplay.showPath(path); //TODO UPDATE showPath
+
         System.out.println("FIND PATHS CURRENTLY NOT SET UP~");
 
 
