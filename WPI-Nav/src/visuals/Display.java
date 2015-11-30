@@ -1312,15 +1312,15 @@ public class Display {
         }
         */
         ArrayList<String> path = new ArrayList<>();
-        path.add("HELLO");
-        path.add("HI");
-        path.add("....sdfa");path.add("HELLO");
-        path.add("HI");
-        path.add("....sdfa");path.add("HELLO");
-        path.add("HI");
-        path.add("....sdfa");path.add("HELLO");
-        path.add("HI");
-        path.add("....sdfa");
+        path.add("Turn right here and walk \n500 feet please.");
+        path.add("Go straight somewhere.");
+        path.add("Turn left there and jump \naround on your hands.");
+        path.add("Random reasonable string \nhere.");
+        path.add("Random reasonable string \nhere.");
+        path.add("Random reasonable string \nhere.");
+        path.add("Random reasonable string \nhere.");
+        path.add("Random reasonable string \nhere.");
+        path.add("Random reasonable string \nhere.");
 
         for(String s : path){
             data.add(s);

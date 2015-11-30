@@ -141,3 +141,16 @@
 .combo-box-base:disabled {
     -fx-opacity: .4;
 }
+
+.list-cell
+{
+    -fx-font-family: HelveticaNeueLight;
+    -fx-font-size: 14;
+    -fx-padding: 5;
+    -fx-font-color:#333;
+}
+
+.list-cell:odd
+{
+    -fx-background-color:#eee;
+}
