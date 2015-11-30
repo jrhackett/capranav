@@ -83,7 +83,7 @@ public class Parser<Struct>
 
 		HashMap<Integer, TStairs> th = new HashMap<>();
 		th.put(t.getID(), t);
-/*
+
 		new Parser<Campus>().toFile(ch);
 		new Parser<Floor>().toFile(fh);
 		new Parser<Bathroom>().toFile(bh);
@@ -93,7 +93,7 @@ public class Parser<Struct>
 		new Parser<Path>().toFile(ph);
 		new Parser<Room>().toFile(rh);
 		new Parser<Stairs>().toFile(sh);
-		new Parser<TStairs>().toFile(th);*/
+		new Parser<TStairs>().toFile(th);
 
 		new Parser<Building>().toFile(buildh);
 /*

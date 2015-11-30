@@ -65,6 +65,8 @@ public class Controller extends Application {
         mapsFromFile();
         buildingsFromFile();
 
+        campus = (Campus)maps.get(0);
+
 		/* basic layout */
         s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
 
@@ -285,16 +287,16 @@ public class Controller extends Application {
     }
 
     public void hideBuildingPane(){
-        if (this.myDisplay.BUILDING_VISIBLE.getValue()){
-            myDisplay.slidingBuilding.playHidePane();
+        //if (this.myDisplay.BUILDING_VISIBLE.getValue()){
+          //  myDisplay.slidingBuilding.playHidePane();
             this.myDisplay.BUILDING_VISIBLE.setValue(false);
-        }
+
     }
     public void showBuildingPane(){
-        if (!this.myDisplay.BUILDING_VISIBLE.getValue()){
-            myDisplay.slidingBuilding.playShowPane();
+       // if (!this.myDisplay.BUILDING_VISIBLE.getValue()){
+      //      myDisplay.slidingBuilding.playShowPane();
             this.myDisplay.BUILDING_VISIBLE.setValue(true);
-        }
+      //  }
     }
 
     public void setCurrentMap(int id){

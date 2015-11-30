@@ -568,7 +568,7 @@ public class Display {
 
         VBox information = new VBox();
         information.getChildren().addAll(nodeBox, buildingBox);
-
+        information.setAlignment(Pos.CENTER);
 
         AnchorPane.setBottomAnchor(information, 0.0);
         AnchorPane.setLeftAnchor(information, 0.0);
