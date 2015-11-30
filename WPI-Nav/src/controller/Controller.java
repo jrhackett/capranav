@@ -95,7 +95,7 @@ public class Controller extends Application {
         });
 
        //add image to stack pane -> if no image return void
-        Image image = new Image(getClass().getResourceAsStream("../images/Riley.png"));
+        Image image = new Image(getClass().getResourceAsStream("../images/Team.jpg"));
         ImageView iv = new ImageView(image);
 
         imageStack.getChildren().add(iv);
