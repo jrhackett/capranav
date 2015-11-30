@@ -44,7 +44,7 @@ public class GraphTesting {
 
     @Test
     public void toStringTest2(){
-        String str = "0\n 1\n 2\n 3\n ";
+        String str = "Generic Interest Generic ID'd Interest Generic Interest 2 Generic ID'd Interest 2 ";
         assertEquals("toString on a non empty graph returned incorrect value", str, testGraph1.toString());
     }
 
