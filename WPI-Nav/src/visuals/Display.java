@@ -399,9 +399,9 @@ public class Display {
 
         javafx.scene.control.Button slidingButton = slidingSettings.getButton();
         slidingButton.setId("dashboardButton");
-        slidingButton.setMaxWidth(EDGE);
-        slidingButton.setMinWidth(EDGE);
-        slidingButton.setPrefWidth(EDGE);
+        slidingButton.setMaxWidth(EDGE - 5);
+        slidingButton.setMinWidth(EDGE - 5);
+        slidingButton.setPrefWidth(EDGE - 5);
         //AnchorPane.setBottomAnchor(slidingButton, 0.0);
         //AnchorPane.setLeftAnchor(slidingButton, 0.0);
         settingsLabelBox.getChildren().addAll(slidingButton, settingsLabel);
@@ -438,6 +438,7 @@ public class Display {
         emailTextField.setOnAction(e -> handleEmailInput(emailTextField, true));    //TODO finish handleWalkingInput
 
         VBox settingsVbox = new VBox();
+        settingsVbox.visibleProperty().bind(DASHBOARD_VISIBLE);
         settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
 
 
