@@ -315,12 +315,14 @@ public class Display {
         VBox bars = new VBox();
         bars.setSpacing(3);
         for (int i = 0; i < 4; i++) {
-            Rectangle bar = new Rectangle(CONTROL_WIDTH - 7, 3);
+            Rectangle bar = new Rectangle(CONTROL_WIDTH - 8, 3);
             bar.setArcHeight(3);
             bar.setArcWidth(3);
             bar.setFill(Color.web("#eeeeee"));
             bars.getChildren().add(bar);
         }
+        bars.setTranslateX(1);
+        bars.setTranslateY(1);
 
         AnchorPane.setTopAnchor(dashBoardTitleBox, 0.0);
         AnchorPane.setLeftAnchor(dashBoardTitleBox, EDGE);
