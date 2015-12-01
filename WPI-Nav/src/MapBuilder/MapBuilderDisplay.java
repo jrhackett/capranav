@@ -13,6 +13,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import java.util.Collection;
+import java.util.Set;
+
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import visuals.Inputs;
@@ -92,7 +96,17 @@ public class MapBuilderDisplay extends VBox {
 		chooseMap.setOnAction(e -> {
 			controller.deselectNode();
 			
-			logic.Map newMap = (logic.Map) chooseMap.getValue();
+			
+			Collection<logic.IMap> mapSet = controller.getMaps().values();
+			
+			logic.IMap newMap = new logic.Floor();
+			
+			for(logic.IMap map : mapSet){
+				if(map.getFilePath().equals(chooseMap.getValue())){
+					newMap = (logic.IMap) map;
+				}
+			}
+
 			controller.setCurrentMap(newMap.getID());
 			mapvisual.setMap(newMap);
 		});

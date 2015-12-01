@@ -64,18 +64,16 @@ public class Inputs extends ComboBox {
 	 * @param maps
 	 * @return
 	 */
-	public ObservableList<IMap> convertMaps(HashMap<Integer, IMap> maps) {
+	public ObservableList<String> convertMaps(HashMap<Integer, IMap> maps) {
 		System.out.println("Turning maps into ObservableItemList");
-		
-		HashMap<Integer, IMap> tempMaps = new HashMap<Integer, IMap>();
 		
 		if (maps.isEmpty()) {
 			System.out.println("Hashmap of maps is empty.");
 			return null;
 		} else {
-			ObservableList<IMap> dataMap = FXCollections.observableArrayList();
+			ObservableList<String> dataMap = FXCollections.observableArrayList();
 			maps.forEach((k, v) -> {
-				dataMap.add(v);
+				dataMap.add(v.getFilePath());
 			});
 			return dataMap.sorted(); // NOTE: this wont work in java 8.40
 		}

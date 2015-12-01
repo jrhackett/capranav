@@ -157,7 +157,7 @@ public class Parser<Struct> {
 				FileReader fileReader = new FileReader(mNames[i]);
 				
 				//System.out.println("File Reader successful");
-				System.out.println(fileReader);
+				//System.out.println(fileReader);
 				
 				parser = new JsonStreamParser(fileReader);
 			} catch (FileNotFoundException e) {
@@ -169,7 +169,7 @@ public class Parser<Struct> {
 				temp = (IMap) gson.fromJson(parser.next(), mTypes[i]);
 				maps.put(temp.getID(), temp);
 				
-				System.out.println("ID: " + temp.getID() + ", Value: " + temp);
+				System.out.println("ID: " + temp.getID() + ", Path: " + temp.getFilePath());
 			}
 		}
 
