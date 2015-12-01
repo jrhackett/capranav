@@ -208,10 +208,10 @@ public class Display {
                 "c31.846,57.063,63.168,104.643,64.484,106.64l22.942,34.775l22.941-34.774c1.317-1.998,32.641-49.577,64.483-106.64" +
                 "c45.023-80.68,66.908-136.559,66.908-170.834C387.625,69.234,318.391,0,233.292,0z M233.292,233.291c-44.182,0-80-35.817-80-80" +
                 "s35.818-80,80-80c44.182,0,80,35.817,80,80S277.473,233.291,233.292,233.291z");
-        pinView.setScaleX(.05);
-        pinView.setScaleY(.05);
+        pinView.setScaleX(.04);
+        pinView.setScaleY(.04);
         pinView.setTranslateX(-50 * 2.5 - 15);
-        pinView.setTranslateY(-50 * 4.5);
+        pinView.setTranslateY(-50 * 4.5 + 3);
         pinView.setId("pinView");
 
         //Image info =			new Image(getClass().getResourceAsStream("../images/info.png"), 20, 20, true, true);
@@ -223,10 +223,10 @@ public class Display {
                 "s-31.782-14.239-31.782-31.782V222.477c0-17.544,14.239-31.782,31.782-31.782s31.782,14.239,31.782,31.782V381.39z" +
                 "M254.26,159.421c-17.544,0-31.782-14.239-31.782-31.782s14.239-31.782,31.782-31.782s31.782,14.239,31.782,31.782" +
                 "S271.804,159.421,254.26,159.421z");
-        infoView.setScaleX(.05);
-        infoView.setScaleY(.05);
+        infoView.setScaleX(.035);
+        infoView.setScaleY(.035);
         infoView.setTranslateX(-50 * 4.5 - 9);
-        infoView.setTranslateY(-50 * 2 - 12);
+        infoView.setTranslateY(-50 * 2 - 11);
         infoView.setId("pinView");
 
 
@@ -475,10 +475,10 @@ public class Display {
         directionsTitleBox.setSpacing(GAP * 3);
 
         VBox directionsControlBox = new VBox();
-        Image directionsArrow = new Image(getClass().getResourceAsStream("../images/forward.png"), 30, 30, true, true);
+        Image directionsArrow = new Image(getClass().getResourceAsStream("../images/forward.png"), 27, 27, true, true);
         ImageView directionsArrowView = new ImageView(directionsArrow);
-        directionsArrowView.setTranslateX(5);
-        directionsArrowView.setTranslateY(2);
+        directionsArrowView.setTranslateX(8);
+        directionsArrowView.setTranslateY(5);
         directionsControlBox.getChildren().addAll(directionsArrowView);
         directionsControlBox.setStyle("-fx-background-color: #ac2738");
         directionsControlBox.setMinHeight(EDGE);
@@ -528,15 +528,15 @@ public class Display {
         emailView.setScaleY(.05);
         emailView.setTranslateX(-50*3 - 15);
         emailView.setTranslateY(-50 + 8);*/
-        Image emailImage = new Image(getClass().getResourceAsStream("../images/email109.png"), 30, 30, true, true);
+        Image emailImage = new Image(getClass().getResourceAsStream("../images/email109.png"), 25, 25, true, true);
         ImageView emailView = new ImageView(emailImage);
         // emailImage.
 
         VBox emailIconBox = new VBox();
         //Image email =	new Image(getClass().getResourceAsStream("../images/email109.png"), 30, 30, true, true);
         //ImageView emailView = new ImageView(email);
-        emailView.setTranslateX(5);
-        emailView.setTranslateY(10);
+        emailView.setTranslateX(8);
+        emailView.setTranslateY(7);
         emailIconBox.getChildren().addAll(emailView);
         emailIconBox.setMaxWidth(20);
         emailIconBox.setMaxHeight(20);
