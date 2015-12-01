@@ -6,9 +6,14 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -612,10 +617,19 @@ public class Display {
         this.mapPane = createMapPane();
         mapPane.setAlignment(Pos.CENTER);
 
-        AnchorPane.setTopAnchor(mapPane, EDGE);//
+       /* AnchorPane.setTopAnchor(mapPane, EDGE);//
         AnchorPane.setLeftAnchor(mapPane, 0.0);
         AnchorPane.setRightAnchor(mapPane, 0.0);
         AnchorPane.setBottomAnchor(mapPane, EDGE * 2); //+ GAP + 2 * EDGE
+*/
+        Group group = new Group(mapPane);
+        GraphicsScaling graphicsScaling = new GraphicsScaling();
+        Parent zoomPane = graphicsScaling.createZoomPane(group);
+
+        AnchorPane.setTopAnchor(zoomPane, EDGE);//
+        AnchorPane.setLeftAnchor(zoomPane, 0.0);
+        AnchorPane.setRightAnchor(zoomPane, 0.0);
+        AnchorPane.setBottomAnchor(zoomPane, EDGE * 2); //+ GAP + 2 * EDGE
 
 
 
@@ -625,7 +639,7 @@ public class Display {
         map.setMinHeight(MAP_HEIGHT + EDGE);
         map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE + EDGE); // + EDGE for NODE INFO
 
-        map.getChildren().addAll(mapTitle, mapPane, information);
+        map.getChildren().addAll(mapTitle, zoomPane, information);
         map.setStyle("-fx-background-color:#eeeeee ;");
 
     }
