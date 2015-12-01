@@ -1,288 +1,395 @@
 package MapBuilder;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import logic.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
 /**
  * This will be a strictly 'PHASE-BASED' application
  *
- * #1: Choose Map
- *      -> loads in Nodes
- * [ADD NODE PHASE]: Clicks add node locations, "no naming now"
- * [CHANGE NAME PHASE]: Clicks selects node, allows user to set name
- * -> WRITES NODE
+ * #1: Choose Map -> loads in Nodes [ADD NODE PHASE]: Clicks add node locations,
+ * "no naming now" [CHANGE NAME PHASE]: Clicks selects node, allows user to set
+ * name -> WRITES NODE
  *
  * [ADD EDGE PHASE]
  *
  */
 
-//TODO Fix this soon
+public class MapBuilderController extends Application {
+	/* visual constants */
+	private static final Double WINDOW_WIDTH = 1000.0;
+	private static final Double WINDOW_HEIGHT = 800.0;
 
-//public class MapBuilderController extends   Application {
-    /* visual constants */
-    /*private static final Double WINDOW_WIDTH = 1000.0;
-    private static final Double WINDOW_HEIGHT = 1000.0;
+	/* visual component */
+	private MapBuilderDisplay myDisplay;
 
-    *//* visual component *//*
-    private MapBuilderDisplay myDisplay;
+	/* information variables */
+	private HashMap<Integer, INode> masterNodeList;
+	private HashMap<Integer, INode> nodeList;
+	private HashMap<Integer, IMap> maps;
 
-    *//* information variables *//*
-    private HashMap<Integer, Node> nodes;
-    private Maps maps;
+	private ArrayList<INode> potentialEdgeNodes;
 
-    private ArrayList<Node> potentialEdgeNodes;
+	private int currentMapID = -1;
 
-    private int currentMap;
+	private int nextNodeID;
+	private int nextMapID = 3335;// TODO UNIQUE
 
-    private int nextNodeID;
-    private int nextMapID  = 3335;//TODO UNIQUE
+	/* current node information */
+	private int selectedNodeID;
 
+	@Override
+	public void start(Stage s) throws Exception {
+		this.nextNodeID = 0; // TODO FIX THIS ID INCREMENT THING
+		potentialEdgeNodes = new ArrayList<>();
 
+		mapsFromFile();
+		nodesFromFile();
 
-    *//* current node information *//*
-    public boolean SELECTED = false; //Describes if a node has been selected
-    public Node selectedNode;
+		// loadNodesFromFile();
 
+		/* basic layout */
+		s.setResizable(true);
 
+		/* setup */
+		// Creats the scene
+		this.myDisplay = new MapBuilderDisplay(s, WINDOW_WIDTH, WINDOW_HEIGHT, this);
 
-    @Override
-    public void start(Stage s) throws Exception {
-        this.nextNodeID = 0; //TODO FIX THIS ID INCREMENT thING
-        potentialEdgeNodes = new ArrayList<>();
+		Scene scene = new Scene(myDisplay, WINDOW_WIDTH, WINDOW_HEIGHT);
+		s.setScene(scene); // sets scene to display
+		scene.getStylesheets().add(getClass().getResource("buttonbar.css").toExternalForm());
 
-        mapsFromFile();
-        nodesFromFile();
+		s.show(); // shows scene
+	}
 
-        setNextNodeID();
+	/**
+	 * sets the next node id to be the largest value
+	 */
+	private void setNextNodeID() {
+		masterNodeList.forEach((k, v) -> {
+			nextNodeID = (k > nextNodeID) ? k : nextNodeID;
+			nextNodeID++;
+		});
+	}
 
+	/**
+	 * Given a mouse event -> gets
+	 * 
+	 * @param e
+	 * @return ID of new Node
+	 */
+	public int newPathNodeAtLocation(double x, double y) {
+		// TODO: get UNIQUE or next number - look into singelton
+		Node newNode = new Path(this.nextNodeID, x, y, 0, x, y, 0, this.currentMapID);
+		nodeList.put(this.nextNodeID, newNode);
+		return this.nextNodeID++;
+	}
 
-        //loadNodesFromFile();
+	/**
+	 * This method takes in the name, path, and pixel to foot ratio and creates
+	 * a new map
+	 *
+	 * @param name
+	 * @param path
+	 * @param ratio
+	 * @return
+	 */
+	public boolean createAndWriteNewMap(String name, String path, double ratio) {
+		// TODO: Fix this to work with new classes
 
-		*//* basic layout *//*
-        s.setResizable(false);
+		/*
+		 * boolean validate = validatePath(path); if (validate) { Map newMap =
+		 * new Map(nextMapID, 0, 0, name, path, ratio); maps.addMap(newMap);
+		 * myDisplay.chooseMap.addMapToMaps(newMap); nextMapID++; return true; }
+		 * else { return false; }
+		 */
 
-		*//* setup *//*
-        this.myDisplay = new MapBuilderDisplay(WINDOW_WIDTH, WINDOW_HEIGHT, this);    //creates scene
+		return false;
+	}
 
-        Scene scene = new Scene(myDisplay, WINDOW_WIDTH, WINDOW_HEIGHT);
-        s.setScene(scene); //sets scene to display
-        scene.getStylesheets().add(getClass().getResource("buttonbar.css").toExternalForm());
+	/**
+	 * sets the selected node name
+	 * 
+	 * @param name
+	 */
+	public void setNodeName(String name) {
+		// TODO: Fix this to work with new classes
 
-        s.show();   //shows scene
-    }
+		/*
+		 * if (this.isNodeSelected()) {
+		 * nodeList.get(selectedNodeID).setName(name);
+		 * changeNameToIncludeMap(selectedNodeID); }
+		 */
+	}
 
+	/**
+	 * sets the selected node name
+	 * 
+	 * @param n
+	 */
+	public void changeNameToIncludeMap(int id) {
+		// TODO: Fix this to work with new classes
 
-    *//**
-     * sets the next node id to be the largest value
-     *//*
-    private void setNextNodeID(){
-        nodes.forEach((k,v) -> {
-            nextNodeID = (k > nextNodeID) ? k : nextNodeID;
-            nextNodeID++;
-        });
-    }
-    *//**
-     * Given a mouse event -> gets
-     * @param e
-     * @return ID of new Node
-     *//*
-    public int newNodeAtLocation(MouseEvent e){
-        double x = e.getX();
-        double y = e.getY();
-        //TODO: get UNIQUE or next number - look into singelton
-        Node newNode = new Node("ENTER TEXT", this.nextNodeID, x, y, 0, this.currentMap);
-        nodes.put(this.nextNodeID, newNode);
-        return this.nextNodeID++;
-    }
+		/*
+		 * String mapPrefix = new String(); mapPrefix =
+		 * maps.getMap(nodeList.get(id).getMap_id()).getName();
+		 * nodeList.get(id).setName(mapPrefix + " " +
+		 * nodeList.get(id).getName());
+		 */
+	}
+	
+	/**
+	 * This takes in two nodes, the original with x, y, and edge information and the new with type specific info
+	 * and combines them to form an updated node. This node is then added to the nodeList
+	 * 
+	 * @param originalNode ID of original node to modify type and info
+	 * @param newNode New node to add with type and specific info
+	 * 
+	 */
+	public void updateNodeType(int originalNodeID, INode newNode){
+		INode originalNode = nodeList.get(originalNodeID);
+		
+		// set the coordinates to be the same
+		newNode.setX(originalNode.getX());
+		newNode.setX(originalNode.getY());
+		newNode.setX(originalNode.getZ());
+		
+		// set the ID
+		newNode.setID(originalNodeID);
+		
+		newNode.setAdjacencies(originalNode.getAdjacencies());
+		
+		nodeList.put(originalNodeID, newNode);
+		
+	}
 
-    *//**
-     *
-     * @param name
-     * @param path
-     * @param ratio
-     * @return
-     *//*
-    public boolean createAndWriteNewMap(String name, String path, double ratio){
-        boolean validate = validatePath(path);
-        if (validate){
-            Map newMap = new Map(nextMapID, 0, 0, name, path, ratio);
-            maps.addMap(newMap);
-            myDisplay.chooseMap.addMapToMaps(newMap);
-            nextMapID++;
-            return  true;
-        } else {
-            return false;
-        }
-    }
+	/**
+	 * Make sure that the file exists and its unique
+	 * 
+	 * @param path
+	 * @return true if it exists
+	 */
+	private boolean validatePath(String path) {
+		// this.maps.get(currentMapID).check(path);
 
-    *//**
-     * sets the selected node name
-     * @param name
-     *//*
-    public void setNodeName(String name){
-        if (SELECTED) {
-            selectedNode.setName(name);
-            changeNameToIncludeMap(selectedNode);
-        }
-    }
+		try {
+			// TODO make this better
+			// This throws an exception if user tries to load a map that DNE
+			System.out.println("PATH ATTEMPT: " + path);
+			Image mapI = new Image(getClass().getResourceAsStream("../images/" + path + ".png"));
+			ImageView mapV = new ImageView(mapI);
+		} catch (NullPointerException e) {
+			try {
+				Image mapI = new Image(getClass().getResourceAsStream("/images/" + path + ".png"));
+			} catch (NullPointerException f) {
+				return false;
+			}
+		}
 
-    *//**
-     * sets the selected node name
-     * @param n
-     *//*
-    public void changeNameToIncludeMap(Node n){
-        String mapPrefix = new String();
-        mapPrefix = maps.getMap(n.getMap_id()).getName();
-        n.setName(mapPrefix + " " + n.getName());
-    }
+		return true;
+	}
 
+	/**
+	 * get the maps [to display]
+	 * 
+	 * @return
+	 */
+	public HashMap<Integer, IMap> getMaps() {
 
+		return this.maps;
+	}
 
-    *//**
-     * Make sure that the file exists and its unique
-     * @param path
-     * @return true if it exists
-     *//*
-    private boolean validatePath(String path){
-        this.maps.check(path);
+	/**
+	 * return the HashMap of Nodes [to display][of the current map]
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public HashMap<Integer, INode> getNodesOfMap(int id) {
 
-        try {
-            //TODO make this better
-            //This throws an exception if user tries to load a map that DNE
-            System.out.println("PATH ATTEMPT: " + path);
-            Image mapI = new Image(getClass().getResourceAsStream("../images/" + path + ".png"));
-            ImageView mapV = new ImageView(mapI);
-        } catch (NullPointerException e){
-            try {
-                Image mapI = new Image(getClass().getResourceAsStream("/images/" + path + ".png"));
-            }
-            catch (NullPointerException f) {
-                return false;
-            }
-        }
+		HashMap<Integer, INode> value = new HashMap<>();
 
-        return true;
-    }
+		masterNodeList.forEach((k, v) -> {
+			if (v.getMap_id() == id) {
+				value.put(k, v);
+			}
+		});
+		return value;
+	}
 
-    *//**
-     * get the maps [to display]
-     * @return
-     *//*
-    public Maps getMaps(){
-        return this.maps;
-    }
+	// Same version as above, but assumes the selected map ID
+	public HashMap<Integer, INode> getNodesOfMap() {
+		return getNodesOfMap(this.currentMapID);
+	}
 
-    *//**
-     * return the HashMap of Nodes [to display][of the current map]
-     * @param id
-     * @return
-     *//*
-    public HashMap<Integer, Node> getNodesOfMap(int id){
+	public HashMap<Integer, INode> getCurrentNodeList() {
+		return nodeList;
+	}
 
-        HashMap<Integer, Node> value = new HashMap<>();
+	/**
+	 * Sets the current map to id
+	 * 
+	 * @param id
+	 */
+	public void setCurrentMap(int id) {
 
-        nodes.forEach((k,v) -> {
-            if(v.getMap_id() == id){
-                value.put(k,v);
-            }
-        });
-        return value;
-    }
+		this.currentMapID = id;
+		this.nodeList = getNodesOfMap();
 
+		//cleanNodeList(this.nodeList);
 
-    *//**
-     * Sets the current map to id
-     * @param id
-     *//*
-    public void setCurrentMap(int id){
+		setNextNodeID();
 
-        this.currentMap = id;
-        //getNodesOfMap(id);
-    }
+	}
 
-    *//**
-     * Gets the node given a key
-     * @param id
-     * @return node
-     *//*
-    public Node getNode(int id){ return nodes.get(id);}
+	/**
+	 * Gets the node given a key
+	 * 
+	 * @param id
+	 * @return node
+	 */
+	public INode getNode(int id) {
+		return nodeList.get(id);
+	}
 
-    *//**
-     * adds a node to the arraylist of node for potential edges
-     *//*
-    public void addPotentialEdge(Node node){
-        //validate
-        if (!potentialEdgeNodes.contains(node)) {
-            boolean check = true;
-            for(Edge e : selectedNode.getAdjacencies()) {
-                if(e.getTarget() == node.getID()) {
-                    check = false;
-                }
-            }
-            if(check)
-                potentialEdgeNodes.add(node);
-        }
-    }
+	/**
+	 * Write nodes to file
+	 * 
+	 * @param
+	 */
+	public void nodesToFile() {
+		// First, remove all the nodes that were deleted
+		// AKA: are present in the old list but not in the new one
+		Integer[] keyList = masterNodeList.keySet().toArray(new Integer[masterNodeList.keySet().size()]);
+		for (int i = 0; i < keyList.length; i++) {
+			if (masterNodeList.containsKey(keyList[i]) && !nodeList.containsKey(keyList[i])) {
+				masterNodeList.remove(keyList[i]);
+			}
+		}
 
-    *//**
-     * resets the potential edges
-     *//*
-    public void resetPotentialEdges(){
-        this.potentialEdgeNodes = new ArrayList<>();
-    }
+		// Remove any rouge edges in the masterNodeList
+		// cleanNodeList(masterNodeList);
 
-    *//**
-     * Adds edges. NOTE: currently weight is defaulted to 1
-     *//*
-    public boolean addEdges(){
-        for (Node n : potentialEdgeNodes){
-            nodes.get(selectedNode.getID()).addEdge(new Edge(n.getID(), 1));
-            *//* below should add the edge both ways *//*
-            boolean check = true;
-            for(Edge e : n.getAdjacencies()) {
-                if(e.getTarget() == selectedNode.getID()) {
-                    check = false;
-                }
-            }
-            if(check)
-                n.addEdge(new Edge(selectedNode.getID(), 1));
-        }
-        return true;
-    }
+		// Update all the nodes that could have been changed
+		nodeList.forEach((k, v) -> {
+			masterNodeList.put(k, v);
+		});
 
-    *//**
-     * Write nodes to file
-     * @param
-     *//*
-    public void nodesToFile(){
-        Parser parser = new Parser("nodes.json");
-        parser.toFile(new Graph(this.nodes));
-    }
+		// send this masterNodeList to the file
+		Parser parser = new Parser();
+		parser.toFile(masterNodeList);
+	}
 
-    *//**
-     * Load nodes to file
-     * @param
-     *//*
-    public void nodesFromFile(){
-        Parser test = new Parser("nodes.json");
-        Graph graph = (Graph)test.fromFile();
-        this.nodes = graph.getNodes();
-    }
+	/**
+	 * Load nodes to file
+	 * 
+	 * @param
+	 */
+	public void nodesFromFile() {
+		this.masterNodeList = new Parser<INode>().fromFileGraph();
+		
+		//int firstKey = masterNodeList.keySet()[0];
+		masterNodeList.remove(0);
+		
+		System.out.println("All nodes form file are shown below:");
+		
+		masterNodeList.forEach((k,v) -> {
+			System.out.println(v + ", " + v.getAdjacencies().size());
+			
+		});
+		
+		System.out.println("Nodes complete");
+		System.out.println("");
+	}
 
-    *//**
-     * writes maps to file
-     *//*
-    public void mapsToFile() {
-        Parser parser = new Parser("maps.json");
-        parser.toFile(this.maps);
-    }
+	/**
+	 * writes maps to file
+	 */
+	public void mapsToFile() {
+		/*
+		 * Parser parser = new Parser("maps.json"); parser.toFile(this.maps);
+		 */
+	}
 
-    *//**
-     * load maps from file
-     *//*
-    public void mapsFromFile() {
-        Parser parser = new Parser("maps.json");
-        this.maps = (Maps)parser.fromFile();
-    }
+	/**
+	 * load maps from file
+	 */
+	public void mapsFromFile() {
+		this.maps = new Parser<IMap>().fromFileMap();
 
-    public static void main(String[] args) {
-        launch(args);
-    }*/
-//}
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
+
+	// Select a certain node for adding edges or modifying information
+	public void selectNode(int id) {
+		this.selectedNodeID = id;
+	}
+
+	// Deselect the current node
+	public void deselectNode() {
+		this.selectedNodeID = -1;
+	}
+
+	// Returns true if a node is currently selected
+	// Otherwise return false
+	public boolean isNodeSelected() {
+		if (this.selectedNodeID == -1) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	// This gets the selected node
+	public INode getSelectedNode() {
+		return getNode(this.selectedNodeID);
+	}
+
+	// This gets the selected node
+	public int getSelectedNodeID() {
+		return this.selectedNodeID;
+	}
+
+	// This deletes a given node
+	public void deleteNode(int id) {
+
+		// Remove the given node
+		nodeList.remove(id);
+
+		// Then clean up the lingering edges
+		cleanNodeList(nodeList);
+	}
+
+	// This method cleans the orphan edges who's target is not a node in the
+	// hashmap
+	private void cleanNodeList(HashMap<Integer, INode> input) {
+
+		// Iterate through the entire hashmap
+		// If any edge in any node points to a node that isn't in the hashmap
+		// Remove that edge.
+		Iterator<HashMap.Entry<Integer, INode>> nodeIterator = input.entrySet().iterator();
+		while (nodeIterator.hasNext()) {
+			HashMap.Entry<Integer, INode> nodeEntry = nodeIterator.next();
+
+			for (int i = 0; i < getNode(nodeEntry.getKey()).getAdjacencies().size(); i++) {
+				Edge currentEdge = getNode(nodeEntry.getKey()).getAdjacencies().get(i);
+
+				if (!input.containsKey(currentEdge.getTarget())) {
+					nodeEntry.getValue().getAdjacencies().remove(currentEdge);
+				}
+			}
+		}
+	}
+}
