@@ -207,6 +207,12 @@
     -fx-border-radius:2;
     -fx-border-color:#333;
     -fx-padding:5 5 5 5;
+    -fx-effect:null;
+}
+
+#email-button:pressed #email-button:hover
+{
+    -fx-effect:null;
 }
 
 .popover

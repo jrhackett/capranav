@@ -189,10 +189,12 @@ public class Display {
         HBox divider_2 = createDivider();
         HBox divider_3 = createDivider();
 
+
         divider_0.visibleProperty().bind(DASHBOARD_VISIBLE);
         divider_1.visibleProperty().bind(DASHBOARD_VISIBLE);
         divider_2.visibleProperty().bind(DASHBOARD_VISIBLE);
         divider_3.visibleProperty().bind(DASHBOARD_VISIBLE);
+
 
         AnchorPane.setTopAnchor(divider_0, EDGE + 2);
         AnchorPane.setLeftAnchor(divider_0, GAP);
@@ -588,18 +590,25 @@ public class Display {
         slidingEmailButton.setMinWidth(EDGE - 5);
         slidingEmailButton.setPrefWidth(EDGE - 5);
 
+        HBox divider_4 = createDivider();
+        divider_4.visibleProperty().bind(new SimpleBooleanProperty(true));
+        divider_4.setTranslateY(-21);
+        divider_4.setTranslateX(-152);   //TODO fix this janky translate garbage
 
-        emailBox.getChildren().addAll(slidingEmailButton, emailLabel);
+        emailBox.getChildren().addAll(slidingEmailButton, emailLabel, divider_4);
 
         /////////// INFO IN EMAIL SLIDE
 
         VBox emailBoxContent = new VBox();
         TextField yourEmail = new TextField("Enter Email Here");
         yourEmail.setStyle("-fx-font-size:12;-fx-padding:4 4;");
-        yourEmail.setTranslateX(48);
+        yourEmail.setTranslateX(0);
+        yourEmail.setPrefWidth(190);
+        yourEmail.setMinWidth(190);
+        yourEmail.setMaxWidth(190);
         javafx.scene.control.Button go = new javafx.scene.control.Button("Send Directions");
         go.setId("email-button");
-        go.setTranslateX(70);
+        go.setTranslateX(41);
         emailBoxContent.getChildren().addAll(yourEmail, go);
         go.setOnAction(e -> {
             if (yourEmail.getText() != null) {
