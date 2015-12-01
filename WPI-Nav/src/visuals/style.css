@@ -250,3 +250,16 @@
     -fx-background-color:white;
     -fx-effect:null;
 }
+
+.list-view:focused
+{
+    -fx-effect:null;
+    -fx-background-insets: 0 ;
+}
+
+.scroll-pane:focused
+{
+    -fx-effect:null;
+    -fx-background-insets: 0 ;
+}
+
