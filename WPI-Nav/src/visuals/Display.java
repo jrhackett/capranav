@@ -8,7 +8,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -22,7 +21,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
-import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,6 +83,8 @@ public class Display {
     private BooleanProperty SETTINGS_VISIBLE;
     private BooleanProperty EMAIL_VISIBLE;
     public BooleanProperty BUILDING_VISIBLE;
+    public BooleanProperty PHOTO_ICON_VISIBLE;
+
     private boolean EMAIL = false;
     //Visual Elements
     private VBox dashBoard;
@@ -104,6 +104,8 @@ public class Display {
     private Label nodeTitle;
     private StackPane nodeViewHolder;
     private ImageView nodeView;
+    //private ImageView nodeIconView;
+    private javafx.scene.control.Button nodeIconViewButton;
 
     private javafx.scene.control.Button left;
     private javafx.scene.control.Button right;
@@ -127,6 +129,8 @@ public class Display {
         this.SETTINGS_VISIBLE = new SimpleBooleanProperty(true);
         this.BUILDING_VISIBLE = new SimpleBooleanProperty(false);
         this.EMAIL_VISIBLE = new SimpleBooleanProperty(true);
+
+        this.PHOTO_ICON_VISIBLE = new SimpleBooleanProperty(false);
 
         this.EDGE = GAP * 2 + CONTROL_WIDTH;
     }
@@ -576,8 +580,8 @@ public class Display {
 
         //emailBox.getChildren().addAll(emailIconBox, emailLabel);
 
-        emailLabel.setOnMouseClicked(e -> handleEmail(emailBox));
-        emailView.setOnMouseClicked(e -> handleEmail(emailBox));
+       /* emailLabel.setOnMouseClicked(e -> handleEmail(emailBox));
+        emailView.setOnMouseClicked(e -> handleEmail(emailBox));*/
 
         /** Sliding Anchor Pane **/
         SlidingAnchorPane slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
@@ -632,7 +636,7 @@ public class Display {
         slidingEmail.getChildren().addAll(finalSlidingBox);
 
 
-        /////
+        /////////////
 
 
         AnchorPane.setBottomAnchor(slidingEmail, 0.0);
@@ -696,11 +700,6 @@ public class Display {
         this.mapPane = createMapPane();
         mapPane.setAlignment(Pos.CENTER);
 
-        /* AnchorPane.setTopAnchor(mapPane, EDGE);//
-        AnchorPane.setLeftAnchor(mapPane, 0.0);
-        AnchorPane.setRightAnchor(mapPane, 0.0);
-        AnchorPane.setBottomAnchor(mapPane, EDGE * 2); //+ GAP + 2 * EDGE
-*/
         Group group = new Group(mapPane);
         GraphicsScaling graphicsScaling = new GraphicsScaling();
         Parent zoomPane = graphicsScaling.createZoomPane(group);
@@ -708,14 +707,10 @@ public class Display {
             zoomPane.requestFocus();
         });
 
-
-
         AnchorPane.setTopAnchor(zoomPane, EDGE);//
         AnchorPane.setLeftAnchor(zoomPane, 0.0);
         AnchorPane.setRightAnchor(zoomPane, 0.0);
         AnchorPane.setBottomAnchor(zoomPane, EDGE * 2); //+ GAP + 2 * EDGE
-
-
 
         map.setMinWidth(MAP_WIDTH);
         map.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
@@ -755,14 +750,34 @@ public class Display {
         nodeViewHolder = new StackPane();
         nodeTitle = new Label();
 
+        Image nodeIconImage = new Image(getClass().getResourceAsStream("../images/photography111.svg"), 27,27,true,true);
+        ImageView nodeIconView = new ImageView(nodeIconImage);
+       // nodeIconView.setScaleX(.05);
+       // nodeIconView.setScaleY(.05);
+        nodeIconView.setFitHeight(22);
+        nodeIconView.setFitWidth(22);
 
-        hbox.getChildren().addAll(nodeViewHolder, nodeTitle);
+        nodeIconViewButton = new javafx.scene.control.Button();
+        nodeIconViewButton.visibleProperty().bind(PHOTO_ICON_VISIBLE);
+        nodeIconViewButton.setGraphic(nodeIconView);
+        nodeIconViewButton.setOnAction(event -> handleFullScreenPicture());
+        nodeIconViewButton.setId("arrow-buttons");
+        nodeIconViewButton.setStyle("-fx-background-color: #eeeeee");
+
+        hbox.getChildren().addAll(nodeViewHolder, nodeTitle, nodeIconViewButton);
         hbox.setMaxHeight(EDGE);
         hbox.setMinHeight(EDGE);
         hbox.setAlignment(Pos.CENTER);
         hbox.setSpacing(GAP);//TODO MAKE SURE THIS LOOKS GOOD
 
         return hbox;
+    }
+
+
+    public void updatePictureIcon(boolean val){
+        //change visibility
+        PHOTO_ICON_VISIBLE.setValue(val);
+        //change image it is connected with
     }
 
     public void updateNodeTitle(String s){
@@ -923,7 +938,7 @@ public class Display {
                 .addListener((ObservableValue<? extends Instructions> obs, Instructions oldinstruction, Instructions selectedInstruction) -> {
                     if (selectedInstruction != null) {
                         //TODO Set the string of the label to this
-                        this.controller.updateNodeInformation(selectedInstruction.getNode().getIcon(), selectedInstruction.getNode().toString());
+                        this.controller.updateNodeInformation(selectedInstruction.getNode());
                     }
                 });
 
@@ -958,45 +973,8 @@ public class Display {
      * FUNCTIONS THAT HANDLE EVENTS
      ****************************************************************************************************************/
 
-    private void handleEmail(Node n) {
-
-        if (!EMAIL) {
-            EMAIL = true;
-            PopOver popOver = new PopOver();
-            VBox emailBox = new VBox();
-            TextField yourEmail = new TextField("Enter Email Here");
-            yourEmail.setStyle("-fx-font-size:12;-fx-padding:4 4;");
-            javafx.scene.control.Button go = new javafx.scene.control.Button("Send Directions");
-            go.setId("email-button");
-            emailBox.getChildren().addAll(yourEmail, go);
-            go.setOnAction(e -> {
-                if (yourEmail.getText() != null) {
-                    if (sendEmail(yourEmail.getText())) {
-                        yourEmail.setText("Email Sent");
-                        popOver.hide();
-                        EMAIL = false;
-                    } else {
-                        yourEmail.setText("Invalid Email");
-                    }
-                }
-            });
-            emailBox.setSpacing(GAP);
-            emailBox.setAlignment(Pos.CENTER);
-            emailBox.setMaxWidth(EDGE + expandedWidth);
-            popOver.setContentNode(emailBox);
-            popOver.setArrowLocation(PopOver.ArrowLocation.BOTTOM_CENTER);
-            popOver.setDetachable(false);
-            popOver.show(n);
-            popOver.setOnAutoHide(e -> {
-                EMAIL = false;
-            });
-            popOver.setOnHidden(e -> {
-                EMAIL = false;
-            });
-            popOver.setOnCloseRequest(e -> {
-                EMAIL = false;
-            });
-        }
+    private void handleFullScreenPicture(){
+        this.controller.showNodeImage();
     }
 
     private void handleSearchInput(Inputs v, boolean START) {

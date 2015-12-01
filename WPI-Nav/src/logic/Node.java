@@ -271,5 +271,9 @@ public abstract class Node implements INode {
 	public String getPicturePath(){
 		return this.picturePath;
 	}
+	public void setPicturePath(String s){
+		this.picturePath = s;
+	};
+
 
 }

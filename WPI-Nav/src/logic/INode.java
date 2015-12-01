@@ -149,5 +149,7 @@ public interface INode {
 
     public String getPicturePath();
 
+    public void setPicturePath(String s);
+
 
     }

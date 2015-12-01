@@ -57,6 +57,8 @@ public class Controller extends Application {
     private int currentIndex;
     private int lastMapID;
 
+    private INode selectedInformationNode;
+
 
     @Override
     public void start(Stage s) throws Exception {
@@ -68,6 +70,11 @@ public class Controller extends Application {
         nodesFromFile();
         mapsFromFile();
         buildingsFromFile();
+
+        //TODO DELETE THIS:
+        nodes.forEach((k,v) -> {
+            v.setPicturePath("Riley.png");
+        });
 
         campus = (Campus)maps.get(0);
 
@@ -83,38 +90,50 @@ public class Controller extends Application {
         display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
         s.show();   //shows scene
         defaultMap();
-        //showNodeImage(new Room(0,0.0,0.0,0.0,0.0,0.0,0.0,"hradfg"));
     }
 
 
     /****************************************************************************************************************
                                     FUNCTIONS THAT ARE CALLED FROM UI AND CONTACT UI
      ****************************************************************************************************************/
-    public void showNodeImage(INode n){
+    public void showNodeImage(){
         //we need a way of getting the image
+        if (this.selectedInformationNode != null) {
 
-        StackPane imageStack = new StackPane();
-        StackPane shadowStack = new StackPane();
-        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+            StackPane imageStack = new StackPane();
+            StackPane shadowStack = new StackPane();
+            shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
 
-        imageStack.setOnMouseClicked(e -> {
-            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
-        });
+            imageStack.setOnMouseClicked(e -> {
+                myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            });
 
-       //add image to stack pane -> if no image return void
-        Image image = new Image(getClass().getResourceAsStream("../images/Riley.png"));
-        ImageView iv = new ImageView(image);
+            //add image to stack pane -> if no image return void
+            //TODO COULD CHECK TO MAKE SURE THIS ISNT NULL AGAIN HERE BUT SHOULD BE NO NEED (PICTURE PATH)
+            Image image = new Image(getClass().getResourceAsStream("../images/" + this.selectedInformationNode.getPicturePath()));
+            ImageView iv = new ImageView(image);
 
-        imageStack.getChildren().add(iv);
+            imageStack.getChildren().add(iv);
 
-
-
-        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+            this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+        }
     }
 
-    public void updateNodeInformation(ImageView i, String s){
-        this.myDisplay.updateNodeIcon(i);
-        this.myDisplay.updateNodeTitle(s);
+    /**
+     * Switch this to just the INode
+     * @param n
+     */
+    public void updateNodeInformation(INode n){
+        this.myDisplay.updateNodeIcon(n.getIcon());
+        this.myDisplay.updateNodeTitle(n.toString());
+
+        if (n.getPicturePath() != null){
+            this.myDisplay.updatePictureIcon(true);
+            this.selectedInformationNode = n;
+        } else {
+            this.myDisplay.updatePictureIcon(false);
+            this.selectedInformationNode = null;
+        }
     }
 
     public boolean sendEmail(String email){
