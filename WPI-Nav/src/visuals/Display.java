@@ -734,8 +734,8 @@ public class Display {
     private HBox createBuildingBox() { //its going to be an HBox with stuff inside of the sliding anchorpane
 
         HBox box = new HBox();
-        this.left = new javafx.scene.control.Button("<");
-        this.right = new javafx.scene.control.Button(">");
+        this.left = new javafx.scene.control.Button("-");
+        this.right = new javafx.scene.control.Button("+");
         buildingName = new Label();
         buildingNumber = new Label();
 
