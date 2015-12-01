@@ -20,6 +20,7 @@ public class IconTesting {
 
     @Before
     public void setUp() throws Exception{
+        /*
         b = new Bathroom(1,0,0,0,0,0,0,"Buh");
         e = new Elevator(1,0,0,0,0,0,0,1);
         f = new Food(1,0,0,0,0,0,0,"Feh");
@@ -32,6 +33,7 @@ public class IconTesting {
         fv = new ImageView(new Image(getClass().getResourceAsStream("../images/cutlery23.svg"), 22, 22, true, true));
         lv = new ImageView(new Image(getClass().getResourceAsStream("../images/pin56_small.svg"), 22, 22, true, true));
         sv = new ImageView(new Image(getClass().getResourceAsStream("../images/exit.svg"), 22, 22, true, true));
+        */
     }
     /*
     @Test

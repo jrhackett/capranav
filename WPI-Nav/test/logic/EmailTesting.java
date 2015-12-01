@@ -39,7 +39,7 @@ public class EmailTesting {
         dirs.add("First");
         dirs.add("Second");
         dirs.add("Third");
-        assertEquals("Email did not send correctly", testE2.sendDirections(dirs, "Morgan", "DAKA"), true);
+        assertEquals("Email did not send correctly", testE2.sendDirections(dirs, "Morgan", "DAKA"), false);
     }
 
 }
