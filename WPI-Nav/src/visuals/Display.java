@@ -569,8 +569,8 @@ public class Display {
         /** Label **/
         Label emailLabel = new Label("Email Me");
         emailLabel.setTextFill(Color.web("#333333"));
-        emailLabel.setStyle("-fx-background-color:#808080;");
-        emailBox.setStyle("-fx-background-color:#808080;");
+        emailLabel.setStyle("-fx-background-color:white;");
+        emailBox.setStyle("-fx-background-color:white;");
 
         //emailBox.getChildren().addAll(emailIconBox, emailLabel);
 
@@ -579,27 +579,27 @@ public class Display {
 
         /** Sliding Anchor Pane **/
         SlidingAnchorPane slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
-        slidingEmail.setStyle("-fx-background-color:#808080;");
+        slidingEmail.setStyle("-fx-background-color:white;");
 
         javafx.scene.control.Button slidingEmailButton = slidingEmail.getButton();
         slidingEmailButton.setId("dashboardButton");
-        slidingEmailButton.setStyle("-fx-background-color:#808080;");
+        slidingEmailButton.setStyle("-fx-background-color:white;");
         slidingEmailButton.setMaxWidth(EDGE - 5);
         slidingEmailButton.setMinWidth(EDGE - 5);
         slidingEmailButton.setPrefWidth(EDGE - 5);
 
 
-        emailBox.getChildren().addAll(slidingEmailButton, emailLabel);  //TODO fix this sliding pane, if we don't want just comment out SlidingAnchorPane stuff and uncomment some of the addAll of panes
-
-        // TODO anchor the listView instructions back to the bottom
+        emailBox.getChildren().addAll(slidingEmailButton, emailLabel);
 
         /////////// INFO IN EMAIL SLIDE
 
         VBox emailBoxContent = new VBox();
         TextField yourEmail = new TextField("Enter Email Here");
         yourEmail.setStyle("-fx-font-size:12;-fx-padding:4 4;");
+        yourEmail.setTranslateX(48);
         javafx.scene.control.Button go = new javafx.scene.control.Button("Send Directions");
         go.setId("email-button");
+        go.setTranslateX(70);
         emailBoxContent.getChildren().addAll(yourEmail, go);
         go.setOnAction(e -> {
             if (yourEmail.getText() != null) {
