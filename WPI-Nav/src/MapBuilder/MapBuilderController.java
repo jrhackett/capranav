@@ -33,13 +33,13 @@ public class MapBuilderController extends Application {
 	private MapBuilderDisplay myDisplay;
 
 	/* information variables */
-	private HashMap<Integer, Node> masterNodeList;
-	private HashMap<Integer, Node> nodeList;
-	private Maps maps;
+	private HashMap<Integer, INode> masterNodeList;
+	private HashMap<Integer, INode> nodeList;
+	private HashMap<Integer, IMap> maps;
 
-	private ArrayList<Node> potentialEdgeNodes;
+	private ArrayList<INode> potentialEdgeNodes;
 
-	private int currentMapID;
+	private int currentMapID = -1;
 
 	private int nextNodeID;
 	private int nextMapID = 3335;// TODO UNIQUE
@@ -52,7 +52,7 @@ public class MapBuilderController extends Application {
 		this.nextNodeID = 0; // TODO FIX THIS ID INCREMENT THING
 		potentialEdgeNodes = new ArrayList<>();
 
-		mapsFromFile();
+		//mapsFromFile();
 		nodesFromFile();
 
 		// loadNodesFromFile();
@@ -75,7 +75,7 @@ public class MapBuilderController extends Application {
 	 * sets the next node id to be the largest value
 	 */
 	private void setNextNodeID() {
-		nodeList.forEach((k, v) -> {
+		masterNodeList.forEach((k, v) -> {
 			nextNodeID = (k > nextNodeID) ? k : nextNodeID;
 			nextNodeID++;
 		});
@@ -87,7 +87,7 @@ public class MapBuilderController extends Application {
 	 * @param e
 	 * @return ID of new Node
 	 */
-	public int newNodeAtLocation(double x, double y) {
+	public int newPathNodeAtLocation(double x, double y) {
 		// TODO: get UNIQUE or next number - look into singelton
 		Node newNode = new Path(this.nextNodeID, x, y, 0, x, y, 0, this.currentMapID);
 		nodeList.put(this.nextNodeID, newNode);
@@ -95,6 +95,8 @@ public class MapBuilderController extends Application {
 	}
 
 	/**
+	 * This method takes in the name, path, and pixel to foot ratio and creates
+	 * a new map
 	 *
 	 * @param name
 	 * @param path
@@ -103,18 +105,14 @@ public class MapBuilderController extends Application {
 	 */
 	public boolean createAndWriteNewMap(String name, String path, double ratio) {
 		// TODO: Fix this to work with new classes
-		
-		/*boolean validate = validatePath(path);
-		if (validate) {
-			Map newMap = new Map(nextMapID, 0, 0, name, path, ratio);
-			maps.addMap(newMap);
-			myDisplay.chooseMap.addMapToMaps(newMap);
-			nextMapID++;
-			return true;
-		} else {
-			return false;
-		}*/
-		
+
+		/*
+		 * boolean validate = validatePath(path); if (validate) { Map newMap =
+		 * new Map(nextMapID, 0, 0, name, path, ratio); maps.addMap(newMap);
+		 * myDisplay.chooseMap.addMapToMaps(newMap); nextMapID++; return true; }
+		 * else { return false; }
+		 */
+
 		return false;
 	}
 
@@ -125,12 +123,12 @@ public class MapBuilderController extends Application {
 	 */
 	public void setNodeName(String name) {
 		// TODO: Fix this to work with new classes
-		
+
 		/*
-		if (this.isNodeSelected()) {
-			nodeList.get(selectedNodeID).setName(name);
-			changeNameToIncludeMap(selectedNodeID);
-		}*/
+		 * if (this.isNodeSelected()) {
+		 * nodeList.get(selectedNodeID).setName(name);
+		 * changeNameToIncludeMap(selectedNodeID); }
+		 */
 	}
 
 	/**
@@ -140,11 +138,13 @@ public class MapBuilderController extends Application {
 	 */
 	public void changeNameToIncludeMap(int id) {
 		// TODO: Fix this to work with new classes
-		
+
 		/*
-		String mapPrefix = new String();
-		mapPrefix = maps.getMap(nodeList.get(id).getMap_id()).getName();
-		nodeList.get(id).setName(mapPrefix + " " + nodeList.get(id).getName());*/
+		 * String mapPrefix = new String(); mapPrefix =
+		 * maps.getMap(nodeList.get(id).getMap_id()).getName();
+		 * nodeList.get(id).setName(mapPrefix + " " +
+		 * nodeList.get(id).getName());
+		 */
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class MapBuilderController extends Application {
 	 * @return true if it exists
 	 */
 	private boolean validatePath(String path) {
-		this.maps.check(path);
+		// this.maps.get(currentMapID).check(path);
 
 		try {
 			// TODO make this better
@@ -178,7 +178,8 @@ public class MapBuilderController extends Application {
 	 * 
 	 * @return
 	 */
-	public Maps getMaps() {
+	public HashMap<Integer, IMap> getMaps() {
+
 		return this.maps;
 	}
 
@@ -188,9 +189,9 @@ public class MapBuilderController extends Application {
 	 * @param id
 	 * @return
 	 */
-	public HashMap<Integer, Node> getNodesOfMap(int id) {
+	public HashMap<Integer, INode> getNodesOfMap(int id) {
 
-		HashMap<Integer, Node> value = new HashMap<>();
+		HashMap<Integer, INode> value = new HashMap<>();
 
 		masterNodeList.forEach((k, v) -> {
 			if (v.getMap_id() == id) {
@@ -201,11 +202,11 @@ public class MapBuilderController extends Application {
 	}
 
 	// Same version as above, but assumes the selected map ID
-	public HashMap<Integer, Node> getNodesOfMap() {
+	public HashMap<Integer, INode> getNodesOfMap() {
 		return getNodesOfMap(this.currentMapID);
 	}
 
-	public HashMap<Integer, Node> getCurrentNodeList() {
+	public HashMap<Integer, INode> getCurrentNodeList() {
 		return nodeList;
 	}
 
@@ -219,7 +220,7 @@ public class MapBuilderController extends Application {
 		this.currentMapID = id;
 		this.nodeList = getNodesOfMap();
 		cleanNodeList(this.nodeList);
-		
+
 		setNextNodeID();
 
 	}
@@ -230,52 +231,8 @@ public class MapBuilderController extends Application {
 	 * @param id
 	 * @return node
 	 */
-	public Node getNode(int id) {
+	public INode getNode(int id) {
 		return nodeList.get(id);
-	}
-
-	/**
-	 * adds a node to the arraylist of node for potential edges
-	 */
-	public void addPotentialEdge(Node node) {
-		// validate
-		if (!potentialEdgeNodes.contains(node)) {
-			boolean check = true;
-			for (Edge e : getNode(selectedNodeID).getAdjacencies()) {
-				if (e.getTarget() == node.getID()) {
-					check = false;
-				}
-			}
-			if (check) {
-				potentialEdgeNodes.add(node);
-			}
-		}
-	}
-
-	/**
-	 * resets the potential edges
-	 */
-	public void resetPotentialEdges() {
-		this.potentialEdgeNodes = new ArrayList<>();
-	}
-
-	/**
-	 * Adds edges. NOTE: currently weight is defaulted to 1
-	 */
-	public boolean addEdges() {
-		for (Node n : potentialEdgeNodes) {
-			nodeList.get(selectedNodeID).addEdge(new Edge(n.getID(), 1));
-			/* below should add the edge both ways */
-			boolean check = true;
-			for (Edge e : n.getAdjacencies()) {
-				if (e.getTarget() == selectedNodeID) {
-					check = false;
-				}
-			}
-			if (check)
-				n.addEdge(new Edge(selectedNodeID, 1));
-		}
-		return true;
 	}
 
 	/**
@@ -284,11 +241,26 @@ public class MapBuilderController extends Application {
 	 * @param
 	 */
 	public void nodesToFile() {
-		/*Parser parser = new Parser("nodes.json");
-		
-		//TODO: update this to support different saving methods
-		parser.toFile(new Graph(this.masterNodeList));
-		*/
+		// First, remove all the nodes that were deleted
+		// AKA: are present in the old list but not in the new one
+		Integer[] keyList = masterNodeList.keySet().toArray(new Integer[masterNodeList.keySet().size()]);
+		for (int i = 0; i < keyList.length; i++) {
+			if (masterNodeList.containsKey(keyList[i]) && !nodeList.containsKey(keyList[i])) {
+				masterNodeList.remove(keyList[i]);
+			}
+		}
+
+		// Remove any rouge edges in the masterNodeList
+		cleanNodeList(masterNodeList);
+
+		// Update all the nodes that could have been changed
+		nodeList.forEach((k, v) -> {
+			masterNodeList.put(k, v);
+		});
+
+		// send this masterNodeList to the file
+		Parser parser = new Parser();
+		parser.toFile(masterNodeList);
 	}
 
 	/**
@@ -297,11 +269,9 @@ public class MapBuilderController extends Application {
 	 * @param
 	 */
 	public void nodesFromFile() {
-		/*
-		Parser test = new Parser("nodes.json");
-		Graph graph = (Graph) test.fromFile();
-		this.masterNodeList = graph.getNodes();
-		*/
+		this.masterNodeList = new Parser<INode>().fromFileGraph();
+		
+		System.out.println(masterNodeList.size());
 	}
 
 	/**
@@ -309,19 +279,21 @@ public class MapBuilderController extends Application {
 	 */
 	public void mapsToFile() {
 		/*
-		Parser parser = new Parser("maps.json");
-		parser.toFile(this.maps);
-		*/
+		 * Parser parser = new Parser("maps.json"); parser.toFile(this.maps);
+		 */
 	}
 
 	/**
 	 * load maps from file
 	 */
 	public void mapsFromFile() {
-		/*
-		Parser parser = new Parser("maps.json");
-		this.maps = (Maps) parser.fromFile();
-		*/
+		this.maps = new Parser<IMap>().fromFileMap();
+
+		if (this.maps == null) {
+			System.out.println("Map List wasn't initialized correctly");
+		} else {
+			System.out.println(this.maps.size());
+		}
 	}
 
 	public static void main(String[] args) {
@@ -349,7 +321,7 @@ public class MapBuilderController extends Application {
 	}
 
 	// This gets the selected node
-	public Node getSelectedNode() {
+	public INode getSelectedNode() {
 		return getNode(this.selectedNodeID);
 	}
 
@@ -359,27 +331,27 @@ public class MapBuilderController extends Application {
 	}
 
 	// This deletes a given node
-	public void deleteNode(int id) {		
-		
+	public void deleteNode(int id) {
+
 		// Remove the given node
 		nodeList.remove(id);
-		
-		//Then clean up the lingering edges
+
+		// Then clean up the lingering edges
 		cleanNodeList(nodeList);
 	}
 
 	// This method cleans the orphan edges who's target is not a node in the
 	// hashmap
-	private void cleanNodeList(HashMap<Integer, Node> input) {
-		
+	private void cleanNodeList(HashMap<Integer, INode> input) {
+
 		// Iterate through the entire hashmap
 		// If any edge in any node points to a node that isn't in the hashmap
 		// Remove that edge.
-		Iterator<HashMap.Entry<Integer, Node>> nodeIterator = input.entrySet().iterator();
+		Iterator<HashMap.Entry<Integer, INode>> nodeIterator = input.entrySet().iterator();
 		while (nodeIterator.hasNext()) {
-			HashMap.Entry<Integer, Node> nodeEntry = nodeIterator.next();
-			
-			for(int i = 0; i < getNode(nodeEntry.getKey()).getAdjacencies().size(); i++){
+			HashMap.Entry<Integer, INode> nodeEntry = nodeIterator.next();
+
+			for (int i = 0; i < getNode(nodeEntry.getKey()).getAdjacencies().size(); i++) {
 				Edge currentEdge = getNode(nodeEntry.getKey()).getAdjacencies().get(i);
 
 				if (!input.containsKey(currentEdge.getTarget())) {

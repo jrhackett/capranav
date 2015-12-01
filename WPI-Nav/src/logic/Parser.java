@@ -12,30 +12,33 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Arrays;
 
-/** A Parser object is used to do translations to/from JSON files and Nodes/Maps/Buildings.
+/**
+ * A Parser object is used to do translations to/from JSON files and
+ * Nodes/Maps/Buildings.
  *
- * USAGE: Struct should be INode, IMap, or Building
- * 		  new Parser<INode>().fromFileGraph();       - Returns HashMap<Integer, INode>
- * 		  new Parser<IMap>().fromFileMap();          - Returns HashMap<Integer, IMap>
- * 		  new Parser<Building>().fromFileBuilding(); - Returns HashMap<Integer, Building>
- * 		  new Parser<Struct>().toFile(HashMap<Integer, Struct> collection); - Stores into files based on type
+ * USAGE: Struct should be INode, IMap, or Building new Parser
+ * <INode>().fromFileGraph(); - Returns HashMap<Integer, INode> new Parser
+ * <IMap>().fromFileMap(); - Returns HashMap<Integer, IMap> new Parser
+ * <Building>().fromFileBuilding(); - Returns HashMap<Integer, Building> new
+ * Parser<Struct>().toFile(HashMap<Integer, Struct> collection); - Stores into
+ * files based on type
  */
-public class Parser<Struct>
-{
-	//Don't need to set any of these anymore - empty constructor
-	private String           filename; //File for reading/writing Nodes
-	private JsonWriter       writer;
+public class Parser<Struct> {
+	// Don't need to set any of these anymore - empty constructor
+	private String filename; // File for reading/writing Nodes
+	private JsonWriter writer;
 	private JsonStreamParser parser;
 
-	//These two sets of arrays must be in parallel !
-	private static final Class[]  mTypes = { Campus.class, Floor.class };
+	// These two sets of arrays must be in parallel !
+	private static final Class[] mTypes = { Campus.class, Floor.class };
 	private static final String[] mNames = { "campus.json", "floor.json" };
-	private static final Class[]  nTypes = { Bathroom.class, Elevator.class, Food.class, Landmark.class, Path.class,
-											 Room.class, Stairs.class, TStairs.class  };
-	private static final String[] nNames = { "bathroom.json", "elevator.json", "food.json", "landmark.json", "path.json",
-											 "room.json", "stair.json", "tstair.json" };
+	private static final Class[] nTypes = { Bathroom.class, Elevator.class, Food.class, Landmark.class, Path.class,
+			Room.class, Stairs.class, TStairs.class };
+	private static final String[] nNames = { "bathroom.json", "elevator.json", "food.json", "landmark.json",
+			"path.json", "room.json", "stair.json", "tstair.json" };
 
-	public Parser() {}
+	public Parser() {
+	}
 
 	public static void main(String args[]) {
 		Campus c = new Campus(1, "Path", 0.13);
@@ -83,33 +86,31 @@ public class Parser<Struct>
 
 		HashMap<Integer, TStairs> th = new HashMap<>();
 		th.put(t.getID(), t);
-/*
-		new Parser<Campus>().toFile(ch);
-		new Parser<Floor>().toFile(fh);
-		new Parser<Bathroom>().toFile(bh);
-		new Parser<Elevator>().toFile(eh);
-		new Parser<Food>().toFile(fooh);
-		new Parser<Landmark>().toFile(lh);
-		new Parser<Path>().toFile(ph);
-		new Parser<Room>().toFile(rh);
-		new Parser<Stairs>().toFile(sh);
-		new Parser<TStairs>().toFile(th);*/
+		/*
+		 * new Parser<Campus>().toFile(ch); new Parser<Floor>().toFile(fh); new
+		 * Parser<Bathroom>().toFile(bh); new Parser<Elevator>().toFile(eh); new
+		 * Parser<Food>().toFile(fooh); new Parser<Landmark>().toFile(lh); new
+		 * Parser<Path>().toFile(ph); new Parser<Room>().toFile(rh); new
+		 * Parser<Stairs>().toFile(sh); new Parser<TStairs>().toFile(th);
+		 */
 
 		new Parser<Building>().toFile(buildh);
-/*
-		HashMap<Integer, IMap> maps = new Parser<>().fromFileMap();
-		HashMap<Integer, INode> nodes = new Parser<>().fromFileGraph();
-		System.out.println(maps.toString());
-		System.out.println(nodes.toString());*/
+		/*
+		 * HashMap<Integer, IMap> maps = new Parser<>().fromFileMap();
+		 * HashMap<Integer, INode> nodes = new Parser<>().fromFileGraph();
+		 * System.out.println(maps.toString());
+		 * System.out.println(nodes.toString());
+		 */
 		System.out.println("SUCCESS !");
 	}
 
 	/**
-	 * toFile() is used to write an entire HashMap of Struct out to a JSON database file
-	 * WARNING: This will OVERWRITE the given file
+	 * toFile() is used to write an entire HashMap of Struct out to a JSON
+	 * database file WARNING: This will OVERWRITE the given file
 	 *
-	 * @param collection: HashMap of Nodes/Maps/Buildings to write to the database
-     */
+	 * @param collection:
+	 *            HashMap of Nodes/Maps/Buildings to write to the database
+	 */
 	public void toFile(HashMap<Integer, Struct> collection) {
 		Gson gson = new Gson();
 
@@ -118,16 +119,22 @@ public class Parser<Struct>
 			int m = Arrays.asList(mTypes).indexOf(s.getClass());
 			int n = Arrays.asList(nTypes).indexOf(s.getClass());
 
-			//Set filename to the correct thing, based on Struct s
-			if      (m != -1) filename = mNames[m];
-			else if (n != -1) filename = nNames[n];
-			else 			  filename = "building.json";
+			// Set filename to the correct thing, based on Struct s
+			if (m != -1)
+				filename = mNames[m];
+			else if (n != -1)
+				filename = nNames[n];
+			else
+				filename = "building.json";
 
-			//Write s out to the correct file
-			try { writer = new JsonWriter(new FileWriter(filename, false)); }
-			catch (IOException e) { return; } //Bad bad bad
+			// Write s out to the correct file
+			try {
+				writer = new JsonWriter(new FileWriter(filename, false));
+			} catch (IOException e) {
+				return;
+			} // Bad bad bad
 			gson.toJson(s, s.getClass(), writer);
-			close(); //Close the writer
+			close(); // Close the writer
 		}
 	}
 
@@ -139,14 +146,21 @@ public class Parser<Struct>
 		IMap temp;
 
 		for (int i = 0; i < mTypes.length; i++) {
-			try { parser = new JsonStreamParser(new FileReader(mNames[i])); }
-			catch (FileNotFoundException e) { return null; } //This is bad - don't let this happen
+			try {
+				System.out.println(mNames[i]);
+				parser = new JsonStreamParser(new FileReader(mNames[i]));
+			} catch (FileNotFoundException e) {
+				System.out.println("Parser File not found.");
+				return null;
+			} // This is bad - don't let this happen
 
-			while(parser.hasNext()) {
-				temp = (IMap)gson.fromJson(parser.next(), mTypes[i]);
+			while (parser.hasNext()) {
+				temp = (IMap) gson.fromJson(parser.next(), mTypes[i]);
 				maps.put(temp.getID(), temp);
 			}
 		}
+
+		System.out.println(maps.size());
 		return maps;
 	}
 
@@ -157,10 +171,9 @@ public class Parser<Struct>
 
 		try {
 			parser = new JsonStreamParser(new FileReader("building.json"));
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
-			return null; //Bad bad bad
+			return null; // Bad bad bad
 		}
 
 		while (parser.hasNext()) {
@@ -170,35 +183,37 @@ public class Parser<Struct>
 		return builds;
 	}
 
-
 	public HashMap<Integer, INode> fromFileGraph() {
 		Gson gson = new Gson();
 		HashMap<Integer, INode> graph = new HashMap<>();
 		INode temp;
 
 		for (int i = 0; i < nTypes.length; i++) {
-			try { parser = new JsonStreamParser(new FileReader(nNames[i])); }
-			catch (FileNotFoundException e) { return null; } //This is bad - don't let this happen
+			try {
+				parser = new JsonStreamParser(new FileReader(nNames[i]));
+			} catch (FileNotFoundException e) {
+				return null;
+			} // This is bad - don't let this happen
 
-			while(parser.hasNext()) {
-				temp = (INode)gson.fromJson(parser.next(), nTypes[i]);
+			while (parser.hasNext()) {
+				temp = (INode) gson.fromJson(parser.next(), nTypes[i]);
 				graph.put(temp.getID(), temp);
 			}
 		}
 		return graph;
 	}
 
-    /**
-     * close is used to close the FileWriter
-	 * Class methods handle opening/closing of FileWriter
-	 * DO NOT (try to) CALL THIS OUTSIDE OF PARSER CLASS
-     * @return void
-     */
+	/**
+	 * close is used to close the FileWriter Class methods handle
+	 * opening/closing of FileWriter DO NOT (try to) CALL THIS OUTSIDE OF PARSER
+	 * CLASS
+	 * 
+	 * @return void
+	 */
 	private void close() {
 		try {
 			this.writer.close();
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

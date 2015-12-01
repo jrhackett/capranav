@@ -10,6 +10,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import logic.Edge;
+import logic.INode;
 import logic.Node;
 
 import java.util.ArrayList;
@@ -109,7 +110,7 @@ public class MapVisual extends Pane {
 				
 				// Iterate through all the existing nodes to find the minimum distance to one
 				for(Integer k : controller.getCurrentNodeList().keySet()){
-					Node v = controller.getCurrentNodeList().get(k);
+					INode v = controller.getCurrentNodeList().get(k);
 					double dist = Math.sqrt(Math.pow((v.getX() - e.getX()), 2) + Math.pow((v.getY() - e.getY()), 2));
 					if (dist < minDist) {
 						minDist = dist;
@@ -121,16 +122,16 @@ public class MapVisual extends Pane {
 				if(minDist >= tolerance){
 					double xyTolerance = 5;
 					
-					Node closestX = null;
+					INode closestX = null;
 					double minXDist = xyTolerance;
-					Node closestY = null;
+					INode closestY = null;
 					double minYDist = xyTolerance;
 					
 					
 					boolean selectedNode = false;
 					
 					for(Integer k : controller.getCurrentNodeList().keySet()){
-						Node v = controller.getCurrentNodeList().get(k);
+						INode v = controller.getCurrentNodeList().get(k);
 						
 						if(!selectedNode){
 							closestX = v;
@@ -164,7 +165,7 @@ public class MapVisual extends Pane {
 					}
 					
 					
-					controller.newNodeAtLocation(newNodeX, newNodeY);
+					controller.newPathNodeAtLocation(newNodeX, newNodeY);
 				} else {
 					//System.out.println("To Close to an existing node");
 					//System.out.println("Distance: " + minDist);
@@ -185,7 +186,7 @@ public class MapVisual extends Pane {
 	 * @param nodes
 	 *            List of nodes for the map
 	 */
-	public void drawNodes(HashMap<Integer, Node> nodes) {
+	public void drawNodes(HashMap<Integer, INode> nodes) {
 		// this.getChildren().remove(nodeCircles);
 		// this.nodeCircles = new AnchorPane();
 		this.nodeCircles.getChildren().clear();
@@ -217,7 +218,7 @@ public class MapVisual extends Pane {
 	 * @param nodes
 	 *            List of nodes for the map
 	 */
-	public void drawEdges(HashMap<Integer, Node> nodes) {
+	public void drawEdges(HashMap<Integer, INode> nodes) {
 		// this.getChildren().remove(edgeLines);
 		// this.edgeLines = new AnchorPane();
 		this.edgeLines.getChildren().clear();
@@ -278,7 +279,7 @@ public class MapVisual extends Pane {
 	 *            Value, given node
 	 * @return
 	 */
-	private Circle createCircle(Node v) {
+	private Circle createCircle(INode v) {
 
 		// the nodes currently have way too small X / Ys - later we'll need to
 		// somehow scale
@@ -385,7 +386,7 @@ public class MapVisual extends Pane {
 	 *            The other end of the edge
 	 * @return
 	 */
-	private Line createLine(Line line, Node nodeA, Node nodeB) {
+	private Line createLine(Line line, INode nodeA, INode nodeB) {
 
 		// Set the initial colour
 		line.setStroke(Color.web("#00CCFF", 0.7));
