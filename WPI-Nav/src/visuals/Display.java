@@ -3,6 +3,7 @@ package visuals;
 import controller.Controller;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -92,7 +93,7 @@ public class Display {
     private AnchorPane map; //VBox
     public StackPane root;
     private HBox dashBoardTitleBox;
-    private ListView<String> instructions; //ListView<Instruction>
+    private ListView<Instructions> instructions; //ListView<Instruction>
     private javafx.scene.control.Button hiddenHandler;
 
 
@@ -103,6 +104,8 @@ public class Display {
     private StackPane nodeViewHolder;
     private ImageView nodeView;
 
+    private javafx.scene.control.Button left;
+    private javafx.scene.control.Button right;
 
     /**
      * Basic constructor.
@@ -681,7 +684,6 @@ public class Display {
         hbox.setSpacing(GAP);//TODO MAKE SURE THIS LOOKS GOOD
 
         return hbox;
-
     }
 
     public void updateNodeTitle(String s){
@@ -699,8 +701,8 @@ public class Display {
     private HBox createBuildingBox() { //its going to be an HBox with stuff inside of the sliding anchorpane
 
         HBox box = new HBox();
-        javafx.scene.control.Button left = new javafx.scene.control.Button("<");
-        javafx.scene.control.Button right = new javafx.scene.control.Button(">");
+        this.left = new javafx.scene.control.Button("<");
+        this.right = new javafx.scene.control.Button(">");
         buildingName = new Label();
         buildingNumber = new Label();
 
@@ -716,6 +718,14 @@ public class Display {
         box.setSpacing(GAP);
         box.getChildren().addAll(left, buildingName, buildingNumber, right);
         return box;
+    }
+
+    public void setRightButtonID(String id){
+        right.setId(id);
+    }
+
+    public void setLeftButtonID(String id){
+        left.setId(id);
     }
 
     public void setBuildingName(String s) {
@@ -800,11 +810,11 @@ public class Display {
 
 
     private void createInstructionListView() {
-        this.instructions = new ListView<String>();
-        instructions.setCellFactory((ListView<String> lv) ->
-                new ListCell<String>() {
+        this.instructions = new ListView<Instructions>();
+        instructions.setCellFactory((ListView<Instructions> lv) ->
+                new ListCell<Instructions>() {
                     @Override
-                    public void updateItem(String in, boolean empty) {
+                    public void updateItem(Instructions in, boolean empty) {
                         super.updateItem(in, empty);
                         if (empty) {
                             setText(null);
@@ -817,13 +827,15 @@ public class Display {
                 }
         );
 
-   /*     instructions.getSelectionModel().selectedItemProperty()
-                .addListener((ObservableValue<? extends Instructions> obs, Instructions oldAlbum, Instructions selectedAlbum) -> {
-                    if (selectedAlbum != null) {
-                        // do something with selectedAlbum
+        instructions.getSelectionModel().selectedItemProperty()
+                .addListener((ObservableValue<? extends Instructions> obs, Instructions oldinstruction, Instructions selectedInstruction) -> {
+                    if (selectedInstruction != null) {
+                        //TODO Set the string of the label to this
+                        this.controller.updateNodeInformation(selectedInstruction.getNode().getIcon(), selectedInstruction.getNode().toString());
                     }
                 });
-*/
+
+
         instructions.setPlaceholder(new Label(" "));
         instructions.setMinWidth(0);
         instructions.setMaxWidth(expandedWidth + EDGE * 2);
@@ -835,6 +847,20 @@ public class Display {
 
 
     }
+    public void clearInstructions() {
+        this.instructions.setItems(null);
+    }
+
+    /**
+     * Call to set the instructions
+     */
+    public void setInstructions(ArrayList<Instructions> instructions) {
+        ObservableList<Instructions> data = FXCollections.observableArrayList();
+        data.addAll(instructions);
+        this.instructions.setItems(data);
+    }
+
+
 /* REAL VERSION
     private void createInstructionListView() {
         this.instructions = new ListView<Instructions>();
@@ -1391,37 +1417,6 @@ public class Display {
 		        );
 		return instructions;
 	}*/
-    public void clearInstructions() {
-        this.instructions.setItems(null);
-    }
 
-    /**
-     * Call to set the instructions
-     */
-    public void setInstructions(){ //ArrayList<logic.INode> nodes, ArrayList<String> instructions) {
-        ObservableList<String> data = FXCollections.observableArrayList();
-
-       /*
-        for (int i = 0; i < nodes.size(); i++) {
-            data.add(new Instructions(instructions.get(i), nodes.get(i)));
-        }
-        */
-        ArrayList<String> path = new ArrayList<>();
-        path.add("Turn right here and walk \n500 feet please.");
-        path.add("Go straight somewhere.");
-        path.add("Turn left there and jump \naround on your hands.");
-        path.add("Random reasonable string \nhere.");
-        path.add("Random reasonable string \nhere.");
-        path.add("Random reasonable string \nhere.");
-        path.add("Random reasonable string \nhere.");
-        path.add("Random reasonable string \nhere.");
-        path.add("Random reasonable string \nhere.");
-
-        for(String s : path){
-            data.add(s);
-        }
-
-        this.instructions.setItems(data);
-    }
 
 }

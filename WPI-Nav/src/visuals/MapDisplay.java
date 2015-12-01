@@ -111,9 +111,9 @@ public class MapDisplay extends Pane {
         this.getChildren().remove(0, this.getChildren().size());
 
         try {
-            this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
+            this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getFilePath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
         } catch (NullPointerException e) {
-            this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
+            this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getFilePath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
         }
 
         this.mapView = new ImageView(mapImage);

@@ -69,14 +69,14 @@ public class MapVisual extends Pane {
 	 *//*
 
 	public void setMap(logic.Map map){
-		System.out.println("MAP PATH:  " + map.getPath());
+		System.out.println("MAP PATH:  " + map.getFilePath());
 		this.getChildren().remove(mapView);
 		//id_circle.forEach((k,v) -> {if(v!= null){this.getChildren().remove(v); }});
 		try {
-			this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"), 660, 495, true, true);
+			this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getFilePath() + ".png"), 660, 495, true, true);
 		}
 		catch (NullPointerException e) {
-			this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getPath() + ".png"), 660, 495, true, true);
+			this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getFilePath() + ".png"), 660, 495, true, true);
 		}
 
 		this.mapView = new ImageView(mapImage);

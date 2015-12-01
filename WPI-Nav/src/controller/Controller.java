@@ -53,6 +53,10 @@ public class Controller extends Application {
     public logic.INode startNode;
     public logic.INode endNode;
 
+    /* path data */
+    ArrayList<ArrayList<Instructions>> fullPath;
+    int currentIndex;
+
 
     @Override
     public void start(Stage s) throws Exception {
@@ -305,11 +309,25 @@ public class Controller extends Application {
     }
 
 
-    public void setFloor(int i){
+    public void setFloor(int i){//TODO HARD CODE IN IDS
         if (buildings.get(currentBuilding).getFloorMap().containsKey(i)){
             setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(i));
             this.currentFloor = i;
             this.myDisplay.setBuildingNumber(i);
+        }
+        if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)){
+            //set id for normal
+            this.myDisplay.setRightButtonID();
+        } else {
+            //set id for grey
+            this.myDisplay.setRightButtonID();
+        }
+        if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)){
+            //set id for normal
+            this.myDisplay.setLeftButtonID();
+        } else {
+            //set id for grey
+            this.myDisplay.setLeftButtonID();
         }
     }
 
@@ -643,28 +661,27 @@ public class Controller extends Application {
      */
     public void findPaths(){
         //Rework code: //TODO update this with the new direction rework
+        getPathNodes(startNode, endNode);
+        fullPath = getInstructions();
+        currentIndex = 0;
+        myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
+        //myDisplay.mapDisplay.showPath(fullPath.get(currentIndex)); //TODO UPDATE showPath
 
-       // ArrayList<ArrayList<Instruction>> path = getInstructions(this.getPathNodes(startNode, endNode));
+    }
 
+    public void handleIncrementPathMap(){
+        //if there is another list of instructions to go
+        if (this.currentIndex + 1 < fullPath.size()){
+            myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
+            switchMapSetting(fullPath.get(currentIndex).get(0).getNode().getMap_id());
+        }
 
-       myDisplay.setInstructions(); //TODO UPDATE setInstructions
-        //myDisplay.mapDisplay.showPath(path); //TODO UPDATE showPath
+        //make sure path is displayed!!!
 
-        System.out.println("FIND PATHS CURRENTLY NOT SET UP~");
+        //switch map
 
+        //switch map text + # node
 
-        //validate that there are inputs for beginging and end
-       /* if (this.startNode != null && this.endNode != null){
-            //logic.Node s = (logic.Node)this.start.getValue();
-            //logic.Node e = (logic.Node)this.end.getValue();
-            ArrayList<logic.INode> path = this.getPathNodes(startNode, endNode);
-            ArrayList<String> instructions = this.getInstructions();//pass correct instructions
-            myDisplay.setInstructions(path, instructions);
-            myDisplay.mapDisplay.showPath(path);
-        }*/
-        //String name = controller.getMapName();
-        //map.setMap(name);
-        //mapDisplay.drawPath();
     }
 
 
