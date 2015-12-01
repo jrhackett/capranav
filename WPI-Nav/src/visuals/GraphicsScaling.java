@@ -62,12 +62,14 @@ public class GraphicsScaling {
                 double Scale = clamp(totalYScale, MIN_SCALE, MAX_SCALE);
                 //System.out.println("Scale " + Scale);
 
-                double mouseX = event.getX();
-                double mouseY = event.getY();
+                double appWidth = scroller.getLayoutY();
+                System.out.println("Width"+appWidth);
+                //double mouseX = event.getX();
+                //double mouseY = event.getY();
                 double mouseSceneX = event.getSceneX();
                 double mouseSceneY = event.getSceneY();
-                System.out.println("mX " + mouseX);
-                System.out.println("mY " + mouseY);
+                //System.out.println("mX " + mouseX);
+                //System.out.println("mY " + mouseY);
                 System.out.println("msceneX " + mouseSceneX);
                 System.out.println("msceneY " + mouseSceneY);
 
@@ -138,7 +140,7 @@ public class GraphicsScaling {
             double halfWidth = scroller.getViewportBounds().getWidth() / 2 ;
             double newScrollXOffset = (scaleFactor - 1) *  halfWidth + scaleFactor * scrollXOffset;
             scroller.setHvalue(scroller.getHmin() + newScrollXOffset * (scroller.getHmax() - scroller.getHmin()) / extraWidth);
-            System.out.println("scroller H val " + scroller.getHmin() + newScrollXOffset * (scroller.getHmax() - scroller.getHmin()) / extraWidth);
+            //System.out.println("scroller H val " + scroller.getHmin() + newScrollXOffset * (scroller.getHmax() - scroller.getHmin()) / extraWidth);
         } else {
             scroller.setHvalue(scroller.getHmin());
         }
@@ -147,7 +149,7 @@ public class GraphicsScaling {
             double halfHeight = scroller.getViewportBounds().getHeight() / 2 ;
             double newScrollYOffset = (scaleFactor - 1) * halfHeight + scaleFactor * scrollYOffset;
             scroller.setVvalue(scroller.getVmin() + newScrollYOffset * (scroller.getVmax() - scroller.getVmin()) / extraHeight);
-            System.out.println("scroller V val " + scroller.getVmin() + newScrollYOffset * (scroller.getVmax() - scroller.getVmin()) / extraHeight);
+            //System.out.println("scroller V val " + scroller.getVmin() + newScrollYOffset * (scroller.getVmax() - scroller.getVmin()) / extraHeight);
         } else {
             scroller.setHvalue(scroller.getHmin());
         }
