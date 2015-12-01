@@ -708,8 +708,8 @@ public class Display {
         });
 
         AnchorPane.setTopAnchor(zoomPane, EDGE);//
-        AnchorPane.setLeftAnchor(zoomPane, 0.0);
-        AnchorPane.setRightAnchor(zoomPane, 0.0);
+        AnchorPane.setLeftAnchor(zoomPane, MAP_BORDER);//00
+        AnchorPane.setRightAnchor(zoomPane, MAP_BORDER);
         AnchorPane.setBottomAnchor(zoomPane, EDGE * 2); //+ GAP + 2 * EDGE
 
         map.setMinWidth(MAP_WIDTH);
