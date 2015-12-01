@@ -11,10 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -193,7 +190,7 @@ public class Display {
         divider_2.visibleProperty().bind(DASHBOARD_VISIBLE);
         divider_3.visibleProperty().bind(DASHBOARD_VISIBLE);
 
-        AnchorPane.setTopAnchor(divider_0, EDGE + 1);
+        AnchorPane.setTopAnchor(divider_0, EDGE + 2);
         AnchorPane.setLeftAnchor(divider_0, GAP);
         AnchorPane.setRightAnchor(divider_0, GAP);
 
@@ -395,6 +392,7 @@ public class Display {
         Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller);
         walkingSpeedBox.setTranslateX(8);  //TODO fix width of this?
         walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
+        walkingSpeedBox.setPromptText("Walking speed");
 
         walkingSpeedBox.setOnAction(e -> handleWalkingInput(walkingSpeedBox, true));    //TODO finish handleWalkingInput
 
@@ -522,10 +520,11 @@ public class Display {
         rightArrowButton.setId("arrow-buttons-grayed");
         rightArrowButton.setOnAction(e -> handleRightArrowButton());
 
-
+        AnchorPane.setRightAnchor(leftArrowButton, expandedWidth - 5.5 - leftArrowButton.getPrefWidth());
         AnchorPane.setTopAnchor(leftArrowButton, 5.5);
         AnchorPane.setLeftAnchor(leftArrowButton, 8.0);
 
+        AnchorPane.setLeftAnchor(rightArrowButton, expandedWidth - 5.5 - rightArrowButton.getPrefWidth());
         AnchorPane.setTopAnchor(rightArrowButton, 5.5);
         AnchorPane.setRightAnchor(rightArrowButton, 8.0);   //TODO add listeners for the buttons
 
@@ -655,6 +654,7 @@ public class Display {
         zoomPane.setOnMouseEntered(e->{
             zoomPane.requestFocus();
         });
+
 
 
         AnchorPane.setTopAnchor(zoomPane, EDGE);//
@@ -812,8 +812,8 @@ public class Display {
         //this.start.setPlaceholder(new Label("Search or Select Starting Location"));
         //this.end.setPlaceholder(new Label("Search or Select End Location"));
 
-        this.start.setPromptText("Search or Select Start");
-        this.end.setPromptText("Search or Select End");
+        this.start.setPromptText("Starting point");
+        this.end.setPromptText("Destination");
 
         this.start.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue && firstTime.get()) {
