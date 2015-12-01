@@ -1,9 +1,9 @@
 package logic;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
-import logic.Map;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Created by Henry on 11/15/2015.
  */
@@ -19,7 +19,7 @@ public class MapTesting {
 
     @Test
     public void setPathTest1() {
-        copyMap.setPath("foo/foo/foo");
-        assertEquals("getPath returned incorrect value from setPath", "foo/foo/foo", copyMap.getPath());
+        copyMap.setFilePath("foo/foo/foo");
+        assertEquals("getFilePath returned incorrect value from setFilePath", "foo/foo/foo", copyMap.getFilePath());
     }
 }
