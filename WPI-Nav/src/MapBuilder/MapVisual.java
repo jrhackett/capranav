@@ -317,8 +317,23 @@ public class MapVisual extends Pane {
 				if (e.getClickCount() >= 2) {
 					System.out.println("Node double clicked");
 					// set selected node to null
-					// Do special case to enter node info
-					// Change colour
+					
+					// Generate pop-over
+					// Add buttons for each kind of node
+					// When a specific button is picked, modify the other elements in the pop-over to display pertinent information
+					
+					// Once the information is entered, store it temporarally
+					
+					// Once the pop-over is exited (by clicking anywhere else
+						// take the old node
+						// take the INode specific info: Heuristics, x, y, z, etc
+						// Make a new node of the specified type
+						// Enter old node information
+						// Enter new information (i.e. name)
+						// save new node to nodeList in controller
+					
+					//Close the pop-over
+					//Redraw all the nodes so that special onces are a certain colour
 				} else {
 					if (controller.isNodeSelected() && controller.getSelectedNode().getID() == v.getID()) {
 						System.out.println("Node Deselected");

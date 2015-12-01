@@ -151,8 +151,15 @@ public class Parser<Struct> {
 
 		for (int i = 0; i < mTypes.length; i++) {
 			try {
-				System.out.println(mNames[i]);
-				parser = new JsonStreamParser(new FileReader(mNames[i]));
+				//System.out.println(mNames[i]);
+				//System.out.println(new File(".").getAbsoluteFile());
+				
+				FileReader fileReader = new FileReader(mNames[i]);
+				
+				//System.out.println("File Reader successful");
+				System.out.println(fileReader);
+				
+				parser = new JsonStreamParser(fileReader);
 			} catch (FileNotFoundException e) {
 				System.out.println("Parser File not found.");
 				return null;
@@ -161,10 +168,12 @@ public class Parser<Struct> {
 			while (parser.hasNext()) {
 				temp = (IMap) gson.fromJson(parser.next(), mTypes[i]);
 				maps.put(temp.getID(), temp);
+				
+				System.out.println("ID: " + temp.getID() + ", Value: " + temp);
 			}
 		}
 
-		System.out.println(maps.size());
+		
 		return maps;
 	}
 

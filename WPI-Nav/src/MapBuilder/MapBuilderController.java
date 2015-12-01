@@ -52,7 +52,7 @@ public class MapBuilderController extends Application {
 		this.nextNodeID = 0; // TODO FIX THIS ID INCREMENT THING
 		potentialEdgeNodes = new ArrayList<>();
 
-		//mapsFromFile();
+		mapsFromFile();
 		nodesFromFile();
 
 		// loadNodesFromFile();
@@ -145,6 +145,31 @@ public class MapBuilderController extends Application {
 		 * nodeList.get(id).setName(mapPrefix + " " +
 		 * nodeList.get(id).getName());
 		 */
+	}
+	
+	/**
+	 * This takes in two nodes, the original with x, y, and edge information and the new with type specific info
+	 * and combines them to form an updated node. This node is then added to the nodeList
+	 * 
+	 * @param originalNode ID of original node to modify type and info
+	 * @param newNode New node to add with type and specific info
+	 * 
+	 */
+	public void updateNodeType(int originalNodeID, INode newNode){
+		INode originalNode = nodeList.get(originalNodeID);
+		
+		// set the coordinates to be the same
+		newNode.setX(originalNode.getX());
+		newNode.setX(originalNode.getY());
+		newNode.setX(originalNode.getZ());
+		
+		// set the ID
+		newNode.setID(originalNodeID);
+		
+		newNode.setAdjacencies(originalNode.getAdjacencies());
+		
+		nodeList.put(originalNodeID, newNode);
+		
 	}
 
 	/**
@@ -271,7 +296,7 @@ public class MapBuilderController extends Application {
 	public void nodesFromFile() {
 		this.masterNodeList = new Parser<INode>().fromFileGraph();
 		
-		System.out.println(masterNodeList.size());
+		
 	}
 
 	/**
@@ -289,11 +314,6 @@ public class MapBuilderController extends Application {
 	public void mapsFromFile() {
 		this.maps = new Parser<IMap>().fromFileMap();
 
-		if (this.maps == null) {
-			System.out.println("Map List wasn't initialized correctly");
-		} else {
-			System.out.println(this.maps.size());
-		}
 	}
 
 	public static void main(String[] args) {
