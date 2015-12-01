@@ -180,13 +180,15 @@ public class MapDisplay extends Pane {
         } else {
             circle.setOnMouseClicked(e -> {
                 if (e.getButton().equals(MouseButton.SECONDARY) && e.getClickCount() == 1) {
-                    controller.showNodeImage(v);
+                    controller.showNodeImage();
                 } else if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
                     controller.handleMapClick(v);
-                    controller.updateNodeInformation(v.getIcon(), v.toString());
                 }
             });
         }
+        circle.setOnMouseEntered(e -> {
+            controller.updateNodeInformation(v);
+        });
 
         return circle;
     }
