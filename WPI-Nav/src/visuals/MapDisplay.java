@@ -30,7 +30,7 @@ public class MapDisplay extends Pane {
     private HashMap<Integer, Circle> id_circle;
     private Controller controller;
     private HashMap<Integer, ArrayList<Line>> lines; /* mapId to line */
-    ArrayList<Integer> idPath;
+    ArrayList<INode> idPath;
 
     /* Visuals */
     private Transition sts;
@@ -144,16 +144,32 @@ public class MapDisplay extends Pane {
         st.play();
     }
 
+    /**
+     * default circle
+     *
+     * @param c
+     */
+    public void normal(Circle c, INode v) {
+        if (v != null && v.isTransition()) {
+            c.setFill(Color.YELLOW);
+        } else {
+            c.setFill(Color.TRANSPARENT);
+        }
+        c.setStrokeWidth(0);
+        c.setRadius(5);
+        c.setOpacity(1);
+        c.setEffect(null);
+    }
+
 
     private Circle createCircle(INode v) {
 
         double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
         double y = v.getY();
         Circle circle = new Circle(x, y, 5);
-        normal(circle);
+        normal(circle, v);
 
-        /** this is some trash trash trash, we'll do it better when we set up svgs better"*/
-        if (v instanceof logic.Transition) {
+        if (v.isTransition()) {
             circle.setOnMouseClicked(e -> {
                 if (e.getButton().equals(MouseButton.SECONDARY) && e.getClickCount() == 1) {
                     //enter building
@@ -179,18 +195,6 @@ public class MapDisplay extends Pane {
         return circle;
     }
 
-    /**
-     * default circle
-     *
-     * @param c
-     */
-    public void normal(Circle c) {
-        c.setFill(Color.BLUE);
-        c.setStrokeWidth(0);
-        c.setRadius(5);
-        c.setOpacity(1);
-        c.setEffect(null);
-    }
 
 
     /**
@@ -225,12 +229,21 @@ public class MapDisplay extends Pane {
     }
 
 
+    public void changeBackOldPathNodes(){
+        for (INode i : idPath){
+            normal(id_circle.get(i),i );
+        }
+    }
+
     /**
      * Show path of nodes
      */
 
     public void createPath(ArrayList<ArrayList<Instructions>> path) {
         idPath = new ArrayList<>(); //TODO AM I REMVOING THE OLD LINES
+
+        changeBackOldPathNodes();
+
 
         double coordX = path.get(0).get(0).getNode().getX();
         double coordY = path.get(0).get(0).getNode().getY();
@@ -240,7 +253,7 @@ public class MapDisplay extends Pane {
             for (Instructions i : list) {
                 /** path nodes highlight blue **/
                 highlightPath(id_circle.get(i.getNode().getID()));
-                idPath.add(i.getNode().getID());
+                idPath.add(i.getNode());
 
                 /** create all the lines and add them to a list **/
                 Line line = new Line();
@@ -307,7 +320,6 @@ public class MapDisplay extends Pane {
             if (ste != null) ste.stop();
             c.setRadius(5);
 
-
             ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
             st.setByX(1.1f);
             st.setByY(1.1f);
@@ -341,14 +353,14 @@ public class MapDisplay extends Pane {
      */
     public void removeNode(int id) {
         if (id_circle.containsKey(id)) {
-            normal(id_circle.get(id));//hideLast(id)
+            //normal(id_circle.get(id), );//hideLast(id)
             this.getChildren().remove(id_circle.remove(id));
             id_circle.remove(id);
         }
     }
 
     public void hideLast(int id) {
-        normal(id_circle.get(id));
+        normal(id_circle.get(id), null);
     }
 
 
