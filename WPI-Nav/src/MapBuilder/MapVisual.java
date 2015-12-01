@@ -13,7 +13,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import logic.Edge;
 import logic.INode;
-import logic.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +25,9 @@ public class MapVisual extends Pane {
 	private double height;
 	private double width;
 	private int currentMapID;
+
+	private double IMAGE_WIDTH = 700;//660
+	private double IMAGE_HEIGHT = 525;//495
 
 	private HashMap<Integer, Circle> id_circle;
 	private MapBuilderController controller;
@@ -76,17 +78,18 @@ public class MapVisual extends Pane {
 		try {
 			// Image(getClass().getResourceAsStream("../images/" + map.getPath()
 			// + ".png"), 660, 495, true, true);
-			this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getFilePath() + ".png"));
+			this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getFilePath()));
 		} catch (NullPointerException e) {
 			// Image(getClass().getResourceAsStream("/images/" + map.getPath() +
 			// ".png"), 660, 495, true, true);
-			this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getFilePath() + ".png"));
+			this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getFilePath()));
 		}
 
 		this.mapView = new ImageView(mapImage);
-
+		mapView.setFitHeight(IMAGE_HEIGHT);
+		mapView.setFitWidth(IMAGE_WIDTH);
 		// mapView.setFitWidth(width/2);
-		mapView.setPreserveRatio(true);
+		//mapView.setPreserveRatio(true);
 		// mapView.setCache(true);
 
 		// add the mapView object
@@ -320,7 +323,9 @@ public class MapVisual extends Pane {
 				if (e.getClickCount() >= 2) {
 					System.out.println("Node double clicked");
 					// set selected node to null
-					
+
+
+
 					// Generate pop-over
 					// Add buttons for each kind of node
 					// When a specific button is picked, modify the other elements in the pop-over to display pertinent information

@@ -1,25 +1,16 @@
 package MapBuilder;
 
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.stage.Screen;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import visuals.Inputs;
 
 import java.util.Collection;
-import java.util.Set;
-
-import javafx.application.Application;
-import javafx.geometry.Rectangle2D;
-import visuals.Inputs;
 
 public class MapBuilderDisplay extends VBox {
 	/* constants */
@@ -73,8 +64,12 @@ public class MapBuilderDisplay extends VBox {
 
 		map_zone.prefWidthProperty().bind(this.widthProperty());
 
-		this.setAlignment(Pos.TOP_LEFT);
+		HBox sections = new HBox();
+		//LEFT / PRIMARY AREA
+		//sections.
 
+
+		this.setAlignment(Pos.TOP_LEFT);
 		this.prefHeightProperty().bind(stage.heightProperty());
 		this.prefWidthProperty().bind(stage.widthProperty());
 	}
