@@ -81,6 +81,7 @@ public class Display {
 
     private BooleanProperty DASHBOARD_VISIBLE;
     private BooleanProperty SETTINGS_VISIBLE;
+    private BooleanProperty EMAIL_VISIBLE;
     public BooleanProperty BUILDING_VISIBLE;
     private boolean EMAIL = false;
     //Visual Elements
@@ -123,6 +124,7 @@ public class Display {
         this.DASHBOARD_VISIBLE = new SimpleBooleanProperty(true);
         this.SETTINGS_VISIBLE = new SimpleBooleanProperty(true);
         this.BUILDING_VISIBLE = new SimpleBooleanProperty(false);
+        this.EMAIL_VISIBLE = new SimpleBooleanProperty(false);
 
         this.EDGE = GAP * 2 + CONTROL_WIDTH;
     }
@@ -526,16 +528,19 @@ public class Display {
 
         AnchorPane.setLeftAnchor(rightArrowButton, expandedWidth - 5.5 - rightArrowButton.getPrefWidth());
         AnchorPane.setTopAnchor(rightArrowButton, 5.5);
-        AnchorPane.setRightAnchor(rightArrowButton, 8.0);   //TODO add listeners for the buttons
+        AnchorPane.setRightAnchor(rightArrowButton, 8.0);
 
         instructionArrows.getChildren().addAll(leftArrowButton, rightArrowButton);
 
         AnchorPane.setTopAnchor(instructions, EDGE + 36);
         AnchorPane.setLeftAnchor(instructions, 0.0);
         AnchorPane.setRightAnchor(instructions, 0.0);
-        AnchorPane.setBottomAnchor(instructions, EDGE);
+        //AnchorPane.setBottomAnchor(instructions, EDGE);
+
+
 
         /** Email Box **/
+
         HBox emailBox = new HBox();
         emailBox.setStyle("-fx-background-color: #ffffff");
         emailBox.setMinHeight(EDGE);
@@ -544,45 +549,43 @@ public class Display {
         emailBox.setAlignment(Pos.CENTER_LEFT);
         emailBox.setSpacing(GAP * 3);
 
-      /*  SVGPath emailView = new SVGPath();
-        emailView.setContent("M356.92,57.712H15.525C6.986,57.712,0,64.7,0,73.236v225.971c0,8.539,6.986,15.525,15.525,15.525H356.92"+
-                "c8.538,0,15.524-6.986,15.524-15.525V73.236C372.444,64.699,365.458,57.712,356.92,57.712z M242.954,197.005"+
-                "c28.809,19.424,103.25,77.049,103.25,77.049c2.965,2.009,3.177,7.16,1.693,10.229c-1.483,3.07-6.122,4.938-9.087,2.93"+
-                "c0,0-79.24-57.212-109.561-77.969c-1.678-1.148-3.164,0.23-3.164,0.23l-33.247,26.527c-1.818,1.492-4.215,2.314-6.745,2.314"+
-                "s-4.926-0.822-6.746-2.314l-33.629-26.838c0,0-1.158-1.009-2.475-0.096c-29.972,20.805-108.867,78.145-108.867,78.145"+
-                "c-2.964,2.009-8.604,0.141-10.087-2.93c-1.483-3.068-1.271-8.22,1.693-10.229c0,0,74.535-57.445,102.884-76.768"+
-                "c1.619-1.104-0.08-2.727-0.08-2.727L23.662,99.908c-3.822-3.133-4.966-8.744-2.605-12.775c1.402-2.398,3.872-3.83,6.604-3.83"+
-                "c1.924,0,3.865,0.723,5.466,2.035l149.502,131.025c0.883,0.723,2.145,1.139,3.464,1.139s2.581-0.416,3.465-1.139L339.059,85.338"+
-                "c1.601-1.313,3.542-2.035,5.467-2.035c2.732,0,5.201,1.432,6.604,3.83c2.36,4.031,1.216,9.643-2.604,12.775l-105.404,94.945"+
-                "C243.121,194.854,241.636,196.114,242.954,197.005z");
 
-        emailView.setScaleX(.05);
-        emailView.setScaleY(.05);
-        emailView.setTranslateX(-50*3 - 15);
-        emailView.setTranslateY(-50 + 8);*/
+
         Image emailImage = new Image(getClass().getResourceAsStream("../images/email109.png"), 25, 25, true, true);
         ImageView emailView = new ImageView(emailImage);
-        // emailImage.
 
-        VBox emailIconBox = new VBox();
-        //Image email =	new Image(getClass().getResourceAsStream("../images/email109.png"), 30, 30, true, true);
-        //ImageView emailView = new ImageView(email);
-        emailView.setTranslateX(8);
-        emailView.setTranslateY(7);
-        emailIconBox.getChildren().addAll(emailView);
+        //VBox emailIconBox = new VBox();
+        emailView.setTranslateX(7);
+        emailView.setTranslateY(0);
+        /*emailIconBox.getChildren().addAll(emailView);
         emailIconBox.setMaxWidth(20);
         emailIconBox.setMaxHeight(20);
         emailIconBox.setStyle("-fx-background-color: #ffffff");
-        emailIconBox.setMinHeight(EDGE);
+        emailIconBox.setMinHeight(EDGE);*/
+
 
 
         /** Label **/
         Label emailLabel = new Label("Email Me");
         emailLabel.setTextFill(Color.web("#333333"));
-        emailBox.getChildren().addAll(emailIconBox, emailLabel);
+        //emailBox.getChildren().addAll(emailIconBox, emailLabel);
 
         emailLabel.setOnMouseClicked(e -> handleEmail(emailBox));
         emailView.setOnMouseClicked(e -> handleEmail(emailBox));
+
+        /** Sliding Anchor Pane **/
+        SlidingAnchorPane slidingEmail = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, emailView);
+        slidingEmail.setStyle("-fx-background-color:white;");
+
+        javafx.scene.control.Button slidingEmailButton = slidingEmail.getButton();
+        slidingEmailButton.setId("dashboardButton");
+        slidingEmailButton.setStyle("-fx-background-color:white;");
+        slidingEmailButton.setMaxWidth(EDGE - 5);
+        slidingEmailButton.setMinWidth(EDGE - 5);
+        slidingEmailButton.setPrefWidth(EDGE - 5);
+        emailBox.getChildren().addAll(slidingEmailButton, emailLabel);  //TODO fix this sliding pane, if we don't want just comment out SlidingAnchorPane stuff and uncomment some of the addAll of panes
+                                                                        //TODO anchor the listView instructions back to the bottom
+
 
         AnchorPane.setBottomAnchor(emailBox, 0.0);
         AnchorPane.setLeftAnchor(emailBox, 0.0);
