@@ -13,7 +13,6 @@ import visuals.Display;
 import visuals.Instructions;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 
@@ -606,6 +605,10 @@ public class Controller extends Application {
      */
     public void findPaths(){
 
+        //MAKE ALL NODES NORMAL
+
+
+
         //set ids
         if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
             this.myDisplay.setIDRightArrowButton("arrow-buttons");
@@ -690,19 +693,6 @@ public class Controller extends Application {
 
     private void mapsFromFile() {
         maps = new Parser<IMap>().fromFileMap();
-    }
-
-    //TODO This might not be needed anymore.. Charlie can decide
-    private void campusFromFile(){
-        HashMap<Integer, IMap> temp = new Parser<Building>().fromFileMap();
-        Collection<IMap> maps = temp.values();
-
-        for(IMap m : maps) {
-            if (m instanceof Campus) {
-                campus = (Campus)m;
-                break;
-            }
-        }
     }
 
     /****************************************************************************************************************
