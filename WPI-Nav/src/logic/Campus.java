@@ -5,8 +5,6 @@ package logic;
  */
 public class Campus extends Map {
 
-    private int buildingID;
-
     public Campus(int id, String path, double pixelToFeetRatio){
         super(id, path, pixelToFeetRatio);
     }
@@ -15,10 +13,14 @@ public class Campus extends Map {
         super(map);
     }
 
-    public Campus(){}
+    public int getBuildingID(){
+        return 0;
+    }
 
+    public int getFloor(){
+        return  0;
+    }
 
     public boolean inside() { return false;}
-
 
 }

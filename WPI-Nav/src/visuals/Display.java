@@ -3,10 +3,13 @@ package visuals;
 import controller.Controller;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -19,7 +22,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
-import javafx.scene.text.Text;
 import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +93,7 @@ public class Display {
     private AnchorPane map; //VBox
     public StackPane root;
     private HBox dashBoardTitleBox;
-    private ListView<String> instructions; //ListView<Instruction>
+    private ListView<Instructions> instructions; //ListView<Instruction>
     private javafx.scene.control.Button hiddenHandler;
 
 
@@ -99,8 +101,14 @@ public class Display {
     private Label buildingNumber;
 
     private Label nodeTitle;
+    private StackPane nodeViewHolder;
     private ImageView nodeView;
 
+    private javafx.scene.control.Button left;
+    private javafx.scene.control.Button right;
+
+    javafx.scene.control.Button leftArrowButton;
+    javafx.scene.control.Button rightArrowButton;
 
     /**
      * Basic constructor.
@@ -159,7 +167,7 @@ public class Display {
         /** create scene **/
         root.setAlignment(Pos.TOP_LEFT);
 
-        Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 2 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
+        Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 5 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE * 4);//+MAP_BORDER*2+TITLE_HEIGHT
         //Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+EDGE*2+expandedWidth*2, MAP_WIDTH + 2 * EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
 
         return scene;
@@ -211,10 +219,10 @@ public class Display {
                 "c31.846,57.063,63.168,104.643,64.484,106.64l22.942,34.775l22.941-34.774c1.317-1.998,32.641-49.577,64.483-106.64" +
                 "c45.023-80.68,66.908-136.559,66.908-170.834C387.625,69.234,318.391,0,233.292,0z M233.292,233.291c-44.182,0-80-35.817-80-80" +
                 "s35.818-80,80-80c44.182,0,80,35.817,80,80S277.473,233.291,233.292,233.291z");
-        pinView.setScaleX(.05);
-        pinView.setScaleY(.05);
+        pinView.setScaleX(.04);
+        pinView.setScaleY(.04);
         pinView.setTranslateX(-50 * 2.5 - 15);
-        pinView.setTranslateY(-50 * 4.5);
+        pinView.setTranslateY(-50 * 4.5 + 3);
         pinView.setId("pinView");
 
         //Image info =			new Image(getClass().getResourceAsStream("../images/info.png"), 20, 20, true, true);
@@ -226,10 +234,10 @@ public class Display {
                 "s-31.782-14.239-31.782-31.782V222.477c0-17.544,14.239-31.782,31.782-31.782s31.782,14.239,31.782,31.782V381.39z" +
                 "M254.26,159.421c-17.544,0-31.782-14.239-31.782-31.782s14.239-31.782,31.782-31.782s31.782,14.239,31.782,31.782" +
                 "S271.804,159.421,254.26,159.421z");
-        infoView.setScaleX(.05);
-        infoView.setScaleY(.05);
+        infoView.setScaleX(.035);
+        infoView.setScaleY(.035);
         infoView.setTranslateX(-50 * 4.5 - 9);
-        infoView.setTranslateY(-50 * 2 - 12);
+        infoView.setTranslateY(-50 * 2 - 11);
         infoView.setId("pinView");
 
 
@@ -313,12 +321,14 @@ public class Display {
         VBox bars = new VBox();
         bars.setSpacing(3);
         for (int i = 0; i < 4; i++) {
-            Rectangle bar = new Rectangle(CONTROL_WIDTH - 7, 3);
+            Rectangle bar = new Rectangle(CONTROL_WIDTH - 8, 3);
             bar.setArcHeight(3);
             bar.setArcWidth(3);
             bar.setFill(Color.web("#eeeeee"));
             bars.getChildren().add(bar);
         }
+        bars.setTranslateX(1);
+        bars.setTranslateY(1);
 
         AnchorPane.setTopAnchor(dashBoardTitleBox, 0.0);
         AnchorPane.setLeftAnchor(dashBoardTitleBox, EDGE);
@@ -392,15 +402,47 @@ public class Display {
 
         javafx.scene.control.Button slidingButton = slidingSettings.getButton();
         slidingButton.setId("dashboardButton");
-        slidingButton.setMaxWidth(EDGE);
-        slidingButton.setMinWidth(EDGE);
-        slidingButton.setPrefWidth(EDGE);
+        slidingButton.setMaxWidth(EDGE - 5);
+        slidingButton.setMinWidth(EDGE - 5);
+        slidingButton.setPrefWidth(EDGE - 5);
         //AnchorPane.setBottomAnchor(slidingButton, 0.0);
         //AnchorPane.setLeftAnchor(slidingButton, 0.0);
         settingsLabelBox.getChildren().addAll(slidingButton, settingsLabel);
 
+        HBox settingsWalkingBox = new HBox();
+        Label settingsWalkingLabel = new Label("Set walking speed:");
+        settingsWalkingLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        settingsWalkingLabel.setTextFill(Color.web("#eeeeee"));
+
+        settingsWalkingBox.getChildren().addAll(settingsWalkingLabel);
+
+        ArrayList<Walking> walkingArrayList = new ArrayList<>();
+        walkingArrayList.add(new Walking("Walking with your grandmother (slow)", 0.5));
+        walkingArrayList.add(new Walking("Normal walking pace (medium)", 1.0));
+        walkingArrayList.add(new Walking("Walking to class when late (fast)", 1.5));
+        Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller);
+        walkingSpeedBox.setTranslateX(8);  //TODO fix width of this?
+        walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
+
+        walkingSpeedBox.setOnAction(e -> handleWalkingInput(walkingSpeedBox, true));    //TODO finish handleWalkingInput
+
+        TextField emailTextField = new TextField();
+        emailTextField.setPromptText("Enter your email");
+        emailTextField.setMaxWidth(INPUT_WIDTH);
+        emailTextField.setMaxHeight(walkingSpeedBox.getMaxHeight());
+        emailTextField.setTranslateX(8);
+        emailTextField.setTranslateY(8);
+        emailTextField.setId("text-field");
+
+        Label setEmailLabel = new Label("Set your email:");
+        setEmailLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        setEmailLabel.setTextFill(Color.web("#eeeeee"));
+
+        emailTextField.setOnAction(e -> handleEmailInput(emailTextField, true));    //TODO finish handleWalkingInput
+
         VBox settingsVbox = new VBox();
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox);
+        settingsVbox.visibleProperty().bind(DASHBOARD_VISIBLE);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
@@ -447,10 +489,10 @@ public class Display {
         directionsTitleBox.setSpacing(GAP * 3);
 
         VBox directionsControlBox = new VBox();
-        Image directionsArrow = new Image(getClass().getResourceAsStream("../images/forward.png"), 30, 30, true, true);
+        Image directionsArrow = new Image(getClass().getResourceAsStream("../images/forward.png"), 27, 27, true, true);
         ImageView directionsArrowView = new ImageView(directionsArrow);
-        directionsArrowView.setTranslateX(5);
-        directionsArrowView.setTranslateY(2);
+        directionsArrowView.setTranslateX(8);
+        directionsArrowView.setTranslateY(5);
         directionsControlBox.getChildren().addAll(directionsArrowView);
         directionsControlBox.setStyle("-fx-background-color: #ac2738");
         directionsControlBox.setMinHeight(EDGE);
@@ -467,10 +509,46 @@ public class Display {
         AnchorPane.setRightAnchor(directionsTitleBox, 0.0);
 
 
-        /** TableView **/
+        /** ListView **/
         createInstructionListView();
 
-        AnchorPane.setTopAnchor(instructions, EDGE);
+        AnchorPane instructionArrows = new AnchorPane();
+
+        instructionArrows.setPrefHeight(36);
+        instructionArrows.setMinHeight(36);
+        instructionArrows.setMaxHeight(36);
+        instructionArrows.setMinWidth(0);
+
+        AnchorPane.setTopAnchor(instructionArrows, EDGE);
+        AnchorPane.setLeftAnchor(instructionArrows, 0.0);
+        AnchorPane.setRightAnchor(instructionArrows, 0.0);
+
+        Image leftArrow = new Image(getClass().getResourceAsStream("../images/leftArrow.png"), 24, 24, true, true);
+        ImageView leftArrowView = new ImageView(leftArrow);
+
+        leftArrowButton = new javafx.scene.control.Button();
+        leftArrowButton.setGraphic(leftArrowView);
+        leftArrowButton.setId("arrow-buttons-grayed");
+        leftArrowButton.setOnAction(e -> handleLeftArrowButton());
+
+        Image rightArrow = new Image(getClass().getResourceAsStream("../images/rightArrow.png"), 24, 24, true, true);
+        ImageView rightArrowView = new ImageView(rightArrow);
+
+        rightArrowButton = new javafx.scene.control.Button();
+        rightArrowButton.setGraphic(rightArrowView);
+        rightArrowButton.setId("arrow-buttons-grayed");
+        rightArrowButton.setOnAction(e -> handleRightArrowButton());
+
+
+        AnchorPane.setTopAnchor(leftArrowButton, 5.5);
+        AnchorPane.setLeftAnchor(leftArrowButton, 8.0);
+
+        AnchorPane.setTopAnchor(rightArrowButton, 5.5);
+        AnchorPane.setRightAnchor(rightArrowButton, 8.0);   //TODO add listeners for the buttons
+
+        instructionArrows.getChildren().addAll(leftArrowButton, rightArrowButton);
+
+        AnchorPane.setTopAnchor(instructions, EDGE + 36);
         AnchorPane.setLeftAnchor(instructions, 0.0);
         AnchorPane.setRightAnchor(instructions, 0.0);
         AnchorPane.setBottomAnchor(instructions, EDGE);
@@ -500,15 +578,15 @@ public class Display {
         emailView.setScaleY(.05);
         emailView.setTranslateX(-50*3 - 15);
         emailView.setTranslateY(-50 + 8);*/
-        Image emailImage = new Image(getClass().getResourceAsStream("../images/email109.png"), 30, 30, true, true);
+        Image emailImage = new Image(getClass().getResourceAsStream("../images/email109.png"), 25, 25, true, true);
         ImageView emailView = new ImageView(emailImage);
         // emailImage.
 
         VBox emailIconBox = new VBox();
         //Image email =	new Image(getClass().getResourceAsStream("../images/email109.png"), 30, 30, true, true);
         //ImageView emailView = new ImageView(email);
-        emailView.setTranslateX(5);
-        emailView.setTranslateY(10);
+        emailView.setTranslateX(8);
+        emailView.setTranslateY(7);
         emailIconBox.getChildren().addAll(emailView);
         emailIconBox.setMaxWidth(20);
         emailIconBox.setMaxHeight(20);
@@ -528,7 +606,7 @@ public class Display {
         AnchorPane.setLeftAnchor(emailBox, 0.0);
         AnchorPane.setRightAnchor(emailBox, 0.0);
 
-        directions.getChildren().addAll(directionsTitleBox, instructions, emailBox);
+        directions.getChildren().addAll(directionsTitleBox, instructionArrows, instructions, emailBox);
         directions.setStyle("-fx-background-color: #ffffff");
         directions.setPrefWidth(expandedWidth + EDGE);
         directions.setMinWidth(0);
@@ -558,18 +636,25 @@ public class Display {
         AnchorPane.setRightAnchor(mapTitle, 0.0);
 
         /** Hidden Sliding Panel **/
-        slidingBuilding  = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, BUILDING_VISIBLE, new Text("hidden"));
+        //slidingBuilding  = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, BUILDING_VISIBLE, new Text("hidden"));
         HBox nodeBox     = createNodeBox();
         HBox buildingBox = createBuildingBox();
         buildingBox.visibleProperty().bind(BUILDING_VISIBLE);
 
-        slidingBuilding.getChildren().addAll(nodeBox, buildingBox);//buildingBox
-        slidingBuilding.setMaxHeight(EDGE);
-        slidingBuilding.setMinHeight(0);
+        //slidingBuilding.getChildren().addAll(nodeBox, buildingBox);//buildingBox
+        //slidingBuilding.setMaxHeight(EDGE);
+        //slidingBuilding.setMinHeight(0);
 
-        AnchorPane.setBottomAnchor(slidingBuilding, 0.0);
-        AnchorPane.setLeftAnchor(slidingBuilding, 0.0);
-        AnchorPane.setRightAnchor(slidingBuilding, 0.0);
+        VBox information = new VBox();
+        information.getChildren().addAll(nodeBox, buildingBox);
+        information.setAlignment(Pos.CENTER);
+        information.setSpacing(GAP * 4); //play with this
+
+        AnchorPane.setBottomAnchor(information, GAP * 5);
+        AnchorPane.setLeftAnchor(information, 0.0);
+        AnchorPane.setRightAnchor(information, 0.0);
+
+
 
 
 
@@ -577,10 +662,19 @@ public class Display {
         this.mapPane = createMapPane();
         mapPane.setAlignment(Pos.CENTER);
 
-        AnchorPane.setTopAnchor(mapPane, EDGE + MAP_BORDER);//
-        AnchorPane.setLeftAnchor(mapPane, MAP_BORDER);
-        AnchorPane.setRightAnchor(mapPane, MAP_BORDER);
-        AnchorPane.setBottomAnchor(mapPane, MAP_BORDER);
+       /* AnchorPane.setTopAnchor(mapPane, EDGE);//
+        AnchorPane.setLeftAnchor(mapPane, 0.0);
+        AnchorPane.setRightAnchor(mapPane, 0.0);
+        AnchorPane.setBottomAnchor(mapPane, EDGE * 2); //+ GAP + 2 * EDGE
+*/
+        Group group = new Group(mapPane);
+        GraphicsScaling graphicsScaling = new GraphicsScaling();
+        Parent zoomPane = graphicsScaling.createZoomPane(group);
+
+        AnchorPane.setTopAnchor(zoomPane, EDGE);//
+        AnchorPane.setLeftAnchor(zoomPane, 0.0);
+        AnchorPane.setRightAnchor(zoomPane, 0.0);
+        AnchorPane.setBottomAnchor(zoomPane, EDGE * 2); //+ GAP + 2 * EDGE
 
 
 
@@ -590,7 +684,7 @@ public class Display {
         map.setMinHeight(MAP_HEIGHT + EDGE);
         map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE + EDGE); // + EDGE for NODE INFO
 
-        map.getChildren().addAll(mapTitle, mapPane, slidingBuilding);
+        map.getChildren().addAll(mapTitle, zoomPane, information);
         map.setStyle("-fx-background-color:#eeeeee ;");
 
     }
@@ -619,18 +713,17 @@ public class Display {
     private HBox createNodeBox(){
         HBox hbox = new HBox();
 
-        nodeView = new ImageView();
+        nodeViewHolder = new StackPane();
         nodeTitle = new Label();
 
 
-        hbox.getChildren().addAll(nodeView, nodeTitle);
+        hbox.getChildren().addAll(nodeViewHolder, nodeTitle);
         hbox.setMaxHeight(EDGE);
         hbox.setMinHeight(EDGE);
         hbox.setAlignment(Pos.CENTER);
-        hbox.setSpacing(EDGE);//TODO MAKE SURE THIS LOOKS GOOD
+        hbox.setSpacing(GAP);//TODO MAKE SURE THIS LOOKS GOOD
 
         return hbox;
-
     }
 
     public void updateNodeTitle(String s){
@@ -638,6 +731,9 @@ public class Display {
     }
 
     public void updateNodeIcon(ImageView i){
+        System.out.println("node view icon");
+        this.nodeViewHolder.getChildren().remove(nodeView);
+        this.nodeViewHolder.getChildren().add(i); //= i;
         this.nodeView = i;
     }
 
@@ -645,8 +741,21 @@ public class Display {
     private HBox createBuildingBox() { //its going to be an HBox with stuff inside of the sliding anchorpane
 
         HBox box = new HBox();
-        javafx.scene.control.Button left = new javafx.scene.control.Button("<");
-        javafx.scene.control.Button right = new javafx.scene.control.Button(">");
+        this.left = new javafx.scene.control.Button();
+        this.right = new javafx.scene.control.Button();
+
+        Image minus = new Image(getClass().getResourceAsStream("../images/minus104.png"), 20, 20, true, true);
+        Image plus = new Image(getClass().getResourceAsStream("../images/plus79.png"), 20, 20, true, true);
+
+        ImageView minusView = new ImageView(minus);
+        ImageView plusView = new ImageView(plus);
+
+        this.left.setGraphic(minusView);
+        this.right.setGraphic(plusView);
+
+        this.left.setStyle("-fx-background-color:#eee;");
+        this.right.setStyle("-fx-background-color:#eee;");
+
         buildingName = new Label();
         buildingNumber = new Label();
 
@@ -664,12 +773,21 @@ public class Display {
         return box;
     }
 
+    public void setRightButtonID(String id){
+        right.setId(id);
+    }
+
+    public void setLeftButtonID(String id){
+        left.setId(id);
+    }
+
     public void setBuildingName(String s) {
         this.buildingName.setText(s);
     }
 
     public void setBuildingNumber(int i) {
         //TODO ADD FLICKERING ANIMATION
+        System.out.println("building number set called");
         this.buildingNumber.setText(Integer.toString(i));
     }
 
@@ -709,7 +827,7 @@ public class Display {
         //this.end.setPlaceholder(new Label("Search or Select End Location"));
 
         this.start.setPromptText("Search or Select Start");
-        this.end.setPromptText("Search or Select Destination");
+        this.end.setPromptText("Search or Select End");
 
         this.start.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue && firstTime.get()) {
@@ -745,43 +863,6 @@ public class Display {
 
 
     private void createInstructionListView() {
-        this.instructions = new ListView<String>();
-        instructions.setCellFactory((ListView<String> lv) ->
-                new ListCell<String>() {
-                    @Override
-                    public void updateItem(String in, boolean empty) {
-                        super.updateItem(in, empty);
-                        if (empty) {
-                            setText(null);
-                        } else {
-                            // use whatever data you need from the album
-                            // object to get the correct displayed value:
-                            setText(in.toString());
-                        }
-                    }
-                }
-        );
-
-   /*     instructions.getSelectionModel().selectedItemProperty()
-                .addListener((ObservableValue<? extends Instructions> obs, Instructions oldAlbum, Instructions selectedAlbum) -> {
-                    if (selectedAlbum != null) {
-                        // do something with selectedAlbum
-                    }
-                });
-*/
-        instructions.setPlaceholder(new Label(" "));
-        instructions.setMinWidth(0);
-        instructions.setMaxWidth(expandedWidth + EDGE * 2);
-        instructions.setMinHeight(0);
-        //instructions.setPrefHeight(MAP_WIDTH - EDGE * 4);
-        this.instructions.setItems(FXCollections.observableArrayList());
-        //instructions.setPrefHeight(TABLE_HEIGHT);
-        //instructions.getColumns().addAll(Instructions.getColumn(instructions));
-
-
-    }
-/* REAL VERSION
-    private void createInstructionListView() {
         this.instructions = new ListView<Instructions>();
         instructions.setCellFactory((ListView<Instructions> lv) ->
                 new ListCell<Instructions>() {
@@ -800,11 +881,13 @@ public class Display {
         );
 
         instructions.getSelectionModel().selectedItemProperty()
-                .addListener((ObservableValue<? extends Instructions> obs, Instructions oldAlbum, Instructions selectedAlbum) -> {
-                    if (selectedAlbum != null) {
-                        // do something with selectedAlbum
+                .addListener((ObservableValue<? extends Instructions> obs, Instructions oldinstruction, Instructions selectedInstruction) -> {
+                    if (selectedInstruction != null) {
+                        //TODO Set the string of the label to this
+                        this.controller.updateNodeInformation(selectedInstruction.getNode().getIcon(), selectedInstruction.getNode().toString());
                     }
                 });
+
 
         instructions.setPlaceholder(new Label(" "));
         instructions.setMinWidth(0);
@@ -816,7 +899,20 @@ public class Display {
         //instructions.getColumns().addAll(Instructions.getColumn(instructions));
 
 
-    }*/
+    }
+    public void clearInstructions() {
+        this.instructions.setItems(null);
+    }
+
+    /**
+     * Call to set the instructions
+     */
+    public void setInstructions(ArrayList<Instructions> instructions) {
+        ObservableList<Instructions> data = FXCollections.observableArrayList();
+        data.addAll(instructions);
+        this.instructions.setItems(data);
+    }
+
 
 
     /****************************************************************************************************************
@@ -828,6 +924,8 @@ public class Display {
         //TODO add visual affects to both change settings ICON and WORDS
         // TODO Have both flash Green on white?
 
+        //TODO maybe this is where we update the email and other settings?
+
     }
 
     private void handleEmail(Node n) {
@@ -837,7 +935,9 @@ public class Display {
             PopOver popOver = new PopOver();
             VBox emailBox = new VBox();
             TextField yourEmail = new TextField("Enter Email Here");
+            yourEmail.setStyle("-fx-font-size:12;-fx-padding:4 4;");
             javafx.scene.control.Button go = new javafx.scene.control.Button("Send Directions");
+            go.setId("email-button");
             emailBox.getChildren().addAll(yourEmail, go);
             go.setOnAction(e -> {
                 if (yourEmail.getText() != null) {
@@ -879,13 +979,41 @@ public class Display {
 
     }
 
+    //TODO finish this
+    private void handleWalkingInput(Inputs v, boolean START) {
+        String value = (String)v.getValue();
+        //TODO Store value in User
+
+    }
+
+    //TODO finish this
+    private void handleEmailInput(TextField v, boolean START) {
+        //TODO How do you get info from a TextField?? Maybe getCharacters()?
+        //TODO Store value in User
+        v.getCharacters();
+    }
+
+    private void handleRightArrowButton(){
+        this.controller.handleIncrementPathMap();
+    }
+
+    private void handleLeftArrowButton(){
+        this.controller.handleDecrementPathMap();
+    }
+
+    public void setIDRightArrowButton(String s){
+        this.rightArrowButton.setId(s);
+    }
+    public void setIDLeftArrowButton(String s){
+        this.leftArrowButton.setId(s);
+    }
+
     /****************************************************************************************************************
      * FUNCTIONS THAT CONTACT THE CONTROLLER FOR INFORMATION
      ****************************************************************************************************************/
     private boolean sendEmail(String email) {
         if (!email.equals("") && !email.equals("Enter Email Here") && !email.equals("Email Sent") && !email.equals("Invalid Email")) {
-            controller.sendEmail(email);
-            return true;
+            return controller.sendEmail(email); //Should return true if the email goes through
         } else {
             return false;
         }
@@ -1322,37 +1450,6 @@ public class Display {
 		        );
 		return instructions;
 	}*/
-    public void clearInstructions() {
-        this.instructions.setItems(null);
-    }
 
-    /**
-     * Call to set the instructions
-     */
-    public void setInstructions(){ //ArrayList<logic.INode> nodes, ArrayList<String> instructions) {
-        ObservableList<String> data = FXCollections.observableArrayList();
-
-       /*
-        for (int i = 0; i < nodes.size(); i++) {
-            data.add(new Instructions(instructions.get(i), nodes.get(i)));
-        }
-        */
-        ArrayList<String> path = new ArrayList<>();
-        path.add("Turn right here and walk \n500 feet please.");
-        path.add("Go straight somewhere.");
-        path.add("Turn left there and jump \naround on your hands.");
-        path.add("Random reasonable string \nhere.");
-        path.add("Random reasonable string \nhere.");
-        path.add("Random reasonable string \nhere.");
-        path.add("Random reasonable string \nhere.");
-        path.add("Random reasonable string \nhere.");
-        path.add("Random reasonable string \nhere.");
-
-        for(String s : path){
-            data.add(s);
-        }
-
-        this.instructions.setItems(data);
-    }
 
 }

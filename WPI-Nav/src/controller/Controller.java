@@ -53,6 +53,11 @@ public class Controller extends Application {
     public logic.INode startNode;
     public logic.INode endNode;
 
+    /* path data */
+    ArrayList<ArrayList<Instructions>> fullPath;
+    private int currentIndex;
+    private int lastMapID;
+
 
     @Override
     public void start(Stage s) throws Exception {
@@ -64,6 +69,8 @@ public class Controller extends Application {
         nodesFromFile();
         mapsFromFile();
         buildingsFromFile();
+
+        campus = (Campus)maps.get(0);
 
 		/* basic layout */
         s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
@@ -111,19 +118,18 @@ public class Controller extends Application {
         this.myDisplay.updateNodeTitle(s);
     }
 
-    public void sendEmail(String email){
-        //TODO FILL THIS OUT
+    public boolean sendEmail(String email){
         INode end = null;
         String startString = null;
         String endString = null;
         ArrayList<String> simplifiedInstruction = new ArrayList<>();
+        if (currentInstructions == null) return false;
         for (ArrayList<Instructions> il : currentInstructions){
             for (Instructions i : il){
                 simplifiedInstruction.add(i.getInstruction_string());
                 end = i.getNode();
             }
         }
-
         if (currentInstructions != null) {
             INode start = currentInstructions.get(0).get(0).getNode();
             if (start.isInteresting()) {
@@ -138,11 +144,11 @@ public class Controller extends Application {
             }
         }
         logic.Email e = new logic.Email(email);
-        System.out.println(email);
-        //TODO FILL IN WITH NEW EMAIL CODE
-        if(simplifiedInstruction.size() != 0 && startString != null && endString != null)
-        e.sendDirections(simplifiedInstruction, startString, endString);
-        //TODO DO WE NEED TO DO SOMETHING MORE??
+        if(simplifiedInstruction.size() != 0 && startString != null && endString != null) {
+            return e.sendDirections(simplifiedInstruction, startString, endString);
+            //Should return true if the email goes through
+        }
+        else return false;
     }
 
     public HashMap<Integer, INode> getNodes(){
@@ -207,16 +213,27 @@ public class Controller extends Application {
 
             if (startNode != null) {
                 System.out.printf("Setting STARTNODE: %d\n", startNode.getID());
+                //TODO if current map contains it, play, if it doesn't - switch and play
+                if (startNode.getMap_id() != currentMap.getID()) {
+                    //gotta switch maps
+                    switchMapSetting(startNode.getMap_id());
+                }
                 myDisplay.mapDisplay.setStartNode(startNode.getID(), true);
             }
 
             if (endNode != null) {
-                System.out.printf("Setting ENDNODE: %d\n", endNode.getID());
-                myDisplay.mapDisplay.setStartNode(endNode.getID(), false);
+                //TODO if current map contains it, play, if it doesn't - dont play, just set and color
+                if (endNode.getMap_id() == currentMap.getID()) {
+                    myDisplay.mapDisplay.setStartNode(endNode.getID(), false);
+                } else {
+                    myDisplay.mapDisplay.setEndNode(endNode);
+                }
+                //TODO
             }
 
             if (startNode != null && endNode != null) {
                 findPaths();
+                //TODO
             }
         }
     }
@@ -229,6 +246,20 @@ public class Controller extends Application {
         //switch to the map it was referencing via the building via the map
         switchMapSetting(t.getBuildingID(), t.getToFloor());
 
+    }
+
+    private void switchMapSetting(int mapId){
+        if (maps.get(mapId).getID() == 0){
+            hideBuildingPane();//ONLY SLIDES UP BUILDING VIEW //TODO STILL UNTESTED
+            defaultMap();
+            this.currentMap = campus;
+        } else {
+            this.currentMap = maps.get(mapId);
+            this.currentBuilding = currentMap.getBuildingID();
+            this.currentFloor = currentMap.getFloor();
+            showBuildingPane();//ONLY SLIDE DOWN BUILDING VIEW //TODO STILL UNTESTED
+            switchToBuildingView(currentBuilding, currentFloor);
+        }
     }
 
     private void switchMapSetting(int buildingID, int startingFLOOR){
@@ -265,36 +296,52 @@ public class Controller extends Application {
 
     public void handleIncreaseFloorButton(){
         if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)){
-            setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(++currentFloor));
+            //setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(++currentFloor));
+            setFloor(++currentFloor);
         }
     }
 
     public void handleDecreaseFloorButton(){
         if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)){
-            setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(--currentFloor));
+            //setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(--currentFloor));
+            setFloor(--currentFloor);
         }
     }
 
 
-    public void setFloor(int i){
+    public void setFloor(int i){//TODO HARD CODE IN IDS
         if (buildings.get(currentBuilding).getFloorMap().containsKey(i)){
             setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(i));
             this.currentFloor = i;
             this.myDisplay.setBuildingNumber(i);
         }
+        if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)){
+            //set id for normal
+            this.myDisplay.setRightButtonID("arrow-buttons");
+        } else {
+            //set id for grey
+            this.myDisplay.setRightButtonID("arrow-buttons-grayed");
+        }
+        if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)){
+            //set id for normal
+            this.myDisplay.setLeftButtonID("arrow-buttons");
+        } else {
+            //set id for grey
+            this.myDisplay.setLeftButtonID("arrow-buttons-grayed");
+        }
     }
 
     public void hideBuildingPane(){
-        if (this.myDisplay.BUILDING_VISIBLE.getValue()){
-            myDisplay.slidingBuilding.playHidePane();
+        //if (this.myDisplay.BUILDING_VISIBLE.getValue()){
+          //  myDisplay.slidingBuilding.playHidePane();
             this.myDisplay.BUILDING_VISIBLE.setValue(false);
-        }
+
     }
     public void showBuildingPane(){
-        if (!this.myDisplay.BUILDING_VISIBLE.getValue()){
-            myDisplay.slidingBuilding.playShowPane();
+       // if (!this.myDisplay.BUILDING_VISIBLE.getValue()){
+      //      myDisplay.slidingBuilding.playShowPane();
             this.myDisplay.BUILDING_VISIBLE.setValue(true);
-        }
+      //  }
     }
 
     public void setCurrentMap(int id){
@@ -323,10 +370,9 @@ public class Controller extends Application {
             //if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode.getID()); //hide the last start
             //this.startNode = n;
 
-            if (!nodes.containsKey(n.getID())) {//TODO double check this works, ie that isn't already added
-                System.out.println("IT LOOKS LIKE IT WORKED START");
+            if (!nodes.containsKey(n.getID())) {
                 tempStart = n;
-                nodes.put(n.getID(), n);
+                nodes.put(n.getID(), n);//puts the node in the map!
             } else {
                 if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode.getID());
             }
@@ -338,8 +384,7 @@ public class Controller extends Application {
         } else {//Else if the last node we added was the last [note, a lot of this gets wonky when we add midway points, jesus
             //this.endNode = n;
 
-            if (!nodes.containsKey(n.getID())) {//TODO double check this works, ie that isn't already added
-                System.out.println("IT LOOKS LIKE IT WORKED END");
+            if (!nodes.containsKey(n.getID())) {
                 tempEnd = n;
                 nodes.put(n.getID(), n);
             } else {
@@ -351,9 +396,7 @@ public class Controller extends Application {
 
         }
 
-        //FIRST = !FIRST;//what if FIRST IS GETTING DOUBLY RESET!! WHOOO! THIS WAS IT BOYS!
         this.FLAG = false;//this should prevent some double triggering of events
-        //myDisplay.mapDisplay.setStartNode(n.getID(), FIRST);//this correctly highlights the new node //todo check this
     }
 
     public INode createTempLandmark(double x, double y){
@@ -392,6 +435,7 @@ public class Controller extends Application {
 
         int target = nearestNodeID(x2, y2, z2);
         temp.addEdge(new Edge(target, 1.0));
+        nodes.get(target).addEdge(new Edge(temp.getID(), 1.0));
 
         return temp;
     }
@@ -456,7 +500,7 @@ public class Controller extends Application {
             nodes.remove(n); //remove node froms nodes [the hashmap]
 
             //remove references of this node in other nodes
-            for (Edge e : n.getAdjacencies()) {
+            for (Edge e : n.getAdjacencies()) {//
                 nodes.get(e.getTarget()).removeEdge(n.getID());
             }
 
@@ -477,10 +521,7 @@ public class Controller extends Application {
 
 
     public void defaultMap(){
-        //currentMap = campus;
         setCurrentMap(campus.getID());
-        //this.myDisplay.mapDisplay.setMap(currentMap);
-
     }
 
     /**
@@ -501,62 +542,6 @@ public class Controller extends Application {
         this.pathNodes = new ArrayList<>();
     }
 
-    public void resetStartEnd(){
-        this.startNode = null;
-        this.endNode = null;
-        this.myDisplay.start.getSelectionModel().clearSelection();
-        this.myDisplay.end.getSelectionModel().clearSelection();
-
-    }
-
-    /*
-    public void nodeFromMapHandler(INode n){
-        //check if we have a start or false
-        if (myDisplay.start.getValue() == null){
-            //if (validateNotEquality(n, (Node)myDisplay.start.getValue())) {
-                //no start, thus -> set it to n
-                this.FLAG = false;
-                //myDisplay.start.addNode(n);
-                myDisplay.start.setValue(n);
-                this.FLAG = true;
-                myDisplay.mapDisplay.setStartNode(n.getID(), true);
-                this.startNode = n;
-           // }
-        } else if (myDisplay.end.getValue() == null){
-           // if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
-                this.FLAG = false;
-               // myDisplay.end.addNode(n);//// TODO: 11/18/15
-                myDisplay.end.setValue(n);
-                this.FLAG = true;
-                myDisplay.mapDisplay.setStartNode(n.getID(), false);
-                this.endNode = n;
-          //  }
-        } else if (!FIRST){
-            if(validateNotEquality(n,(INode)myDisplay.start.getValue())) {
-                //no start, thus -> set it to n
-                this.FLAG = false;
-                //myDisplay.start.addNode(n);//// TODO: 11/18/15
-                myDisplay.start.setValue(n);
-                this.FLAG = true;
-                myDisplay.mapDisplay.setStartNode(n.getID(), true);
-                FIRST = true;
-                this.startNode = n;
-            }
-            //myDisplay.mapDisplay.mapDescriptor.setText("Refresh to Click and Choose");
-        } else {
-            if(validateNotEquality(n,(INode)myDisplay.end.getValue())) {
-                this.FLAG = false;
-                //myDisplay.end.addNode(n);//// TODO: 11/18/15
-                myDisplay.end.setValue(n);
-                this.FLAG = true;
-                myDisplay.mapDisplay.setStartNode(n.getID(), false);
-                FIRST = false;
-                this.endNode = n;
-            }
-        }
-    }
-    */
-
     private boolean validateNotEquality(INode n, INode m){
         if (n.getID() == m.getID()){
             return false;
@@ -575,7 +560,7 @@ public class Controller extends Application {
      * gets the instructions by via pathNodes set by getPathNodes
      * @return an ArrayList<String?
      */
-    public ArrayList<String> getInstructions(){
+    public ArrayList<ArrayList<Instructions>> getInstructions(){
         return Directions.stepByStep(this.pathNodes, this.maps);
     }
 
@@ -620,30 +605,61 @@ public class Controller extends Application {
      * We also have to think about clearing things
      */
     public void findPaths(){
-        //Rework code: //TODO update this with the new direction rework
 
-       // ArrayList<ArrayList<Instruction>> path = getInstructions(this.getPathNodes(startNode, endNode));
+        //set ids
+        if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
+            this.myDisplay.setIDRightArrowButton("arrow-buttons");
+        }
+
+        if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {
+            this.myDisplay.setIDLeftArrowButton("arrow-buttons");
+        }
 
 
-       myDisplay.setInstructions(); //TODO UPDATE setInstructions
-        //myDisplay.mapDisplay.showPath(path); //TODO UPDATE showPath
+            getPathNodes(startNode, endNode);
+        fullPath = getInstructions();
+        currentIndex = 0;
+        lastMapID = fullPath.get(currentIndex).get(0).getNode().getMap_id();
+        myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
+        myDisplay.mapDisplay.createPath(fullPath);
+        myDisplay.mapDisplay.showLines(0, lastMapID); //TODO UPDATE showPath
 
-        System.out.println("FIND PATHS CURRENTLY NOT SET UP~");
 
-
-        //validate that there are inputs for beginging and end
-       /* if (this.startNode != null && this.endNode != null){
-            //logic.Node s = (logic.Node)this.start.getValue();
-            //logic.Node e = (logic.Node)this.end.getValue();
-            ArrayList<logic.INode> path = this.getPathNodes(startNode, endNode);
-            ArrayList<String> instructions = this.getInstructions();//pass correct instructions
-            myDisplay.setInstructions(path, instructions);
-            myDisplay.mapDisplay.showPath(path);
-        }*/
-        //String name = controller.getMapName();
-        //map.setMap(name);
-        //mapDisplay.drawPath();
     }
+
+    public void handleIncrementPathMap(){
+        //if there is another list of instructions to go
+        if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
+            myDisplay.setInstructions(fullPath.get(++currentIndex)); //TODO UPDATE setInstructions
+            switchMapSetting(fullPath.get(currentIndex).get(0).getNode().getMap_id());
+            this.myDisplay.mapDisplay.softSelectAnimation(fullPath.get(currentIndex).get(0).getNode().getID());
+            this.myDisplay.mapDisplay.showLines(lastMapID, fullPath.get(currentIndex).get(0).getNode().getMap_id()); //TODO UPDATE showPath
+        }
+
+        if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
+            this.myDisplay.setIDRightArrowButton("arrow-buttons");
+        } else {
+            this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
+
+        }
+
+    }
+    public void handleDecrementPathMap(){
+        //if there is another list of instructions to go
+        if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1){
+            myDisplay.setInstructions(fullPath.get(--currentIndex)); //TODO UPDATE setInstructions
+            switchMapSetting(fullPath.get(currentIndex).get(0).getNode().getMap_id());
+            this.myDisplay.mapDisplay.softSelectAnimation(fullPath.get(currentIndex).get(0).getNode().getID());
+        }
+
+        if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {
+            this.myDisplay.setIDLeftArrowButton("arrow-buttons");
+        } else {
+            this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
+        }
+    }
+
+
 
 
 
@@ -674,10 +690,9 @@ public class Controller extends Application {
 
     private void mapsFromFile() {
         maps = new Parser<IMap>().fromFileMap();
-
-
     }
 
+    //TODO This might not be needed anymore.. Charlie can decide
     private void campusFromFile(){
         HashMap<Integer, IMap> temp = new Parser<Building>().fromFileMap();
         Collection<IMap> maps = temp.values();
@@ -690,9 +705,39 @@ public class Controller extends Application {
         }
     }
 
+    /****************************************************************************************************************
+                                                     TIME ESTIMATION
+     ****************************************************************************************************************/
+
+    /**
+     * Returns a String with the time calculated to min/sec.
+     * Rounds sec value so that second values are either 0, 15, 30, 45
+     * (Would be a poor estimation if it said it takes 23 seconds to get somewhere)
+     */
+    public String getTime(Directions dir, double walkSpeed) {
+        double time = timeEst(dir, walkSpeed);
+        long min = 0, sec;
+        while(time >= 60) {
+            min++;
+            time -= 60;
+        }
+        sec = Math.round(time/15) * 15; //Rounds seconds to the nearest 1/4 minute
+        return min + " minutes, " + sec + " seconds";
+    }
+
+    /**
+     * Returns the time estimation for a given route
+     * TODO Need some way to get directions.. not available in this class?
+     * @param dir Directions object for the given route
+     * @param walkSpeed Person's walking speed in some distance per second
+     * @return Time in seconds
+     */
+    public double timeEst(Directions dir, double walkSpeed) {
+        return dir.getTotalDistance() / walkSpeed;
+    }
 
 
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static void main(String[] args) {
         launch(args);
     }

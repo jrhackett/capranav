@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonStreamParser;
 import com.google.gson.stream.JsonWriter;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Arrays;
@@ -16,12 +13,15 @@ import java.util.Arrays;
  * A Parser object is used to do translations to/from JSON files and
  * Nodes/Maps/Buildings.
  *
- * USAGE: Struct should be INode, IMap, or Building new Parser
- * <INode>().fromFileGraph(); - Returns HashMap<Integer, INode> new Parser
- * <IMap>().fromFileMap(); - Returns HashMap<Integer, IMap> new Parser
- * <Building>().fromFileBuilding(); - Returns HashMap<Integer, Building> new
- * Parser<Struct>().toFile(HashMap<Integer, Struct> collection); - Stores into
- * files based on type
+ * USAGE: Struct should be INode, IMap, or Building
+ * 		  new Parser<INode>().fromFileGraph();       - Returns HashMap<Integer, INode>
+ * 		  new Parser<IMap>().fromFileMap();          - Returns HashMap<Integer, IMap>
+ * 		  new Parser<Building>().fromFileBuilding(); - Returns HashMap<Integer, Building>
+ * 		  new Parser<Struct>().toFile(HashMap<Integer, Struct> collection); - Stores into files based on type
+ *
+ * 		  Added for future iterations:
+ * 		  new Parser<User>().fromFileUser(); - Returns HashMap<String, User> (String is name field)
+ * 		  new Parser<User>().toFile(User u)  - Stores User in file
  */
 public class Parser<Struct> {
 	// Don't need to set any of these anymore - empty constructor
@@ -86,13 +86,17 @@ public class Parser<Struct> {
 
 		HashMap<Integer, TStairs> th = new HashMap<>();
 		th.put(t.getID(), t);
-		/*
-		 * new Parser<Campus>().toFile(ch); new Parser<Floor>().toFile(fh); new
-		 * Parser<Bathroom>().toFile(bh); new Parser<Elevator>().toFile(eh); new
-		 * Parser<Food>().toFile(fooh); new Parser<Landmark>().toFile(lh); new
-		 * Parser<Path>().toFile(ph); new Parser<Room>().toFile(rh); new
-		 * Parser<Stairs>().toFile(sh); new Parser<TStairs>().toFile(th);
-		 */
+		
+		new Parser<Campus>().toFile(ch);
+		new Parser<Floor>().toFile(fh);
+		new Parser<Bathroom>().toFile(bh);
+		new Parser<Elevator>().toFile(eh);
+		new Parser<Food>().toFile(fooh);
+		new Parser<Landmark>().toFile(lh);
+		new Parser<Path>().toFile(ph);
+		new Parser<Room>().toFile(rh);
+		new Parser<Stairs>().toFile(sh);
+		new Parser<TStairs>().toFile(th);
 
 		new Parser<Building>().toFile(buildh);
 		/*
@@ -203,13 +207,37 @@ public class Parser<Struct> {
 		return graph;
 	}
 
-	/**
-	 * close is used to close the FileWriter Class methods handle
-	 * opening/closing of FileWriter DO NOT (try to) CALL THIS OUTSIDE OF PARSER
-	 * CLASS
-	 * 
-	 * @return void
-	 */
+	public void toFile(User user) {
+		filename = "user.json";
+		try { writer = new JsonWriter(new FileWriter(filename, false)); }
+		catch (IOException e) { return; } //Bad bad bad
+		new Gson().toJson(user, user.getClass(), writer);
+		close(); //Close the writer
+	}
+
+	//HashMap is Name->User
+	public HashMap<String, User> fromFileUser() {
+		Gson gson = new Gson();
+		filename = "user.json";
+		HashMap<String,User> users = new HashMap<>();
+		User temp;
+
+		try { parser = new JsonStreamParser(new FileReader(filename)); }
+		catch (FileNotFoundException e) { return null; }
+
+		while(parser.hasNext()) {
+			temp = gson.fromJson(parser.next(), User.class);
+			users.put(temp.getName(), temp);
+		}
+		return users;
+	}
+
+    /**
+     * close is used to close the FileWriter
+	 * Class methods handle opening/closing of FileWriter
+	 * DO NOT (try to) CALL THIS OUTSIDE OF PARSER CLASS
+     * @return void
+     */
 	private void close() {
 		try {
 			this.writer.close();

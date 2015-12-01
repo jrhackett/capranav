@@ -97,7 +97,10 @@ public class Email {
             builder.append("<p><b>" + i + ".</b> " + directions.get(i-1) + "</p>");
         }
         builder.append("<hr><h4>Thank you for using CapraNav by 9 Wong Productions!</h4>");
-        builder.append("<p>" + fork + "</p>"); //Adds Fork Me button to email
+        //builder.append("<p>" + fork + "</p>"); //Adds Fork Me button to email
+        //Removed for now, sizes weird in some email clients, probably best to leave out
+        builder.append("<pre>WPI Police: 508-831-5555<br>");
+        builder.append("SNAP:       508-831-6111</pre>");
 
         return builder.toString();
     }

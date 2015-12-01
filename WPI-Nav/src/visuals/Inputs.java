@@ -19,6 +19,7 @@ public class Inputs extends ComboBox {
 	private String initial;
 	ObservableList<InputItem> data;
 	Application controller;
+	ObservableList<Walking> walking;
 
 	@SuppressWarnings("unchecked") /* probably should remove this */
 	public Inputs(String s, double WIDTH, Application controller) {
@@ -92,6 +93,13 @@ public class Inputs extends ComboBox {
 
 		return data.sorted();
 	}
+
+	public ObservableList<Walking> createWalkingItems(ArrayList<Walking> walkingArrayList) {
+		this.walking = FXCollections.observableArrayList();
+		this.walking.addAll(walkingArrayList);
+		return this.walking;
+	}
+
 
 	public InputItem addNode(logic.INode v, IMap map) {
 		InputItem item = null;

@@ -1,3 +1,5 @@
+// MapVisual
+
 package MapBuilder;
 
 import javafx.scene.image.Image;
@@ -65,20 +67,20 @@ public class MapVisual extends Pane {
 	 * 
 	 * @param map
 	 */
-	public void setMap(logic.Map map) {
-
+	public void setMap(logic.IMap map) {
+		
 		// Set the map image
-		System.out.println("MAP PATH:  " + map.getPath());
+		System.out.println("MAP PATH:  " + map.getFilePath());
 		this.getChildren().remove(mapView);
 
 		try {
 			// Image(getClass().getResourceAsStream("../images/" + map.getPath()
 			// + ".png"), 660, 495, true, true);
-			this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"));
+			this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getFilePath() + ".png"));
 		} catch (NullPointerException e) {
 			// Image(getClass().getResourceAsStream("/images/" + map.getPath() +
 			// ".png"), 660, 495, true, true);
-			this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getPath() + ".png"));
+			this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getFilePath() + ".png"));
 		}
 
 		this.mapView = new ImageView(mapImage);

@@ -32,7 +32,7 @@ public class Maps {
         boolean check = true;
         try {
             for (IMap m : this.maps.values()) {
-                if (m.getPath().equals(path))
+                if (m.getFilePath().equals(path))
                     return false;
             }
             return check;

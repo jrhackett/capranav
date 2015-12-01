@@ -35,7 +35,7 @@ public class Floors implements ICollection {
         boolean check = true;
         try {
             for (Map m : this.maps.values()) {
-                if (m.getPath().equals(path))
+                if (m.getFilePath().equals(path))
                     return false;
             }
             return check;
