@@ -172,12 +172,8 @@ public class MapDisplay extends Pane {
         if (v.isTransition()) {
             circle.setOnMouseClicked(e -> {
                 if (e.getButton().equals(MouseButton.SECONDARY) && e.getClickCount() == 1) {
-                    //enter building
-                    System.out.println("Double Click");
                     controller.handleEnterBuilding((logic.Transition) v);
                 } else if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
-                    System.out.println("HANDLE Click");
-
                     controller.handleMapClick(v);
                 }
             });
@@ -271,6 +267,8 @@ public class MapDisplay extends Pane {
             }
             lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
         }
+
+
     }
 
     /**

@@ -17,7 +17,7 @@ public class Elevator extends Transition {
     }
 
     public ImageView getIcon(){
-        Image image = new Image(getClass().getResourceAsStream("../images/cutlery23.svg"), 20, 20, true, true);
+        Image image = new Image(getClass().getResourceAsStream("../images/lift8.svg"), 22, 22, true, true);
         ImageView imageView = new ImageView(image);
         return imageView;
     }

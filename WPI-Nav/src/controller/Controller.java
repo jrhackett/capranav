@@ -210,6 +210,12 @@ public class Controller extends Application {
                 this.endNode = nodes.get(id);
             }
 
+
+
+            if (startNode != null && endNode != null) {
+                findPaths();
+            }
+
             if (startNode != null) {
                 System.out.printf("Setting STARTNODE: %d\n", startNode.getID());
                 //TODO if current map contains it, play, if it doesn't - switch and play
@@ -227,11 +233,6 @@ public class Controller extends Application {
                 } else {
                     myDisplay.mapDisplay.setEndNode(endNode);
                 }
-                //TODO
-            }
-
-            if (startNode != null && endNode != null) {
-                findPaths();
                 //TODO
             }
         }
@@ -285,7 +286,7 @@ public class Controller extends Application {
 
         //set building info arrows / tab
 
-        // this.myDisplay.populateShowAddBuildingPanel(buildings.get(buildingID));
+        // his.myDisplay.populateShowAddBuildingPanel(buildings.get(buildingID));
 
         //switch to correct view
 
