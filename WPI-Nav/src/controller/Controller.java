@@ -97,7 +97,6 @@ public class Controller extends Application {
                                     FUNCTIONS THAT ARE CALLED FROM UI AND CONTACT UI
      ****************************************************************************************************************/
     public void showNodeImage(){
-        //we need a way of getting the image
         if (this.selectedInformationNode != null) {
 
             StackPane imageStack = new StackPane();
@@ -109,7 +108,6 @@ public class Controller extends Application {
             });
 
             //add image to stack pane -> if no image return void
-            //TODO COULD CHECK TO MAKE SURE THIS ISNT NULL AGAIN HERE BUT SHOULD BE NO NEED (PICTURE PATH)
             Image image = new Image(getClass().getResourceAsStream("../images/" + this.selectedInformationNode.getPicturePath()));
             ImageView iv = new ImageView(image);
 
