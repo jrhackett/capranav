@@ -999,12 +999,16 @@ public class Display {
 
     //TODO finish this
     private void handleWalkingInput(Inputs v, boolean START) {
+        String value = (String)v.getValue();
+        //TODO Store value in User
 
     }
 
     //TODO finish this
     private void handleEmailInput(TextField v, boolean START) {
-
+        //TODO How do you get info from a TextField?? Maybe getCharacters()?
+        //TODO Store value in User
+        v.getCharacters();
     }
 
     /****************************************************************************************************************
@@ -1012,8 +1016,7 @@ public class Display {
      ****************************************************************************************************************/
     private boolean sendEmail(String email) {
         if (!email.equals("") && !email.equals("Enter Email Here") && !email.equals("Email Sent") && !email.equals("Invalid Email")) {
-            controller.sendEmail(email);
-            return true;
+            return controller.sendEmail(email); //Should return true if the email goes through
         } else {
             return false;
         }
