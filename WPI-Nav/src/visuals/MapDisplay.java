@@ -30,6 +30,7 @@ public class MapDisplay extends Pane {
     private HashMap<Integer, Circle> id_circle;
     private Controller controller;
     private HashMap<Integer, ArrayList<Line>> lines; /* mapId to line */
+    ArrayList<Integer> idPath;
 
     /* Visuals */
     private Transition sts;
@@ -175,17 +176,6 @@ public class MapDisplay extends Pane {
             });
         }
 
-        //POPOVER HERE // TODO POPOVER !!!!!
-        //things you can do:
-        //interesting nodes have names
-        //transition nodes have a tostring method
-        //all nodes have an svg ICON as an ImageView you can get via
-        //                    v.getIcon()
-        //                    think about when we want to trigger the picture screen?
-        //                    double click the popover icon?
-        //                    double click instructions
-        //                    some version of click on the nodeitself, but its kinda complicated on that count already
-
         return circle;
     }
 
@@ -240,7 +230,7 @@ public class MapDisplay extends Pane {
      */
 
     public void createPath(ArrayList<ArrayList<Instructions>> path) {
-        ArrayList<Integer> idPath = new ArrayList<>();
+        idPath = new ArrayList<>(); //TODO AM I REMVOING THE OLD LINES
 
         double coordX = path.get(0).get(0).getNode().getX();
         double coordY = path.get(0).get(0).getNode().getY();

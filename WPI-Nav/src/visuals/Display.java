@@ -586,6 +586,10 @@ public class Display {
         AnchorPane.setLeftAnchor(emailBox, 0.0);
         AnchorPane.setRightAnchor(emailBox, 0.0);
 
+        instructions.setOnMouseEntered(e->{
+            instructions.requestFocus();
+        });
+
         directions.getChildren().addAll(directionsTitleBox, instructionArrows, instructions, emailBox);
         directions.setStyle("-fx-background-color: #ffffff");
         directions.setPrefWidth(expandedWidth + EDGE);
@@ -634,15 +638,10 @@ public class Display {
         AnchorPane.setLeftAnchor(information, 0.0);
         AnchorPane.setRightAnchor(information, 0.0);
 
-
-
-
-
-
         this.mapPane = createMapPane();
         mapPane.setAlignment(Pos.CENTER);
 
-       /* AnchorPane.setTopAnchor(mapPane, EDGE);//
+        /* AnchorPane.setTopAnchor(mapPane, EDGE);//
         AnchorPane.setLeftAnchor(mapPane, 0.0);
         AnchorPane.setRightAnchor(mapPane, 0.0);
         AnchorPane.setBottomAnchor(mapPane, EDGE * 2); //+ GAP + 2 * EDGE
@@ -650,6 +649,10 @@ public class Display {
         Group group = new Group(mapPane);
         GraphicsScaling graphicsScaling = new GraphicsScaling();
         Parent zoomPane = graphicsScaling.createZoomPane(group);
+        zoomPane.setOnMouseEntered(e->{
+            zoomPane.requestFocus();
+        });
+
 
 
         AnchorPane.setTopAnchor(zoomPane, EDGE);//
