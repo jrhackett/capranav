@@ -9,10 +9,11 @@ import static org.junit.Assert.assertEquals;
 
 public class EmailTesting {
 
-    Email testE;
+    Email testE, testE2;
     @Before
     public void setUp() throws Exception {
        testE = new Email("mjgiancola@wpi.edu");
+        testE2 = new Email("notarealaddress@notarealemail.egg");
     }
 
     @Test
@@ -21,12 +22,24 @@ public class EmailTesting {
     }
 
     @Test
-    public void realTest() throws Exception {
+    public void eTest1() throws Exception {
         ArrayList<String> dirs = new ArrayList<>();
         dirs.add("First");
         dirs.add("Second");
         dirs.add("Third");
-        assertEquals("This one does stuff", testE.sendDirections(dirs, "Morgan", "DAKA"), true);
+        assertEquals("Email did not send correctly", testE.sendDirections(dirs, "Morgan", "DAKA"), true);
+    }
+
+    /* Even if the email address isn't real, it still considers the attempt to send as being successful
+    That's probably okay
+     */
+    @Test
+    public void eTest2() throws Exception {
+        ArrayList<String> dirs = new ArrayList<>();
+        dirs.add("First");
+        dirs.add("Second");
+        dirs.add("Third");
+        assertEquals("Email did not send correctly", testE2.sendDirections(dirs, "Morgan", "DAKA"), true);
     }
 
 }

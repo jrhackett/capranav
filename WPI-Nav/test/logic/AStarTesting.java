@@ -12,31 +12,31 @@ import static org.junit.Assert.assertEquals;
 public class AStarTesting {
 
 	//TODO Fix the instances of Node pls
-	/*Node t1, t2, t3, t4, t5;
+	Node t1, t2, t3, t4, t5;
 	Node n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14;
-	HashMap<Integer, Node> nodes, tnodes;
+	HashMap<Integer, INode> nodes, tnodes;
 
 	@Before
 	public void setUp() throws Exception {
-		t1 = new Node("Origin", 1, 0, 0, 0);
-		t2 = new Node("X", 2, 5, 0, 0);
-		t3 = new Node("Y", 3, 0, 5, 0);
-		t4 = new Node("Slope", 4, 5, 5, 0);
-		t5 = new Node("Z", 5, 5, 5, 5);
+		t1 = new Food(1, 0, 0, 0, 0, 0, 0, "Origin");
+		t2 = new Food(2, 5, 0, 0, 5, 0, 0, "X");
+		t3 = new Food(3, 0, 5, 0, 0, 5, 0, "Y");
+		t4 = new Food(4, 5, 5, 0, 5, 5, 0, "Slope");
+		t5 = new Food(5, 5, 5, 5, 5, 5, 5, "Z");
 
-		n1 = new Node("Institute", 5, 0, 0, 0);
-		n2 = new Node("RecCenter", 6, 0, 10, 0);
-		n3 = new Node("Field", 7, 0, 20, 0);
-		n4 = new Node("Harrington", 8, 3, 16, 0);
-		n5 = new Node("Quad", 9, 5, 5, 0);
-		n6 = new Node("Morgan", 10, 6, 1, 0);
-		n7 = new Node("Riley", 11, 11, 2, 0);
-		n8 = new Node("Higgins Labs", 12, 10, 13, 0);
-		n9 = new Node("Campus Center", 13, 10, 20, 0);
-		n10 = new Node("Fountain", 14, 16, 17, 0);
-		n11 = new Node("Alden", 15, 16, 3, 0);
-		n12 = new Node("West Street", 16, 18, 8, 0);
-		n13 = new Node("Library", 17, 20, 20, 0);
+		n1 = new Food(5, 0, 0, 0, 0, 0, 0, "Institute");
+		n2 = new Food(6, 0, 10, 0, 0, 10, 0, "Rec Center");
+		n3 = new Food(7, 0, 20, 0, 0, 20, 0, "Field");
+		n4 = new Food(8, 3, 16, 0, 3, 16, 0, "Harrington");
+		n5 = new Food(9, 5, 5, 0, 5, 5, 0, "Quad");
+		n6 = new Food(10, 6, 1, 0, 6, 1, 0, "Morgan");
+		n7 = new Food(11, 11, 2, 0, 11, 2, 0, "Riley");
+		n8 = new Food(12, 10, 13, 0, 10, 13, 0, "Higgins");
+		n9 = new Food(13, 12, 20, 0, 12, 20, 0, "Campus Center");
+		n10 = new Food(14, 16, 17, 0, 16, 17, 0, "Fountain");
+		n11 = new Food(15, 16, 3, 0, 16, 3, 0, "Alden");
+		n12 = new Food(16, 18, 8, 0, 18, 8, 0, "West Street");
+		n13 = new Food(17, 20, 20, 0, 20, 20, 0, "Library");
 
 
 		
@@ -210,7 +210,7 @@ public class AStarTesting {
 	public void AStarTest9() {
 		ArrayList<Node> path = new ArrayList<Node>(Arrays.asList(n1, n5, n8, n10, n13));
 		assertEquals("Tests AStar", path, AStarShortestPath.AStarSearch(n1, n13, nodes));
-	}*/
+	}
 
     @Test
     public void dummyTest() throws Exception{
