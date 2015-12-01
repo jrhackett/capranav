@@ -74,7 +74,8 @@ public class Inputs extends ComboBox {
 
 	public ObservableList<InputItem> createInputItems(HashMap<Integer, logic.INode> nodes, HashMap<Integer, logic.IMap> maps) {
 		this.data = FXCollections.observableArrayList();
-		nodes.forEach((k, v) -> { //For each node
+
+		nodes.forEach((k, v) -> {
 			 addNode(v, maps.get(v.getMap_id()));
 		});
 
