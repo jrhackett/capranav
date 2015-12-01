@@ -108,20 +108,21 @@ public class MapDisplay extends Pane {
         this.getChildren().remove(0, this.getChildren().size());
 
         try {
-            this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getFilePath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
+            this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getFilePath()));//
         } catch (NullPointerException e) {
-            this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getFilePath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
+            this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getFilePath()));//, IMAGE_WIDTH, IMAGE_HEIGHT, true, true
         }
 
         this.mapView = new ImageView(mapImage);
+        this.mapView.setFitHeight(IMAGE_HEIGHT);
+        this.mapView.setFitWidth(IMAGE_WIDTH);
+
         this.getChildren().add(mapView);
         drawNodes(controller.getNodesOfMap(map.getID()));
 
         mapView.setOnMouseClicked(e -> {
             if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() >= 2) createTempLandmark(e);
         });
-
-
     }
 
 

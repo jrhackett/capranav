@@ -10,7 +10,7 @@ public class Directions {
 	
 	/**
 	 * stepByStep takes in an arrayList of Nodes and outputs a list of
-	 * 
+	 *
 	 * @param aStarPath
 	 * @return
 	 */
@@ -27,6 +27,7 @@ public class Directions {
 		double dist = Math.sqrt(Math.pow((aStarPath.get(0).getX() - aStarPath.get(1).getX()), 2)
 				+ Math.pow((aStarPath.get(0).getY() - aStarPath.get(1).getY()), 2));
 
+
 		double scalar = 1;
 
 		if(maps.containsKey(aStarPath.get(0).getMap_id())){
@@ -37,10 +38,11 @@ public class Directions {
 		}
 		
 		totalDistance += dist;
-		
+
 		double angle = Math.atan2((aStarPath.get(0).getY() - aStarPath.get(1).getY()),
 				(aStarPath.get(0).getX() - aStarPath.get(1).getX()));
 		
+
 		angle = Math.round(angle * 180 / Math.PI - 180);
 		if (angle < 0) {
 			angle += 360;
@@ -80,10 +82,12 @@ public class Directions {
 			INode next = aStarPath.get(i + 2);
 			
 			// get the distance to the next node and angle
+            //TODO JOSH / ANTHONY CHECK THIS
 			dist = Math.sqrt(Math.pow((turn.getX() - next.getX()), 2) + Math.pow((turn.getY() - next.getY()), 2));
 			distspec += dist;
 			//NEW LINE- add CURRENT dist to distspec, which is used for adding culled distances
 			//Future steps' distance will be added to this variable later.
+//			dist = Math.sqrt(Math.pow((turn.getX_univ() - next.getX_univ()), 2) + Math.pow((turn.getY_univ() - next.getY_univ()), 2));
 
 			if(maps.containsKey(turn.getMap_id())){
 				scalar = maps.get(turn.getMap_id()).getPixelToFeetRatio();
@@ -152,10 +156,14 @@ public class Directions {
 		double theta1;
 		double theta2;
 		double angle;
-		
+
 		theta1 = Math.atan2((turn.getY() - previous.getY()), (turn.getX() - previous.getX()));
 		theta2 = Math.atan2((next.getY() - turn.getY()), (next.getX() - turn.getX()));
 		
+//TODO checkout this please as well
+//		theta1 = Math.atan2((turn.getY_univ() - previous.getY_univ()), (turn.getX_univ() - previous.getX_univ()));
+//		theta2 = Math.atan2((next.getY_univ() - turn.getY_univ()), (next.getX_univ() - turn.getX_univ()));
+
 		angle = (Math.PI - theta1 + theta2) % (2 * Math.PI);
 		return angle;
 	}

@@ -226,7 +226,7 @@ public abstract class Node implements INode {
 		this.map_id = map_id;
 	}
 
-	public double getXUniv() {
+	public double getX_univ() {
 		return this.x_univ;
 	}
 
@@ -274,6 +274,4 @@ public abstract class Node implements INode {
 	public void setPicturePath(String s){
 		this.picturePath = s;
 	};
-
-
 }

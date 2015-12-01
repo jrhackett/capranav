@@ -19,7 +19,7 @@ public class AStarShortestPath {
 	public static ArrayList<INode> AStarSearch(INode start, INode destination, HashMap<Integer, INode> map) {
 
 		Set<INode> explored = new HashSet<INode>(); // Create Set for explored
-													// nodes
+		// nodes
 
 		PriorityQueue<INode> queue = new PriorityQueue<INode>(10, // Create PriorityQueue for nodes, initial capacity of 10
 				new Comparator<INode>() { // compare nodes based on comparator function
@@ -47,11 +47,11 @@ public class AStarShortestPath {
 		queue.add(start); // add the starting Node to the priority queue
 
 		boolean found = false; // set found boolean to false, will change to
-								// true once path is found
+		// true once path is found
 		int i = 0;
 		while ((!queue.isEmpty()) && (!found)) { // continue to loop as long as
-													// queue is not empty AND
-													// path isn't found yet
+			// queue is not empty AND
+			// path isn't found yet
 			// Retrieve and remove the Node in queue with the lowest f_score
 			// value
 			INode current = queue.poll();
@@ -62,14 +62,14 @@ public class AStarShortestPath {
 			// check if current value is the destination value
 			if (current.getID() == (destination.getID())) {
 				found = true; // if current Node = destination Node, set found
-								// boolean to true and exit while loop when done
+				// boolean to true and exit while loop when done
 			}
 
 			// check children of current Node
 			for (Edge e : current.getAdjacencies()) {
 				INode child = map.get(e.getTarget()); // set child Node =
-																// to edge of
-																// current Node
+				// to edge of
+				// current Node
 				double movement_cost = getCost(current, e, map); // obtain movement_cost from edge
 				double temp_g_scores = current.getG() + movement_cost; // calculate g_scores
 				double temp_h_scores = 0; //getHeuristic(child, destination); // get heuristic cost from current node and destination node
@@ -96,9 +96,9 @@ public class AStarShortestPath {
 
 		}
 		ArrayList<INode> path = printPath(destination); // create a list of
-														// Nodes, tracing from
-														// the destination Node
-														// back to the start
+		// Nodes, tracing from
+		// the destination Node
+		// back to the start
 		return path;
 	}
 	/**
@@ -111,12 +111,12 @@ public class AStarShortestPath {
 		INode child = map.get(adjacentEdge.getTarget());
 		double multiplier = adjacentEdge.getWeight();
 		double cost = Math.sqrt(
-				Math.pow((child.getX() - currentNode.getX()), 2) + Math.pow((child.getY() - currentNode.getY()), 2)
-						+ Math.pow((child.getZ() - currentNode.getZ()), 2));
+				Math.pow((child.getX_univ() - currentNode.getX_univ()), 2) + Math.pow((child.getY_univ() - currentNode.getY_univ()), 2)
+						+ Math.pow((child.getZ_univ() - currentNode.getZ_univ()), 2));
 		cost *= multiplier;
 		return cost;
 	}
-	
+
 	/**
 	 * getHeuristic calculates the unweighted distance between two given Nodes based on coordinate values of the Nodes
 	 * @param currentNode - current Node you are measuring from
@@ -124,12 +124,12 @@ public class AStarShortestPath {
 	 * @return heuristic value, AKA as the crow flies distance between Nodes
 	 */
 	public static double getHeuristic(INode currentNode, INode endNode) {
-		double x1 = currentNode.getX();
-		double x2 = endNode.getX();
-		double y1 = currentNode.getY();
-		double y2 = endNode.getY();
-		double z1 = currentNode.getZ();
-		double z2 = endNode.getZ();
+		double x1 = currentNode.getX_univ();
+		double x2 = endNode.getX_univ();
+		double y1 = currentNode.getY_univ();
+		double y2 = endNode.getY_univ();
+		double z1 = currentNode.getZ_univ();
+		double z2 = endNode.getZ_univ();
 		double heuristic = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
 		return heuristic;
 	}
