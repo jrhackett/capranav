@@ -238,9 +238,10 @@ public class Parser<Struct>
 	private static String getPath() {
 		StringBuilder s = new StringBuilder();
 		String fp = new File("").getAbsolutePath();
-		s.append(fp);
+		s.append(fp.substring(0, fp.length()));
 		s.append("/json/");
-		return s.toString();
+
+		return s.toString();//s.toString();
 	}
 
 	private String getMName(int m) {

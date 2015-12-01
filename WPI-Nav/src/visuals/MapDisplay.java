@@ -22,8 +22,8 @@ import java.util.HashMap;
 
 public class MapDisplay extends Pane {
     /* constants */
-    private double IMAGE_WIDTH = 660;
-    private double IMAGE_HEIGHT = 495;
+    private double IMAGE_WIDTH = 700;//660
+    private double IMAGE_HEIGHT = 525;//495
 
 
     /* Data Structures */
