@@ -118,19 +118,18 @@ public class Controller extends Application {
         this.myDisplay.updateNodeTitle(s);
     }
 
-    public void sendEmail(String email){
-        //TODO FILL THIS OUT
+    public boolean sendEmail(String email){
         INode end = null;
         String startString = null;
         String endString = null;
         ArrayList<String> simplifiedInstruction = new ArrayList<>();
+        if (currentInstructions == null) return false;
         for (ArrayList<Instructions> il : currentInstructions){
             for (Instructions i : il){
                 simplifiedInstruction.add(i.getInstruction_string());
                 end = i.getNode();
             }
         }
-
         if (currentInstructions != null) {
             INode start = currentInstructions.get(0).get(0).getNode();
             if (start.isInteresting()) {
@@ -145,11 +144,11 @@ public class Controller extends Application {
             }
         }
         logic.Email e = new logic.Email(email);
-        System.out.println(email);
-        //TODO FILL IN WITH NEW EMAIL CODE
-        if(simplifiedInstruction.size() != 0 && startString != null && endString != null)
-        e.sendDirections(simplifiedInstruction, startString, endString);
-        //TODO DO WE NEED TO DO SOMETHING MORE??
+        if(simplifiedInstruction.size() != 0 && startString != null && endString != null) {
+            return e.sendDirections(simplifiedInstruction, startString, endString);
+            //Should return true if the email goes through
+        }
+        else return false;
     }
 
     public HashMap<Integer, INode> getNodes(){
@@ -318,17 +317,17 @@ public class Controller extends Application {
         }
         if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)){
             //set id for normal
-            this.myDisplay.setRightButtonID();
+            this.myDisplay.setRightButtonID("arrow-buttons");
         } else {
             //set id for grey
-            this.myDisplay.setRightButtonID();
+            this.myDisplay.setRightButtonID("arrow-buttons-grayed");
         }
         if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)){
             //set id for normal
-            this.myDisplay.setLeftButtonID();
+            this.myDisplay.setLeftButtonID("arrow-buttons");
         } else {
             //set id for grey
-            this.myDisplay.setLeftButtonID();
+            this.myDisplay.setLeftButtonID("arrow-buttons-grayed");
         }
     }
 
@@ -436,6 +435,7 @@ public class Controller extends Application {
 
         int target = nearestNodeID(x2, y2, z2);
         temp.addEdge(new Edge(target, 1.0));
+        nodes.get(target).addEdge(new Edge(temp.getID(), 1.0));
 
         return temp;
     }
@@ -500,7 +500,7 @@ public class Controller extends Application {
             nodes.remove(n); //remove node froms nodes [the hashmap]
 
             //remove references of this node in other nodes
-            for (Edge e : n.getAdjacencies()) {
+            for (Edge e : n.getAdjacencies()) {//
                 nodes.get(e.getTarget()).removeEdge(n.getID());
             }
 
@@ -724,6 +724,7 @@ public class Controller extends Application {
         maps = new Parser<IMap>().fromFileMap();
     }
 
+    //TODO This might not be needed anymore.. Charlie can decide
     private void campusFromFile(){
         HashMap<Integer, IMap> temp = new Parser<Building>().fromFileMap();
         Collection<IMap> maps = temp.values();

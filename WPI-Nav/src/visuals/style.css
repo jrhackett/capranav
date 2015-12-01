@@ -206,12 +206,38 @@
 
 #arrow-buttons
 {
-    -fx-pref-height:33 !important;
-    -fx-min-height:33 !important;
-    -fx-max-height:33 !important;
+    -fx-pref-height:26 !important;
+    -fx-min-height:26 !important;
+    -fx-max-height:26 !important;
+    -fx-background-color:white;
+    -fx-border-width:0;
+    -fx-text-fill:#333;
+}
+
+#arrow-buttons:hover
+{
+    /*-fx-border-width:1;
+    -fx-border-radius:2;
+    -fx-border-color:#333;*/
+
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+#arrow-buttons-grayed
+{
+    -fx-pref-height:26 !important;
+    -fx-min-height:26 !important;
+    -fx-max-height:26 !important;
     -fx-background-color:white;
     -fx-border-width:1;
     -fx-border-radius:2;
-    -fx-border-color:#333;
+    -fx-border-color:#aaa;
+    -fx-text-fill:#aaa;
+    -fx-opacity:0.6;
 }
 
+#arrow-buttons-grayed:pressed
+{
+    -fx-background-color:white;
+    -fx-effect:null;
+}

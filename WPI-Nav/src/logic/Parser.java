@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonStreamParser;
 import com.google.gson.stream.JsonWriter;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Arrays;
@@ -19,6 +16,10 @@ import java.util.Arrays;
  * 		  new Parser<IMap>().fromFileMap();          - Returns HashMap<Integer, IMap>
  * 		  new Parser<Building>().fromFileBuilding(); - Returns HashMap<Integer, Building>
  * 		  new Parser<Struct>().toFile(HashMap<Integer, Struct> collection); - Stores into files based on type
+ *
+ * 		  Added for future iterations:
+ * 		  new Parser<User>().fromFileUser(); - Returns HashMap<String, User> (String is name field)
+ * 		  new Parser<User>().toFile(User u)  - Stores User in file
  */
 public class Parser<Struct>
 {
@@ -186,6 +187,31 @@ public class Parser<Struct>
 			}
 		}
 		return graph;
+	}
+
+	public void toFile(User user) {
+		filename = "user.json";
+		try { writer = new JsonWriter(new FileWriter(filename, false)); }
+		catch (IOException e) { return; } //Bad bad bad
+		new Gson().toJson(user, user.getClass(), writer);
+		close(); //Close the writer
+	}
+
+	//HashMap is Name->User
+	public HashMap<String, User> fromFileUser() {
+		Gson gson = new Gson();
+		filename = "user.json";
+		HashMap<String,User> users = new HashMap<>();
+		User temp;
+
+		try { parser = new JsonStreamParser(new FileReader(filename)); }
+		catch (FileNotFoundException e) { return null; }
+
+		while(parser.hasNext()) {
+			temp = gson.fromJson(parser.next(), User.class);
+			users.put(temp.getName(), temp);
+		}
+		return users;
 	}
 
     /**
