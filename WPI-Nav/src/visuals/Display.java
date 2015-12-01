@@ -11,7 +11,10 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,7 +22,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
-import org.apache.batik.bridge.TextNode;
 import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,7 +126,7 @@ public class Display {
         this.DASHBOARD_VISIBLE = new SimpleBooleanProperty(true);
         this.SETTINGS_VISIBLE = new SimpleBooleanProperty(true);
         this.BUILDING_VISIBLE = new SimpleBooleanProperty(false);
-        this.EMAIL_VISIBLE = new SimpleBooleanProperty(false);
+        this.EMAIL_VISIBLE = new SimpleBooleanProperty(true);
 
         this.EDGE = GAP * 2 + CONTROL_WIDTH;
     }
@@ -364,8 +366,6 @@ public class Display {
         settingsLabelBox.setPrefWidth(expandedWidth);
         settingsLabelBox.setMaxWidth(expandedWidth);
 
-        settingsLabel.setOnMouseClicked(e -> handleSettings());
-        gearsView.setOnMouseClicked(e -> handleSettings());
 
         //settings a sliding pane!
         SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView);
@@ -535,9 +535,8 @@ public class Display {
         AnchorPane.setTopAnchor(instructions, EDGE + 36);
         AnchorPane.setLeftAnchor(instructions, 0.0);
         AnchorPane.setRightAnchor(instructions, 0.0);
-        //AnchorPane.setBottomAnchor(instructions, EDGE);
-
-
+        AnchorPane.setBottomAnchor(instructions, EDGE);
+        //instructions.setPrefHeight(MAP_HEIGHT + 2 * EDGE - 36);
 
         /** Email Box **/
 
@@ -565,37 +564,79 @@ public class Display {
 
 
 
+
+
         /** Label **/
         Label emailLabel = new Label("Email Me");
         emailLabel.setTextFill(Color.web("#333333"));
+        emailLabel.setStyle("-fx-background-color:#808080;");
+        emailBox.setStyle("-fx-background-color:#808080;");
+
         //emailBox.getChildren().addAll(emailIconBox, emailLabel);
 
         emailLabel.setOnMouseClicked(e -> handleEmail(emailBox));
         emailView.setOnMouseClicked(e -> handleEmail(emailBox));
 
         /** Sliding Anchor Pane **/
-        SlidingAnchorPane slidingEmail = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, emailView);
-        slidingEmail.setStyle("-fx-background-color:white;");
+        SlidingAnchorPane slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
+        slidingEmail.setStyle("-fx-background-color:#808080;");
 
         javafx.scene.control.Button slidingEmailButton = slidingEmail.getButton();
         slidingEmailButton.setId("dashboardButton");
-        slidingEmailButton.setStyle("-fx-background-color:white;");
+        slidingEmailButton.setStyle("-fx-background-color:#808080;");
         slidingEmailButton.setMaxWidth(EDGE - 5);
         slidingEmailButton.setMinWidth(EDGE - 5);
         slidingEmailButton.setPrefWidth(EDGE - 5);
+
+
         emailBox.getChildren().addAll(slidingEmailButton, emailLabel);  //TODO fix this sliding pane, if we don't want just comment out SlidingAnchorPane stuff and uncomment some of the addAll of panes
-                                                                        //TODO anchor the listView instructions back to the bottom
+
+        // TODO anchor the listView instructions back to the bottom
+
+        /////////// INFO IN EMAIL SLIDE
+
+        VBox emailBoxContent = new VBox();
+        TextField yourEmail = new TextField("Enter Email Here");
+        yourEmail.setStyle("-fx-font-size:12;-fx-padding:4 4;");
+        javafx.scene.control.Button go = new javafx.scene.control.Button("Send Directions");
+        go.setId("email-button");
+        emailBoxContent.getChildren().addAll(yourEmail, go);
+        go.setOnAction(e -> {
+            if (yourEmail.getText() != null) {
+                if (sendEmail(yourEmail.getText())) {
+                    yourEmail.setText("Email Sent"); //TODO ADD GREEN COLOR
+                    EMAIL = false;
+                } else {
+                    yourEmail.setText("Invalid Email");//TODO ADD RED COLOR
+                }
+            }
+        });
+        emailBoxContent.setSpacing(GAP);
+        emailBoxContent.setAlignment(Pos.CENTER);
+        emailBoxContent.setMaxWidth(EDGE + expandedWidth);
+
+        //emailBoxContent.visibleProperty().bind(EMAIL_VISIBLE);
+
+        VBox finalSlidingBox = new VBox();
+        finalSlidingBox.getChildren().addAll(emailBox, emailBoxContent);
+
+        slidingEmail.getChildren().addAll(finalSlidingBox);
 
 
-        AnchorPane.setBottomAnchor(emailBox, 0.0);
-        AnchorPane.setLeftAnchor(emailBox, 0.0);
-        AnchorPane.setRightAnchor(emailBox, 0.0);
+        /////
+
+
+        AnchorPane.setBottomAnchor(slidingEmail, 0.0);
+        AnchorPane.setLeftAnchor(slidingEmail, 0.0);
+        AnchorPane.setRightAnchor(slidingEmail, 0.0);
 
         instructions.setOnMouseEntered(e->{
             instructions.requestFocus();
         });
 
-        directions.getChildren().addAll(directionsTitleBox, instructionArrows, instructions, emailBox);
+
+
+        directions.getChildren().addAll(directionsTitleBox, instructionArrows, instructions, slidingEmail);
         directions.setStyle("-fx-background-color: #ffffff");
         directions.setPrefWidth(expandedWidth + EDGE);
         directions.setMinWidth(0);
@@ -881,8 +922,8 @@ public class Display {
         instructions.setPlaceholder(new Label(" "));
         instructions.setMinWidth(0);
         instructions.setMaxWidth(expandedWidth + EDGE * 2);
-        instructions.setMinHeight(0);
-        //instructions.setPrefHeight(MAP_WIDTH - EDGE * 4);
+        instructions.setMinHeight(expandedWidth);
+        instructions.setPrefHeight(MAP_HEIGHT-40-EDGE);
         this.instructions.setItems(FXCollections.observableArrayList());
         //instructions.setPrefHeight(TABLE_HEIGHT);
         //instructions.getColumns().addAll(Instructions.getColumn(instructions));
@@ -907,15 +948,6 @@ public class Display {
     /****************************************************************************************************************
      * FUNCTIONS THAT HANDLE EVENTS
      ****************************************************************************************************************/
-
-    private void handleSettings() {
-        //TODO what do we want to happen here? A POPUP / OR WHAT??
-        //TODO add visual affects to both change settings ICON and WORDS
-        // TODO Have both flash Green on white?
-
-        //TODO maybe this is where we update the email and other settings?
-
-    }
 
     private void handleEmail(Node n) {
 

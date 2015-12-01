@@ -147,7 +147,7 @@ public interface INode {
 
     public ImageView getIcon();
 
-
+    public String getPicturePath();
 
 
     }
