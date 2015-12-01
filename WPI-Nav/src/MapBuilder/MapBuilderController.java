@@ -244,7 +244,8 @@ public class MapBuilderController extends Application {
 
 		this.currentMapID = id;
 		this.nodeList = getNodesOfMap();
-		cleanNodeList(this.nodeList);
+
+		//cleanNodeList(this.nodeList);
 
 		setNextNodeID();
 
@@ -276,7 +277,7 @@ public class MapBuilderController extends Application {
 		}
 
 		// Remove any rouge edges in the masterNodeList
-		cleanNodeList(masterNodeList);
+		// cleanNodeList(masterNodeList);
 
 		// Update all the nodes that could have been changed
 		nodeList.forEach((k, v) -> {
@@ -296,7 +297,18 @@ public class MapBuilderController extends Application {
 	public void nodesFromFile() {
 		this.masterNodeList = new Parser<INode>().fromFileGraph();
 		
+		//int firstKey = masterNodeList.keySet()[0];
+		masterNodeList.remove(0);
 		
+		System.out.println("All nodes form file are shown below:");
+		
+		masterNodeList.forEach((k,v) -> {
+			System.out.println(v + ", " + v.getAdjacencies().size());
+			
+		});
+		
+		System.out.println("Nodes complete");
+		System.out.println("");
 	}
 
 	/**

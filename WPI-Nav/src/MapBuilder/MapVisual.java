@@ -97,6 +97,8 @@ public class MapVisual extends Pane {
 		drawEdges(controller.getCurrentNodeList());
 		drawNodes(controller.getCurrentNodeList());
 
+		this.getChildren().remove(this.edgeLines);
+		this.getChildren().remove(this.nodeCircles);
 		this.getChildren().addAll(this.edgeLines, this.nodeCircles);
 
 		// This is called when the map is clicked
@@ -240,6 +242,7 @@ public class MapVisual extends Pane {
 			double mainX = v.getX();
 			double mainY = v.getY();
 
+			System.out.println("Random node edge list size: " + v.getAdjacencies().size());
 			v.getAdjacencies().forEach(e -> {
 				Integer nextKey = e.getTarget();
 				if (!nodeKeyList.contains(nextKey) && nodes.containsKey(e.getTarget())) {
