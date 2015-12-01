@@ -219,10 +219,10 @@ public class Controller extends Application {
 
             if (endNode != null) {
                 //TODO if current map contains it, play, if it doesn't - dont play, just set and color
-                if (startNode.getMap_id() == currentMap.getID()) {
+                if (endNode.getMap_id() == currentMap.getID()) {
                     myDisplay.mapDisplay.setStartNode(endNode.getID(), false);
                 } else {
-                    myDisplay.mapDisplay.setEndNode(endNode.getID());
+                    myDisplay.mapDisplay.setEndNode(endNode);
                 }
                 //TODO
             }
