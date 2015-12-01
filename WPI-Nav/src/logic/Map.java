@@ -3,19 +3,19 @@ package logic;
 //basic map class
 abstract public class Map implements IMap{
     private int ID;
-    private String path;
+    private String filePath;
     private double pixelToFeetRatio;
 
 
-    public Map(int id, String path, double pixelToFeetRatio){
+    public Map(int id, String filePath, double pixelToFeetRatio){
         this.ID = id;
-        this.path = path;
+        this.filePath = filePath;
         this.pixelToFeetRatio = pixelToFeetRatio;
     }
 
     public Map(IMap map) {
         this.ID = map.getID();
-        this.path = map.getPath();
+        this.filePath = map.getFilePath();
         this.pixelToFeetRatio = 0;
     }
 
@@ -25,12 +25,12 @@ abstract public class Map implements IMap{
         return ID;
     }
 
-    public String getPath() {
-        return path;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public double getPixelToFeetRatio() { return this.pixelToFeetRatio;}

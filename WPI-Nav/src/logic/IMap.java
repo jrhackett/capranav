@@ -7,9 +7,9 @@ package logic;
 
      int getID();
 
-     String getPath();
+     String getFilePath();
 
-     void setPath(String path);
+     void setFilePath(String path);
 
      double getPixelToFeetRatio();
 

@@ -83,6 +83,7 @@ public class MapDisplay extends Pane {
 
         nodes.forEach((k,v) -> {
             if (id_circle.containsKey(k)) {
+                System.out.println("Already Had Circle");
                 Circle c = id_circle.get(k);
                 this.getChildren().add(c);
             } else {
@@ -110,16 +111,20 @@ public class MapDisplay extends Pane {
         this.getChildren().remove(0, this.getChildren().size());
 
         try {
-            this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
+            this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getFilePath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
         } catch (NullPointerException e) {
-            this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getPath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
+            this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getFilePath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
         }
 
         this.mapView = new ImageView(mapImage);
         this.getChildren().add(mapView);
         drawNodes(controller.getNodesOfMap(map.getID()));
 
-        mapView.setOnMouseClicked(e -> createTempLandmark(e));
+        mapView.setOnMouseClicked(e -> {
+            if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() >= 2) createTempLandmark(e);
+        });
+
+
     }
 
 
@@ -316,11 +321,17 @@ public class MapDisplay extends Pane {
     }
 
 
-    public void setEndNode(int id){
-        Circle c = id_circle.get(id);
-        c.setRadius(5);
-        highlight(c, Color.FIREBRICK, Color.RED);
-        //TODO may have to put back
+    public void setEndNode(INode v){
+        if (id_circle.containsKey(v.getID())) {
+            Circle c = id_circle.get(v.getID());
+            c.setRadius(5);
+            highlight(c, Color.FIREBRICK, Color.RED);
+            //TODO may have to put back
+        } else {
+            Circle c = createCircle(v);
+            c.setRadius(5);
+            highlight(c, Color.FIREBRICK, Color.RED);
+        }
     }
 
 
