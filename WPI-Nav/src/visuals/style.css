@@ -204,3 +204,14 @@
     -fx-pref-height:70 !important;
 }
 
+#arrow-buttons
+{
+    -fx-pref-height:33 !important;
+    -fx-min-height:33 !important;
+    -fx-max-height:33 !important;
+    -fx-background-color:white;
+    -fx-border-width:1;
+    -fx-border-radius:2;
+    -fx-border-color:#333;
+}
+

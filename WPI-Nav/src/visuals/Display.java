@@ -502,10 +502,43 @@ public class Display {
         AnchorPane.setRightAnchor(directionsTitleBox, 0.0);
 
 
-        /** TableView **/
+        /** ListView **/
         createInstructionListView();
 
-        AnchorPane.setTopAnchor(instructions, EDGE);
+        AnchorPane instructionArrows = new AnchorPane();
+
+        instructionArrows.setPrefHeight(44);
+        instructionArrows.setMinHeight(44);
+        instructionArrows.setMaxHeight(44);
+        instructionArrows.setMinWidth(0);
+
+        AnchorPane.setTopAnchor(instructionArrows, EDGE);
+        AnchorPane.setLeftAnchor(instructionArrows, 0.0);
+        AnchorPane.setRightAnchor(instructionArrows, 0.0);
+
+        Image leftArrow = new Image(getClass().getResourceAsStream("../images/leftArrow.png"), 27, 27, true, true);
+        ImageView leftArrowView = new ImageView(leftArrow);
+
+        javafx.scene.control.Button leftArrowButton = new javafx.scene.control.Button();
+        leftArrowButton.setGraphic(leftArrowView);
+        leftArrowButton.setId("arrow-buttons");
+
+        Image rightArrow = new Image(getClass().getResourceAsStream("../images/rightArrow.png"), 27, 27, true, true);
+        ImageView rightArrowView = new ImageView(rightArrow);
+
+        javafx.scene.control.Button rightArrowButton = new javafx.scene.control.Button();
+        rightArrowButton.setGraphic(rightArrowView);
+        rightArrowButton.setId("arrow-buttons");
+
+        AnchorPane.setTopAnchor(leftArrowButton, 5.5);
+        AnchorPane.setLeftAnchor(leftArrowButton, 8.0);
+
+        AnchorPane.setTopAnchor(rightArrowButton, 5.5);
+        AnchorPane.setRightAnchor(rightArrowButton, 8.0);   //TODO add listeners for the buttons
+
+        instructionArrows.getChildren().addAll(leftArrowButton, rightArrowButton);
+
+        AnchorPane.setTopAnchor(instructions, EDGE + 44);
         AnchorPane.setLeftAnchor(instructions, 0.0);
         AnchorPane.setRightAnchor(instructions, 0.0);
         AnchorPane.setBottomAnchor(instructions, EDGE);
@@ -563,7 +596,7 @@ public class Display {
         AnchorPane.setLeftAnchor(emailBox, 0.0);
         AnchorPane.setRightAnchor(emailBox, 0.0);
 
-        directions.getChildren().addAll(directionsTitleBox, instructions, emailBox);
+        directions.getChildren().addAll(directionsTitleBox, instructionArrows, instructions, emailBox);
         directions.setStyle("-fx-background-color: #ffffff");
         directions.setPrefWidth(expandedWidth + EDGE);
         directions.setMinWidth(0);
