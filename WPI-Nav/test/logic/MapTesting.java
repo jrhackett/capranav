@@ -19,7 +19,7 @@ public class MapTesting {
 
     @Test
     public void setPathTest1() {
-        copyMap.setPath("foo/foo/foo");
-        assertEquals("getPath returned incorrect value from setPath", "foo/foo/foo", copyMap.getPath());
+        copyMap.setFilePath("foo/foo/foo");
+        assertEquals("getPath returned incorrect value from setPath", "foo/foo/foo", copyMap.getFilePath());
     }
 }

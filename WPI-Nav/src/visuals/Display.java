@@ -510,23 +510,23 @@ public class Display {
 
         AnchorPane instructionArrows = new AnchorPane();
 
-        instructionArrows.setPrefHeight(44);
-        instructionArrows.setMinHeight(44);
-        instructionArrows.setMaxHeight(44);
+        instructionArrows.setPrefHeight(36);
+        instructionArrows.setMinHeight(36);
+        instructionArrows.setMaxHeight(36);
         instructionArrows.setMinWidth(0);
 
         AnchorPane.setTopAnchor(instructionArrows, EDGE);
         AnchorPane.setLeftAnchor(instructionArrows, 0.0);
         AnchorPane.setRightAnchor(instructionArrows, 0.0);
 
-        Image leftArrow = new Image(getClass().getResourceAsStream("../images/leftArrow.png"), 27, 27, true, true);
+        Image leftArrow = new Image(getClass().getResourceAsStream("../images/leftArrow.png"), 24, 24, true, true);
         ImageView leftArrowView = new ImageView(leftArrow);
 
         javafx.scene.control.Button leftArrowButton = new javafx.scene.control.Button();
         leftArrowButton.setGraphic(leftArrowView);
         leftArrowButton.setId("arrow-buttons");
 
-        Image rightArrow = new Image(getClass().getResourceAsStream("../images/rightArrow.png"), 27, 27, true, true);
+        Image rightArrow = new Image(getClass().getResourceAsStream("../images/rightArrow.png"), 24, 24, true, true);
         ImageView rightArrowView = new ImageView(rightArrow);
 
         javafx.scene.control.Button rightArrowButton = new javafx.scene.control.Button();
@@ -541,7 +541,7 @@ public class Display {
 
         instructionArrows.getChildren().addAll(leftArrowButton, rightArrowButton);
 
-        AnchorPane.setTopAnchor(instructions, EDGE + 44);
+        AnchorPane.setTopAnchor(instructions, EDGE + 36);
         AnchorPane.setLeftAnchor(instructions, 0.0);
         AnchorPane.setRightAnchor(instructions, 0.0);
         AnchorPane.setBottomAnchor(instructions, EDGE);
@@ -734,8 +734,21 @@ public class Display {
     private HBox createBuildingBox() { //its going to be an HBox with stuff inside of the sliding anchorpane
 
         HBox box = new HBox();
-        this.left = new javafx.scene.control.Button("-");
-        this.right = new javafx.scene.control.Button("+");
+        this.left = new javafx.scene.control.Button();
+        this.right = new javafx.scene.control.Button();
+
+        Image minus = new Image(getClass().getResourceAsStream("../images/minus104.png"), 20, 20, true, true);
+        Image plus = new Image(getClass().getResourceAsStream("../images/plus79.png"), 20, 20, true, true);
+
+        ImageView minusView = new ImageView(minus);
+        ImageView plusView = new ImageView(plus);
+
+        this.left.setGraphic(minusView);
+        this.right.setGraphic(plusView);
+
+        this.left.setStyle("-fx-background-color:#eee;");
+        this.right.setStyle("-fx-background-color:#eee;");
+
         buildingName = new Label();
         buildingNumber = new Label();
 
