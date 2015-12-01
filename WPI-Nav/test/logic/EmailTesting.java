@@ -12,7 +12,7 @@ public class EmailTesting {
     Email testE;
     @Before
     public void setUp() throws Exception {
-       testE = new Email("mjgiancola@wpi.edu");
+       testE = new Email("team9.cs3733@gmail.com");
     }
 
     @Test
