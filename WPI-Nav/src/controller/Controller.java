@@ -55,7 +55,8 @@ public class Controller extends Application {
 
     /* path data */
     ArrayList<ArrayList<Instructions>> fullPath;
-    int currentIndex;
+    private int currentIndex;
+    private int lastMapID;
 
 
     @Override
@@ -664,25 +665,33 @@ public class Controller extends Application {
         getPathNodes(startNode, endNode);
         fullPath = getInstructions();
         currentIndex = 0;
+        lastMapID = fullPath.get(currentIndex).get(0).getNode().getMap_id();
         myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
-        //myDisplay.mapDisplay.showPath(fullPath.get(currentIndex)); //TODO UPDATE showPath
+        myDisplay.mapDisplay.createPath(fullPath);
+        myDisplay.mapDisplay.showLines(0, lastMapID); //TODO UPDATE showPath
+
 
     }
 
     public void handleIncrementPathMap(){
         //if there is another list of instructions to go
-        if (this.currentIndex + 1 < fullPath.size()){
-            myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
+        if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
+            myDisplay.setInstructions(fullPath.get(++currentIndex)); //TODO UPDATE setInstructions
             switchMapSetting(fullPath.get(currentIndex).get(0).getNode().getMap_id());
+            this.myDisplay.mapDisplay.softSelectAnimation(fullPath.get(currentIndex).get(0).getNode().getID());
+            this.myDisplay.mapDisplay.showLines(lastMapID, fullPath.get(currentIndex).get(0).getNode().getMap_id()); //TODO UPDATE showPath
         }
-
-        //make sure path is displayed!!!
-
-        //switch map
-
-        //switch map text + # node
-
     }
+    public void handleDecrementPathMap(){
+        //if there is another list of instructions to go
+        if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1){
+            myDisplay.setInstructions(fullPath.get(--currentIndex)); //TODO UPDATE setInstructions
+            switchMapSetting(fullPath.get(currentIndex).get(0).getNode().getMap_id());
+            this.myDisplay.mapDisplay.softSelectAnimation(fullPath.get(currentIndex).get(0).getNode().getID());
+        }
+    }
+
+
 
 
 
