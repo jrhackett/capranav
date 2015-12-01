@@ -542,62 +542,6 @@ public class Controller extends Application {
         this.pathNodes = new ArrayList<>();
     }
 
-    public void resetStartEnd(){
-        this.startNode = null;
-        this.endNode = null;
-        this.myDisplay.start.getSelectionModel().clearSelection();
-        this.myDisplay.end.getSelectionModel().clearSelection();
-
-    }
-
-    /*
-    public void nodeFromMapHandler(INode n){
-        //check if we have a start or false
-        if (myDisplay.start.getValue() == null){
-            //if (validateNotEquality(n, (Node)myDisplay.start.getValue())) {
-                //no start, thus -> set it to n
-                this.FLAG = false;
-                //myDisplay.start.addNode(n);
-                myDisplay.start.setValue(n);
-                this.FLAG = true;
-                myDisplay.mapDisplay.setStartNode(n.getID(), true);
-                this.startNode = n;
-           // }
-        } else if (myDisplay.end.getValue() == null){
-           // if(validateNotEquality(n,(Node)myDisplay.end.getValue())) {
-                this.FLAG = false;
-               // myDisplay.end.addNode(n);//// TODO: 11/18/15
-                myDisplay.end.setValue(n);
-                this.FLAG = true;
-                myDisplay.mapDisplay.setStartNode(n.getID(), false);
-                this.endNode = n;
-          //  }
-        } else if (!FIRST){
-            if(validateNotEquality(n,(INode)myDisplay.start.getValue())) {
-                //no start, thus -> set it to n
-                this.FLAG = false;
-                //myDisplay.start.addNode(n);//// TODO: 11/18/15
-                myDisplay.start.setValue(n);
-                this.FLAG = true;
-                myDisplay.mapDisplay.setStartNode(n.getID(), true);
-                FIRST = true;
-                this.startNode = n;
-            }
-            //myDisplay.mapDisplay.mapDescriptor.setText("Refresh to Click and Choose");
-        } else {
-            if(validateNotEquality(n,(INode)myDisplay.end.getValue())) {
-                this.FLAG = false;
-                //myDisplay.end.addNode(n);//// TODO: 11/18/15
-                myDisplay.end.setValue(n);
-                this.FLAG = true;
-                myDisplay.mapDisplay.setStartNode(n.getID(), false);
-                FIRST = false;
-                this.endNode = n;
-            }
-        }
-    }
-    */
-
     private boolean validateNotEquality(INode n, INode m){
         if (n.getID() == m.getID()){
             return false;
@@ -661,8 +605,18 @@ public class Controller extends Application {
      * We also have to think about clearing things
      */
     public void findPaths(){
-        //Rework code: //TODO update this with the new direction rework
-        getPathNodes(startNode, endNode);
+
+        //set ids
+        if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
+            this.myDisplay.setIDRightArrowButton("arrow-buttons");
+        }
+
+        if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {
+            this.myDisplay.setIDLeftArrowButton("arrow-buttons");
+        }
+
+
+            getPathNodes(startNode, endNode);
         fullPath = getInstructions();
         currentIndex = 0;
         lastMapID = fullPath.get(currentIndex).get(0).getNode().getMap_id();
@@ -681,6 +635,14 @@ public class Controller extends Application {
             this.myDisplay.mapDisplay.softSelectAnimation(fullPath.get(currentIndex).get(0).getNode().getID());
             this.myDisplay.mapDisplay.showLines(lastMapID, fullPath.get(currentIndex).get(0).getNode().getMap_id()); //TODO UPDATE showPath
         }
+
+        if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
+            this.myDisplay.setIDRightArrowButton("arrow-buttons");
+        } else {
+            this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
+
+        }
+
     }
     public void handleDecrementPathMap(){
         //if there is another list of instructions to go
@@ -688,6 +650,12 @@ public class Controller extends Application {
             myDisplay.setInstructions(fullPath.get(--currentIndex)); //TODO UPDATE setInstructions
             switchMapSetting(fullPath.get(currentIndex).get(0).getNode().getMap_id());
             this.myDisplay.mapDisplay.softSelectAnimation(fullPath.get(currentIndex).get(0).getNode().getID());
+        }
+
+        if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {
+            this.myDisplay.setIDLeftArrowButton("arrow-buttons");
+        } else {
+            this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
         }
     }
 

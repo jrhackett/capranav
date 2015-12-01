@@ -108,6 +108,9 @@ public class Display {
     private javafx.scene.control.Button left;
     private javafx.scene.control.Button right;
 
+    javafx.scene.control.Button leftArrowButton;
+    javafx.scene.control.Button rightArrowButton;
+
     /**
      * Basic constructor.
      */
@@ -165,7 +168,7 @@ public class Display {
         /** create scene **/
         root.setAlignment(Pos.TOP_LEFT);
 
-        Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 2 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE * 3);//+MAP_BORDER*2+TITLE_HEIGHT
+        Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 5 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE * 4);//+MAP_BORDER*2+TITLE_HEIGHT
         //Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+EDGE*2+expandedWidth*2, MAP_WIDTH + 2 * EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
 
         return scene;
@@ -506,16 +509,19 @@ public class Display {
         Image leftArrow = new Image(getClass().getResourceAsStream("../images/leftArrow.png"), 24, 24, true, true);
         ImageView leftArrowView = new ImageView(leftArrow);
 
-        javafx.scene.control.Button leftArrowButton = new javafx.scene.control.Button();
+        leftArrowButton = new javafx.scene.control.Button();
         leftArrowButton.setGraphic(leftArrowView);
-        leftArrowButton.setId("arrow-buttons");
+        leftArrowButton.setId("arrow-buttons-grayed");
+        leftArrowButton.setOnAction(e -> handleLeftArrowButton());
 
         Image rightArrow = new Image(getClass().getResourceAsStream("../images/rightArrow.png"), 24, 24, true, true);
         ImageView rightArrowView = new ImageView(rightArrow);
 
-        javafx.scene.control.Button rightArrowButton = new javafx.scene.control.Button();
+        rightArrowButton = new javafx.scene.control.Button();
         rightArrowButton.setGraphic(rightArrowView);
-        rightArrowButton.setId("arrow-buttons");
+        rightArrowButton.setId("arrow-buttons-grayed");
+        rightArrowButton.setOnAction(e -> handleRightArrowButton());
+
 
         AnchorPane.setTopAnchor(leftArrowButton, 5.5);
         AnchorPane.setLeftAnchor(leftArrowButton, 8.0);
@@ -891,44 +897,6 @@ public class Display {
     }
 
 
-/* REAL VERSION
-    private void createInstructionListView() {
-        this.instructions = new ListView<Instructions>();
-        instructions.setCellFactory((ListView<Instructions> lv) ->
-                new ListCell<Instructions>() {
-                    @Override
-                    public void updateItem(Instructions in, boolean empty) {
-                        super.updateItem(in, empty);
-                        if (empty) {
-                            setText(null);
-                        } else {
-                            // use whatever data you need from the album
-                            // object to get the correct displayed value:
-                            setText(in.toString());
-                        }
-                    }
-                }
-        );
-
-        instructions.getSelectionModel().selectedItemProperty()
-                .addListener((ObservableValue<? extends Instructions> obs, Instructions oldAlbum, Instructions selectedAlbum) -> {
-                    if (selectedAlbum != null) {
-                        // do something with selectedAlbum
-                    }
-                });
-
-        instructions.setPlaceholder(new Label(" "));
-        instructions.setMinWidth(0);
-        instructions.setMaxWidth(expandedWidth + EDGE * 2);
-        instructions.setMinHeight(0);
-        //instructions.setPrefHeight(MAP_WIDTH - EDGE * 4);
-        this.instructions.setItems(FXCollections.observableArrayList());
-        //instructions.setPrefHeight(TABLE_HEIGHT);
-        //instructions.getColumns().addAll(Instructions.getColumn(instructions));
-
-
-    }*/
-
 
     /****************************************************************************************************************
      * FUNCTIONS THAT HANDLE EVENTS
@@ -1006,6 +974,21 @@ public class Display {
         //TODO How do you get info from a TextField?? Maybe getCharacters()?
         //TODO Store value in User
         v.getCharacters();
+    }
+
+    private void handleRightArrowButton(){
+        this.controller.handleIncrementPathMap();
+    }
+
+    private void handleLeftArrowButton(){
+        this.controller.handleDecrementPathMap();
+    }
+
+    public void setIDRightArrowButton(String s){
+        this.rightArrowButton.setId(s);
+    }
+    public void setIDLeftArrowButton(String s){
+        this.leftArrowButton.setId(s);
     }
 
     /****************************************************************************************************************
