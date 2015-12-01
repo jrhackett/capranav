@@ -81,6 +81,10 @@ public class MapBuilderDisplay extends VBox {
 		// this.TopBar = new HBox();
 		TopBar.setId("top-bar");
 
+		
+		// TODO: Fix this to work with new classes
+		
+		/*
 		// This makes the drop-down for selecting different maps
 		this.chooseMap = new Inputs("maps", input_width);
 		chooseMap.setItems(chooseMap.convertMaps(controller.getMaps().getMaps()));
@@ -90,7 +94,7 @@ public class MapBuilderDisplay extends VBox {
 			logic.Map newMap = (logic.Map) chooseMap.getValue();
 			controller.setCurrentMap(newMap.getID());
 			mapvisual.setMap(newMap);
-		});
+		});*/
 		// chooseMap.setTranslateX(10);
 
 		// Make the 'Close' button to save all the changes and close the

@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 
 public class StepByStepTesting {
 	// This initializes the 9 nodes
-	Node nA, nB, nC, nD, nE, nF, nG, nH, nI;
+	/*Node nA, nB, nC, nD, nE, nF, nG, nH, nI;
 	Map m1;
 	HashMap<Integer, Map> maps;
 
@@ -197,5 +197,5 @@ public class StepByStepTesting {
 		assertEquals("Message from Node 7 to Node 8", "Turn a near U-turn left, and walk 141 feet.", steps.get(6));
 		assertEquals("Final message", "You have reached your destination", steps.get(7));
 	}
-
+*/
 }

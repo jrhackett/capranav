@@ -89,7 +89,7 @@ public class MapBuilderController extends Application {
 	 */
 	public int newNodeAtLocation(double x, double y) {
 		// TODO: get UNIQUE or next number - look into singelton
-		Node newNode = new Node("ENTER TEXT", this.nextNodeID, x, y, 0, this.currentMapID);
+		Node newNode = new Path(this.nextNodeID, x, y, 0, x, y, 0, this.currentMapID);
 		nodeList.put(this.nextNodeID, newNode);
 		return this.nextNodeID++;
 	}
@@ -102,7 +102,9 @@ public class MapBuilderController extends Application {
 	 * @return
 	 */
 	public boolean createAndWriteNewMap(String name, String path, double ratio) {
-		boolean validate = validatePath(path);
+		// TODO: Fix this to work with new classes
+		
+		/*boolean validate = validatePath(path);
 		if (validate) {
 			Map newMap = new Map(nextMapID, 0, 0, name, path, ratio);
 			maps.addMap(newMap);
@@ -111,7 +113,9 @@ public class MapBuilderController extends Application {
 			return true;
 		} else {
 			return false;
-		}
+		}*/
+		
+		return false;
 	}
 
 	/**
@@ -120,10 +124,13 @@ public class MapBuilderController extends Application {
 	 * @param name
 	 */
 	public void setNodeName(String name) {
+		// TODO: Fix this to work with new classes
+		
+		/*
 		if (this.isNodeSelected()) {
 			nodeList.get(selectedNodeID).setName(name);
 			changeNameToIncludeMap(selectedNodeID);
-		}
+		}*/
 	}
 
 	/**
@@ -132,9 +139,12 @@ public class MapBuilderController extends Application {
 	 * @param n
 	 */
 	public void changeNameToIncludeMap(int id) {
+		// TODO: Fix this to work with new classes
+		
+		/*
 		String mapPrefix = new String();
 		mapPrefix = maps.getMap(nodeList.get(id).getMap_id()).getName();
-		nodeList.get(id).setName(mapPrefix + " " + nodeList.get(id).getName());
+		nodeList.get(id).setName(mapPrefix + " " + nodeList.get(id).getName());*/
 	}
 
 	/**
@@ -274,10 +284,11 @@ public class MapBuilderController extends Application {
 	 * @param
 	 */
 	public void nodesToFile() {
-		Parser parser = new Parser("nodes.json");
+		/*Parser parser = new Parser("nodes.json");
 		
 		//TODO: update this to support different saving methods
 		parser.toFile(new Graph(this.masterNodeList));
+		*/
 	}
 
 	/**
@@ -286,25 +297,31 @@ public class MapBuilderController extends Application {
 	 * @param
 	 */
 	public void nodesFromFile() {
+		/*
 		Parser test = new Parser("nodes.json");
 		Graph graph = (Graph) test.fromFile();
 		this.masterNodeList = graph.getNodes();
+		*/
 	}
 
 	/**
 	 * writes maps to file
 	 */
 	public void mapsToFile() {
+		/*
 		Parser parser = new Parser("maps.json");
 		parser.toFile(this.maps);
+		*/
 	}
 
 	/**
 	 * load maps from file
 	 */
 	public void mapsFromFile() {
+		/*
 		Parser parser = new Parser("maps.json");
 		this.maps = (Maps) parser.fromFile();
+		*/
 	}
 
 	public static void main(String[] args) {
