@@ -883,6 +883,8 @@ public class Display {
         //TODO add visual affects to both change settings ICON and WORDS
         // TODO Have both flash Green on white?
 
+        //TODO maybe this is where we update the email and other settings?
+
     }
 
     private void handleEmail(Node n) {
@@ -892,7 +894,9 @@ public class Display {
             PopOver popOver = new PopOver();
             VBox emailBox = new VBox();
             TextField yourEmail = new TextField("Enter Email Here");
+            yourEmail.setStyle("-fx-font-size:12;-fx-padding:4 4;");
             javafx.scene.control.Button go = new javafx.scene.control.Button("Send Directions");
+            go.setId("email-button");
             emailBox.getChildren().addAll(yourEmail, go);
             go.setOnAction(e -> {
                 if (yourEmail.getText() != null) {
