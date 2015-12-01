@@ -29,18 +29,19 @@ public class Parser<Struct> {
 	private JsonWriter writer;
 	private JsonStreamParser parser;
 
-	// These two sets of arrays must be in parallel !
-	private static final Class[] mTypes = { Campus.class, Floor.class };
+	private static final String path = Parser.getPath();
+
+	//These two sets of arrays must be in parallel !
+	private static final Class[]  mTypes = { Campus.class, Floor.class };
 	private static final String[] mNames = { "campus.json", "floor.json" };
 	private static final Class[] nTypes = { Bathroom.class, Elevator.class, Food.class, Landmark.class, Path.class,
 			Room.class, Stairs.class, TStairs.class };
 	private static final String[] nNames = { "bathroom.json", "elevator.json", "food.json", "landmark.json",
 			"path.json", "room.json", "stair.json", "tstair.json" };
 
-	public Parser() {
-	}
-
-	public static void main(String args[]) {
+	public Parser() {}
+	///*
+	public static void main(String args[]) { /*
 		Campus c = new Campus(1, "Path", 0.13);
 		Floor f = new Floor(2, "Floor", 0.13, 3, 4);
 
@@ -105,6 +106,7 @@ public class Parser<Struct> {
 		 * System.out.println(maps.toString());
 		 * System.out.println(nodes.toString());
 		 */
+		
 		System.out.println("SUCCESS !");
 	}
 
@@ -123,20 +125,15 @@ public class Parser<Struct> {
 			int m = Arrays.asList(mTypes).indexOf(s.getClass());
 			int n = Arrays.asList(nTypes).indexOf(s.getClass());
 
-			// Set filename to the correct thing, based on Struct s
-			if (m != -1)
-				filename = mNames[m];
-			else if (n != -1)
-				filename = nNames[n];
-			else
-				filename = "building.json";
 
-			// Write s out to the correct file
-			try {
-				writer = new JsonWriter(new FileWriter(filename, false));
-			} catch (IOException e) {
-				return;
-			} // Bad bad bad
+			//Set filename to the correct thing, based on Struct s
+			if      (m != -1) filename = getMName(m);
+			else if (n != -1) filename = getNName(n);
+			else 			  filename = path + "building.json";
+
+			//Write s out to the correct file
+			try { writer = new JsonWriter(new FileWriter(filename, false)); }
+			catch (IOException e) { return; } //Bad bad bad
 			gson.toJson(s, s.getClass(), writer);
 			close(); // Close the writer
 		}
@@ -150,23 +147,11 @@ public class Parser<Struct> {
 		IMap temp;
 
 		for (int i = 0; i < mTypes.length; i++) {
-			try {
-				//System.out.println(mNames[i]);
-				//System.out.println(new File(".").getAbsoluteFile());
-				
-				FileReader fileReader = new FileReader(mNames[i]);
-				
-				//System.out.println("File Reader successful");
-				//System.out.println(fileReader);
-				
-				parser = new JsonStreamParser(fileReader);
-			} catch (FileNotFoundException e) {
-				System.out.println("Parser File not found.");
-				return null;
-			} // This is bad - don't let this happen
+			try { parser = new JsonStreamParser(new FileReader(getMName(i))); }
+			catch (FileNotFoundException e) { return null; } //This is bad - don't let this happen
 
-			while (parser.hasNext()) {
-				temp = (IMap) gson.fromJson(parser.next(), mTypes[i]);
+			while(parser.hasNext()) {
+				temp = (IMap)gson.fromJson(parser.next(), mTypes[i]);
 				maps.put(temp.getID(), temp);
 				
 				System.out.println("ID: " + temp.getID() + ", Path: " + temp.getFilePath());
@@ -183,8 +168,9 @@ public class Parser<Struct> {
 		Building temp;
 
 		try {
-			parser = new JsonStreamParser(new FileReader("building.json"));
-		} catch (IOException e) {
+			parser = new JsonStreamParser(new FileReader(path + "building.json"));
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 			return null; // Bad bad bad
 		}
@@ -202,14 +188,11 @@ public class Parser<Struct> {
 		INode temp;
 
 		for (int i = 0; i < nTypes.length; i++) {
-			try {
-				parser = new JsonStreamParser(new FileReader(nNames[i]));
-			} catch (FileNotFoundException e) {
-				return null;
-			} // This is bad - don't let this happen
+			try { parser = new JsonStreamParser(new FileReader(getNName(i))); }
+			catch (FileNotFoundException e) { return null; } //This is bad - don't let this happen
 
-			while (parser.hasNext()) {
-				temp = (INode) gson.fromJson(parser.next(), nTypes[i]);
+			while(parser.hasNext()) {
+				temp = (INode)gson.fromJson(parser.next(), nTypes[i]);
 				graph.put(temp.getID(), temp);
 			}
 		}
@@ -217,8 +200,7 @@ public class Parser<Struct> {
 	}
 
 	public void toFile(User user) {
-		filename = "user.json";
-		try { writer = new JsonWriter(new FileWriter(filename, false)); }
+		try { writer = new JsonWriter(new FileWriter(path + "user.json", false)); }
 		catch (IOException e) { return; } //Bad bad bad
 		new Gson().toJson(user, user.getClass(), writer);
 		close(); //Close the writer
@@ -227,11 +209,10 @@ public class Parser<Struct> {
 	//HashMap is Name->User
 	public HashMap<String, User> fromFileUser() {
 		Gson gson = new Gson();
-		filename = "user.json";
 		HashMap<String,User> users = new HashMap<>();
 		User temp;
 
-		try { parser = new JsonStreamParser(new FileReader(filename)); }
+		try { parser = new JsonStreamParser(new FileReader(path + "user.json")); }
 		catch (FileNotFoundException e) { return null; }
 
 		while(parser.hasNext()) {
@@ -253,5 +234,27 @@ public class Parser<Struct> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * The three below methods handle figuring out the absolute path on the current machine
+	 * and use it in getting JSON files. Leave these alone.
+	 *
+     */
+
+	private static String getPath() {
+		StringBuilder s = new StringBuilder();
+		String fp = new File("").getAbsolutePath();
+		s.append(fp);
+		s.append("/json/");
+		return s.toString();
+	}
+
+	private String getMName(int m) {
+		return path + mNames[m];
+	}
+
+	private String getNName(int n) {
+		return path + nNames[n];
 	}
 }

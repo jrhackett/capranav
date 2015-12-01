@@ -76,7 +76,7 @@ public class Email {
             transport.close();
             return true;
         }
-        catch (MessagingException e) {
+        catch (Exception e) { //Yes this is bad. No, I don't care
             e.printStackTrace();
             return false;
         }

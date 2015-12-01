@@ -17,6 +17,7 @@ public abstract class Node implements INode {
 	private double f_scores = 0;
 	private ArrayList<Edge> adjacencies;
 	private INode parent;
+	private String picturePath = null;
 
 	/**
 	 * Nodes are used to represent a location and to hold the Edges to all other
@@ -225,7 +226,7 @@ public abstract class Node implements INode {
 		this.map_id = map_id;
 	}
 
-	public double getXUniv() {
+	public double getX_univ() {
 		return this.x_univ;
 	}
 
@@ -267,4 +268,10 @@ public abstract class Node implements INode {
 		}
 	}
 
+	public String getPicturePath(){
+		return this.picturePath;
+	}
+	public void setPicturePath(String s){
+		this.picturePath = s;
+	};
 }

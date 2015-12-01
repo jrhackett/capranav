@@ -30,6 +30,7 @@ public class MapDisplay extends Pane {
     private HashMap<Integer, Circle> id_circle;
     private Controller controller;
     private HashMap<Integer, ArrayList<Line>> lines; /* mapId to line */
+    ArrayList<INode> idPath;
 
     /* Visuals */
     private Transition sts;
@@ -107,20 +108,21 @@ public class MapDisplay extends Pane {
         this.getChildren().remove(0, this.getChildren().size());
 
         try {
-            this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getFilePath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
+            this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getFilePath()));//
         } catch (NullPointerException e) {
-            this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getFilePath() + ".png"), IMAGE_WIDTH, IMAGE_HEIGHT, true, true);
+            this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getFilePath()));//, IMAGE_WIDTH, IMAGE_HEIGHT, true, true
         }
 
         this.mapView = new ImageView(mapImage);
+        this.mapView.setFitHeight(IMAGE_HEIGHT);
+        this.mapView.setFitWidth(IMAGE_WIDTH);
+
         this.getChildren().add(mapView);
         drawNodes(controller.getNodesOfMap(map.getID()));
 
         mapView.setOnMouseClicked(e -> {
             if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() >= 2) createTempLandmark(e);
         });
-
-
     }
 
 
@@ -143,64 +145,55 @@ public class MapDisplay extends Pane {
         st.play();
     }
 
+    /**
+     * default circle
+     *
+     * @param c
+     */
+    public void normal(Circle c, INode v) {
+        if (v != null && v.isTransition()) {
+            c.setFill(Color.YELLOW);
+        } else {
+            c.setFill(Color.TRANSPARENT);
+        }
+        c.setStrokeWidth(0);
+        c.setRadius(5);
+        c.setOpacity(1);
+        c.setEffect(null);
+    }
+
 
     private Circle createCircle(INode v) {
 
         double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
         double y = v.getY();
         Circle circle = new Circle(x, y, 5);
-        normal(circle);
+        normal(circle, v);
 
-        /** this is some trash trash trash, we'll do it better when we set up svgs better"*/
-        if (v instanceof logic.Transition) {
+        if (v.isTransition()) {
             circle.setOnMouseClicked(e -> {
                 if (e.getButton().equals(MouseButton.SECONDARY) && e.getClickCount() == 1) {
-                    //enter building
-                    System.out.println("Double Click");
                     controller.handleEnterBuilding((logic.Transition) v);
                 } else if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
-                    System.out.println("HANDLE Click");
-
                     controller.handleMapClick(v);
                 }
             });
         } else {
             circle.setOnMouseClicked(e -> {
                 if (e.getButton().equals(MouseButton.SECONDARY) && e.getClickCount() == 1) {
-                    controller.showNodeImage(v);
+                    controller.showNodeImage();
                 } else if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
                     controller.handleMapClick(v);
-                    controller.updateNodeInformation(v.getIcon(), v.toString());
                 }
             });
         }
-
-        //POPOVER HERE // TODO POPOVER !!!!!
-        //things you can do:
-        //interesting nodes have names
-        //transition nodes have a tostring method
-        //all nodes have an svg ICON as an ImageView you can get via
-        //                    v.getIcon()
-        //                    think about when we want to trigger the picture screen?
-        //                    double click the popover icon?
-        //                    double click instructions
-        //                    some version of click on the nodeitself, but its kinda complicated on that count already
+        circle.setOnMouseEntered(e -> {
+            controller.updateNodeInformation(v);
+        });
 
         return circle;
     }
 
-    /**
-     * default circle
-     *
-     * @param c
-     */
-    public void normal(Circle c) {
-        c.setFill(Color.BLUE);
-        c.setStrokeWidth(0);
-        c.setRadius(5);
-        c.setOpacity(1);
-        c.setEffect(null);
-    }
 
 
     /**
@@ -235,12 +228,21 @@ public class MapDisplay extends Pane {
     }
 
 
+    public void changeBackOldPathNodes(){
+        for (INode i : idPath){
+            normal(id_circle.get(i),i );
+        }
+    }
+
     /**
      * Show path of nodes
      */
 
     public void createPath(ArrayList<ArrayList<Instructions>> path) {
-        ArrayList<Integer> idPath = new ArrayList<>();
+        idPath = new ArrayList<>(); //TODO AM I REMVOING THE OLD LINES
+
+        changeBackOldPathNodes();
+
 
         double coordX = path.get(0).get(0).getNode().getX();
         double coordY = path.get(0).get(0).getNode().getY();
@@ -250,7 +252,7 @@ public class MapDisplay extends Pane {
             for (Instructions i : list) {
                 /** path nodes highlight blue **/
                 highlightPath(id_circle.get(i.getNode().getID()));
-                idPath.add(i.getNode().getID());
+                idPath.add(i.getNode());
 
                 /** create all the lines and add them to a list **/
                 Line line = new Line();
@@ -268,6 +270,8 @@ public class MapDisplay extends Pane {
             }
             lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
         }
+
+
     }
 
     /**
@@ -317,7 +321,6 @@ public class MapDisplay extends Pane {
             if (ste != null) ste.stop();
             c.setRadius(5);
 
-
             ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
             st.setByX(1.1f);
             st.setByY(1.1f);
@@ -351,14 +354,14 @@ public class MapDisplay extends Pane {
      */
     public void removeNode(int id) {
         if (id_circle.containsKey(id)) {
-            normal(id_circle.get(id));//hideLast(id)
+            //normal(id_circle.get(id), );//hideLast(id)
             this.getChildren().remove(id_circle.remove(id));
             id_circle.remove(id);
         }
     }
 
     public void hideLast(int id) {
-        normal(id_circle.get(id));
+        normal(id_circle.get(id), null);
     }
 
 

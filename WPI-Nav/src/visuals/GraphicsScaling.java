@@ -16,6 +16,8 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
 
 public class GraphicsScaling {
+    private static final double MAX_SCALE = 10d;
+    private static final double MIN_SCALE = 1d;
 
     public Parent createZoomPane(final Group group) {
         final double SCALE_DELTA = 1.1;
@@ -26,6 +28,8 @@ public class GraphicsScaling {
         final ScrollPane scroller = new ScrollPane();
         final Group scrollContent = new Group(zoomPane);
         scroller.setContent(scrollContent);
+        scroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         scroller.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
             @Override
@@ -54,12 +58,29 @@ public class GraphicsScaling {
                 // units
                 Point2D scrollOffset = figureScrollOffset(scrollContent, scroller);
 
-                group.setScaleX(group.getScaleX() * scaleFactor);
-                group.setScaleY(group.getScaleY() * scaleFactor);
+                double totalYScale = group.getScaleY() * scaleFactor;
+                double Scale = clamp(totalYScale, MIN_SCALE, MAX_SCALE);
+                //System.out.println("Scale " + Scale);
 
-                // move viewport so that old center remains in the center after the
-                // scaling
-                repositionScroller(scrollContent, scroller, scaleFactor, scrollOffset);
+                double appWidth = scroller.getLayoutY();
+                System.out.println("Width"+appWidth);
+                //double mouseX = event.getX();
+                //double mouseY = event.getY();
+                double mouseSceneX = event.getSceneX();
+                double mouseSceneY = event.getSceneY();
+                //System.out.println("mX " + mouseX);
+                //System.out.println("mY " + mouseY);
+                System.out.println("msceneX " + mouseSceneX);
+                System.out.println("msceneY " + mouseSceneY);
+
+                //if the Scale has not been clamped
+                if (Scale < (MAX_SCALE - 1)){
+                    // move viewport so that old center remains in the center after the
+                    // scaling
+                    group.setScaleX(Scale);
+                    group.setScaleY(Scale);
+                    repositionScroller(scrollContent, scroller, scaleFactor, scrollOffset);
+                }
 
             }
         });
@@ -72,6 +93,7 @@ public class GraphicsScaling {
                 lastMouseCoordinates.set(new Point2D(event.getX(), event.getY()));
             }
         });
+
 
         scrollContent.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
@@ -90,10 +112,10 @@ public class GraphicsScaling {
             }
         });
 
-     /*   scroller.setMaxHeight(300);
-        scroller.setMinHeight(300);
-        scroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        scroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);*/
+        //scroller.setMaxHeight(300);
+        //scroller.setMinHeight(300);
+        scroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         //scroller.setViewportBounds();
         return scroller;
     }
@@ -105,6 +127,8 @@ public class GraphicsScaling {
         double extraHeight = scrollContent.getLayoutBounds().getHeight() - scroller.getViewportBounds().getHeight();
         double vScrollProportion = (scroller.getVvalue() - scroller.getVmin()) / (scroller.getVmax() - scroller.getVmin());
         double scrollYOffset = vScrollProportion * Math.max(0, extraHeight);
+        //System.out.println("ScrollXOFF " + scrollXOffset);
+        //System.out.println("ScrollYOFF " + scrollYOffset);
         return new Point2D(scrollXOffset, scrollYOffset);
     }
 
@@ -116,6 +140,7 @@ public class GraphicsScaling {
             double halfWidth = scroller.getViewportBounds().getWidth() / 2 ;
             double newScrollXOffset = (scaleFactor - 1) *  halfWidth + scaleFactor * scrollXOffset;
             scroller.setHvalue(scroller.getHmin() + newScrollXOffset * (scroller.getHmax() - scroller.getHmin()) / extraWidth);
+            //System.out.println("scroller H val " + scroller.getHmin() + newScrollXOffset * (scroller.getHmax() - scroller.getHmin()) / extraWidth);
         } else {
             scroller.setHvalue(scroller.getHmin());
         }
@@ -124,8 +149,21 @@ public class GraphicsScaling {
             double halfHeight = scroller.getViewportBounds().getHeight() / 2 ;
             double newScrollYOffset = (scaleFactor - 1) * halfHeight + scaleFactor * scrollYOffset;
             scroller.setVvalue(scroller.getVmin() + newScrollYOffset * (scroller.getVmax() - scroller.getVmin()) / extraHeight);
+            //System.out.println("scroller V val " + scroller.getVmin() + newScrollYOffset * (scroller.getVmax() - scroller.getVmin()) / extraHeight);
         } else {
             scroller.setHvalue(scroller.getHmin());
         }
     }
+
+    public static double clamp( double value, double min, double max) {
+
+        if( Double.compare(value, min) < 0)
+            return min;
+
+        if( Double.compare(value, max) > 0)
+            return max;
+
+        return value;
+    }
+
 }

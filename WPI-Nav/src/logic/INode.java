@@ -125,7 +125,7 @@ public interface INode {
      */
     public void setMap_id(int map_id);
 
-    public double getXUniv();
+    public double getX_univ();
 
     public double getY_univ();
 
@@ -147,7 +147,9 @@ public interface INode {
 
     public ImageView getIcon();
 
+    public String getPicturePath();
 
+    public void setPicturePath(String s);
 
 
     }

@@ -13,7 +13,6 @@ import visuals.Display;
 import visuals.Instructions;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 
@@ -58,6 +57,8 @@ public class Controller extends Application {
     private int currentIndex;
     private int lastMapID;
 
+    private INode selectedInformationNode;
+
 
     @Override
     public void start(Stage s) throws Exception {
@@ -69,6 +70,11 @@ public class Controller extends Application {
         nodesFromFile();
         mapsFromFile();
         buildingsFromFile();
+
+        //TODO DELETE THIS:
+        nodes.forEach((k,v) -> {
+            v.setPicturePath("Riley.png");
+        });
 
         campus = (Campus)maps.get(0);
 
@@ -84,38 +90,48 @@ public class Controller extends Application {
         display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
         s.show();   //shows scene
         defaultMap();
-        //showNodeImage(new Room(0,0.0,0.0,0.0,0.0,0.0,0.0,"hradfg"));
     }
 
 
     /****************************************************************************************************************
                                     FUNCTIONS THAT ARE CALLED FROM UI AND CONTACT UI
      ****************************************************************************************************************/
-    public void showNodeImage(INode n){
-        //we need a way of getting the image
+    public void showNodeImage(){
+        if (this.selectedInformationNode != null) {
 
-        StackPane imageStack = new StackPane();
-        StackPane shadowStack = new StackPane();
-        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+            StackPane imageStack = new StackPane();
+            StackPane shadowStack = new StackPane();
+            shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
 
-        imageStack.setOnMouseClicked(e -> {
-            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
-        });
+            imageStack.setOnMouseClicked(e -> {
+                myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            });
 
-       //add image to stack pane -> if no image return void
-        Image image = new Image(getClass().getResourceAsStream("../images/Riley.png"));
-        ImageView iv = new ImageView(image);
+            //add image to stack pane -> if no image return void
+            Image image = new Image(getClass().getResourceAsStream("../images/" + this.selectedInformationNode.getPicturePath()));
+            ImageView iv = new ImageView(image);
 
-        imageStack.getChildren().add(iv);
+            imageStack.getChildren().add(iv);
 
-
-
-        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+            this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+        }
     }
 
-    public void updateNodeInformation(ImageView i, String s){
-        this.myDisplay.updateNodeIcon(i);
-        this.myDisplay.updateNodeTitle(s);
+    /**
+     * Switch this to just the INode
+     * @param n
+     */
+    public void updateNodeInformation(INode n){
+        this.myDisplay.updateNodeIcon(n.getIcon());
+        this.myDisplay.updateNodeTitle(n.toString());
+
+        if (n.getPicturePath() != null){
+            this.myDisplay.updatePictureIcon(true);
+            this.selectedInformationNode = n;
+        } else {
+            this.myDisplay.updatePictureIcon(false);
+            this.selectedInformationNode = null;
+        }
     }
 
     public boolean sendEmail(String email){
@@ -211,6 +227,12 @@ public class Controller extends Application {
                 this.endNode = nodes.get(id);
             }
 
+
+
+            if (startNode != null && endNode != null) {
+                findPaths();
+            }
+
             if (startNode != null) {
                 System.out.printf("Setting STARTNODE: %d\n", startNode.getID());
                 //TODO if current map contains it, play, if it doesn't - switch and play
@@ -228,11 +250,6 @@ public class Controller extends Application {
                 } else {
                     myDisplay.mapDisplay.setEndNode(endNode);
                 }
-                //TODO
-            }
-
-            if (startNode != null && endNode != null) {
-                findPaths();
                 //TODO
             }
         }
@@ -286,7 +303,7 @@ public class Controller extends Application {
 
         //set building info arrows / tab
 
-        // this.myDisplay.populateShowAddBuildingPanel(buildings.get(buildingID));
+        // his.myDisplay.populateShowAddBuildingPanel(buildings.get(buildingID));
 
         //switch to correct view
 
@@ -606,6 +623,10 @@ public class Controller extends Application {
      */
     public void findPaths(){
 
+        //MAKE ALL NODES NORMAL
+
+
+
         //set ids
         if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
             this.myDisplay.setIDRightArrowButton("arrow-buttons");
@@ -690,19 +711,6 @@ public class Controller extends Application {
 
     private void mapsFromFile() {
         maps = new Parser<IMap>().fromFileMap();
-    }
-
-    //TODO This might not be needed anymore.. Charlie can decide
-    private void campusFromFile(){
-        HashMap<Integer, IMap> temp = new Parser<Building>().fromFileMap();
-        Collection<IMap> maps = temp.values();
-
-        for(IMap m : maps) {
-            if (m instanceof Campus) {
-                campus = (Campus)m;
-                break;
-            }
-        }
     }
 
     /****************************************************************************************************************
