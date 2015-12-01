@@ -58,7 +58,10 @@ public class TranslationTesting {
     @Test
     public void testInitial2() throws Exception {
         Translate p = new Translate(A1_L, B1_L, A1_U, B1_U);
-        assertEquals("Initial test2",universal1,p.setUniversalCoordinates(local1));
+       // assertEquals("Initial test2",universal1,p.setUniversalCoordinates(local1));
+        assertEquals("Initial test2 - on individual IDs", universal1.get(4).getID(), p.setUniversalCoordinates(local1).get(4).getID());
+        assertEquals("Initial test2 - on individual IDs", universal1.get(5).getID(), p.setUniversalCoordinates(local1).get(5).getID());
+
     }
 
     @Test

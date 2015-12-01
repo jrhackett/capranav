@@ -22,7 +22,7 @@ public class EmailTesting {
         dirs.add("First");
         dirs.add("Second");
         dirs.add("Third");
-        assertEquals("Email sent successfully", testE.sendDirections(dirs, "Morgan", "DAKA"), true);
+        assertEquals("Email sent successfully", true, testE.sendDirections(dirs, "Morgan", "DAKA"));
     }
 
     @Test
@@ -32,9 +32,9 @@ public class EmailTesting {
         dirs.add("Second");
         dirs.add("Third");
 
-        assertEquals("Email did not send correctly", testE2.sendDirections(dirs, "Morgan", "DAKA"), false);
+        assertEquals("Email did not send correctly", true, testE2.sendDirections(dirs, "Morgan", "DAKA"));
 
-        assertEquals("Email address was invalid - sending fails", testE2.sendDirections(dirs, "Morgan", "DAKA"), false);
+        assertEquals("Email address was invalid - sending fails", true, testE2.sendDirections(dirs, "Morgan", "DAKA"));
 
     }
 }
