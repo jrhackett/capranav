@@ -2,6 +2,8 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import visuals.Instructions;
 		
 public class Directions {
 	private static double totalDistance = 0;
@@ -12,13 +14,14 @@ public class Directions {
 	 * @param aStarPath
 	 * @return
 	 */
-	public static ArrayList<String> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps) {
+	public static ArrayList<ArrayList<Instructions>> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps) {
 		// TODO: Implement skipping of straight path nodes
+		int mapstep=0;
 		double distspec = 0;
 
 		//^^NEW LINE, init var distspec
 
-		ArrayList<String> directions = new ArrayList<String>();
+		ArrayList<ArrayList<Instructions>> directions = new ArrayList<ArrayList<Instructions>>();
 		
 		// Do special case for first node
 		double dist = Math.sqrt(Math.pow((aStarPath.get(0).getX() - aStarPath.get(1).getX()), 2)
@@ -69,7 +72,7 @@ public class Directions {
 		
 		String distPhrase = Math.round(dist) + " feet.";
 		
-		directions.add("Face " + anglePhrase + ", and walk " + distPhrase);
+		directions.get(0).add(new Instructions("Face " + anglePhrase + ", and walk " + distPhrase,aStarPath.get(0)));
 		
 		for (int i = 0; i < aStarPath.size() - 2; i++) {
 			INode prev = aStarPath.get(i);
@@ -121,13 +124,14 @@ public class Directions {
 
 			if (angle<165 || angle>195){
 				//^^NEW LINE: Don't add this step's direction if straight (30 degree window)(don't forget the close squiggly)
-				directions.add("Turn " + anglePhrase + ", and walk " + distPhrase);
+				directions.get(mapstep).add(new Instructions("Turn " + anglePhrase + ", and walk " + distPhrase,turn));
 			}
+			if(turn.isTransition())mapstep++;
 			distspec = 0;
 			//^^NEW LINE: Clear distspec so the distance is not carried through and counted twice
 		}
 		
-		directions.add("You have reached your destination");
+		directions.get(directions.size()).add(new Instructions("You have reached your destination",aStarPath.get(aStarPath.size())));
 		
 		return directions;
 	}
