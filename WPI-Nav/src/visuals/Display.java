@@ -11,10 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -193,7 +190,7 @@ public class Display {
         divider_2.visibleProperty().bind(DASHBOARD_VISIBLE);
         divider_3.visibleProperty().bind(DASHBOARD_VISIBLE);
 
-        AnchorPane.setTopAnchor(divider_0, EDGE + 1);
+        AnchorPane.setTopAnchor(divider_0, EDGE + 2);
         AnchorPane.setLeftAnchor(divider_0, GAP);
         AnchorPane.setRightAnchor(divider_0, GAP);
 
@@ -653,6 +650,7 @@ public class Display {
         Group group = new Group(mapPane);
         GraphicsScaling graphicsScaling = new GraphicsScaling();
         Parent zoomPane = graphicsScaling.createZoomPane(group);
+
 
         AnchorPane.setTopAnchor(zoomPane, EDGE);//
         AnchorPane.setLeftAnchor(zoomPane, 0.0);

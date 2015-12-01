@@ -90,10 +90,10 @@ public class GraphicsScaling {
             }
         });
 
-     /*   scroller.setMaxHeight(300);
-        scroller.setMinHeight(300);
-        scroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        scroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);*/
+        //scroller.setMaxHeight(300);
+        //scroller.setMinHeight(300);
+        scroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroller.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         //scroller.setViewportBounds();
         return scroller;
     }
