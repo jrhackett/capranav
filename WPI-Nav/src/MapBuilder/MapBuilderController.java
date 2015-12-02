@@ -264,6 +264,13 @@ public class MapBuilderController extends Application {
 	 */
 	public void saveNodesToMaster(){
 		if(nodeList != null){
+
+			nodeList.forEach((k, v) -> {
+				if(v.isTransition()){
+					System.out.println("Transition node found");
+				}
+			});
+
 			// First, remove all the nodes that were deleted
 			// AKA: are present in the old list but not in the new one
 			Integer[] keyList = masterNodeList.keySet().toArray(new Integer[masterNodeList.keySet().size()]);
@@ -280,6 +287,10 @@ public class MapBuilderController extends Application {
 			// Update all the nodes that could have been changed
 			nodeList.forEach((k, v) -> {
 				masterNodeList.put(k, v);
+
+				if(v.isTransition()){
+					//System.out.println("Transition node found");
+				}
 			});
 		}
 	}
@@ -380,6 +391,11 @@ public class MapBuilderController extends Application {
 	// This gets the selected node
 	public int getSelectedNodeID() {
 		return this.selectedNodeID;
+	}
+
+	// This adds a given node to the nodeList hashmap
+	public void addNode(INode iNode){
+		nodeList.put(iNode.getID(), iNode);
 	}
 
 	// This deletes a given node

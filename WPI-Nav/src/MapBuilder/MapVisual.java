@@ -483,7 +483,7 @@ public class MapVisual extends Pane {
 
 
 		} else {
-			controller.getNodesOfMap().put(iNode.getID(), iNode);
+			controller.addNode(iNode);
 			popOver.hide();
 
 			this.getChildren().remove(id_circle.get(iNode.getID()));
@@ -495,7 +495,7 @@ public class MapVisual extends Pane {
 
 
 	private void saveNodeInformation(String s, INode iNode, PopOver popOver ){
-		controller.getNodesOfMap().put(iNode.getID(), iNode);
+
 		popOver.hide();
 
 		ArrayList<String> list = parseString(s);
@@ -504,6 +504,8 @@ public class MapVisual extends Pane {
 		Circle	c =		createCircle(iNode);
 		this.getChildren().add(c);
 		this.id_circle.put(iNode.getID(), c);
+
+		controller.addNode(iNode);
 	}
 
 
@@ -622,11 +624,11 @@ public class MapVisual extends Pane {
 			if (!v.isTransition()) {
 				c.setFill(Color.BLUE);
 				c.setStrokeWidth(0);
-				c.setRadius(2);
+				c.setRadius(5);
 			} else {
 				c.setFill(Color.HOTPINK);
 				c.setStrokeWidth(0);
-				c.setRadius(2);
+				c.setRadius(5);
 			}
 		}
 	}
