@@ -7,6 +7,10 @@ import visuals.Instructions;
 		
 public class Directions {
 	private static double totalDistance = 0;
+
+	public Directions(){
+		totalDistance = 0;
+	}
 	//TODO: multiply ALL by campus pixel to feet ratio....which we do not know
 	/**
 	 * stepByStep takes in an arrayList of Nodes and outputs a list of
@@ -122,8 +126,9 @@ public class Directions {
 			if (next instanceof Stairs || next instanceof TStairs) distPhrase = "climb the stairs and go " + Math.round(distspec) + " feet.";
 			if (next instanceof Elevator) distPhrase = "enter the elevator."; //TODO: This should include what floor to select
 			// specialdirs changed lines ^^
+			//if (angle<165 || angle>195){
 
-			if (angle<165 || angle>195){
+			if (angle<=-10 || angle>=10){
 				//^^NEW LINE: Don't add this step's direction if straight (30 degree window)(don't forget the close squiggly)
 				directions.get(mapstep).add(new Instructions("Turn " + anglePhrase + ", and walk " + distPhrase,turn));
 			}
@@ -134,8 +139,10 @@ public class Directions {
 			distspec = 0;
 			//^^NEW LINE: Clear distspec so the distance is not carried through and counted twice
 		}
-		
-		directions.get(mapstep).add(new Instructions("You have reached your destination",aStarPath.get(aStarPath.size())));
+		System.out.println(directions.size());
+		System.out.println(mapstep);
+		System.out.println(aStarPath.size());
+		directions.get(directions.size()-1).add(new Instructions("You have reached your destination.",aStarPath.get(aStarPath.size()-1)));
 		
 		return directions;
 	}
