@@ -266,7 +266,14 @@ public class Display {
         infoView.setId("pinView");
 
 
-        Image gears = new Image(getClass().getResourceAsStream("../images/gears.png"), 20, 20, true, true);
+        Image gears;
+        try {
+            gears = new Image(getClass().getResourceAsStream("../images/gears.png"), 20, 20, true, true);
+        }
+        catch (NullPointerException e) {
+            gears = new Image(getClass().getResourceAsStream("/images/gears.png"), 20, 20, true, true);
+        }
+
         ImageView gearsView = new ImageView(gears);
         //gearsView.setStyle("-fx-fill: #eeeeee;");
         //SVGPath gearsView = new SVGPath();
@@ -492,7 +499,15 @@ public class Display {
         directionsTitleBox.setSpacing(GAP * 3);
 
         VBox directionsControlBox = new VBox();
-        Image directionsArrow = new Image(getClass().getResourceAsStream("../images/forward.png"), 27, 27, true, true);
+
+        Image directionsArrow;
+        try {
+            directionsArrow = new Image(getClass().getResourceAsStream("../images/forward.png"), 27, 27, true, true);
+        }
+        catch (NullPointerException e) {
+            directionsArrow = new Image(getClass().getResourceAsStream("/images/forward.png"), 27, 27, true, true);
+        }
+
         ImageView directionsArrowView = new ImageView(directionsArrow);
         directionsArrowView.setTranslateX(8);
         directionsArrowView.setTranslateY(5);
@@ -526,7 +541,14 @@ public class Display {
         AnchorPane.setLeftAnchor(instructionArrows, 0.0);
         AnchorPane.setRightAnchor(instructionArrows, 0.0);
 
-        Image leftArrow = new Image(getClass().getResourceAsStream("../images/leftArrow.png"), 24, 24, true, true);
+        Image leftArrow;
+        try {
+            leftArrow = new Image(getClass().getResourceAsStream("../images/leftArrow.png"), 24, 24, true, true);
+        }
+        catch(NullPointerException e) {
+            leftArrow = new Image(getClass().getResourceAsStream("/images/leftArrow.png"), 24, 24, true, true);
+        }
+
         ImageView leftArrowView = new ImageView(leftArrow);
 
         leftArrowButton = new javafx.scene.control.Button();
@@ -534,7 +556,15 @@ public class Display {
         leftArrowButton.setId("arrow-buttons-grayed");
         leftArrowButton.setOnAction(e -> handleLeftArrowButton());
 
-        Image rightArrow = new Image(getClass().getResourceAsStream("../images/rightArrow.png"), 24, 24, true, true);
+        Image rightArrow;
+        try {
+            rightArrow = new Image(getClass().getResourceAsStream("../images/rightArrow.png"), 24, 24, true, true);
+        }
+        catch (NullPointerException e) {
+            rightArrow = new Image(getClass().getResourceAsStream("/images/rightArrow.png"), 24, 24, true, true);
+        }
+
+
         ImageView rightArrowView = new ImageView(rightArrow);
 
         rightArrowButton = new javafx.scene.control.Button();
@@ -569,8 +599,14 @@ public class Display {
         emailBox.setSpacing(GAP * 3);
 
 
+        Image emailImage;
+        try {
+            emailImage = new Image(getClass().getResourceAsStream("../images/email109.png"), 25, 25, true, true);
+        }
+        catch (NullPointerException e) {
+            emailImage = new Image(getClass().getResourceAsStream("/images/email109.png"), 25, 25, true, true);
+        }
 
-        Image emailImage = new Image(getClass().getResourceAsStream("../images/email109.png"), 25, 25, true, true);
         ImageView emailView = new ImageView(emailImage);
 
         //VBox emailIconBox = new VBox();
@@ -761,7 +797,14 @@ public class Display {
         nodeTitle = new Label();
         nodeTransitionButton = new javafx.scene.control.Button();
 
-        Image nodeIconImage = new Image(getClass().getResourceAsStream("../images/picture.png"), 27,27,true,true);
+        Image nodeIconImage;
+        try {
+            nodeIconImage = new Image(getClass().getResourceAsStream("../images/picture.png"), 27,27,true,true);
+        }
+        catch (NullPointerException e) {
+            nodeIconImage = new Image(getClass().getResourceAsStream("/images/picture.png"), 27,27,true,true);
+        }
+
         ImageView nodeIconView = new ImageView(nodeIconImage);
         nodeTransitionButton.setGraphic(nodeViewHolder);
         nodeIconView.setFitHeight(27);
@@ -821,8 +864,17 @@ public class Display {
         this.left = new javafx.scene.control.Button();
         this.right = new javafx.scene.control.Button();
 
-        Image minus = new Image(getClass().getResourceAsStream("../images/minus104.png"), 20, 20, true, true);
-        Image plus = new Image(getClass().getResourceAsStream("../images/plus79.png"), 20, 20, true, true);
+        Image minus;
+        Image plus;
+        try {
+            minus = new Image(getClass().getResourceAsStream("../images/minus104.png"), 20, 20, true, true);
+            plus = new Image(getClass().getResourceAsStream("../images/plus79.png"), 20, 20, true, true);
+        }
+        catch  (NullPointerException e) {
+            minus = new Image(getClass().getResourceAsStream("/images/minus104.png"), 20, 20, true, true);
+            plus = new Image(getClass().getResourceAsStream("/images/plus79.png"), 20, 20, true, true);
+        }
+
 
         ImageView minusView = new ImageView(minus);
         ImageView plusView = new ImageView(plus);
