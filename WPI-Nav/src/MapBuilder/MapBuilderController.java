@@ -59,6 +59,7 @@ public class MapBuilderController extends Application {
 
 		mapsFromFile();
 		nodesFromFile();
+		buildingsFromFile();
 
 		// loadNodesFromFile();
 
@@ -92,16 +93,18 @@ public class MapBuilderController extends Application {
 	 * sets the next node id to be the largest value
 	 */
 	private void setNextNodeID() {
+		/*
 		if (ugh) {
-			nextNodeID = 3000;
+			nextNodeID = 4000;
 			ugh = false;
 		}
 		else {
-
+*/
 		masterNodeList.forEach((k, v) -> {
 			nextNodeID = (k > nextNodeID) ? k : nextNodeID;
 			nextNodeID++;
-		}); }
+		});
+	//}
 	}
 
 	/**
@@ -321,9 +324,9 @@ public class MapBuilderController extends Application {
 		}
 
 
-		/*this.buildings.forEach((k,v) -> {
-			v.translateBuilding(getNodesOfBuilding(k));
-		});*/
+		this.buildings.forEach((k,v) -> {
+			v.translateBuilding(getNodesOfBuilding(k), masterNodeList);
+		});
 
 
 		Parser parser = new Parser<INode>();

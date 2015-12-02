@@ -8,11 +8,10 @@ public class Building {
     private int id;
     private int floors; //number of floors
 
-    private INode universalA;
-    private INode universalB;
-    private INode localA;
-    private INode localB;
-
+    private int universalA;
+    private int universalB;
+    private int localA;
+    private int localB;
 
 
     //<Integer> maps; //Floor would be easier but easier to just do int for parsing
@@ -32,7 +31,7 @@ public class Building {
     public ArrayList<String> getNames(){ return this.names;}
 
     public void   addName(String s){ this.names.add(s);}
-    public HashMap<Integer, Integer> getFloorMap(){
+    public HashMap<Integer, Integer> getFloorMap(){ //floor -> id map
         return floorMap;
     }
 
@@ -43,15 +42,15 @@ public class Building {
         this.names = names;
     }
 
-    public void setTranslateNodes(INode a, INode b, INode c, INode d){
+    public void setTranslateNodes(int a, int b, int c, int d){
         this.universalA = a;
         this.universalB = b;
         this.localA     = c;
         this.localB     = d;
     }
 
-    public void  translateBuilding(HashMap<Integer, INode> nodes){
-        Translate translate = new Translate(localA, localB, universalA, universalB);
+    public void  translateBuilding(HashMap<Integer, INode> nodes, HashMap<Integer,INode> master){
+        Translate translate = new Translate(master.get(localA), master.get(localB), master.get(universalA), master.get(universalB));
         translate.setUniversalCoordinates(nodes);
     }
 

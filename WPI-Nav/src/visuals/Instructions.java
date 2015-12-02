@@ -55,6 +55,8 @@ public class Instructions {
 	 */
 	public INode getNode(){ return this.node;}
 
+	public String toString(){ return  this.instruction_string;}
+
 
 
 }

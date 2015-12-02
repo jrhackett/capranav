@@ -30,8 +30,10 @@ public class Transition extends Node {
     }
 
     public ImageView getIcon(){
-        Image image = new Image(getClass().getResourceAsStream("../images/exit21.svg"), 20, 20, true, true);
+        Image image = new Image(getClass().getResourceAsStream("../images/exit.svg"), 20, 20, true, true);
         ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(22);
+        imageView.setFitWidth(22);
         return imageView;
     }
     public String toString(){

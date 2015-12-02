@@ -15,6 +15,7 @@ import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import logic.IMap;
 import logic.INode;
+import logic.Path;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -188,9 +189,13 @@ public class MapDisplay extends Pane {
             });
         }
 
-        circle.setOnMouseEntered(e -> {
-            controller.updateNodeInformation(v);
-        });
+        if(v instanceof Path){
+
+        }else {
+            circle.setOnMouseEntered(e -> {
+                controller.updateNodeInformation(v);
+            });
+        }
 
         return circle;
     }

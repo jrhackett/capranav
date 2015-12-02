@@ -282,11 +282,14 @@ public class Controller extends Application {
 
     private void switchMapSetting(int buildingID, int startingFLOOR){
         if (buildingID == 0){
+            System.out.println("BUILDING ID 0");
             //remove the current building info/pane/whatever
             hideBuildingPane();//ONLY SLIDES UP BUILDING VIEW //TODO STILL UNTESTED
             //switch to campus map
             defaultMap();
         } else {
+            System.out.println("BUILDING ID >>");
+            System.out.println(buildingID);
             this.currentBuilding = buildingID;
             showBuildingPane();//ONLY SLIDE DOWN BUILDING VIEW //TODO STILL UNTESTED
             switchToBuildingView(buildingID, startingFLOOR);
@@ -295,7 +298,7 @@ public class Controller extends Application {
 
     private void switchToBuildingView(int buildingID, int startingFLOOR){
         //the arrows should already be correctly mapped to controller
-
+        System.out.println("SWITCH TO BUILDING VIEW");
         //set the Building Name
         myDisplay.setBuildingName(buildings.get(buildingID).getName());
 
@@ -328,7 +331,10 @@ public class Controller extends Application {
 
 
     public void setFloor(int i){//TODO HARD CODE IN IDS
+        System.out.println("SET FLOOR");
+        System.out.println(i);
         if (buildings.get(currentBuilding).getFloorMap().containsKey(i)){
+            System.out.println("SET FLOOR IF i");
             setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(i));
             this.currentFloor = i;
             this.myDisplay.setBuildingNumber(i);
