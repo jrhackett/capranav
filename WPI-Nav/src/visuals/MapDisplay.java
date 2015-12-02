@@ -66,6 +66,8 @@ public class MapDisplay extends Pane {
         this.setMaxHeight(IMAGE_HEIGHT);
         this.id_circle = new HashMap<>();
         this.path = new ArrayList<>();
+        this.lines = new HashMap<>();
+        this.idPath = new ArrayList<>();
         this.ste = new ScaleTransition();
         this.sts = new ScaleTransition();
     }
@@ -168,6 +170,7 @@ public class MapDisplay extends Pane {
                 if (v != null && v.isTransition()) {
                     c.setFill(Color.YELLOW);
                 } else {
+                    System.out.println("TRYING TO TRANSPARENT");
                     c.setFill(Color.TRANSPARENT);
                 }
                 c.setStrokeWidth(0);
@@ -251,8 +254,13 @@ public class MapDisplay extends Pane {
 
 
     public void changeBackOldPathNodes(){
-        for (INode i : idPath){
-            normal(id_circle.get(i),i );
+        lines.forEach((k,v) -> {
+           this.getChildren().removeAll(v);
+        });
+
+        for (INode i :idPath){
+            normal(id_circle.get(i), i);
+            System.out.println("TRYING TO NORMAL");
         }
     }
 
@@ -261,9 +269,12 @@ public class MapDisplay extends Pane {
      */
 
     public void createPath(ArrayList<ArrayList<Instructions>> path) {
+
+        changeBackOldPathNodes();
+
+
         idPath = new ArrayList<>(); //TODO AM I REMVOING THE OLD LINES
         lines = new HashMap<>();
-        changeBackOldPathNodes();
 
 
         double coordX = path.get(0).get(0).getNode().getX();
