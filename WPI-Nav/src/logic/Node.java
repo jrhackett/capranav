@@ -289,11 +289,7 @@ public abstract class Node implements INode {
 		if (Double.compare(node.z_coord, z_coord) != 0) return false;
 		if (Double.compare(node.getX_univ(), getX_univ()) != 0) return false;
 		if (Double.compare(node.getY_univ(), getY_univ()) != 0) return false;
-		if (Double.compare(node.getZ_univ(), getZ_univ()) != 0) return false;
-		if (getAdjacencies() != null ? !getAdjacencies().equals(node.getAdjacencies()) : node.getAdjacencies() != null)
-			return false;
-		if (getParent() != null ? !getParent().equals(node.getParent()) : node.getParent() != null) return false;
-		return !(getPicturePath() != null ? !getPicturePath().equals(node.getPicturePath()) : node.getPicturePath() != null);
+		return Double.compare(node.getZ_univ(), getZ_univ()) == 0;
 
 	}
 
@@ -302,7 +298,6 @@ public abstract class Node implements INode {
 		int result;
 		long temp;
 		result = id;
-		result = 31 * result + getMap_id();
 		temp = Double.doubleToLongBits(x_coord);
 		result = 31 * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(y_coord);
@@ -315,9 +310,6 @@ public abstract class Node implements INode {
 		result = 31 * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(getZ_univ());
 		result = 31 * result + (int) (temp ^ (temp >>> 32));
-		result = 31 * result + (getAdjacencies() != null ? getAdjacencies().hashCode() : 0);
-		result = 31 * result + (getParent() != null ? getParent().hashCode() : 0);
-		result = 31 * result + (getPicturePath() != null ? getPicturePath().hashCode() : 0);
 		return result;
 	}
 }
