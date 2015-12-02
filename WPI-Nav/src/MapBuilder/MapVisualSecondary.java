@@ -72,11 +72,11 @@ public class MapVisualSecondary extends Pane {
         try {
             // Image(getClass().getResourceAsStream("../images/" + map.getPath()
             // + ".png"), 660, 495, true, true);
-            this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getFilePath()));
+            this.mapImage = new Image(getClass().getResourceAsStream("../images/floorPlans/" + map.getFilePath()));
         } catch (NullPointerException e) {
             // Image(getClass().getResourceAsStream("/images/" + map.getPath() +
             // ".png"), 660, 495, true, true);
-            this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getFilePath()));
+            this.mapImage = new Image(getClass().getResourceAsStream("/images/floorPlans/" + map.getFilePath()));
         }
 
         this.mapView = new ImageView(mapImage);
@@ -161,6 +161,8 @@ public class MapVisualSecondary extends Pane {
             if (e.getButton() == MouseButton.PRIMARY) {
                 if(controller.isNodeSelected() && controller.getSelectedNode().isTransition()){
 
+                    System.out.println("Transition edge created!");
+
                     // Make an edge to that node
 
                     // Add edge between nodes
@@ -186,7 +188,7 @@ public class MapVisualSecondary extends Pane {
                         controller.getSelectedNode().addEdge(newCEdge);
                         v.addEdge(newVEdge);
 
-                        drawNodes(controller.getCurrentNodeList());
+                        drawNodes(controller.getSecondaryNodeList());
                     } else {
                         System.out.println("Edge already exists");
                     }

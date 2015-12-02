@@ -327,6 +327,10 @@ public class MapBuilderController extends Application {
 		this.masterNodeList = new Parser<INode>().fromFileGraph();
 		
 		//int firstKey = masterNodeList.keySet()[0];
+		if(masterNodeList == null){
+			System.out.println("Nodes were never added. Expect Errors");
+		}
+		
 		masterNodeList.remove(0);
 
 		/*
