@@ -21,6 +21,7 @@ public class Directions {
 		//^^NEW LINE, init var distspec
 
 		ArrayList<ArrayList<Instructions>> directions = new ArrayList<ArrayList<Instructions>>();
+		directions.add(new ArrayList<Instructions>());
 		
 		// Do special case for first node
 		double dist = Math.sqrt(Math.pow((aStarPath.get(0).getX_univ() - aStarPath.get(1).getX_univ()), 2)
@@ -126,12 +127,15 @@ public class Directions {
 				//^^NEW LINE: Don't add this step's direction if straight (30 degree window)(don't forget the close squiggly)
 				directions.get(mapstep).add(new Instructions("Turn " + anglePhrase + ", and walk " + distPhrase,turn));
 			}
-			if(turn.isTransition())mapstep++;
+			if(turn.isTransition()){
+				mapstep++;
+				directions.add(new ArrayList<Instructions>());
+			}
 			distspec = 0;
 			//^^NEW LINE: Clear distspec so the distance is not carried through and counted twice
 		}
 		
-		directions.get(directions.size()).add(new Instructions("You have reached your destination",aStarPath.get(aStarPath.size())));
+		directions.get(mapstep).add(new Instructions("You have reached your destination",aStarPath.get(aStarPath.size())));
 		
 		return directions;
 	}
