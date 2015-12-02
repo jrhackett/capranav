@@ -16,6 +16,10 @@ public class Path extends Node {
         super(id, x, y, z, x1, x2, x3, mapID);
     }
 
+    public Path(INode iNode){
+        super(iNode);
+    }
+
     public ImageView getIcon(){
         Image image = new Image(getClass().getResourceAsStream("../images/path.svg"), 22, 22, true, true);
         ImageView imageView = new ImageView(image);

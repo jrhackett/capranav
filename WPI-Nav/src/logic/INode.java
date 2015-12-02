@@ -151,5 +151,7 @@ public interface INode {
 
     public void setPicturePath(String s);
 
+    public void addNames(ArrayList<String> s);
+
 
     }

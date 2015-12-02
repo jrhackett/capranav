@@ -16,6 +16,10 @@ public class Elevator extends Transition {
         super(id, x, y, z, x1, y1, z1, map_id);
     }
 
+    public Elevator(INode iNode){
+        super(iNode);
+    }
+
     public ImageView getIcon(){
         Image image = new Image(getClass().getResourceAsStream("../images/lift8.svg"), 22, 22, true, true);
         ImageView imageView = new ImageView(image);
