@@ -50,6 +50,19 @@ public class Building {
     }
 
     public HashMap<Integer, INode>  translateBuilding(HashMap<Integer, INode> nodes, HashMap<Integer,INode> master){
+
+        for (Edge e : master.get(localA).getAdjacencies()){
+            if (master.get(e.getTarget()).getMap_id() != master.get(localA).getMap_id()){
+                universalA = master.get(e.getTarget()).getID();
+            }
+        }
+
+        for (Edge e : master.get(localB).getAdjacencies()){
+            if (master.get(e.getTarget()).getMap_id() != master.get(localB).getMap_id()){
+                universalB = master.get(e.getTarget()).getID();
+            }
+        }
+
         Translate translate = new Translate(master.get(localA), master.get(localB), master.get(universalA), master.get(universalB));
         return translate.setUniversalCoordinates(nodes);
     }
