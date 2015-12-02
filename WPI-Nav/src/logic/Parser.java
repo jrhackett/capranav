@@ -37,10 +37,10 @@ public class Parser<Struct> {
 	private static boolean[] mBools = { true, true };
 
 	private static final Class[] nTypes = { Bathroom.class, Elevator.class, Food.class, Landmark.class, Path.class,
-			Room.class, Stairs.class, TStairs.class };
+			Room.class, Stairs.class, Transition.class, TStairs.class };
 	private static final String[] nNames = { "bathroom.json", "elevator.json", "food.json", "landmark.json",
-			"path.json", "room.json", "stair.json", "tstair.json" };
-	private static boolean[] nBools = { true, true, true, true, true, true, true, true };
+			"path.json", "room.json", "stair.json", "transition.json", "tstair.json" };
+	private static boolean[] nBools = { true, true, true, true, true, true, true, true, true };
 
 	private static boolean building = true;
 	private static boolean user = true;

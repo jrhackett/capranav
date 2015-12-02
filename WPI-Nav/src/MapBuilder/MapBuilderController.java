@@ -78,7 +78,7 @@ public class MapBuilderController extends Application {
 
 
 	public void  setNodeInformation(INode node){
-		this.myDisplay.setNodeLabel(node.getClass().toString() + "  |  " + node.toString());
+		this.myDisplay.setNodeLabel(node.getClass().toString() + "  |  " + node.toString() + "  |  " + node.getID());
 	}
 
 	public void setEdgeInformation(String s){
@@ -93,7 +93,7 @@ public class MapBuilderController extends Application {
 	 */
 	private void setNextNodeID() {
 		if (ugh) {
-			nextNodeID = 1000;
+			nextNodeID = 3000;
 			ugh = false;
 		}
 		else {
