@@ -23,6 +23,8 @@ public class TStairs  extends Transition {
     public ImageView getIcon(){
         Image image = new Image(getClass().getResourceAsStream("../images/stairs7.svg"), 22, 22, true, true);
         ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(22);
+        imageView.setFitWidth(22);
         return imageView;
     }
     public String toString(){
