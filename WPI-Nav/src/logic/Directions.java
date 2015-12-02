@@ -7,7 +7,7 @@ import visuals.Instructions;
 		
 public class Directions {
 	private static double totalDistance = 0;
-	
+	//TODO: multiply ALL by campus pixel to feet ratio....which we do not know
 	/**
 	 * stepByStep takes in an arrayList of Nodes and outputs a list of
 	 *
@@ -15,7 +15,6 @@ public class Directions {
 	 * @return
 	 */
 	public static ArrayList<ArrayList<Instructions>> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps) {
-		// TODO: Implement skipping of straight path nodes
 		int mapstep=0;
 		double distspec = 0;
 
@@ -24,8 +23,8 @@ public class Directions {
 		ArrayList<ArrayList<Instructions>> directions = new ArrayList<ArrayList<Instructions>>();
 		
 		// Do special case for first node
-		double dist = Math.sqrt(Math.pow((aStarPath.get(0).getX() - aStarPath.get(1).getX()), 2)
-				+ Math.pow((aStarPath.get(0).getY() - aStarPath.get(1).getY()), 2));
+		double dist = Math.sqrt(Math.pow((aStarPath.get(0).getX_univ() - aStarPath.get(1).getX_univ()), 2)
+				+ Math.pow((aStarPath.get(0).getY_univ() - aStarPath.get(1).getY_univ()), 2));
 
 
 		double scalar = 1;
@@ -39,8 +38,8 @@ public class Directions {
 		
 		totalDistance += dist;
 
-		double angle = Math.atan2((aStarPath.get(0).getY() - aStarPath.get(1).getY()),
-				(aStarPath.get(0).getX() - aStarPath.get(1).getX()));
+		double angle = Math.atan2((aStarPath.get(0).getY_univ() - aStarPath.get(1).getY_univ()),
+				(aStarPath.get(0).getX_univ() - aStarPath.get(1).getX_univ()));
 		
 
 		angle = Math.round(angle * 180 / Math.PI - 180);
@@ -82,12 +81,11 @@ public class Directions {
 			INode next = aStarPath.get(i + 2);
 			
 			// get the distance to the next node and angle
-            //TODO JOSH / ANTHONY CHECK THIS
-			dist = Math.sqrt(Math.pow((turn.getX() - next.getX()), 2) + Math.pow((turn.getY() - next.getY()), 2));
+            // Set to use universal.
+			dist = Math.sqrt(Math.pow((turn.getX_univ() - next.getX_univ()), 2) + Math.pow((turn.getY_univ() - next.getY_univ()), 2));
 			distspec += dist;
 			//NEW LINE- add CURRENT dist to distspec, which is used for adding culled distances
 			//Future steps' distance will be added to this variable later.
-//			dist = Math.sqrt(Math.pow((turn.getX_univ() - next.getX_univ()), 2) + Math.pow((turn.getY_univ() - next.getY_univ()), 2));
 
 			if(maps.containsKey(turn.getMap_id())){
 				scalar = maps.get(turn.getMap_id()).getPixelToFeetRatio();
@@ -109,7 +107,7 @@ public class Directions {
 			int j = 1;
 			while(aStarPath.size()>i+j+2 && getAngle(aStarPath.get(i+j),aStarPath.get(i+j+1),aStarPath.get(i+j+2)) > 2.87979327 && getAngle(aStarPath.get(i+j-1),aStarPath.get(i+j),aStarPath.get(i+j+1)) < 3.40339204){
 				//While loop checks if future turns are straight and we have not reached the end
-				distspec += (Math.sqrt(Math.pow((aStarPath.get(i+j+1).getX() - aStarPath.get(i+j+2).getX()), 2) + Math.pow((aStarPath.get(i+j+1).getY() - aStarPath.get(i+j+2).getY()), 2)));
+				distspec += (Math.sqrt(Math.pow((aStarPath.get(i+j+1).getX_univ() - aStarPath.get(i+j+2).getX_univ()), 2) + Math.pow((aStarPath.get(i+j+1).getY_univ() - aStarPath.get(i+j+2).getY_univ()), 2)));
 				//Add the distance of a step in the future
 				j++;
 			}
@@ -155,12 +153,12 @@ public class Directions {
 		double theta2;
 		double angle;
 
-		theta1 = Math.atan2((turn.getY() - previous.getY()), (turn.getX() - previous.getX()));
-		theta2 = Math.atan2((next.getY() - turn.getY()), (next.getX() - turn.getX()));
+	//	theta1 = Math.atan2((turn.getY() - previous.getY()), (turn.getX() - previous.getX()));
+	//	theta2 = Math.atan2((next.getY() - turn.getY()), (next.getX() - turn.getX()));
 		
-//TODO checkout this please as well
-//		theta1 = Math.atan2((turn.getY_univ() - previous.getY_univ()), (turn.getX_univ() - previous.getX_univ()));
-//		theta2 = Math.atan2((next.getY_univ() - turn.getY_univ()), (next.getX_univ() - turn.getX_univ()));
+//We should be using universal
+		theta1 = Math.atan2((turn.getY_univ() - previous.getY_univ()), (turn.getX_univ() - previous.getX_univ()));
+		theta2 = Math.atan2((next.getY_univ() - turn.getY_univ()), (next.getX_univ() - turn.getX_univ()));
 
 		angle = (Math.PI - theta1 + theta2) % (2 * Math.PI);
 		return angle;
