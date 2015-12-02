@@ -187,6 +187,7 @@ public class MapDisplay extends Pane {
                 }
             });
         }
+
         circle.setOnMouseEntered(e -> {
             controller.updateNodeInformation(v);
         });

@@ -273,6 +273,21 @@
     -fx-effect:null;
 }
 
+#arrow-buttons-grayed2
+{
+    -fx-pref-height:26 !important;
+    -fx-min-height:26 !important;
+    -fx-max-height:26 !important;
+    -fx-background-color:white;
+    -fx-text-fill:#aaa;
+}
+
+#arrow-buttons-grayed2:pressed
+{
+    -fx-background-color:white;
+    -fx-effect:null;
+}
+
 .list-view:focused
 {
     -fx-effect:null;
