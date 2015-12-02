@@ -4,8 +4,8 @@ package visuals;
  * Created by jacobhackett on 11/30/15.
  */
 public class Walking {
-    String description;
-    double walkingSpeed;
+    private String description;
+    private double walkingSpeed; //in mph
 
     public Walking(String x, double y) {
         this.description = x;
