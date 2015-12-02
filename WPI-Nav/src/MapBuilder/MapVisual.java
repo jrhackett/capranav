@@ -354,8 +354,9 @@ public class MapVisual extends Pane {
 					Button room = new Button("Room");
 					Button stairs = new Button("Stairs");
 					Button tstairs = new Button("Transition Stairs");
+					Button transition = new Button("Transition");
 
-					buttonBox.getChildren().addAll(bathroom, mensroom, girlsroom, elevator, food, landmark, path, room, stairs, tstairs);
+					buttonBox.getChildren().addAll(bathroom, mensroom, girlsroom, elevator, food, landmark, path, room, stairs, tstairs, transition);
 
 					//effects of buttons
 					mensroom.setOnAction(c -> handleNodeChoiceHelper(new Bathroom(v), BathroomType.MENS, infoPopOver));
@@ -368,7 +369,7 @@ public class MapVisual extends Pane {
 					room.setOnAction(c -> handleNodeChoice(new Room(v), infoPopOver));
 					stairs.setOnAction(c -> handleNodeChoice(new Stairs(v), infoPopOver));
 					tstairs.setOnAction(c -> handleNodeChoice(new TStairs(v), infoPopOver));
-
+					transition.setOnAction(c -> handleNodeChoice(new Transition(v), infoPopOver));
 
 					infoPopOver.setContentNode(buttonBox);
 					// Generate pop-over
