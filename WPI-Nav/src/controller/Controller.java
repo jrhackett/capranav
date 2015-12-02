@@ -286,6 +286,7 @@ public class Controller extends Application {
             this.currentFloor = currentMap.getFloor();
             showBuildingPane();//ONLY SLIDE DOWN BUILDING VIEW //TODO STILL UNTESTED
             switchToBuildingView(currentBuilding, currentFloor);
+            myDisplay.mapDisplay.showLines(lastMapID, currentMap.getID());//TODO QESTUISNDFFsadcf
         }
     }
 
