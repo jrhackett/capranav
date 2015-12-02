@@ -28,4 +28,8 @@ public class Path extends Node {
 
         return imageView;
     }
+
+    public String toString(){
+        return "Path";
+    }
 }
