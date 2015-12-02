@@ -155,20 +155,27 @@ public class MapDisplay extends Pane {
      */
     public void normal(Circle c, INode v) {
         //ultra jank <-- // TODO: 12/2/15
-        if (!id_circle.containsKey(v.getID())){
-            c = createCircle(v);
-            id_circle.put(v.getID(), c);
-        }
 
-        if (v != null && v.isTransition()) {
-            c.setFill(Color.YELLOW);
-        } else {
-            c.setFill(Color.TRANSPARENT);
+
+        if (v==null){
+            System.out.println("INode is null in normal");
         }
-        c.setStrokeWidth(0);
-        c.setRadius(5);
-        c.setOpacity(1);
-        c.setEffect(null);
+        {
+            if (!id_circle.containsKey(v.getID())) {
+                c = createCircle(v);
+                id_circle.put(v.getID(), c);
+            }
+
+            if (v != null && v.isTransition()) {
+                c.setFill(Color.YELLOW);
+            } else {
+                c.setFill(Color.TRANSPARENT);
+            }
+            c.setStrokeWidth(0);
+            c.setRadius(5);
+            c.setOpacity(1);
+            c.setEffect(null);
+        }
     }
 
 
