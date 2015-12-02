@@ -5,10 +5,9 @@ import com.google.gson.JsonStreamParser;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Arrays;
-import java.lang.StringBuilder;
 
 /**
  * A Parser object is used to do translations to/from JSON files and
@@ -35,10 +34,16 @@ public class Parser<Struct> {
 	//These two sets of arrays must be in parallel !
 	private static final Class[]  mTypes = { Campus.class, Floor.class };
 	private static final String[] mNames = { "campus.json", "floor.json" };
+	private static boolean[] mBools = { true, true };
+
 	private static final Class[] nTypes = { Bathroom.class, Elevator.class, Food.class, Landmark.class, Path.class,
 			Room.class, Stairs.class, TStairs.class };
 	private static final String[] nNames = { "bathroom.json", "elevator.json", "food.json", "landmark.json",
 			"path.json", "room.json", "stair.json", "tstair.json" };
+	private static boolean[] nBools = { true, true, true, true, true, true, true, true };
+
+	private static boolean building = true;
+	private static boolean user = true;
 
 
 	public Parser() {}
@@ -120,26 +125,50 @@ public class Parser<Struct> {
 	 *            HashMap of Nodes/Maps/Buildings to write to the database
 	 */
 	public void toFile(HashMap<Integer, Struct> collection) {
-		reset();
 		Gson gson = new Gson();
 
 		Collection<Struct> vals = collection.values();
 		for (Struct s : vals) {
 			int m = Arrays.asList(mTypes).indexOf(s.getClass());
 			int n = Arrays.asList(nTypes).indexOf(s.getClass());
-
-
 			//Set filename to the correct thing, based on Struct s
-			if      (m != -1) filename = getMName(m);
-			else if (n != -1) filename = getNName(n);
-			else 			  filename = path + "building.json";
+			if (m != -1) {
+				filename = getMName(m);
+				if (mBools[m]) {
+					try { writer = new JsonWriter(new FileWriter(filename, false)); }
+					catch (IOException e) { return; } //Bad bad bad
+					mBools[m] = false;
+				}
+				else {
+					try { writer = new JsonWriter(new FileWriter(filename, true)); }
+					catch (IOException e) { return; } //Bad bad bad
+				}
+			}
+			else if (n != -1) {
+				filename = getNName(n);
+				if (nBools[n]) {
+					try { writer = new JsonWriter(new FileWriter(filename, false)); }
+					catch (IOException e) { return; } //Bad bad bad
+					nBools[n] = false;
+				}
+				else {
+					try { writer = new JsonWriter(new FileWriter(filename, true)); }
+					catch (IOException e) { return; } //Bad bad bad
+				}
+			}
+			else {
+				filename = path + "building.json";
+				if (building) {
+					try { writer = new JsonWriter(new FileWriter(filename, false)); }
+					catch (IOException e) { return; } //Bad bad bad
+					building = false;
+				}
+				else {
+					try { writer = new JsonWriter(new FileWriter(filename, true)); }
+					catch (IOException e) { return; } //Bad bad bad
+				}
+			}
 
-			if(!(new File(filename)).exists()) System.out.println("Something wong");
-			else System.out.println(filename);
-
-			//Write s out to the correct file
-			try { writer = new JsonWriter(new FileWriter(filename, true)); }
-			catch (IOException e) { return; } //Bad bad bad
 			gson.toJson(s, s.getClass(), writer);
 			close(); // Close the writer
 		}
@@ -206,7 +235,6 @@ public class Parser<Struct> {
 	}
 
 	public void toFile(User user) {
-		reset();
 		try { writer = new JsonWriter(new FileWriter(path + "user.json", false)); }
 		catch (IOException e) { return; } //Bad bad bad
 		new Gson().toJson(user, user.getClass(), writer);
@@ -272,28 +300,10 @@ public class Parser<Struct> {
 		return path + nNames[n];
 	}
 
-	//Resets the FileWriters for all JSON files
-	//WARNING: THIS MEANS DELETES
-	//Call this inside every toFile function, first line
-	private void reset() {
-		for (int i = 0; i < mNames.length; i++) {
-			filename = getMName(i);
-			resetInd();
-		}
-		for (int i = 0; i < nNames.length; i++) {
-			filename = getNName(i);
-			resetInd();
-		}
-		filename = path + "user.json";
-		resetInd();
-		filename = path + "building.json";
-		resetInd();
-	}
-
-	//Helper that handles the resetting once filename is set
+	//Deletes contents of filename (doesn't actually delete file)
 	private void resetInd() {
-		try { writer = new JsonWriter(new FileWriter(filename, true)); }
-		catch (IOException e) {}
+		try { writer = new JsonWriter(new FileWriter(filename, false)); }
+		catch (IOException e) { return; }
 		close();
 	}
 }
