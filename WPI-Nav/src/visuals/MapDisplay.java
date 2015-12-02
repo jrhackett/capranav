@@ -92,6 +92,7 @@ public class MapDisplay extends Pane {
             } else {
                 Circle c = createCircle(v);
                 id_circle.put(k, c);
+                normal(c, v);
                 this.getChildren().add(c);
             }
         });
@@ -132,6 +133,7 @@ public class MapDisplay extends Pane {
         INode temp = controller.createTempLandmark(e.getX(), e.getY());
         Circle c = createCircle(temp);
         id_circle.put(temp.getID(), c);
+        normal(c, temp);
         this.getChildren().add(c);
         controller.handleMapClick(temp);
     }
@@ -152,6 +154,12 @@ public class MapDisplay extends Pane {
      * @param c
      */
     public void normal(Circle c, INode v) {
+        //ultra jank <-- // TODO: 12/2/15
+        if (!id_circle.containsKey(v.getID())){
+            c = createCircle(v);
+            id_circle.put(v.getID(), c);
+        }
+
         if (v != null && v.isTransition()) {
             c.setFill(Color.YELLOW);
         } else {
@@ -169,7 +177,6 @@ public class MapDisplay extends Pane {
         double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
         double y = v.getY();
         Circle circle = new Circle(x, y, 5);
-        normal(circle, v);
 
         if (v.isTransition()) {
             circle.setOnMouseClicked(e -> {
@@ -343,11 +350,12 @@ public class MapDisplay extends Pane {
             Circle c = id_circle.get(v.getID());
             c.setRadius(5);
             highlight(c, Color.FIREBRICK, Color.RED);
-            //TODO may have to put back
+            id_circle.put(v.getID(), c);
         } else {
             Circle c = createCircle(v);
             c.setRadius(5);
             highlight(c, Color.FIREBRICK, Color.RED);
+            id_circle.put(v.getID(), c);
         }
     }
 

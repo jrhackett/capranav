@@ -83,7 +83,7 @@ public class Inputs extends ComboBox {
 	// This returns all the Obvservable List objects for use in the main
 	// application
 	public ObservableList<InputItem> createInputItems(HashMap<Integer, logic.INode> nodes,
-			HashMap<Integer, logic.IMap> maps) {
+													  HashMap<Integer, logic.IMap> maps) {
 		this.data = FXCollections.observableArrayList();
 		nodes.forEach((k, v) -> { // For each node
 			addNode(v, maps.get(v.getMap_id()));

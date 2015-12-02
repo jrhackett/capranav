@@ -49,9 +49,9 @@ public class Building {
         this.localB     = d;
     }
 
-    public void  translateBuilding(HashMap<Integer, INode> nodes, HashMap<Integer,INode> master){
+    public HashMap<Integer, INode>  translateBuilding(HashMap<Integer, INode> nodes, HashMap<Integer,INode> master){
         Translate translate = new Translate(master.get(localA), master.get(localB), master.get(universalA), master.get(universalB));
-        translate.setUniversalCoordinates(nodes);
+        return translate.setUniversalCoordinates(nodes);
     }
 
 

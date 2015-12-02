@@ -320,10 +320,14 @@ public class MapBuilderController extends Application {
 		for (java.util.Map.Entry<Integer, INode> nodeEntry : masterNodeList.entrySet()){
 			if (nodeEntry.getValue().isTransition()){
 				for(Edge e : nodeEntry.getValue().getAdjacencies()){
-					if (masterNodeList.get(e.getTarget()).isTransition()){
-						((Transition)nodeEntry.getValue()).setBuildingID(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getBuildingID());
-						((Transition)nodeEntry.getValue()).setToFloor(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getFloor());
-						break;
+					try {
+						if (masterNodeList.get(e.getTarget()).isTransition()) {
+							((Transition) nodeEntry.getValue()).setBuildingID(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getBuildingID());
+							((Transition) nodeEntry.getValue()).setToFloor(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getFloor());
+							break;
+						}
+					} catch (NullPointerException z){
+						System.out.println("ERROR WITH NODES, SOME EDGES LOST IN GIT");
 					}
 				}
 			}
@@ -331,7 +335,9 @@ public class MapBuilderController extends Application {
 
 
 		this.buildings.forEach((k,v) -> {
-			v.translateBuilding(getNodesOfBuilding(k), masterNodeList);
+			v.translateBuilding(getNodesOfBuilding(k), masterNodeList).forEach((key,value) ->{
+				masterNodeList.put(key, value);
+			});
 		});
 
 
