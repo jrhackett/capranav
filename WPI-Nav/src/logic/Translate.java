@@ -73,9 +73,13 @@ public class Translate {
             z_universal = z_local; //keep the z values the same for each coordinate
 
             // set Node v's universal Coordinates to the calculated values
-            v.setX_univ(x_universal);
-            v.setY_univ(y_universal);
-            v.setZ_univ(z_universal);
+            double x_val = ((int) ((x_universal * 100.0) + ((x_universal < 0.0) ? -0.5 : 0.5))) / 100.0;
+            double y_val = ((int) ((y_universal * 100.0) + ((y_universal < 0.0) ? -0.5 : 0.5))) / 100.0;
+            double z_val = ((int) ((z_universal * 100.0) + ((z_universal < 0.0) ? -0.5 : 0.5))) / 100.0;
+
+            v.setX_univ(Math.round (x_val));
+            v.setY_univ(Math.round (y_val));
+            v.setZ_univ(Math.round (z_val));
 
         });
         return universal;

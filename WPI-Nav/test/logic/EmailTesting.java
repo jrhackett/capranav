@@ -13,7 +13,7 @@ public class EmailTesting {
     @Before
     public void setUp() throws Exception {
        testE = new Email("team9.cs3733@gmail.com");
-       testE2 = new Email("notarealaddress@notarealemail.egg");
+       testE2 = new Email("%%%%%%");
     }
 
     @Test
@@ -22,7 +22,7 @@ public class EmailTesting {
         dirs.add("First");
         dirs.add("Second");
         dirs.add("Third");
-        assertEquals("Email sent successfully", true, testE.sendDirections(dirs, "Morgan", "DAKA"));
+        assertEquals("Email did not send!", true, testE.sendDirections(dirs, "Morgan", "DAKA"));
     }
 
     @Test
@@ -32,9 +32,7 @@ public class EmailTesting {
         dirs.add("Second");
         dirs.add("Third");
 
-        assertEquals("Email did not send correctly", true, testE2.sendDirections(dirs, "Morgan", "DAKA"));
-
-        assertEquals("Email address was invalid - sending fails", true, testE2.sendDirections(dirs, "Morgan", "DAKA"));
+        assertEquals("Email sent when it shouldn't have!", false, testE2.sendDirections(dirs, "Morgan", "DAKA"));
 
     }
 }

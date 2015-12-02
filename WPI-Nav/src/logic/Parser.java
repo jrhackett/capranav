@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.lang.StringBuilder;
 
 /** A Parser object is used to do translations to/from JSON files and Nodes/Maps/Buildings.
  *
@@ -34,7 +35,7 @@ public class Parser<Struct>
 	private static final Class[]  mTypes = { Campus.class, Floor.class };
 	private static final String[] mNames = { "campus.json", "floor.json" };
 	private static final Class[]  nTypes = { Bathroom.class, Elevator.class, Food.class, Landmark.class, Path.class,
-											 Room.class, Stairs.class, TStairs.class  };
+											 Room.class, Stairs.class, TStairs.class };
 	private static final String[] nNames = { "bathroom.json", "elevator.json", "food.json", "landmark.json", "path.json",
 											 "room.json", "stair.json", "tstair.json" };
 
@@ -114,6 +115,7 @@ public class Parser<Struct>
 	 * @param collection: HashMap of Nodes/Maps/Buildings to write to the database
      */
 	public void toFile(HashMap<Integer, Struct> collection) {
+		reset();
 		Gson gson = new Gson();
 
 		Collection<Struct> vals = collection.values();
@@ -127,7 +129,7 @@ public class Parser<Struct>
 			else 			  filename = path + "building.json";
 
 			//Write s out to the correct file
-			try { writer = new JsonWriter(new FileWriter(filename, false)); }
+			try { writer = new JsonWriter(new FileWriter(filename, true)); }
 			catch (IOException e) { return; } //Bad bad bad
 			gson.toJson(s, s.getClass(), writer);
 			close(); //Close the writer
@@ -192,6 +194,7 @@ public class Parser<Struct>
 	}
 
 	public void toFile(User user) {
+		reset();
 		try { writer = new JsonWriter(new FileWriter(path + "user.json", false)); }
 		catch (IOException e) { return; } //Bad bad bad
 		new Gson().toJson(user, user.getClass(), writer);
@@ -237,11 +240,17 @@ public class Parser<Struct>
 
 	private static String getPath() {
 		StringBuilder s = new StringBuilder();
-		String fp = new File("").getAbsolutePath();
-		s.append(fp.substring(0, fp.length()));
+		String root = new File("").getAbsolutePath();
+		s.append(root);
 		s.append("/json/");
-
-		return s.toString();//s.toString();
+		String fullPath = s.toString();
+		if (!(new File(fullPath).exists())) { //Fixes file path for Charlie :P
+			s = new StringBuilder();
+			s.append(root);
+			s.append("/WPI-Nav/json/");
+			fullPath = s.toString();
+		}
+		return fullPath;
 	}
 
 	private String getMName(int m) {
@@ -250,5 +259,30 @@ public class Parser<Struct>
 
 	private String getNName(int n) {
 		return path + nNames[n];
+	}
+
+	//Resets the FileWriters for all JSON files
+	//WARNING: THIS MEANS DELETES
+	//Call this inside every toFile function, first line
+	private void reset() {
+		for (int i = 0; i < mNames.length; i++) {
+			filename = getMName(i);
+			resetInd();
+		}
+		for (int i = 0; i < nNames.length; i++) {
+			filename = getNName(i);
+			resetInd();
+		}
+		filename = path + "user.json";
+		resetInd();
+		filename = path + "building.json";
+		resetInd();
+	}
+
+	//Helper that handles the resetting once filename is set
+	private void resetInd() {
+		try { writer = new JsonWriter(new FileWriter(filename, true)); }
+		catch (IOException e) {}
+		close();
 	}
 }
