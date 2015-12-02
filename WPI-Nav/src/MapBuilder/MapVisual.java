@@ -466,7 +466,6 @@ public class MapVisual extends Pane {
 		if (iNode.isInteresting()){
 			VBox input = new VBox();
 			TextField newNodeName = new TextField();
-			newNodeName.setText("Node Not Named");
 
 			//populate popover with new
 			Button doneButton = new Button("Done");

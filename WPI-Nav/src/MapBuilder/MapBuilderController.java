@@ -92,17 +92,19 @@ public class MapBuilderController extends Application {
 	 * sets the next node id to be the largest value
 	 */
 	private void setNextNodeID() {
-		if (ugh) {
-			nextNodeID = 3000;
-			ugh = false;
-		}
-		else {
+//		if (ugh) {
+//			nextNodeID = 3000;
+//			ugh = false;
+//		}
+//		else {
 
 		masterNodeList.forEach((k, v) -> {
 			nextNodeID = (k > nextNodeID) ? k : nextNodeID;
-			nextNodeID++;
-		}); }
+		});
+		nextNodeID++;
+
 	}
+	//}
 
 	/**
 	 * Given a mouse event -> gets
