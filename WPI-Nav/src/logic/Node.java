@@ -290,6 +290,7 @@ public abstract class Node implements INode {
 	public void setPicturePath(String s){
 		this.picturePath = s;
 	};
+    public void addNames(ArrayList<String> l) {};
 
 	@Override
 	public boolean equals(Object o) {

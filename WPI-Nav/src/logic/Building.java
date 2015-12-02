@@ -5,8 +5,16 @@ import java.util.HashMap;
 
 //These will be mapped to transition nodes somehow!!?
 public class Building {
-    int id;
-    int floors; //number of floors
+    private int id;
+    private int floors; //number of floors
+
+    private INode universalA;
+    private INode universalB;
+    private INode localA;
+    private INode localB;
+
+
+
     //<Integer> maps; //Floor would be easier but easier to just do int for parsing
     private HashMap<Integer, Integer> floorMap; //int -> mapID
 
@@ -34,5 +42,18 @@ public class Building {
     public void setNames(ArrayList<String> names){
         this.names = names;
     }
+
+    public void setTranslateNodes(INode a, INode b, INode c, INode d){
+        this.universalA = a;
+        this.universalB = b;
+        this.localA     = c;
+        this.localB     = d;
+    }
+
+    public void  translateBuilding(HashMap<Integer, INode> nodes){
+        Translate translate = new Translate(localA, localB, universalA, universalB);
+        translate.setUniversalCoordinates(nodes);
+    }
+
 
 }

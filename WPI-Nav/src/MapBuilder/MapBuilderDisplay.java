@@ -1,9 +1,10 @@
 package MapBuilder;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -12,7 +13,7 @@ import visuals.Inputs;
 
 import java.util.Collection;
 
-public class MapBuilderDisplay extends VBox {
+public class MapBuilderDisplay extends StackPane {
 	/* constants */
 	private static final double GAP = 5;
 
@@ -25,7 +26,7 @@ public class MapBuilderDisplay extends VBox {
 	VBox options;
 	StackPane map_zone;
 	public Inputs chooseMap;
-	AnchorPane TopBar;
+	HBox TopBar;
 
 	/* map */
 	MapVisual mapvisual;
@@ -36,6 +37,8 @@ public class MapBuilderDisplay extends VBox {
 
 	/* controller */
 	MapBuilderController controller;
+	Label nodeInformation;
+
 
 	public MapBuilderDisplay(Stage stage, double width, double height, MapBuilderController controller) {
 		super();
@@ -71,22 +74,26 @@ public class MapBuilderDisplay extends VBox {
 
 		HBox sections = new HBox();
 		sections.setSpacing(50);
-		sections.setStyle("-fx-background-color: #444444;");
+		sections.setStyle("-fx-background-color: #eeeeee;");
 		sections.prefHeightProperty().bind(stage.heightProperty());
 		sections.prefWidthProperty().bind(stage.widthProperty());
 
 		sections.getChildren().addAll(mapvisual, mapvisualSecondary);
 
-		this.getChildren().addAll(TopBar, sections);
 
-		this.setAlignment(Pos.TOP_LEFT);
-		this.prefHeightProperty().bind(stage.heightProperty());
-		this.prefWidthProperty().bind(stage.widthProperty());
+
+		VBox content = new VBox();
+
+		content.getChildren().addAll(TopBar, sections);
+		content.setAlignment(Pos.TOP_LEFT);
+		content.prefHeightProperty().bind(stage.heightProperty());
+		content.prefWidthProperty().bind(stage.widthProperty());
+		this.getChildren().addAll(content);
 	}
 
 	private void create_TopBar() {
 		// Initialize the topBar
-		this.TopBar = new AnchorPane();
+		this.TopBar = new HBox();
 		// this.TopBar = new HBox();
 		TopBar.setId("top-bar");
 
@@ -114,6 +121,7 @@ public class MapBuilderDisplay extends VBox {
 
 			controller.setCurrentMap(newMap.getID());
 			mapvisual.setMap(newMap);
+			chooseMapTwo.setVisible(true);
 		});
 
 		this.chooseMapTwo = new Inputs("maps", input_width, controller);
@@ -140,10 +148,6 @@ public class MapBuilderDisplay extends VBox {
 
 
 
-		// chooseMap.setTranslateX(10);
-
-		// Make the 'Close' button to save all the changes and close the
-		// application
 		Button closeButton = new Button("X");
 		closeButton.setOnAction(e -> {
 			// Save the maps and nodes to the JSON files
@@ -154,11 +158,49 @@ public class MapBuilderDisplay extends VBox {
 			Platform.exit();
 		});
 
-		TopBar.getChildren().addAll(chooseMap, chooseMapTwo, closeButton);
+
+		final ToggleGroup group = new ToggleGroup();
+
+		ToggleButton toggleButtonOn = new ToggleButton("Snapping On");
+		ToggleButton toggleButtonOff = new ToggleButton("Snapping Off");
+
+		toggleButtonOn.setToggleGroup(group);
+		toggleButtonOff.setToggleGroup(group);
+
+		toggleButtonOn.setSelected(true);
+
+		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+			public void changed(ObservableValue<? extends Toggle> ov,
+								Toggle toggle, Toggle new_toggle) {
+				if (new_toggle != null){
+					if (toggleButtonOn.selectedProperty().getValue()){
+						controller.SNAPPING = true;
+					} else {
+						controller.SNAPPING = false;
+					}
+				}
+
+			}
+		});
+
+
+		nodeInformation = new Label();
+
+
+		chooseMapTwo.setVisible(false);
+		chooseMap.setTranslateX(10);
+		TopBar.setSpacing(15);
+		TopBar.getChildren().addAll(chooseMap, chooseMapTwo, toggleButtonOn, toggleButtonOff, nodeInformation, closeButton);
 		
-		AnchorPane.setRightAnchor(closeButton, 5.0);
+		/*AnchorPane.setRightAnchor(closeButton, 5.0);
 		AnchorPane.setLeftAnchor(chooseMap, 5.0);
-		AnchorPane.setLeftAnchor(chooseMapTwo, 600.0);
+		AnchorPane.setLeftAnchor(chooseMapTwo, 600.0);*/
 
 	}
+
+	public void setNodeLabel(String s){
+		nodeInformation.setText(s);
+	}
 }
+
+

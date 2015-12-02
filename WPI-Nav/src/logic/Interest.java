@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public abstract class Interest extends Node {
 
-    private ArrayList<String> names;
+    private ArrayList<String> names = new ArrayList<>();
 
     public Interest(int id, double x, double y, double z, double x1, double y1, double z1, String name){
         super(id, x, y, z, x1, y1, z1);
@@ -61,6 +61,7 @@ public abstract class Interest extends Node {
     public String toString(){
         return getName();
     }
+
 
 
 }

@@ -19,6 +19,7 @@ import logic.*;
 import org.controlsfx.control.PopOver;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 //The visual component of the maps and the Nodes
@@ -86,11 +87,11 @@ public class MapVisual extends Pane {
 		try {
 			// Image(getClass().getResourceAsStream("../images/" + map.getPath()
 			// + ".png"), 660, 495, true, true);
-			this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getFilePath()));
+			this.mapImage = new Image(getClass().getResourceAsStream("../images/floorPlans/" + map.getFilePath()));
 		} catch (NullPointerException e) {
 			// Image(getClass().getResourceAsStream("/images/" + map.getPath() +
 			// ".png"), 660, 495, true, true);
-			this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getFilePath()));
+			this.mapImage = new Image(getClass().getResourceAsStream("/images/floorPlans/" + map.getFilePath()));
 		}
 
 		this.mapView = new ImageView(mapImage);
@@ -131,52 +132,55 @@ public class MapVisual extends Pane {
 						minDist = dist;
 					}
 				}
-				
+
 				// If the mouse click is far enough away from existing nodes
 				// Make a new node
 				if(minDist >= tolerance){
-					double xyTolerance = 5;
-					
-					INode closestX = null;
-					double minXDist = xyTolerance;
-					INode closestY = null;
-					double minYDist = xyTolerance;
-					
-					
-					boolean selectedNode = false;
-					
-					for(Integer k : controller.getCurrentNodeList().keySet()){
-						INode v = controller.getCurrentNodeList().get(k);
-						
-						if(!selectedNode){
-							closestX = v;
-							closestY = v;
-							selectedNode = true;
-						}
-						
-						double distX = Math.abs(v.getX() - e.getX());
-						double distY = Math.abs(v.getY() - e.getY());
-						
-						if(distX < minXDist){
-							minXDist = distX;
-							closestX = v;
-						}
-						
-						if(distY < minYDist){
-							minYDist = distY;
-							closestY = v;
-						}
-					}
-					
+
 					double newNodeX = e.getX();
 					double newNodeY = e.getY();
-					
-					if(minXDist < xyTolerance){
-						newNodeX = closestX.getX();
-					}
-					
-					if(minYDist < xyTolerance){
-						newNodeY = closestY.getY();
+
+					if (controller.SNAPPING) {
+
+						double xyTolerance = 5;
+
+						INode closestX = null;
+						double minXDist = xyTolerance;
+						INode closestY = null;
+						double minYDist = xyTolerance;
+
+						boolean selectedNode = false;
+
+						for (Integer k : controller.getCurrentNodeList().keySet()) {
+							INode v = controller.getCurrentNodeList().get(k);
+
+							if (!selectedNode) {
+								closestX = v;
+								closestY = v;
+								selectedNode = true;
+							}
+
+							double distX = Math.abs(v.getX() - e.getX());
+							double distY = Math.abs(v.getY() - e.getY());
+
+							if (distX < minXDist) {
+								minXDist = distX;
+								closestX = v;
+							}
+
+							if (distY < minYDist) {
+								minYDist = distY;
+								closestY = v;
+							}
+						}
+
+						if (minXDist < xyTolerance) {
+							newNodeX = closestX.getX();
+						}
+
+						if (minYDist < xyTolerance) {
+							newNodeY = closestY.getY();
+						}
 					}
 					
 					
@@ -301,27 +305,22 @@ public class MapVisual extends Pane {
 		// somehow scale
 		double x = v.getX();
 		double y = v.getY();
+
 		Circle circle = new Circle(x, y, 5);
-		normal(circle);
+
+		normal(circle, v);
+
 
 		circle.setOnMouseEntered(e -> {
 			last = (Color) circle.getFill();
 			lastStroke = (Color) circle.getStroke();
 			highlight(circle, Color.GOLD, Color.BLACK);
-			// TODO: POPOVER FOR NAME HERE
-			/*
-			 * PopOver popOver = new PopOver(); popOver.show(circle);
-			 * popOver.setContentNode(new Text(v.toString()));
-			 */
+			controller.setNodeInformation(v);
 
 		});
 
 		circle.setOnMouseExited(e -> {
-			if (!controller.isNodeSelected()) {
-				normal(circle);
-			} else if (controller.getSelectedNode().getID() != v.getID()) {
-				normal(circle);
-			}
+			normal(circle, v);
 
 		});
 
@@ -329,6 +328,15 @@ public class MapVisual extends Pane {
 		circle.setOnMouseClicked(e -> {
 			if (e.getButton() == MouseButton.PRIMARY) {
 				if (e.getClickCount() >= 2) {
+					if(controller.isNodeSelected()){
+						INode selectedNode = controller.getSelectedNode();
+						controller.deselectNode();
+						normal(id_circle.get(selectedNode.getID()), selectedNode);
+					}
+
+					normal(circle, v);
+
+
 					System.out.println("Node double clicked");
 					// set selected node to null
 					PopOver infoPopOver = new PopOver();
@@ -347,7 +355,7 @@ public class MapVisual extends Pane {
 					Button stairs = new Button("Stairs");
 					Button tstairs = new Button("Transition Stairs");
 
-					buttonBox.getChildren().addAll(bathroom, mensroom, girlsroom, elevator, food, landmark, path, stairs, tstairs);
+					buttonBox.getChildren().addAll(bathroom, mensroom, girlsroom, elevator, food, landmark, path, room, stairs, tstairs);
 
 					//effects of buttons
 					mensroom.setOnAction(c -> handleNodeChoiceHelper(new Bathroom(v), BathroomType.MENS, infoPopOver));
@@ -383,7 +391,7 @@ public class MapVisual extends Pane {
 					if (controller.isNodeSelected() && controller.getSelectedNode().getID() == v.getID()) {
 						System.out.println("Node Deselected");
 						controller.deselectNode();
-						normal(circle);
+						normal(circle, v);
 					} else {
 						if (!controller.isNodeSelected()) {
 							System.out.println("New node selected");
@@ -454,33 +462,54 @@ public class MapVisual extends Pane {
 	 * @param iNode
      */
 	private void handleNodeChoice(INode iNode, PopOver popOver){
-		//populate popover with new
-		Button doneButton = new Button("Done");
-		Button cancelButton = new Button("Cancel");
-
-		doneButton.setOnAction(e -> {
-			controller.getNodesOfMap().put(iNode.getID(), iNode);
-			popOver.hide();
-		});
-
-		cancelButton.setOnAction(e -> popOver.hide());
-
-		HBox buttonBox = new HBox();
-		buttonBox.getChildren().addAll(doneButton, cancelButton);
-
 		if (iNode.isInteresting()){
-			//display name entering
 			VBox input = new VBox();
 			TextField newNodeName = new TextField();
+			newNodeName.setText("Node Not Named");
+
+			//populate popover with new
+			Button doneButton = new Button("Done");
+			Button cancelButton = new Button("Cancel");
+
+			HBox buttonBox = new HBox();
+			buttonBox.getChildren().addAll(doneButton, cancelButton);
+
 
 			input.getChildren().addAll(newNodeName, buttonBox);
 			popOver.setContentNode(input);
-		} else {
-			popOver.setContentNode(buttonBox);
-		}
 
+			doneButton.setOnAction(e -> saveNodeInformation(newNodeName.getText(), iNode, popOver));
+			cancelButton.setOnAction(e -> popOver.hide());
+
+
+		} else {
+			controller.getNodesOfMap().put(iNode.getID(), iNode);
+			popOver.hide();
+
+			this.getChildren().remove(id_circle.get(iNode.getID()));
+			Circle	c =		createCircle(iNode);
+			this.getChildren().add(c);
+			this.id_circle.put(iNode.getID(), c);
+		}
 	}
 
+
+	private void saveNodeInformation(String s, INode iNode, PopOver popOver ){
+		controller.getNodesOfMap().put(iNode.getID(), iNode);
+		popOver.hide();
+
+		ArrayList<String> list = parseString(s);
+		iNode.addNames(list);
+		this.getChildren().remove(id_circle.get(iNode.getID()));
+		Circle	c =		createCircle(iNode);
+		this.getChildren().add(c);
+		this.id_circle.put(iNode.getID(), c);
+	}
+
+
+	private ArrayList<String> parseString(String str){
+		return new ArrayList<String>(Arrays.asList(str.split("\\s*,\\s*")));
+	}
 
 	/**
 	 * This creates a line object for each edge. The here is where the mouse
@@ -514,7 +543,7 @@ public class MapVisual extends Pane {
 		line.setOnMouseClicked(e -> {
 			// If there was a selected node, deselect it and change it's colour
 			if (this.controller.isNodeSelected()) {
-				normal(this.id_circle.get(controller.getSelectedNode().getID()));
+				normal(this.id_circle.get(controller.getSelectedNode().getID()), controller.getSelectedNode());
 
 				controller.deselectNode();
 			}
@@ -566,7 +595,7 @@ public class MapVisual extends Pane {
 		this.last = Color.BLUE;
 		this.lastStroke = Color.BLACK;
 		highlightAll();
-		normal(id_circle.get(id));
+		normal(id_circle.get(id), controller.getNode(id));
 	}
 
 	/*
@@ -583,11 +612,25 @@ public class MapVisual extends Pane {
 		c.setStrokeWidth(1);
 	}
 
-	private void normal(Circle c) {
-		c.setFill(Color.BLUE);
-		c.setStrokeWidth(0);
-		c.setRadius(5);
+	private void normal(Circle c, INode v) {
+		if(controller.isNodeSelected() && controller.getSelectedNodeID() == v.getID()){
+			last = (Color) c.getFill();
+			lastStroke = (Color) c.getStroke();
+			highlight(c, Color.GOLD, Color.BLACK);
+		} else {
+
+			if (!v.isTransition()) {
+				c.setFill(Color.BLUE);
+				c.setStrokeWidth(0);
+				c.setRadius(5);
+			} else {
+				c.setFill(Color.HOTPINK);
+				c.setStrokeWidth(0);
+				c.setRadius(5);
+			}
+		}
 	}
+
 
 	private void highlightAll() {
 		id_circle.forEach((k, v) -> {
@@ -597,11 +640,6 @@ public class MapVisual extends Pane {
 
 	}
 
-	private void hideAll() {
-		id_circle.forEach((k, v) -> {
-			normal(v);
-		});
-	}
 
 	private void set_up_background() {
 		default_background = new Rectangle(width, height);

@@ -59,9 +59,9 @@ public class Translate {
 
     }
 
-    public HashMap<Integer, INode> setUniversalCoordinates(HashMap<Integer, INode> local_coord){
-        HashMap<Integer, INode> universal = local_coord;
-        universal.forEach((k, v) -> { // for each Node in ArrayList<Node>
+    public void setUniversalCoordinates(HashMap<Integer, INode> local_coord){
+        //HashMap<Integer, INode> universal = local_coord;
+        local_coord.forEach((k, v) -> { // for each Node in ArrayList<Node>
             // get the local x,y,z coordinates for Node v
             x_local = v.getX();
             y_local = v.getY();
@@ -82,7 +82,7 @@ public class Translate {
             v.setZ_univ(Math.round (z_val));
 
         });
-        return universal;
+       // return universal;
     }
 
     private void resizeCoordinates() {

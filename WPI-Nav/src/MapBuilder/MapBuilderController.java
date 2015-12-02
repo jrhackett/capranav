@@ -31,6 +31,7 @@ public class MapBuilderController extends Application {
 	private MapBuilderDisplay myDisplay;
 
 	/* information variables */
+	private HashMap<Integer, Building> buildings;
 	private HashMap<Integer, INode> masterNodeList;
 	private HashMap<Integer, INode> nodeList;
 	private HashMap<Integer, IMap> maps;
@@ -50,6 +51,7 @@ public class MapBuilderController extends Application {
 	private HashMap<Integer, INode> secondaryMapNodeList;
 
 
+	public boolean SNAPPING;
 
 
 	@Override
@@ -75,6 +77,14 @@ public class MapBuilderController extends Application {
 
 		s.show(); // shows scene
 	}
+
+
+	public void  setNodeInformation(INode node){
+		this.myDisplay.setNodeLabel(node.getClass().toString() + "  |  " + node.toString());
+	}
+
+
+
 
 	/**
 	 * sets the next node id to be the largest value
@@ -120,60 +130,7 @@ public class MapBuilderController extends Application {
 		return false;
 	}
 
-	/**
-	 * sets the selected node name
-	 * 
-	 * @param name
-	 */
-	public void setNodeName(String name) {
-		// TODO: Fix this to work with new classes
 
-		/*
-		 * if (this.isNodeSelected()) {
-		 * nodeList.get(selectedNodeID).setName(name);
-		 * changeNameToIncludeMap(selectedNodeID); }
-		 */
-	}
-
-	/**
-	 * sets the selected node name
-	 * 
-	 * @param
-	 */
-	public void changeNameToIncludeMap(int id) {
-		// TODO: Fix this to work with new classes
-
-		/*
-		 * String mapPrefix = new String(); mapPrefix =
-		 * maps.getMap(nodeList.get(id).getMap_id()).getName();
-		 * nodeList.get(id).setName(mapPrefix + " " +
-		 * nodeList.get(id).getName());
-		 */
-	}
-	
-	/**
-	 * This takes in two nodes, the original with x, y, and edge information and the new with type specific info
-	 * and combines them to form an updated node. This node is then added to the nodeList
-	 * 
-	 * @param newNode New node to add with type and specific info
-	 * 
-	 */
-	public void updateNodeType(int originalNodeID, INode newNode){
-		INode originalNode = nodeList.get(originalNodeID);
-		
-		// set the coordinates to be the same
-		newNode.setX(originalNode.getX());
-		newNode.setX(originalNode.getY());
-		newNode.setX(originalNode.getZ());
-		
-		// set the ID
-		newNode.setID(originalNodeID);
-		
-		newNode.setAdjacencies(originalNode.getAdjacencies());
-		
-		nodeList.put(originalNodeID, newNode);
-		
-	}
 
 	/**
 	 * Make sure that the file exists and its unique
@@ -223,6 +180,24 @@ public class MapBuilderController extends Application {
 
 		masterNodeList.forEach((k, v) -> {
 			if (v.getMap_id() == id) {
+				value.put(k, v);
+			}
+		});
+		return value;
+	}
+
+	/**
+	 * return the HashMap of Nodes [to display][of the current map]
+	 *
+	 * @param id
+	 * @return
+	 */
+	public HashMap<Integer, INode> getNodesOfBuilding(int id) {
+
+		HashMap<Integer, INode> value = new HashMap<>();
+
+		masterNodeList.forEach((k, v) -> {
+			if (maps.get(v.getMap_id()).getBuildingID() == id) {
 				value.put(k, v);
 			}
 		});
@@ -317,15 +292,20 @@ public class MapBuilderController extends Application {
 	 */
 	public void nodesToFile() {
 		saveNodesToMaster();
-		System.out.println("Nodes saved to file");
-		// send this masterNodeList to the file
-		masterNodeList.forEach((k,v)->{
-			System.out.println(k);
+
+		this.buildings.forEach((k,v) -> {
+			v.translateBuilding(getNodesOfBuilding(k));
 		});
+
 
 		Parser parser = new Parser<INode>();
 		parser.toFile(masterNodeList);
 	}
+
+	private void buildingsFromFile(){
+		buildings = new Parser<Building>().fromFileBuilding();
+	}
+
 
 	/**
 	 * Load nodes to file
