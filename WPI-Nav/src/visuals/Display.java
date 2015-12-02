@@ -27,7 +27,6 @@ import logic.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.mail.Address;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.util.ArrayList;
@@ -90,6 +89,8 @@ public class Display {
     private BooleanProperty EMAIL_VISIBLE;
     public BooleanProperty BUILDING_VISIBLE;
     public BooleanProperty PHOTO_ICON_VISIBLE;
+    public BooleanProperty ICON_VISIBLE;
+
 
     private boolean EMAIL = false;
     //Visual Elements
@@ -139,6 +140,7 @@ public class Display {
         this.EMAIL_VISIBLE = new SimpleBooleanProperty(true);
 
         this.PHOTO_ICON_VISIBLE = new SimpleBooleanProperty(false);
+        this.ICON_VISIBLE =       new SimpleBooleanProperty(false);
 
         this.EDGE = GAP * 2 + CONTROL_WIDTH;
     }
