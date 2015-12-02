@@ -258,10 +258,15 @@ public class MapDisplay extends Pane {
            this.getChildren().removeAll(v);
         });
 
-        for (INode i :idPath){
+        id_circle.forEach((k,v) -> {
+            normal(id_circle.get(k), controller.getNode(k));
+            System.out.println("TRYING TO NORMAL");
+        });
+
+       /* for (INode i :idPath){
             normal(id_circle.get(i), i);
             System.out.println("TRYING TO NORMAL");
-        }
+        }*/
     }
 
     /**

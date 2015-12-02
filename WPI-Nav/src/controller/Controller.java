@@ -196,6 +196,9 @@ public class Controller extends Application {
     public void handleSearchInput(int id, boolean START) {
         FIRST = START; //Set START so when / if map clicked properly sets start/end node
 
+        myDisplay.mapDisplay.changeBackOldPathNodes();
+
+
         if (nodes.containsKey(id)) {
 
             if (START) {//setting start
