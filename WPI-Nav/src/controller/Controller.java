@@ -122,7 +122,7 @@ public class Controller extends Application {
      * @param n
      */
     public void updateNodeInformation(INode n){
-        this.myDisplay.updateNodeIcon(n.getIcon());
+        this.myDisplay.updateNodeIcon(n.getIcon(), n);
         this.myDisplay.updateNodeTitle(n.toString());
 
         if (n.getPicturePath() != null){

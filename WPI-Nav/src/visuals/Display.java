@@ -21,6 +21,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import logic.INode;
+import logic.Transition;
 import logic.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,6 +118,8 @@ public class Display {
 
     javafx.scene.control.Button leftArrowButton;
     javafx.scene.control.Button rightArrowButton;
+
+    private javafx.scene.control.Button nodeTransitionButton;
 
     /**
      * Basic constructor.
@@ -407,7 +411,7 @@ public class Display {
         Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller);
         walkingSpeedBox.setTranslateX(8);  //TODO fix width of this?
         walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
-        walkingSpeedBox.setPromptText("Walking speed");
+        walkingSpeedBox.setValue(walkingArrayList.get(1));
 
         walkingSpeedBox.setOnAction(e -> handleWalkingInput(walkingSpeedBox, true));    //TODO finish handleWalkingInput
 
@@ -422,6 +426,7 @@ public class Display {
         Label setEmailLabel = new Label("Set your email:");
         setEmailLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
         setEmailLabel.setTextFill(Color.web("#eeeeee"));
+        setEmailLabel.setTranslateY(3);
 
         emailTextField.setOnAction(e -> handleEmailInput(emailTextField, true));
 
@@ -752,13 +757,17 @@ public class Display {
 
         nodeViewHolder = new StackPane();
         nodeTitle = new Label();
+        nodeTransitionButton = new javafx.scene.control.Button();
 
         Image nodeIconImage = new Image(getClass().getResourceAsStream("../images/picture.png"), 27,27,true,true);
         ImageView nodeIconView = new ImageView(nodeIconImage);
-       // nodeIconView.setScaleX(.05);
-       // nodeIconView.setScaleY(.05);
+        nodeTransitionButton.setGraphic(nodeViewHolder);
         nodeIconView.setFitHeight(27);
         nodeIconView.setFitWidth(27);
+
+        nodeTransitionButton.visibleProperty().bind(PHOTO_ICON_VISIBLE);
+        this.nodeTransitionButton.setId("arrow-buttons");
+        this.nodeTransitionButton.setStyle("-fx-background-color:#eeeeee");
 
         nodeIconViewButton = new javafx.scene.control.Button();
         nodeIconViewButton.visibleProperty().bind(PHOTO_ICON_VISIBLE);
@@ -767,7 +776,7 @@ public class Display {
         nodeIconViewButton.setId("arrow-buttons");
         nodeIconViewButton.setStyle("-fx-background-color: #eeeeee");
 
-        hbox.getChildren().addAll(nodeViewHolder, nodeTitle, nodeIconViewButton);
+        hbox.getChildren().addAll(nodeTransitionButton, nodeTitle, nodeIconViewButton);
         hbox.setMaxHeight(EDGE);
         hbox.setMinHeight(EDGE);
         hbox.setAlignment(Pos.CENTER);
@@ -787,11 +796,20 @@ public class Display {
         this.nodeTitle.setText(s);
     }
 
-    public void updateNodeIcon(ImageView i){
+    public void updateNodeIcon(ImageView i, INode iNode){
         System.out.println("node view icon");
         this.nodeViewHolder.getChildren().remove(nodeView);
         this.nodeViewHolder.getChildren().add(i); //= i;
         this.nodeView = i;
+        if (iNode.isTransition()){
+            this.nodeTransitionButton.setId("arrow-buttons");
+            this.nodeTransitionButton.setOnAction(e -> controller.handleEnterBuilding((Transition)iNode));
+        } else {
+            this.nodeTransitionButton.setId("arrow-buttons-grayed2");
+            this.nodeTransitionButton.setOnAction(e -> {});//// TODO: 12/2/15 fix
+        }
+
+
     }
 
     //TODO THIS IS START OF BUILDING BOX PANE!
@@ -878,6 +896,7 @@ public class Display {
 
         VBox inputs = new VBox();
         inputs.setSpacing(GAP);
+        end.setTranslateY(3);
         inputs.getChildren().addAll(start, end);
 
         //this.start.setPlaceholder(new Label("Search or Select Starting Location"));
@@ -1199,6 +1218,7 @@ public class Display {
         this.chooseMap.setPromptText("Search or Select Map");
         this.start.setPromptText("Search or Select Map");
         this.end.setPromptText("Search or Select Map");
+
 
         this.chooseMap.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue && firstTime.get()) {
