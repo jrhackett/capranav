@@ -145,7 +145,7 @@ public class DirectionsTesting {
         Instructions i3 = new Instructions("You have reached your destination.", As.get(2));
         assertEquals("stepByStep did not output correct output", i1.getInstruction_string(), aI.get(0).get(0).getInstruction_string());
         assertEquals("stepByStep did not output correct output", i2.getInstruction_string(), aI.get(0).get(1).getInstruction_string());
-        //assertEquals("stepByStep did not output correct output", i3.getInstruction_string(), aI.get(0).get(2).getInstruction_string());
+        assertEquals("stepByStep did not output correct output", i3.getInstruction_string(), aI.get(0).get(2).getInstruction_string());
 
     }
 
@@ -160,5 +160,27 @@ public class DirectionsTesting {
         assertEquals("stepByStep did not output correct output", i1.getInstruction_string(), aI.get(0).get(0).getInstruction_string());
         assertEquals("stepByStep did not output correct output", i2.getInstruction_string(), aI.get(0).get(1).getInstruction_string());
         assertEquals("stepByStep did not output correct output", i3.getInstruction_string(), aI.get(0).get(2).getInstruction_string());
+    }
+
+    @Test
+    public void stepByStepTesting5(){
+        ArrayList<INode> As = AStarShortestPath.AStarSearch(nD, nG, nodes);
+        Directions d = new Directions();
+        ArrayList<ArrayList<Instructions>> aI = d.stepByStep(As, m);
+
+        Instructions i1 = new Instructions("Face North, and walk 100 feet.", As.get(0));
+        Instructions i2 = new Instructions("Turn hard right, and walk 100 feet.", As.get(1));
+        Instructions i2b = new Instructions("Turn hard right, and walk 100 feet.", As.get(1));
+        Instructions i2c = new Instructions("Turn right, and walk 141 feet.", As.get(1));
+
+        Instructions i3 = new Instructions("You have reached your destination.", As.get(2));
+
+
+        assertEquals("stepByStep did not output correct output", i1.getInstruction_string(), aI.get(0).get(0).getInstruction_string());
+        assertEquals("stepByStep did not output correct output", i2.getInstruction_string(), aI.get(0).get(1).getInstruction_string());
+        assertEquals("stepByStep did not output correct output", i2b.getInstruction_string(), aI.get(0).get(2).getInstruction_string());
+        assertEquals("stepByStep did not output correct output", i2c.getInstruction_string(), aI.get(0).get(3).getInstruction_string());
+
+        assertEquals("stepByStep did not output correct output", i3.getInstruction_string(), aI.get(0).get(4).getInstruction_string());
     }
 }

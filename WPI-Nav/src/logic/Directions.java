@@ -21,6 +21,7 @@ public class Directions {
 	public static ArrayList<ArrayList<Instructions>> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps) {
 		int mapstep=0;
 		double distspec = 0;
+		boolean veryfirm = false;
 
 		//^^NEW LINE, init var distspec
 
@@ -128,9 +129,12 @@ public class Directions {
 			// specialdirs changed lines ^^
 			//if (angle<165 || angle>195){
 
-			if (angle<=-10 || angle>=10){
+			if (angle<=-10 || angle>=10 || (aStarPath.size()==i+j+2 && veryfirm == false)){
 				//^^NEW LINE: Don't add this step's direction if straight (30 degree window)(don't forget the close squiggly)
 				directions.get(mapstep).add(new Instructions("Turn " + anglePhrase + ", and walk " + distPhrase,turn));
+				if(aStarPath.size()==i+j+2) {
+					veryfirm = true;
+				}
 			}
 			if(turn.isTransition()){
 				mapstep++;
@@ -139,9 +143,6 @@ public class Directions {
 			distspec = 0;
 			//^^NEW LINE: Clear distspec so the distance is not carried through and counted twice
 		}
-		System.out.println(directions.size());
-		System.out.println(mapstep);
-		System.out.println(aStarPath.size());
 		directions.get(directions.size()-1).add(new Instructions("You have reached your destination.",aStarPath.get(aStarPath.size()-1)));
 		
 		return directions;
