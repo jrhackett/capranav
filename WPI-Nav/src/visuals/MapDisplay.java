@@ -322,7 +322,10 @@ public class MapDisplay extends Pane {
      * @param mapIdNew
      */
     public void showLines(int mapIdOld, int mapIdNew) {
-    if (mapIdOld != -1) this.getChildren().removeAll(lines.get(mapIdOld));
+    if (mapIdOld != -1) {
+        this.getChildren().removeAll(lines.get(mapIdOld));
+       // this.getChildren().removeAll(lines.get(mapIdOld));
+    }
     else                this.getChildren().addAll(lines.get(mapIdNew));
     }
 
