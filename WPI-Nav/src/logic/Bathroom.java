@@ -39,20 +39,27 @@ public class Bathroom extends Interest {
         //TODO FILL THIS IN
         Image image;
         ImageView imageView;
+
         switch (bathroomType){
             case MENS:
-                 image = new Image(getClass().getResourceAsStream("../images/female105.svg"), 22, 22, true, true);
-                 imageView = new ImageView(image);
+                image = new Image(getClass().getResourceAsStream("../images/female105.svg"), 22, 22, true, true);
+                imageView = new ImageView(image);
+                imageView.setFitHeight(22);
+                imageView.setFitWidth(22);
                 return imageView;
             case WOMAN:
-                 image = new Image(getClass().getResourceAsStream("../images/female105.svg"), 22, 22, true, true);
-                 imageView = new ImageView(image);
+                image = new Image(getClass().getResourceAsStream("../images/female105.svg"), 22, 22, true, true);
+                imageView = new ImageView(image);
+                imageView.setFitHeight(22);
+                imageView.setFitWidth(22);
                 return imageView;
             case HANDICAP:
             case GENERAL:
             default:
-                     image = new Image(getClass().getResourceAsStream("../images/female105.svg"), 22, 22, true, true);
-                     imageView = new ImageView(image);
+                image = new Image(getClass().getResourceAsStream("../images/female105.svg"), 22, 22, true, true);
+                imageView = new ImageView(image);
+                imageView.setFitHeight(22);
+                imageView.setFitWidth(22);
                     return imageView;
                 }
         }
