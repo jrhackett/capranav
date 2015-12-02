@@ -142,7 +142,7 @@ public class Directions {
 					veryfirm = true;
 				}
 			}
-			if(turn.isTransition()){
+			if(turn.isTransition() && next.getMap_id() != turn.getMap_id()){
 				mapstep++;
 				directions.add(new ArrayList<Instructions>());
 			}

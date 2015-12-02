@@ -142,10 +142,10 @@ public class MapDisplay extends Pane {
 
     public void softSelectAnimation(int id) {
         Circle c = id_circle.get(id); //TODO confirm we dont need to ensure its on the same map
-        ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
-        st.setByX(1.1f);
-        st.setByY(1.1f);
-        st.setCycleCount(4);
+        ScaleTransition st = new ScaleTransition(Duration.millis(160), c);
+        st.setByX(1.03f);
+        st.setByY(1.03f);
+        st.setCycleCount(2);
         st.setAutoReverse(true);
         st.play();
     }
@@ -234,12 +234,17 @@ public class MapDisplay extends Pane {
         c.setStrokeWidth(1);
     }
 
+    public void highlightPath(int id){
+        if (controller.startNode.getID() != id && controller.endNode.getID() != id)
+        highlightPath(id_circle.get(id));
+    }
+
     /**
      * Highlights the path of nodes.
      *
      * @param c
      */
-    private void highlightPath(Circle c) {
+    public void highlightPath(Circle c) {
         //c.setFill(Color.web("#00CCFF"));
         // c.setStroke(Color.web("#0018A8"));
         c.setRadius(5);
@@ -322,11 +327,14 @@ public class MapDisplay extends Pane {
      * @param mapIdNew
      */
     public void showLines(int mapIdOld, int mapIdNew) {
-    if (mapIdOld != -1) {
-        this.getChildren().removeAll(lines.get(mapIdOld));
-       // this.getChildren().removeAll(lines.get(mapIdOld));
-    }
-    else                this.getChildren().addAll(lines.get(mapIdNew));
+        try {
+            if (mapIdOld != -1) {
+                this.getChildren().removeAll(lines.get(mapIdOld));
+                // this.getChildren().removeAll(lines.get(mapIdOld));
+            } else this.getChildren().addAll(lines.get(mapIdNew));
+        } catch (NullPointerException e){
+
+        }
     }
 
 

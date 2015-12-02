@@ -303,7 +303,7 @@ public class Controller extends Application {
             this.currentBuilding = buildingID;
             showBuildingPane();//ONLY SLIDE DOWN BUILDING VIEW //TODO STILL UNTESTED
             switchToBuildingView(buildingID, startingFLOOR);
-            myDisplay.mapDisplay.showLines(lastMapID, currentMap.getID());//TODO QESTUISNDFFsadcf
+            //myDisplay.mapDisplay.showLines(lastMapID, currentMap.getID());//TODO QESTUISNDFFsadcf
         }
     }
 
@@ -315,7 +315,7 @@ public class Controller extends Application {
 
         //set the correct floor
         setFloor(startingFLOOR);
-        myDisplay.mapDisplay.showLines(lastMapID, currentMap.getID());//TODO QESTUISNDFFsadcf
+        //myDisplay.mapDisplay.showLines(lastMapID, currentMap.getID());//TODO QESTUISNDFFsadcf
 
 
         //set building info arrows / tab
@@ -351,8 +351,11 @@ public class Controller extends Application {
             setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(i));
             this.currentFloor = i;
             this.myDisplay.setBuildingNumber(i);
-            myDisplay.mapDisplay.showLines(lastMapID, currentMap.getID());//TODO QESTUISNDFFsadcf
+
+            //myDisplay.mapDisplay.showLines(lastMapID, currentMap.getID());//TODO QESTUISNDFFsadcf
+
         }
+
         if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)){
             //set id for normal
             this.myDisplay.setRightButtonID("arrow-buttons");

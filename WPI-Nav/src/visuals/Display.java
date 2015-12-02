@@ -963,6 +963,8 @@ public class Display {
                     if (selectedInstruction != null) {
                         //TODO Set the string of the label to this
                         this.controller.updateNodeInformation(selectedInstruction.getNode());
+                        this.mapDisplay.highlightPath(selectedInstruction.getNode().getID());
+                        this.mapDisplay.softSelectAnimation(selectedInstruction.getNode().getID());
                     }
                 });
 
