@@ -25,6 +25,9 @@ import logic.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.mail.Address;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -65,7 +68,7 @@ public class Display {
     public Inputs start;
     public Inputs end;
 
-
+    public TextField yourEmail;
     /*****************************************************************/
     /**
      * New Values / Variables for UI Rework
@@ -219,6 +222,8 @@ public class Display {
         AnchorPane.setTopAnchor(divider_3, 0.0);
         AnchorPane.setLeftAnchor(divider_3, GAP);
         AnchorPane.setRightAnchor(divider_3, GAP);
+
+        divider_3.setTranslateY(-1);
 
         /** images **/
         //Image pin =				new Image(getClass().getResourceAsStream("../images/pin.png"), 20, 20, true, true);
@@ -395,10 +400,10 @@ public class Display {
         settingsWalkingBox.getChildren().addAll(settingsWalkingLabel);
 
         ArrayList<Walking> walkingArrayList = new ArrayList<>();
-        walkingArrayList.add(new Walking("Casual Speed (Walking with your Grandmother)", 2.0));
-        walkingArrayList.add(new Walking("Quick Speed (Walking to Class)", 3.0));
-        walkingArrayList.add(new Walking("Fast Speed (Late to Class)", 4.0));
-        walkingArrayList.add(new Walking("Ultra Speed (Late to Interview)", 6.0));
+        walkingArrayList.add(new Walking("Casual (Walking with your Grandmother)", 2.0));
+        walkingArrayList.add(new Walking("Quick  (Walking to Class)", 3.0));
+        walkingArrayList.add(new Walking("Fast   (Late to Class)", 4.0));
+        walkingArrayList.add(new Walking("Ultra  (Late to Interview)", 6.0));
         Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller);
         walkingSpeedBox.setTranslateX(8);  //TODO fix width of this?
         walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
@@ -411,14 +416,14 @@ public class Display {
         emailTextField.setMaxWidth(INPUT_WIDTH);
         emailTextField.setMaxHeight(walkingSpeedBox.getMaxHeight());
         emailTextField.setTranslateX(8);
-        emailTextField.setTranslateY(8);
+        emailTextField.setTranslateY(5);
         emailTextField.setId("text-field");
 
         Label setEmailLabel = new Label("Set your email:");
         setEmailLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
         setEmailLabel.setTextFill(Color.web("#eeeeee"));
 
-        emailTextField.setOnAction(e -> handleEmailInput(emailTextField, true));    //TODO finish handleWalkingInput
+        emailTextField.setOnAction(e -> handleEmailInput(emailTextField, true));
 
         /*AnchorPane.setLeftAnchor(settingsWalkingBox, EDGE);
         AnchorPane.setLeftAnchor(settingsWalkingLabel, EDGE);
@@ -606,26 +611,22 @@ public class Display {
         /////////// INFO IN EMAIL SLIDE
 
         VBox emailBoxContent = new VBox();
-        TextField yourEmail = new TextField("Enter Email Here");
+        yourEmail = new TextField();
         yourEmail.setStyle("-fx-font-size:12;-fx-padding:4 4;");
+        yourEmail.setPromptText("Enter your email");
+
         yourEmail.setTranslateX(0);
         yourEmail.setPrefWidth(190);
         yourEmail.setMinWidth(190);
         yourEmail.setMaxWidth(190);
+        yourEmail.setId("email-text-field");
+
+        yourEmail.setOnAction(e -> handleEmailInput2(yourEmail, true));
         javafx.scene.control.Button go = new javafx.scene.control.Button("Send Directions");
         go.setId("email-button");
         go.setTranslateX(41);
         emailBoxContent.getChildren().addAll(yourEmail, go);
-        go.setOnAction(e -> {
-            if (yourEmail.getText() != null) {
-                if (sendEmail(yourEmail.getText())) {
-                    yourEmail.setText("Email Sent"); //TODO ADD GREEN COLOR
-                    EMAIL = false;
-                } else {
-                    yourEmail.setText("Invalid Email");//TODO ADD RED COLOR
-                }
-            }
-        });
+        go.setOnAction(e -> handleEmailInput2(yourEmail, true));
         emailBoxContent.setSpacing(GAP);
         emailBoxContent.setAlignment(Pos.CENTER);
         emailBoxContent.setMaxWidth(EDGE + expandedWidth);
@@ -992,14 +993,34 @@ public class Display {
     private void handleWalkingInput(Inputs v, boolean START) {
         visuals.Walking value = (visuals.Walking)v.getValue();
         User.setSpeed(value.getWalkingSpeed());
-        //System.out.println(value.get)
-        //TODO Finish this
+        System.out.println(value.getWalkingSpeed()); //TODO Remove
     }
-//TODO and finish this
+
+    //Green if email addr valid, red if not
     private void handleEmailInput(TextField v, boolean START) {
-        //TODO How do you get info from a TextField?? Maybe getCharacters()?
-        //TODO Store value in User
         User.setEmail(v.getText());
+
+        //Validate Address
+        try { new InternetAddress(v.getText()).validate(); }
+        catch(AddressException e) { //If invalid, set color to red
+            v.setId("text-field-denied");
+            return;
+        }
+        //If valid, set other textbox & color
+        yourEmail.setText(User.getEmail());
+        v.setId("text-field-confirmed");
+    }
+
+    //Green if email is sent, red if not
+    private void handleEmailInput2(TextField v, boolean START) {
+        if (yourEmail.getText() != null) {
+            if (sendEmail(yourEmail.getText())) {
+                yourEmail.setId("email-text-field-confirmed");
+                EMAIL = false;
+            } else {
+                yourEmail.setId("email-text-field-denied");
+            }
+        }
     }
 
     private void handleRightArrowButton(){

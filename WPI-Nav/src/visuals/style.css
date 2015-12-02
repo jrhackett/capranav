@@ -200,6 +200,28 @@
     -fx-font-size:12;
 }
 
+#text-field-confirmed
+{
+-fx-background-color:#333;
+    -fx-text-fill:#eee;
+    -fx-border-width:1;
+    -fx-border-color:green;
+    -fx-border-radius:3;
+    -fx-padding:3 3;
+    -fx-font-size:12;}
+
+#text-field-denied
+{
+-fx-background-color:#333;
+    -fx-text-fill:#eee;
+    -fx-border-width:1;
+    -fx-border-color:red;
+    -fx-border-radius:3;
+    -fx-padding:3 3;
+    -fx-font-size:12;
+    }
+
+
 #email-button{
     -fx-font-size:12;
     -fx-background-color:white;
@@ -263,3 +285,35 @@
     -fx-background-insets: 0 ;
 }
 
+#email-text-field
+{
+-fx-background-color:white;
+    -fx-text-fill:#333;
+    -fx-border-width:1;
+    -fx-border-color:#333;
+    -fx-border-radius:3;
+    -fx-padding:3 3;
+    -fx-font-size:12;
+}
+
+#email-text-field-confirmed
+{
+-fx-background-color:white;
+    -fx-text-fill:#333;
+    -fx-border-width:1;
+    -fx-border-color:green;
+    -fx-border-radius:3;
+    -fx-padding:3 3;
+    -fx-font-size:12;
+}
+
+#email-text-field-denied
+{
+-fx-background-color:white;
+    -fx-text-fill:#333;
+    -fx-border-width:1;
+    -fx-border-color:red;
+    -fx-border-radius:3;
+    -fx-padding:3 3;
+    -fx-font-size:12;
+}
