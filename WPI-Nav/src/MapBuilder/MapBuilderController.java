@@ -84,16 +84,22 @@ public class MapBuilderController extends Application {
 	}
 
 
-
+	public static boolean ugh = true;
 
 	/**
 	 * sets the next node id to be the largest value
 	 */
 	private void setNextNodeID() {
+		if (ugh) {
+			nextNodeID = 1000;
+			ugh = false;
+		}
+		else {
+
 		masterNodeList.forEach((k, v) -> {
 			nextNodeID = (k > nextNodeID) ? k : nextNodeID;
 			nextNodeID++;
-		});
+		}); }
 	}
 
 	/**

@@ -124,6 +124,7 @@ public class Controller extends Application {
     public void updateNodeInformation(INode n){
         this.myDisplay.updateNodeIcon(n.getIcon(), n);
         this.myDisplay.updateNodeTitle(n.toString());
+        this.myDisplay.ICON_VISIBLE.setValue(true);
 
         if (n.getPicturePath() != null){
             this.myDisplay.updatePictureIcon(true);
