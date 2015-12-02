@@ -400,10 +400,10 @@ public class Display {
         settingsWalkingBox.getChildren().addAll(settingsWalkingLabel);
 
         ArrayList<Walking> walkingArrayList = new ArrayList<>();
-        walkingArrayList.add(new Walking("Casual Speed (Walking with your Grandmother)", 2.0));
-        walkingArrayList.add(new Walking("Quick Speed (Walking to Class)", 3.0));
-        walkingArrayList.add(new Walking("Fast Speed (Late to Class)", 4.0));
-        walkingArrayList.add(new Walking("Ultra Speed (Late to Interview)", 6.0));
+        walkingArrayList.add(new Walking("Casual (Walking with your Grandmother)", 2.0));
+        walkingArrayList.add(new Walking("Quick  (Walking to Class)", 3.0));
+        walkingArrayList.add(new Walking("Fast   (Late to Class)", 4.0));
+        walkingArrayList.add(new Walking("Ultra  (Late to Interview)", 6.0));
         Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller);
         walkingSpeedBox.setTranslateX(8);  //TODO fix width of this?
         walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
@@ -1002,8 +1002,7 @@ public class Display {
 
         //Validate Address
         try { new InternetAddress(v.getText()).validate(); }
-        catch(AddressException e) {
-            v.setText("");
+        catch(AddressException e) { //If invalid, set color to red
             v.setId("text-field-denied");
             return;
         }
