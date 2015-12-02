@@ -1,9 +1,9 @@
 package logic;
 
+import visuals.Instructions;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import visuals.Instructions;
 		
 public class Directions {
 	private static double totalDistance = 0;
@@ -29,6 +29,12 @@ public class Directions {
 		directions.add(new ArrayList<Instructions>());
 		
 		// Do special case for first node
+		for (INode i : aStarPath){
+			System.out.println(i.getID());
+		}
+
+		System.out.println(aStarPath.size());
+
 		double dist = Math.sqrt(Math.pow((aStarPath.get(0).getX_univ() - aStarPath.get(1).getX_univ()), 2)
 				+ Math.pow((aStarPath.get(0).getY_univ() - aStarPath.get(1).getY_univ()), 2));
 

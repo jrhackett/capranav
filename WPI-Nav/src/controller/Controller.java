@@ -591,7 +591,7 @@ public class Controller extends Application {
 
 
     public ArrayList<logic.INode> getPathNodes(logic.INode s, logic.INode f){
-        this.pathNodes = AStarShortestPath.AStarSearch(s,f, nodes);
+        this.pathNodes = AStarShortestPath.AStarSearch(s, f, nodes);
         return pathNodes;
     }
 
