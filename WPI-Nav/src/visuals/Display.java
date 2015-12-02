@@ -752,12 +752,12 @@ public class Display {
         nodeViewHolder = new StackPane();
         nodeTitle = new Label();
 
-        Image nodeIconImage = new Image(getClass().getResourceAsStream("../images/photography111.svg"), 27,27,true,true);
+        Image nodeIconImage = new Image(getClass().getResourceAsStream("../images/picture.png"), 27,27,true,true);
         ImageView nodeIconView = new ImageView(nodeIconImage);
        // nodeIconView.setScaleX(.05);
        // nodeIconView.setScaleY(.05);
-        nodeIconView.setFitHeight(22);
-        nodeIconView.setFitWidth(22);
+        nodeIconView.setFitHeight(27);
+        nodeIconView.setFitWidth(27);
 
         nodeIconViewButton = new javafx.scene.control.Button();
         nodeIconViewButton.visibleProperty().bind(PHOTO_ICON_VISIBLE);

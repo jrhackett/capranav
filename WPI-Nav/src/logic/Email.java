@@ -77,7 +77,7 @@ public class Email {
             return true;
         }
         catch (MessagingException a){
-            a.printStackTrace();
+            //a.printStackTrace();
             return false;
         }
     }
