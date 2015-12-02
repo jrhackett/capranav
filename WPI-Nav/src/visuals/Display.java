@@ -21,6 +21,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import logic.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -394,9 +395,10 @@ public class Display {
         settingsWalkingBox.getChildren().addAll(settingsWalkingLabel);
 
         ArrayList<Walking> walkingArrayList = new ArrayList<>();
-        walkingArrayList.add(new Walking("Walking with your grandmother (slow)", 0.5));
-        walkingArrayList.add(new Walking("Normal walking pace (medium)", 1.0));
-        walkingArrayList.add(new Walking("Walking to class when late (fast)", 1.5));
+        walkingArrayList.add(new Walking("Casual Speed (Walking with your Grandmother)", 2.0));
+        walkingArrayList.add(new Walking("Quick Speed (Walking to Class)", 3.0));
+        walkingArrayList.add(new Walking("Fast Speed (Late to Class)", 4.0));
+        walkingArrayList.add(new Walking("Ultra Speed (Late to Interview)", 6.0));
         Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller);
         walkingSpeedBox.setTranslateX(8);  //TODO fix width of this?
         walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
@@ -987,18 +989,17 @@ public class Display {
 
     }
 
-    //TODO finish this
     private void handleWalkingInput(Inputs v, boolean START) {
-        String value = (String)v.getValue();
-        //TODO Store value in User
-
+        visuals.Walking value = (visuals.Walking)v.getValue();
+        User.setSpeed(value.getWalkingSpeed());
+        //System.out.println(value.get)
+        //TODO Finish this
     }
-
-    //TODO finish this
+//TODO and finish this
     private void handleEmailInput(TextField v, boolean START) {
         //TODO How do you get info from a TextField?? Maybe getCharacters()?
         //TODO Store value in User
-        v.getCharacters();
+        User.setEmail(v.getText());
     }
 
     private void handleRightArrowButton(){
