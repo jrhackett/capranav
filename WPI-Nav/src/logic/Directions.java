@@ -119,12 +119,10 @@ public class Directions {
 			distPhrase = Math.round(distspec) + " feet.";
 			//^^EDITED LINE: distPhrase now uses distspec.
 
-			// TODO: implement special phrase for when a node is a landmark
-			// if (next is a landmark){
-			// distPhrase = next.specialPhrase;
-			// } else {
-			// distPhrase = Math.round(dist) + " feet.";
-			// }
+			// specialdirs changed lines VV
+			if (next instanceof Stairs || next instanceof TStairs) distPhrase = "climb the stairs and go " + Math.round(distspec) + " feet.";
+			if (next instanceof Elevator) distPhrase = "enter the elevator."; //TODO: This should include what floor to select
+			// specialdirs changed lines ^^
 
 			if (angle<165 || angle>195){
 				//^^NEW LINE: Don't add this step's direction if straight (30 degree window)(don't forget the close squiggly)
