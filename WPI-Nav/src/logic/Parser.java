@@ -35,17 +35,11 @@ public class Parser<Struct> {
 	//These two sets of arrays must be in parallel !
 	private static final Class[]  mTypes = { Campus.class, Floor.class };
 	private static final String[] mNames = { "campus.json", "floor.json" };
-<<<<<<< HEAD
 	private static final Class[] nTypes = { Bathroom.class, Elevator.class, Food.class, Landmark.class, Path.class,
 			Room.class, Stairs.class, TStairs.class };
 	private static final String[] nNames = { "bathroom.json", "elevator.json", "food.json", "landmark.json",
 			"path.json", "room.json", "stair.json", "tstair.json" };
-=======
-	private static final Class[]  nTypes = { Bathroom.class, Elevator.class, Food.class, Landmark.class, Path.class,
-											 Room.class, Stairs.class, TStairs.class };
-	private static final String[] nNames = { "bathroom.json", "elevator.json", "food.json", "landmark.json", "path.json",
-											 "room.json", "stair.json", "tstair.json" };
->>>>>>> UI_rework
+
 
 	public Parser() {}
 	///*
@@ -145,13 +139,7 @@ public class Parser<Struct> {
 
 			//Write s out to the correct file
 			try { writer = new JsonWriter(new FileWriter(filename, true)); }
-<<<<<<< HEAD
-			catch (IOException e) {
-				e.printStackTrace();
-				return; } //Bad bad bad
-=======
 			catch (IOException e) { return; } //Bad bad bad
->>>>>>> UI_rework
 			gson.toJson(s, s.getClass(), writer);
 			close(); // Close the writer
 		}
