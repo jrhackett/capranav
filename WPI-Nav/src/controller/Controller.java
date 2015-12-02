@@ -3,23 +3,33 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import logic.*;
 import visuals.Display;
 import visuals.Instructions;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import com.sun.javafx.application.LauncherImpl;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+
 
 
 /**
  * IMPORTANT: This Class will 'launch' the application.
  *            And control the application
  */
+
+
 public class Controller extends Application {
 
     /* visual component */
@@ -58,6 +68,7 @@ public class Controller extends Application {
     private int lastMapID;
 
     private INode selectedInformationNode;
+
 
 
     @Override
@@ -255,7 +266,7 @@ public class Controller extends Application {
         }
     }
 
-//TODO MEGAIMPORTANT DO THIS YES DO
+//TODO MEGA IMPORTANT DO THIS YES DO
     public void handleEnterBuilding(Transition t){
         System.out.println("Entered handle Enter Building");
         //remove it from the ends and start??
@@ -746,7 +757,7 @@ public class Controller extends Application {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public static void main(String[] args) {
-        launch(args);
-    }
-}
+        public static void main(String[] args) {
+            LauncherImpl.launchApplication(Controller.class, myPreloader.class, args);
+        }}
+

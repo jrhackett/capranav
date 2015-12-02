@@ -1,6 +1,7 @@
 package visuals;
 
 import controller.Controller;
+import controller.myPreloader;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
@@ -135,6 +136,8 @@ public class Display {
 
         this.EDGE = GAP * 2 + CONTROL_WIDTH;
     }
+
+
 
     /**
      * This sets up the GUI interface - both visuals and interactions.
