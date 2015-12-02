@@ -7,9 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import logic.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * This will be a strictly 'PHASE-BASED' application
@@ -81,6 +79,10 @@ public class MapBuilderController extends Application {
 
 	public void  setNodeInformation(INode node){
 		this.myDisplay.setNodeLabel(node.getClass().toString() + "  |  " + node.toString());
+	}
+
+	public void setEdgeInformation(String s){
+		this.myDisplay.setEdgeLabel(s);
 	}
 
 
@@ -271,11 +273,7 @@ public class MapBuilderController extends Application {
 	public void saveNodesToMaster(){
 		if(nodeList != null){
 
-			nodeList.forEach((k, v) -> {
-				if(v.isTransition()){
-					System.out.println("Transition node found");
-				}
-			});
+
 
 			// First, remove all the nodes that were deleted
 			// AKA: are present in the old list but not in the new one
@@ -309,6 +307,19 @@ public class MapBuilderController extends Application {
 	 */
 	public void nodesToFile() {
 		saveNodesToMaster();
+
+		for (java.util.Map.Entry<Integer, INode> nodeEntry : masterNodeList.entrySet()){
+			if (nodeEntry.getValue().isTransition()){
+				for(Edge e : nodeEntry.getValue().getAdjacencies()){
+					if (masterNodeList.get(e.getTarget()).isTransition()){
+						((Transition)nodeEntry.getValue()).setBuildingID(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getBuildingID());
+						((Transition)nodeEntry.getValue()).setToFloor(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getFloor());
+						break;
+					}
+				}
+			}
+		}
+
 
 		/*this.buildings.forEach((k,v) -> {
 			v.translateBuilding(getNodesOfBuilding(k));

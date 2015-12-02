@@ -72,11 +72,11 @@ public class MapVisualSecondary extends Pane {
         try {
             // Image(getClass().getResourceAsStream("../images/" + map.getPath()
             // + ".png"), 660, 495, true, true);
-            this.mapImage = new Image(getClass().getResourceAsStream("../images/" + map.getFilePath()));
+            this.mapImage = new Image(getClass().getResourceAsStream("../images/floorPlans/" + map.getFilePath()));
         } catch (NullPointerException e) {
             // Image(getClass().getResourceAsStream("/images/" + map.getPath() +
             // ".png"), 660, 495, true, true);
-            this.mapImage = new Image(getClass().getResourceAsStream("/images/" + map.getFilePath()));
+            this.mapImage = new Image(getClass().getResourceAsStream("/images/floorPlans/" + map.getFilePath()));
         }
 
         this.mapView = new ImageView(mapImage);
@@ -96,10 +96,6 @@ public class MapVisualSecondary extends Pane {
 
         this.getChildren().remove(this.nodeCircles);
         this.getChildren().addAll(this.nodeCircles);
-
-        // This is called when the map is clicked
-        //drawEdges(controller.getCurrentNodeList());
-        //drawNodes(controller.getCurrentNodeList());
 
     }
 
@@ -179,16 +175,17 @@ public class MapVisualSecondary extends Pane {
                     // Also draw the edge
                     if (isNewEdge) {
                         System.out.println("New Edge Created!");
+                        controller.setEdgeInformation("New Edge Across Maps Created!");
+
 
                         Edge newCEdge = new Edge(v.getID(), 1);
                         Edge newVEdge = new Edge(controller.getSelectedNode().getID(), 1);
 
                         controller.getSelectedNode().addEdge(newCEdge);
                         v.addEdge(newVEdge);
-
-                        drawNodes(controller.getCurrentNodeList());
                     } else {
                         System.out.println("Edge already exists");
+                        controller.setEdgeInformation("Edge already exists");
                     }
                 }
             }
@@ -212,7 +209,7 @@ public class MapVisualSecondary extends Pane {
     }
 
     private void normal(Circle c) {
-        c.setFill(Color.GREEN);
+        c.setFill(Color.HOTPINK);
         c.setStrokeWidth(0);
         c.setRadius(5);
     }

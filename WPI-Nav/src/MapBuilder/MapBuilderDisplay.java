@@ -38,6 +38,7 @@ public class MapBuilderDisplay extends StackPane {
 	/* controller */
 	MapBuilderController controller;
 	Label nodeInformation;
+	Label edgeInformation;
 
 
 	public MapBuilderDisplay(Stage stage, double width, double height, MapBuilderController controller) {
@@ -185,12 +186,12 @@ public class MapBuilderDisplay extends StackPane {
 
 
 		nodeInformation = new Label();
-
+		edgeInformation = new Label();
 
 		chooseMapTwo.setVisible(false);
 		chooseMap.setTranslateX(10);
 		TopBar.setSpacing(15);
-		TopBar.getChildren().addAll(chooseMap, chooseMapTwo, toggleButtonOn, toggleButtonOff, nodeInformation, closeButton);
+		TopBar.getChildren().addAll(chooseMap, chooseMapTwo, toggleButtonOn, toggleButtonOff, nodeInformation, edgeInformation, closeButton);
 		
 		/*AnchorPane.setRightAnchor(closeButton, 5.0);
 		AnchorPane.setLeftAnchor(chooseMap, 5.0);
@@ -201,6 +202,11 @@ public class MapBuilderDisplay extends StackPane {
 	public void setNodeLabel(String s){
 		nodeInformation.setText(s);
 	}
+
+	public void setEdgeLabel(String s){
+		edgeInformation.setText(s);
+	}
+
 }
 
 
