@@ -223,6 +223,8 @@ public class Display {
         AnchorPane.setLeftAnchor(divider_3, GAP);
         AnchorPane.setRightAnchor(divider_3, GAP);
 
+        divider_3.setTranslateY(-1);
+
         /** images **/
         //Image pin =				new Image(getClass().getResourceAsStream("../images/pin.png"), 20, 20, true, true);
         //ImageView pinView = 	new ImageView(pin);
@@ -414,7 +416,7 @@ public class Display {
         emailTextField.setMaxWidth(INPUT_WIDTH);
         emailTextField.setMaxHeight(walkingSpeedBox.getMaxHeight());
         emailTextField.setTranslateX(8);
-        emailTextField.setTranslateY(8);
+        emailTextField.setTranslateY(4);
         emailTextField.setId("text-field");
 
         Label setEmailLabel = new Label("Set your email:");
