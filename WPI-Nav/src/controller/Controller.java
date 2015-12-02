@@ -203,7 +203,10 @@ public class Controller extends Application {
 
                 if (!FLAG) {//if not from a click on the map hide the last
                     System.out.println("FLAG FALSE!");
-                    if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode.getID());
+                    if (startNode != null) {
+                        System.out.println("HIDING START");
+                        this.myDisplay.mapDisplay.hideLast(startNode.getID());
+                    }
                 }
 
                 if (endNode != null && id == endNode.getID()) {//if end and start will be the same remove the other
@@ -217,7 +220,10 @@ public class Controller extends Application {
             } else {
                 if (!FLAG) {//if not from a click on the map hide the last
                     System.out.println("FLAG FALSE!");
-                    if (endNode != null) this.myDisplay.mapDisplay.hideLast(endNode.getID());
+                    if (endNode != null) {
+                        System.out.println("HIDING END!");
+                        this.myDisplay.mapDisplay.hideLast(endNode.getID());
+                    }
                 }
 
                 if (startNode != null && id == startNode.getID()) {//if end and start will be the same remove the other
@@ -233,9 +239,7 @@ public class Controller extends Application {
             if (startNode != null && endNode != null) {
                 findPaths();
             }
-
             if (startNode != null) {
-                System.out.printf("Setting STARTNODE: %d\n", startNode.getID());
                 //TODO if current map contains it, play, if it doesn't - switch and play
                 if (startNode.getMap_id() != currentMap.getID()) {
                     //gotta switch maps
@@ -254,6 +258,7 @@ public class Controller extends Application {
                 }
                 //TODO
             }
+
         }
     }
 
@@ -665,8 +670,6 @@ public class Controller extends Application {
         myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
         myDisplay.mapDisplay.createPath(fullPath);
         myDisplay.mapDisplay.showLines(-1, lastMapID); //TODO UPDATE showPath
-
-
     }
 
     public void handleIncrementPathMap(){

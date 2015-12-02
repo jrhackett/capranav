@@ -240,7 +240,7 @@ public class MapDisplay extends Pane {
         //c.setFill(Color.web("#00CCFF"));
         // c.setStroke(Color.web("#0018A8"));
         c.setRadius(5);
-        // highlight(c, Color.BLUE, Color.LIGHTBLUE);
+        highlight(c, Color.BLUE, Color.LIGHTBLUE);
 
         DropShadow ds = new DropShadow();
         ds.setColor(Color.WHITE);
