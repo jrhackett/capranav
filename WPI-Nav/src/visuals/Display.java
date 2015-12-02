@@ -416,7 +416,7 @@ public class Display {
         emailTextField.setMaxWidth(INPUT_WIDTH);
         emailTextField.setMaxHeight(walkingSpeedBox.getMaxHeight());
         emailTextField.setTranslateX(8);
-        emailTextField.setTranslateY(4);
+        emailTextField.setTranslateY(5);
         emailTextField.setId("text-field");
 
         Label setEmailLabel = new Label("Set your email:");
