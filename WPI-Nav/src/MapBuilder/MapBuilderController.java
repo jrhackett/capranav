@@ -4,14 +4,12 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import logic.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
 /**
  * This will be a strictly 'PHASE-BASED' application
@@ -26,8 +24,8 @@ import java.util.Set;
 
 public class MapBuilderController extends Application {
 	/* visual constants */
-	private static final Double WINDOW_WIDTH = 1000.0;
-	private static final Double WINDOW_HEIGHT = 800.0;
+	private static final Double WINDOW_WIDTH = 1425.0;
+	private static final Double WINDOW_HEIGHT = 600.0;
 
 	/* visual component */
 	private MapBuilderDisplay myDisplay;
@@ -39,13 +37,20 @@ public class MapBuilderController extends Application {
 
 	private ArrayList<INode> potentialEdgeNodes;
 
-	private int currentMapID = -1;
+	private int currentMapID = 0;
 
 	private int nextNodeID;
-	private int nextMapID = 3335;// TODO UNIQUE
+	private int nextMapID = 7;// TODO UNIQUE
 
 	/* current node information */
 	private int selectedNodeID;
+
+	/* map two stuff */
+	private int currentMapIDTwo = 0;
+	private HashMap<Integer, INode> secondaryMapNodeList;
+
+
+
 
 	@Override
 	public void start(Stage s) throws Exception {
@@ -83,13 +88,12 @@ public class MapBuilderController extends Application {
 
 	/**
 	 * Given a mouse event -> gets
-	 * 
-	 * @param e
+	 *
 	 * @return ID of new Node
 	 */
 	public int newPathNodeAtLocation(double x, double y) {
 		// TODO: get UNIQUE or next number - look into singelton
-		Node newNode = new Path(this.nextNodeID, x, y, 0, x, y, 0, this.currentMapID);
+		INode newNode = new Path(this.nextNodeID, x, y, 0, x, y, 0, this.currentMapID);
 		nodeList.put(this.nextNodeID, newNode);
 		return this.nextNodeID++;
 	}
@@ -134,7 +138,7 @@ public class MapBuilderController extends Application {
 	/**
 	 * sets the selected node name
 	 * 
-	 * @param n
+	 * @param
 	 */
 	public void changeNameToIncludeMap(int id) {
 		// TODO: Fix this to work with new classes
@@ -151,7 +155,6 @@ public class MapBuilderController extends Application {
 	 * This takes in two nodes, the original with x, y, and edge information and the new with type specific info
 	 * and combines them to form an updated node. This node is then added to the nodeList
 	 * 
-	 * @param originalNode ID of original node to modify type and info
 	 * @param newNode New node to add with type and specific info
 	 * 
 	 */
@@ -251,6 +254,26 @@ public class MapBuilderController extends Application {
 
 	}
 
+
+	public HashMap<Integer, INode> getSecondaryNodeList(){
+		return secondaryMapNodeList;
+	}
+
+	public void setCurrentMapTwo(int id) {
+
+		this.currentMapIDTwo = id;
+		this.secondaryMapNodeList =	new HashMap<>();
+
+		masterNodeList.forEach((k,v) ->{
+			if (v.isTransition() && v.getMap_id() == id){
+				secondaryMapNodeList.put(k,v);
+			}
+		});
+
+		//cleanNodeList(this.nodeList);
+		//setNextNodeID();
+	}
+
 	/**
 	 * Gets the node given a key
 	 * 
@@ -262,30 +285,45 @@ public class MapBuilderController extends Application {
 	}
 
 	/**
+	 * This method saves the nodes in nodeList to masterNodeList
+	 */
+	public void saveNodesToMaster(){
+		if(nodeList != null){
+			// First, remove all the nodes that were deleted
+			// AKA: are present in the old list but not in the new one
+			Integer[] keyList = masterNodeList.keySet().toArray(new Integer[masterNodeList.keySet().size()]);
+			for (int i = 0; i < keyList.length; i++) {
+				if (masterNodeList.containsKey(keyList[i]) && masterNodeList.get(keyList[i]).getMap_id() == currentMapID
+						&&!nodeList.containsKey(keyList[i])) {
+					masterNodeList.remove(keyList[i]);
+				}
+			}
+
+			// Remove any rouge edges in the masterNodeList
+			// cleanNodeList(masterNodeList);
+
+			// Update all the nodes that could have been changed
+			nodeList.forEach((k, v) -> {
+				masterNodeList.put(k, v);
+			});
+		}
+	}
+
+
+	/**
 	 * Write nodes to file
 	 * 
 	 * @param
 	 */
 	public void nodesToFile() {
-		// First, remove all the nodes that were deleted
-		// AKA: are present in the old list but not in the new one
-		Integer[] keyList = masterNodeList.keySet().toArray(new Integer[masterNodeList.keySet().size()]);
-		for (int i = 0; i < keyList.length; i++) {
-			if (masterNodeList.containsKey(keyList[i]) && !nodeList.containsKey(keyList[i])) {
-				masterNodeList.remove(keyList[i]);
-			}
-		}
-
-		// Remove any rouge edges in the masterNodeList
-		// cleanNodeList(masterNodeList);
-
-		// Update all the nodes that could have been changed
-		nodeList.forEach((k, v) -> {
-			masterNodeList.put(k, v);
+		saveNodesToMaster();
+		System.out.println("Nodes saved to file");
+		// send this masterNodeList to the file
+		masterNodeList.forEach((k,v)->{
+			System.out.println(k);
 		});
 
-		// send this masterNodeList to the file
-		Parser parser = new Parser();
+		Parser parser = new Parser<INode>();
 		parser.toFile(masterNodeList);
 	}
 
@@ -299,6 +337,8 @@ public class MapBuilderController extends Application {
 		
 		//int firstKey = masterNodeList.keySet()[0];
 		masterNodeList.remove(0);
+
+		/*
 		
 		System.out.println("All nodes form file are shown below:");
 		
@@ -308,7 +348,7 @@ public class MapBuilderController extends Application {
 		});
 		
 		System.out.println("Nodes complete");
-		System.out.println("");
+		System.out.println("");*/
 	}
 
 	/**

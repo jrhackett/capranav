@@ -18,6 +18,10 @@ public class Bathroom extends Interest {
         super(id, x, y, z, x1, x2, x3, mapID, name);
     }
 
+    public Bathroom(INode node){
+        super(node);
+    }
+
     public void setBathroomType(BathroomType t){
         this.bathroomType = t;
     }

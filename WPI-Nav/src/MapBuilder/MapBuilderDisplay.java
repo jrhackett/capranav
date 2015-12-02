@@ -30,6 +30,10 @@ public class MapBuilderDisplay extends VBox {
 	/* map */
 	MapVisual mapvisual;
 
+	MapVisualSecondary mapvisualSecondary;
+	public Inputs chooseMapTwo;
+
+
 	/* controller */
 	MapBuilderController controller;
 
@@ -50,24 +54,30 @@ public class MapBuilderDisplay extends VBox {
 		// right:
 		this.map_zone = new StackPane();
 		// map_zone.setMaxWidth(3 * width / 4);
-		map_zone.setMinWidth(width * 1.0);
-		map_zone.setMaxWidth(width * 1.0);
+		//map_zone.setMinWidth(width * 1.0);
+		//map_zone.setMaxWidth(width * 1.0);
 		// map_zone.setMaxHeight(height);
-		map_zone.setMinHeight(height);
-		map_zone.setAlignment(Pos.TOP_LEFT);
-		map_zone.setStyle("-fx-background-color: #444444;");
+		//map_zone.setMinHeight(height);
+		//map_zone.setAlignment(Pos.TOP_LEFT);
+		//map_zone.getChildren().addAll(mapvisual);
+
+
 		this.mapvisual = new MapVisual(controller);
-		map_zone.getChildren().addAll(mapvisual);
-		this.getChildren().addAll(TopBar, map_zone);
-		
-		System.out.println("map_zone width = " + map_zone.getWidth());
+		this.mapvisualSecondary = new MapVisualSecondary(controller);
+
+		//System.out.println("map_zone width = " + map_zone.getWidth());
 
 		map_zone.prefWidthProperty().bind(this.widthProperty());
 
 		HBox sections = new HBox();
-		//LEFT / PRIMARY AREA
-		//sections.
+		sections.setSpacing(50);
+		sections.setStyle("-fx-background-color: #444444;");
+		sections.prefHeightProperty().bind(stage.heightProperty());
+		sections.prefWidthProperty().bind(stage.widthProperty());
 
+		sections.getChildren().addAll(mapvisual, mapvisualSecondary);
+
+		this.getChildren().addAll(TopBar, sections);
 
 		this.setAlignment(Pos.TOP_LEFT);
 		this.prefHeightProperty().bind(stage.heightProperty());
@@ -90,8 +100,8 @@ public class MapBuilderDisplay extends VBox {
 		chooseMap.setItems(chooseMap.convertMaps(controller.getMaps()));
 		chooseMap.setOnAction(e -> {
 			controller.deselectNode();
-			
-			
+			controller.saveNodesToMaster();
+
 			Collection<logic.IMap> mapSet = controller.getMaps().values();
 			
 			logic.IMap newMap = new logic.Floor();
@@ -105,6 +115,31 @@ public class MapBuilderDisplay extends VBox {
 			controller.setCurrentMap(newMap.getID());
 			mapvisual.setMap(newMap);
 		});
+
+		this.chooseMapTwo = new Inputs("maps", input_width, controller);
+
+		chooseMapTwo.setItems(chooseMapTwo.convertMaps(controller.getMaps()));
+		chooseMapTwo.setOnAction(e -> {
+			controller.deselectNode();
+
+
+			Collection<logic.IMap> mapSet = controller.getMaps().values();
+
+			logic.IMap newMap = new logic.Floor();
+
+			for(logic.IMap map : mapSet){
+				if(map.getFilePath().equals(chooseMapTwo.getValue())){
+					newMap = (logic.IMap) map;
+				}
+			}
+
+			controller.setCurrentMapTwo(newMap.getID());
+			mapvisualSecondary.setMap(newMap);
+		});
+
+
+
+
 		// chooseMap.setTranslateX(10);
 
 		// Make the 'Close' button to save all the changes and close the
@@ -119,10 +154,11 @@ public class MapBuilderDisplay extends VBox {
 			Platform.exit();
 		});
 
-		TopBar.getChildren().addAll(chooseMap, closeButton);
+		TopBar.getChildren().addAll(chooseMap, chooseMapTwo, closeButton);
 		
 		AnchorPane.setRightAnchor(closeButton, 5.0);
 		AnchorPane.setLeftAnchor(chooseMap, 5.0);
+		AnchorPane.setLeftAnchor(chooseMapTwo, 600.0);
 
 	}
 }

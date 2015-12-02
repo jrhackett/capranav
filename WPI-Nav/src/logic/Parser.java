@@ -131,9 +131,14 @@ public class Parser<Struct> {
 			else if (n != -1) filename = getNName(n);
 			else 			  filename = path + "building.json";
 
+			if(!(new File(filename)).exists()) System.out.println("Something wong");
+			else System.out.println(filename);
+
 			//Write s out to the correct file
-			try { writer = new JsonWriter(new FileWriter(filename, false)); }
-			catch (IOException e) { return; } //Bad bad bad
+			try { writer = new JsonWriter(new FileWriter(filename, true)); }
+			catch (IOException e) {
+				e.printStackTrace();
+				return; } //Bad bad bad
 			gson.toJson(s, s.getClass(), writer);
 			close(); // Close the writer
 		}
@@ -154,7 +159,7 @@ public class Parser<Struct> {
 				temp = (IMap)gson.fromJson(parser.next(), mTypes[i]);
 				maps.put(temp.getID(), temp);
 				
-				System.out.println("ID: " + temp.getID() + ", Path: " + temp.getFilePath());
+				//System.out.println("ID: " + temp.getID() + ", Path: " + temp.getFilePath());
 			}
 		}
 

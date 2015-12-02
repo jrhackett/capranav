@@ -2,17 +2,21 @@
 
 package MapBuilder;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import logic.Edge;
-import logic.INode;
+import logic.*;
+import org.controlsfx.control.PopOver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,7 +77,11 @@ public class MapVisual extends Pane {
 		
 		// Set the map image
 		System.out.println("MAP PATH:  " + map.getFilePath());
-		this.getChildren().remove(mapView);
+		if (this.getChildren().size() > 0 ) {
+			this.getChildren().remove(0, this.getChildren().size() - 1);
+		}
+		//0, this.getChildren().size()-1);
+
 
 		try {
 			// Image(getClass().getResourceAsStream("../images/" + map.getPath()
@@ -245,7 +253,7 @@ public class MapVisual extends Pane {
 			double mainX = v.getX();
 			double mainY = v.getY();
 
-			System.out.println("Random node edge list size: " + v.getAdjacencies().size());
+			//System.out.println("Random node edge list size: " + v.getAdjacencies().size());
 			v.getAdjacencies().forEach(e -> {
 				Integer nextKey = e.getTarget();
 				if (!nodeKeyList.contains(nextKey) && nodes.containsKey(e.getTarget())) {
@@ -323,9 +331,38 @@ public class MapVisual extends Pane {
 				if (e.getClickCount() >= 2) {
 					System.out.println("Node double clicked");
 					// set selected node to null
+					PopOver infoPopOver = new PopOver();
+					infoPopOver.show(circle);
+
+					//VBox of buttons
+					VBox buttonBox = new VBox();
+					Button bathroom = new Button("Bathroom");
+					Button mensroom = new Button("Mens' Bathroom");
+					Button girlsroom = new Button("Womens' Bathroom");
+					Button elevator = new Button("Elevator");
+					Button food = new Button("Food");
+					Button landmark = new Button("Landmark");
+					Button path = new Button("Path");
+					Button room = new Button("Room");
+					Button stairs = new Button("Stairs");
+					Button tstairs = new Button("Transition Stairs");
+
+					buttonBox.getChildren().addAll(bathroom, mensroom, girlsroom, elevator, food, landmark, path, stairs, tstairs);
+
+					//effects of buttons
+					mensroom.setOnAction(c -> handleNodeChoiceHelper(new Bathroom(v), BathroomType.MENS, infoPopOver));
+					girlsroom.setOnAction(c -> handleNodeChoiceHelper(new Bathroom(v), BathroomType.WOMAN, infoPopOver));
+					bathroom.setOnAction(c -> handleNodeChoice(new Bathroom(v), infoPopOver));
+					elevator.setOnAction(c -> handleNodeChoice(new Elevator(v), infoPopOver));
+					food.setOnAction(c -> handleNodeChoice(new Food(v), infoPopOver));
+					landmark.setOnAction(c -> handleNodeChoice(new Landmark(v), infoPopOver));
+					path.setOnAction(c -> handleNodeChoice(new Path(v), infoPopOver));
+					room.setOnAction(c -> handleNodeChoice(new Room(v), infoPopOver));
+					stairs.setOnAction(c -> handleNodeChoice(new Stairs(v), infoPopOver));
+					tstairs.setOnAction(c -> handleNodeChoice(new TStairs(v), infoPopOver));
 
 
-
+					infoPopOver.setContentNode(buttonBox);
 					// Generate pop-over
 					// Add buttons for each kind of node
 					// When a specific button is picked, modify the other elements in the pop-over to display pertinent information
@@ -398,6 +435,52 @@ public class MapVisual extends Pane {
 
 		return circle;
 	}
+
+	/**
+	 * This method helps the handleNodeChoice method
+	 *
+	 * @param node
+	 * @param type
+     */
+	private void handleNodeChoiceHelper(Bathroom node, BathroomType type, PopOver popOver){
+		node.setBathroomType(type);
+		handleNodeChoice(node, popOver);
+	}
+
+	/**
+	 * This is called in the node popover
+	 * It takes in a new node and modified the selected node
+	 *
+	 * @param iNode
+     */
+	private void handleNodeChoice(INode iNode, PopOver popOver){
+		//populate popover with new
+		Button doneButton = new Button("Done");
+		Button cancelButton = new Button("Cancel");
+
+		doneButton.setOnAction(e -> {
+			controller.getNodesOfMap().put(iNode.getID(), iNode);
+			popOver.hide();
+		});
+
+		cancelButton.setOnAction(e -> popOver.hide());
+
+		HBox buttonBox = new HBox();
+		buttonBox.getChildren().addAll(doneButton, cancelButton);
+
+		if (iNode.isInteresting()){
+			//display name entering
+			VBox input = new VBox();
+			TextField newNodeName = new TextField();
+
+			input.getChildren().addAll(newNodeName, buttonBox);
+			popOver.setContentNode(input);
+		} else {
+			popOver.setContentNode(buttonBox);
+		}
+
+	}
+
 
 	/**
 	 * This creates a line object for each edge. The here is where the mouse

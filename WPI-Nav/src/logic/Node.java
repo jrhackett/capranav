@@ -66,6 +66,22 @@ public abstract class Node implements INode {
 		this.adjacencies = new ArrayList<Edge>();
 	}
 
+	/**
+	 * Creates a node from an old node
+	 * @param node
+     */
+	public Node(INode node){
+		this.id = node.getID();
+		this.x_coord = node.getX();
+		this.y_coord = node.getY();
+		this.z_coord = node.getZ();
+		this.x_univ = node.getX_univ();
+		this.y_univ = node.getY_univ();
+		this.z_univ = node.getZ_univ();
+		this.map_id = node.getMap_id();
+		this.adjacencies = node.getAdjacencies();
+	}
+
 
 	/**
 	 * getID is used to return the id of the node
@@ -274,4 +290,5 @@ public abstract class Node implements INode {
 	public void setPicturePath(String s){
 		this.picturePath = s;
 	};
+
 }

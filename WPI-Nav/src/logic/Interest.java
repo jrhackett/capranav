@@ -24,6 +24,10 @@ public abstract class Interest extends Node {
         this.names.add(name);
     }
 
+    public Interest(INode iNode){
+        super(iNode);
+    }
+
     public boolean isInteresting() {
         return true;
     }
@@ -57,4 +61,6 @@ public abstract class Interest extends Node {
     public String toString(){
         return getName();
     }
+
+
 }

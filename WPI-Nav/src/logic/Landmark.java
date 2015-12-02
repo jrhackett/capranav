@@ -16,9 +16,14 @@ public class Landmark extends Interest {
         super(id, x, y, z, x1, x2, x3, mapID, name);
     }
 
+    public Landmark(INode iNode){
+        super(iNode);
+    }
+
     public ImageView getIcon(){
         Image image = new Image(getClass().getResourceAsStream("../images/pin56_small.svg"), 22, 22, true, true);
         ImageView imageView = new ImageView(image);
         return imageView;
     }
+
 }
