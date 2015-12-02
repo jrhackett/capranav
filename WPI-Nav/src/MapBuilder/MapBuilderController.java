@@ -97,15 +97,21 @@ public class MapBuilderController extends Application {
 		if (ugh) {
 			nextNodeID = 4000;
 			ugh = false;
-		}
-		else {
-*/
+	*/
+
+//		if (ugh) {
+//			nextNodeID = 3000;
+//			ugh = false;
+//		}
+//		else {
+
 		masterNodeList.forEach((k, v) -> {
 			nextNodeID = (k > nextNodeID) ? k : nextNodeID;
-			nextNodeID++;
 		});
-	//}
+		nextNodeID++;
+
 	}
+	//}
 
 	/**
 	 * Given a mouse event -> gets
