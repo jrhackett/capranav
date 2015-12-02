@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.lang.StringBuilder;
 
 /** A Parser object is used to do translations to/from JSON files and Nodes/Maps/Buildings.
  *
@@ -237,10 +238,17 @@ public class Parser<Struct>
 
 	private static String getPath() {
 		StringBuilder s = new StringBuilder();
-		String fp = new File("").getAbsolutePath();
-		s.append(fp);
+		String root = new File("").getAbsolutePath();
+		s.append(root);
 		s.append("/json/");
-		return s.toString();
+		String fullPath = s.toString();
+		if (!(new File(fullPath).exists())) { //Fixes file path for Charlie :P
+			s = new StringBuilder();
+			s.append(root);
+			s.append("/WPI-Nav/json/");
+			fullPath = s.toString();
+		}
+		return fullPath;
 	}
 
 	private String getMName(int m) {

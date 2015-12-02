@@ -78,7 +78,7 @@ public class NodeTesting {
 
     @Test
     public void equalsTest3() throws Exception{
-        assertEquals("equals returned incorrect value", false, t1.equals(t1c));
+        assertEquals("equals returned incorrect value", true, t1.equals(t1c));
     }
 
     @Test
