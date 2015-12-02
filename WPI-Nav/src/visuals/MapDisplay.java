@@ -156,25 +156,27 @@ public class MapDisplay extends Pane {
     public void normal(Circle c, INode v) {
         //ultra jank <-- // TODO: 12/2/15
 
-
-        if (v==null){
-            System.out.println("INode is null in normal");
-        }
-        {
-            if (!id_circle.containsKey(v.getID())) {
-                c = createCircle(v);
-                id_circle.put(v.getID(), c);
-            }
-
-            if (v != null && v.isTransition()) {
-                c.setFill(Color.YELLOW);
+        try {
+            if (v == null) {
+                System.out.println("INode is null in normal");
             } else {
-                c.setFill(Color.TRANSPARENT);
+                if (!id_circle.containsKey(v.getID())) {
+                    c = createCircle(v);
+                    id_circle.put(v.getID(), c);
+                }
+
+                if (v != null && v.isTransition()) {
+                    c.setFill(Color.YELLOW);
+                } else {
+                    c.setFill(Color.TRANSPARENT);
+                }
+                c.setStrokeWidth(0);
+                c.setRadius(5);
+                c.setOpacity(1);
+                c.setEffect(null);
             }
-            c.setStrokeWidth(0);
-            c.setRadius(5);
-            c.setOpacity(1);
-            c.setEffect(null);
+        } catch (NullPointerException e){
+            System.out.println("TRYING TO HIDE LAST AND THERE IS NO LAST TO HIDE");
         }
     }
 
@@ -260,7 +262,7 @@ public class MapDisplay extends Pane {
 
     public void createPath(ArrayList<ArrayList<Instructions>> path) {
         idPath = new ArrayList<>(); //TODO AM I REMVOING THE OLD LINES
-
+        lines = new HashMap<>();
         changeBackOldPathNodes();
 
 
@@ -287,7 +289,9 @@ public class MapDisplay extends Pane {
                 line.setStrokeDashOffset(5);
                 line.getStrokeDashArray().addAll(2d, 7d);
                 lineArrayList.add(line);
+                System.out.println("lines created");
             }
+            System.out.println("lines put into hashmap");
             lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
         }
 
@@ -302,8 +306,8 @@ public class MapDisplay extends Pane {
      * @param mapIdNew
      */
     public void showLines(int mapIdOld, int mapIdNew) {
-        this.getChildren().removeAll(lines.get(mapIdOld));
-        this.getChildren().addAll(lines.get(mapIdNew));
+    if (mapIdOld != -1) this.getChildren().removeAll(lines.get(mapIdOld));
+    else                this.getChildren().addAll(lines.get(mapIdNew));
     }
 
 
@@ -315,8 +319,14 @@ public class MapDisplay extends Pane {
     public void setStartNode(int id, boolean START) {
         //NOW WE HAVE TO CHECK IF NODE IS ON THIS MAP
         //I think we should keep all circles
+        Circle c;
 
-        Circle c = id_circle.get(id);
+        if (!id_circle.containsKey(id)){
+            c = createCircle(controller.getNode(id));
+        } else {
+            c = id_circle.get(id);
+        }
+
         c.setRadius(5);
 
         if (START) {

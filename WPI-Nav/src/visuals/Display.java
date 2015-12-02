@@ -1004,6 +1004,7 @@ public class Display {
     private void handleSearchInput(Inputs v, boolean START) {
         if (v.getValue() != null && !v.getValue().toString().isEmpty())
             try {
+                logger.info("FOUND A NODE!");
                 controller.handleSearchInput(((InputItem) v.getValue()).getId(), START);
             } catch (ClassCastException cce) {
                 logger.error("INPUT VALUE IS NOT YET A FULL INPUT, IT IS JUST A STRING: {}", v.getValue());

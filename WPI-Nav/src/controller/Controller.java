@@ -245,6 +245,7 @@ public class Controller extends Application {
             }
 
             if (endNode != null) {
+                System.out.println("END NODE HIGHLIGHTED!");
                 //TODO if current map contains it, play, if it doesn't - dont play, just set and color
                 if (endNode.getMap_id() == currentMap.getID()) {
                     myDisplay.mapDisplay.setStartNode(endNode.getID(), false);
@@ -395,6 +396,7 @@ public class Controller extends Application {
             //this.startNode = n;
 
             if (!nodes.containsKey(n.getID())) {
+                System.out.println("Adding to hashmap 1");
                 tempStart = n;
                 nodes.put(n.getID(), n);//puts the node in the map!
             } else {
@@ -409,6 +411,7 @@ public class Controller extends Application {
             //this.endNode = n;
 
             if (!nodes.containsKey(n.getID())) {
+                System.out.println("Adding to hashmap 2");
                 tempEnd = n;
                 nodes.put(n.getID(), n);
             } else {
@@ -477,10 +480,12 @@ public class Controller extends Application {
 
         for(HashMap.Entry<Integer, INode> cursor : nodes.entrySet()){
             INode v = cursor.getValue();
-                if(Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y)) < distance){
+
+            if(v.getMap_id() == currentMap.getID() && Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y)) < distance){
                     n = v;
                     distance =Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y));
                 }
+
             }
 
 
@@ -504,13 +509,18 @@ public class Controller extends Application {
         for(HashMap.Entry<Integer, INode> cursor : nodes.entrySet()){
             INode v = cursor.getValue();
             if(v.isInteresting() && cursor.getKey() != -1 && cursor.getKey() != -2){ //we dont want the name Near Near Stratton Hall
-                if(Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y)) < distance ){
+                if(v.getMap_id() == currentMap.getID() && Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y)) < distance ){
+                    System.out.println("smaller distance found");
                     n = v;
-                    distance =Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y));
+                    distance = Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y));
                 }
             }
         }
 
+        if (n == null){
+            System.out.println("NO DISTANCE FOUND OR SOMETHING");
+            return "Entrance";
+        }
         return ((Interest)n).getName();
     }
 
@@ -623,6 +633,10 @@ public class Controller extends Application {
         return value;
     }
 
+    public INode getNode(int id){
+        return nodes.get(id);
+    }
+
     /**
      * This will kick everything off!
      * We can later change it so other things trigger this.
@@ -644,13 +658,13 @@ public class Controller extends Application {
         }
 
 
-            getPathNodes(startNode, endNode);
+        getPathNodes(startNode, endNode);
         fullPath = getInstructions();
         currentIndex = 0;
         lastMapID = fullPath.get(currentIndex).get(0).getNode().getMap_id();
         myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
         myDisplay.mapDisplay.createPath(fullPath);
-        myDisplay.mapDisplay.showLines(0, lastMapID); //TODO UPDATE showPath
+        myDisplay.mapDisplay.showLines(-1, lastMapID); //TODO UPDATE showPath
 
 
     }
