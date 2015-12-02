@@ -209,7 +209,7 @@ public class MapVisualSecondary extends Pane {
     }
 
     private void normal(Circle c) {
-        c.setFill(Color.GREEN);
+        c.setFill(Color.HOTPINK);
         c.setStrokeWidth(0);
         c.setRadius(5);
     }
