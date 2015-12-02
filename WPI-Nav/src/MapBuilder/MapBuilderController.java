@@ -293,9 +293,9 @@ public class MapBuilderController extends Application {
 	public void nodesToFile() {
 		saveNodesToMaster();
 
-		this.buildings.forEach((k,v) -> {
+		/*this.buildings.forEach((k,v) -> {
 			v.translateBuilding(getNodesOfBuilding(k));
-		});
+		});*/
 
 
 		Parser parser = new Parser<INode>();

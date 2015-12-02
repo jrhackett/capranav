@@ -622,11 +622,11 @@ public class MapVisual extends Pane {
 			if (!v.isTransition()) {
 				c.setFill(Color.BLUE);
 				c.setStrokeWidth(0);
-				c.setRadius(5);
+				c.setRadius(2);
 			} else {
 				c.setFill(Color.HOTPINK);
 				c.setStrokeWidth(0);
-				c.setRadius(5);
+				c.setRadius(2);
 			}
 		}
 	}
