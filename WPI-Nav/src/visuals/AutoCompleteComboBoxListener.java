@@ -19,8 +19,6 @@ public class AutoCompleteComboBoxListener<T> {
     public AutoCompleteComboBoxListener(ComboBox<T> comboBox) {
         this.comboBox = comboBox;
         this.comboBox.setVisibleRowCount(0);//Test this <-- I LIKE IT
-
-
         sb = new StringBuilder();
         this.comboBox.setEditable(true);
         this.comboBox.setOnKeyReleased(event -> {

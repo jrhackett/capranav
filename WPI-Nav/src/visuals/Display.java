@@ -912,11 +912,50 @@ public class Display {
 
 		/* start */
         this.start = new Inputs("Search WPI Maps", INPUT_WIDTH, controller);
-        start.setOnAction(e -> handleSearchInput(start, true));
+        start.setOnKeyPressed(e -> handleSearchInput(start, true));
+
+        /*
+        start.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    System.out.println("Start ENTER");
+                    handleSearchInput(start, true);
+                    end.requestFocus();
+                } else if (event.getCode() == KeyCode.ESCAPE) {
+                    System.out.println("Start ESCAPE");
+                    start.setValue(null);
+                    end.setValue(null);
+                } else if (event.getCode() == KeyCode.TAB) {
+                    System.out.println("Start TAB");
+                    end.requestFocus();
+                }
+            }});
+            */
+
+        //start.setOnAction(e -> handleSearchInput(start, true));
 
 		/* end */
         this.end = new Inputs("For Destination", INPUT_WIDTH, controller);
-        end.setOnAction(e -> handleSearchInput(end, false));
+       /*
+        end.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    System.out.println("End ENTER");
+                    handleSearchInput(end, true);
+                } else if (event.getCode() == KeyCode.ESCAPE) {
+                    System.out.println("End ESCAPE");
+                    start.setValue(null);
+                    end.setValue(null);
+                } else if (event.getCode() == KeyCode.TAB) {
+                    System.out.println("End TAB");
+                    handleSearchInput(end, true);
+                }
+            }});
+*/
+
+       // end.setOnAction(e -> handleSearchInput(end, false));
 
 //        start.getStyleClass().add("combo-box");
 
