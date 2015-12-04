@@ -18,9 +18,13 @@ public class AutoCompleteComboBoxListener<T> {
 
     public AutoCompleteComboBoxListener(ComboBox<T> comboBox) {
         this.comboBox = comboBox;
+        this.comboBox.setVisibleRowCount(0);//Test this <-- I LIKE IT
+
+
         sb = new StringBuilder();
         this.comboBox.setEditable(true);
         this.comboBox.setOnKeyReleased(event -> {
+
             // this variable is used to bypass the auto complete process if the length is the same.
             // this occurs if user types fast, the length of textfield will record after the user
             // has typed after a certain delay.
@@ -119,7 +123,7 @@ public class AutoCompleteComboBoxListener<T> {
 
         if (!inFocus && comboBox.getEditor().getText() != null && comboBox.getEditor().getText().trim().length() > 0) {
             // press enter key programmatically to have this entry added
-           // KeyEvent ke = new KeyEvent(comboBox, KeyCode.ENTER.toString(), KeyCode.ENTER.getName(), KeyCode.ENTER.impl_getCode(), false, false, false, false, KeyEvent.KEY_RELEASED);
+            // KeyEvent ke = new KeyEvent(comboBox, KeyCode.ENTER.toString(), KeyCode.ENTER.getName(), KeyCode.ENTER.impl_getCode(), false, false, false, false, KeyEvent.KEY_RELEASED);
             KeyEvent ke = new KeyEvent(KeyEvent.KEY_RELEASED, KeyCode.ENTER.toString(), KeyCode.ENTER.toString(), KeyCode.ENTER, false, false, false, false);
             comboBox.fireEvent(ke);
         }

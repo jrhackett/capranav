@@ -34,8 +34,7 @@ public class Controller extends Application {
     private HashMap<Integer, INode> nodes;   /* all the nodes */
     private HashMap<Integer, IMap> maps;
 
-    //Maps maps;                       /* information of the maps */
-
+    /* information of the maps */
     private int currentBuilding = 0;
     private int currentFloor;
     private Campus campus;
@@ -65,30 +64,30 @@ public class Controller extends Application {
         /* load up svg converter */
         SvgImageLoaderFactory.install();
 
-
 		/* get information */
         nodesFromFile();
         mapsFromFile();
         buildingsFromFile();
 
-        //TODO DELETE THIS:
+        /* node images */
+        //TODO FIX
         nodes.forEach((k,v) -> {
-            v.setPicturePath("Riley.png");
+            v.setPicturePath("../images/Riley.png");
         });
 
-        campus = (Campus)maps.get(0);
+
+        campus = (Campus) maps.get(0);
 
 		/* basic layout */
-        s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
-
+        s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open [switch to UNDECORATED]
         s.setResizable(true);
 
 		/* setup */
         this.myDisplay = new Display(this);    //creates scene
-        Scene display = myDisplay.Init(); //initializes scene
-        s.setScene(display); //sets scene to display
+        Scene display = myDisplay.Init();      //initializes scene
+        s.setScene(display);                   //sets scene to display
         display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
-        s.show();   //shows scene
+        s.show();                              //shows scene
         defaultMap();
     }
 
@@ -96,8 +95,16 @@ public class Controller extends Application {
     /****************************************************************************************************************
                                     FUNCTIONS THAT ARE CALLED FROM UI AND CONTACT UI
      ****************************************************************************************************************/
+
+    /**
+     * Brings up the picture of the node on to the screen and greys out the screen
+     * TODO:
+     *      Potentials ideas / improvements
+     *      Arrows on left and right to switch to node information
+     *          Would have to notify the selected node information
+     */
     public void showNodeImage(){
-        if (this.selectedInformationNode != null) {
+        if (this.selectedInformationNode != null) { //if there is a selected node
 
             StackPane imageStack = new StackPane();
             StackPane shadowStack = new StackPane();
@@ -135,6 +142,11 @@ public class Controller extends Application {
         }
     }
 
+    /**
+     * Sends email
+     * @param email
+     * @return
+     */
     public boolean sendEmail(String email){
         INode end = null;
         String startString = null;
@@ -147,6 +159,7 @@ public class Controller extends Application {
                 end = i.getNode();
             }
         }
+
         if (currentInstructions != null) {
             INode start = currentInstructions.get(0).get(0).getNode();
             if (start.isInteresting()) {
@@ -155,19 +168,23 @@ public class Controller extends Application {
                 startString = start.toString();
             }
             if (end != null && end.isInteresting()) {
-                endString = start.getNames().get(0);
+                endString = end.getNames().get(0);
             } else if (start.isTransition()) {
-                endString = start.toString();
+                endString = end.toString();
             }
         }
+
         logic.Email e = new logic.Email(email);
         if(simplifiedInstruction.size() != 0 && startString != null && endString != null) {
             return e.sendDirections(simplifiedInstruction, startString, endString);
-            //Should return true if the email goes through
         }
         else return false;
     }
 
+    /**
+     * returns the nodes
+     * @return
+     */
     public HashMap<Integer, INode> getNodes(){
         return nodes;
     }
@@ -676,6 +693,8 @@ public class Controller extends Application {
 
         getPathNodes(startNode, endNode);
         fullPath = getInstructions();
+        currentInstructions = fullPath;
+
         currentIndex = 0;
         lastMapID = fullPath.get(currentIndex).get(0).getNode().getMap_id();
         myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
