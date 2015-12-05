@@ -21,6 +21,7 @@ public class Directions {
 	public static ArrayList<ArrayList<Instructions>> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps) {
 		int mapstep=0;
 		double distspec = 0;
+		String distPhrase =" ";
 		//boolean veryfirm = false;
 
 		//^^NEW LINE, init var distspec
@@ -82,7 +83,13 @@ public class Directions {
 			anglePhrase = "North-East";
 		if (angle > 337 && angle <= 360)
 			anglePhrase = "East";
-		
+
+		if(aStarPath.size() == 2){
+			distPhrase = Math.round(dist) + " feet.";
+			directions.get(0).add(new Instructions("Face " + anglePhrase + ", and walk " + distPhrase,aStarPath.get(0)));
+			return directions;
+		}
+
 		int p=0;
 		double distfirst = dist;
 		INode firstprev = aStarPath.get(0);
@@ -95,7 +102,7 @@ public class Directions {
 			distfirst += (Math.sqrt(Math.pow((firstturn.getX_univ() - firstnext.getX_univ()), 2) + Math.pow((firstturn.getY_univ() - firstnext.getY_univ()), 2)));
 			p++;
 		}
-		String distPhrase = Math.round(distfirst) + " feet.";
+		distPhrase = Math.round(distfirst) + " feet.";
 		
 		directions.get(0).add(new Instructions("Face " + anglePhrase + ", and walk " + distPhrase,aStarPath.get(0)));
 		
