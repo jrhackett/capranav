@@ -114,7 +114,6 @@ public class Parser<Struct> {
 		 * System.out.println(nodes.toString());
 		 */
 		
-		System.out.println("SUCCESS !");
 	}
 
 	/**

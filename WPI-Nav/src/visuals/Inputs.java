@@ -65,10 +65,10 @@ public class Inputs extends ComboBox {
 	 * @return
 	 */
 	public ObservableList<String> convertMaps(HashMap<Integer, IMap> maps) {
-		System.out.println("Turning maps into ObservableItemList");
+		//System.out.println("Turning maps into ObservableItemList");
 		
 		if (maps.isEmpty()) {
-			System.out.println("Hashmap of maps is empty.");
+			//System.out.println("Hashmap of maps is empty.");
 			return null;
 		} else {
 			ObservableList<String> dataMap = FXCollections.observableArrayList();

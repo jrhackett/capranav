@@ -161,7 +161,7 @@ public class MapBuilderController extends Application {
 		try {
 			// TODO make this better
 			// This throws an exception if user tries to load a map that DNE
-			System.out.println("PATH ATTEMPT: " + path);
+			//System.out.println("PATH ATTEMPT: " + path);
 			Image mapI = new Image(getClass().getResourceAsStream("../images/" + path + ".png"));
 			ImageView mapV = new ImageView(mapI);
 		} catch (NullPointerException e) {

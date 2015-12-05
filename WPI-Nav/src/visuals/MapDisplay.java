@@ -88,7 +88,7 @@ public class MapDisplay extends Pane {
 
         nodes.forEach((k, v) -> {
             if (id_circle.containsKey(k)) {
-                System.out.println("Already Had Circle");
+                //System.out.println("Already Had Circle");
                 Circle c = id_circle.get(k);
                 this.getChildren().add(c);
             } else {
@@ -160,7 +160,7 @@ public class MapDisplay extends Pane {
 
         try {
             if (v == null) {
-                System.out.println("INode is null in normal");
+                //System.out.println("INode is null in normal");
             } else {
                 if (!id_circle.containsKey(v.getID())) {
                     c = createCircle(v);
@@ -170,7 +170,7 @@ public class MapDisplay extends Pane {
                 if (v != null && v.isTransition()) {
                     c.setFill(Color.YELLOW);
                 } else {
-                    System.out.println("TRYING TO TRANSPARENT");
+                    //System.out.println("TRYING TO TRANSPARENT");
                     c.setFill(Color.TRANSPARENT);
                 }
                 c.setStrokeWidth(0);
@@ -179,7 +179,7 @@ public class MapDisplay extends Pane {
                 c.setEffect(null);
             }
         } catch (NullPointerException e){
-            System.out.println("TRYING TO HIDE LAST AND THERE IS NO LAST TO HIDE");
+            //System.out.println("TRYING TO HIDE LAST AND THERE IS NO LAST TO HIDE");
         }
     }
 
@@ -265,7 +265,7 @@ public class MapDisplay extends Pane {
 
         id_circle.forEach((k,v) -> {
             normal(id_circle.get(k), controller.getNode(k));
-            System.out.println("TRYING TO NORMAL");
+            //System.out.println("TRYING TO NORMAL");
         });
 
        /* for (INode i :idPath){
@@ -310,9 +310,9 @@ public class MapDisplay extends Pane {
                 line.setStrokeDashOffset(5);
                 line.getStrokeDashArray().addAll(2d, 7d);
                 lineArrayList.add(line);
-                System.out.println("lines created");
+                //System.out.println("lines created");
             }
-            System.out.println("lines put into hashmap");
+            //System.out.println("lines put into hashmap");
             lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
         }
 

@@ -62,7 +62,7 @@ public class GraphicsScaling {
 
                 double totalYScale = group.getScaleY() * scaleFactor;
                 double Scale = clamp(totalYScale, MIN_SCALE, MAX_SCALE);
-                System.out.println("Scale " + Scale);
+                //System.out.println("Scale " + Scale);
 
                 //double appWidth = scroller.getLayoutY();
                 //System.out.println("Width"+appWidth);
@@ -79,8 +79,8 @@ public class GraphicsScaling {
                 prevY = mouseSceneY;
                 //System.out.println("mX " + mouseX);
                 //System.out.println("mY " + mouseY);
-                System.out.println("msceneX " + event.getSceneX());
-                System.out.println("msceneY " + event.getSceneY());
+                //System.out.println("msceneX " + event.getSceneX());
+                //System.out.println("msceneY " + event.getSceneY());
 
                 //if the Scale has not been clamped
                 if (Scale < (MAX_SCALE - 1)){
@@ -94,8 +94,8 @@ public class GraphicsScaling {
 
 
 
-                System.out.println("Hmin "+ scroller.getHmin() + " Hmax " + scroller.getHmax() + " Hval " + scroller.getHvalue());
-                System.out.println("Vmin "+ scroller.getVmin() + " Vmax " + scroller.getVmax() + " Vval " + scroller.getVvalue());
+                //System.out.println("Hmin "+ scroller.getHmin() + " Hmax " + scroller.getHmax() + " Hval " + scroller.getHvalue());
+                //System.out.println("Vmin "+ scroller.getVmin() + " Vmax " + scroller.getVmax() + " Vval " + scroller.getVvalue());
             }
         });
 
@@ -156,7 +156,7 @@ public class GraphicsScaling {
             double setValueH = scroller.getHmin() + newScrollXOffset * (scroller.getHmax() - scroller.getHmin()) / extraWidth;
             scroller.setHvalue(setValueH + x);
             //scroller.setHvalue(setValueH );
-            System.out.println("scroller H val " + scroller.getHmin() + newScrollXOffset * (scroller.getHmax() - scroller.getHmin()) / extraWidth);
+            //System.out.println("scroller H val " + scroller.getHmin() + newScrollXOffset * (scroller.getHmax() - scroller.getHmin()) / extraWidth);
         } else {
             scroller.setHvalue(scroller.getHmin());
         }
@@ -167,7 +167,7 @@ public class GraphicsScaling {
             double setValueV = scroller.getVmin() + newScrollYOffset * (scroller.getVmax() - scroller.getVmin()) / extraHeight;
             scroller.setVvalue(setValueV + y);
             //scroller.setVvalue(setValueV);
-            System.out.println("scroller V val " + scroller.getVmin() + newScrollYOffset * (scroller.getVmax() - scroller.getVmin()) / extraHeight);
+           // System.out.println("scroller V val " + scroller.getVmin() + newScrollYOffset * (scroller.getVmax() - scroller.getVmin()) / extraHeight);
         } else {
             scroller.setHvalue(scroller.getHmin());
         }

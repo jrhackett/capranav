@@ -7,7 +7,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import logic.*;
 import visuals.Display;
 import visuals.Instructions;
@@ -63,7 +62,7 @@ public class Controller extends Application {
     @Override
     public void start(Stage s) throws Exception {
         /* load up svg converter */
-        SvgImageLoaderFactory.install();
+        SvgImageLoaderFactory.install(); //TODO FIND A BETTER WAY
 
 
 		/* get information */
@@ -76,11 +75,9 @@ public class Controller extends Application {
             v.setPicturePath("Riley.png");
         });
 
-        campus = (Campus)maps.get(0);
 
 		/* basic layout */
-        s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
-
+       // s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
         s.setResizable(true);
 
 		/* setup */
@@ -89,6 +86,8 @@ public class Controller extends Application {
         s.setScene(display); //sets scene to display
         display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
         s.show();   //shows scene
+
+       /* sets the campus map as the loaded map */
         defaultMap();
     }
 
@@ -202,18 +201,18 @@ public class Controller extends Application {
         if (nodes.containsKey(id)) {
 
             if (START) {//setting start
-                System.out.println("START TRUE!");
+                //System.out.println("START TRUE!");
 
                 if (!FLAG) {//if not from a click on the map hide the last
-                    System.out.println("FLAG FALSE!");
+                    //System.out.println("FLAG FALSE!");
                     if (startNode != null) {
-                        System.out.println("HIDING START");
+                        //System.out.println("HIDING START");
                         this.myDisplay.mapDisplay.hideLast(startNode.getID());
                     }
                 }
 
                 if (endNode != null && id == endNode.getID()) {//if end and start will be the same remove the other
-                    System.out.println("IDS SAME!");
+                   // System.out.println("IDS SAME!");
 
                     endNode = null;
                     this.myDisplay.end.setValue(null);
@@ -222,9 +221,9 @@ public class Controller extends Application {
                 this.startNode = nodes.get(id);
             } else {
                 if (!FLAG) {//if not from a click on the map hide the last
-                    System.out.println("FLAG FALSE!");
+                   // System.out.println("FLAG FALSE!");
                     if (endNode != null) {
-                        System.out.println("HIDING END!");
+                      //  System.out.println("HIDING END!");
                         this.myDisplay.mapDisplay.hideLast(endNode.getID());
                     }
                 }
@@ -252,7 +251,7 @@ public class Controller extends Application {
             }
 
             if (endNode != null) {
-                System.out.println("END NODE HIGHLIGHTED!");
+               // System.out.println("END NODE HIGHLIGHTED!");
                 //TODO if current map contains it, play, if it doesn't - dont play, just set and color
                 if (endNode.getMap_id() == currentMap.getID()) {
                     myDisplay.mapDisplay.setStartNode(endNode.getID(), false);
@@ -267,7 +266,7 @@ public class Controller extends Application {
 
 //TODO MEGAIMPORTANT DO THIS YES DO
     public void handleEnterBuilding(Transition t){
-        System.out.println("Entered handle Enter Building");
+        //System.out.println("Entered handle Enter Building");
         //remove it from the ends and start??
 
         //switch to the map it was referencing via the building via the map
@@ -292,14 +291,14 @@ public class Controller extends Application {
 
     private void switchMapSetting(int buildingID, int startingFLOOR){
         if (buildingID == 0){
-            System.out.println("BUILDING ID 0");
+           // System.out.println("BUILDING ID 0");
             //remove the current building info/pane/whatever
             hideBuildingPane();//ONLY SLIDES UP BUILDING VIEW //TODO STILL UNTESTED
             //switch to campus map
             defaultMap();
         } else {
-            System.out.println("BUILDING ID >>");
-            System.out.println(buildingID);
+           // System.out.println("BUILDING ID >>");
+            //System.out.println(buildingID);
             this.currentBuilding = buildingID;
             showBuildingPane();//ONLY SLIDE DOWN BUILDING VIEW //TODO STILL UNTESTED
             switchToBuildingView(buildingID, startingFLOOR);
@@ -309,7 +308,7 @@ public class Controller extends Application {
 
     private void switchToBuildingView(int buildingID, int startingFLOOR){
         //the arrows should already be correctly mapped to controller
-        System.out.println("SWITCH TO BUILDING VIEW");
+        //System.out.println("SWITCH TO BUILDING VIEW");
         //set the Building Name
         myDisplay.setBuildingName(buildings.get(buildingID).getName());
 
@@ -344,10 +343,10 @@ public class Controller extends Application {
 
 
     public void setFloor(int i){//TODO HARD CODE IN IDS
-        System.out.println("SET FLOOR");
-        System.out.println(i);
+        //System.out.println("SET FLOOR");
+        //System.out.println(i);
         if (buildings.get(currentBuilding).getFloorMap().containsKey(i)){
-            System.out.println("SET FLOOR IF i");
+            //System.out.println("SET FLOOR IF i");
             setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(i));
             this.currentFloor = i;
             this.myDisplay.setBuildingNumber(i);
@@ -412,7 +411,7 @@ public class Controller extends Application {
             //this.startNode = n;
 
             if (!nodes.containsKey(n.getID())) {
-                System.out.println("Adding to hashmap 1");
+                //System.out.println("Adding to hashmap 1");
                 tempStart = n;
                 nodes.put(n.getID(), n);//puts the node in the map!
             } else {
@@ -427,7 +426,7 @@ public class Controller extends Application {
             //this.endNode = n;
 
             if (!nodes.containsKey(n.getID())) {
-                System.out.println("Adding to hashmap 2");
+                //System.out.println("Adding to hashmap 2");
                 tempEnd = n;
                 nodes.put(n.getID(), n);
             } else {
@@ -460,19 +459,19 @@ public class Controller extends Application {
 
         if(!FIRST) {
             if (startNode != null){//have to delete old before creating new one (with same ID)
-                System.out.println("Hiding old start node");
+                //System.out.println("Hiding old start node");
                 this.myDisplay.mapDisplay.hideLast(startNode.getID()); //hide the last start
             }
             eradicate(tempStart, true); //completely get rid of the last start
-            System.out.println("-1");
+            //System.out.println("-1");
             temp = new Landmark(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
         } else {
             if (endNode != null){
-                System.out.println("Hiding old end node");
+                //System.out.println("Hiding old end node");
                 this.myDisplay.mapDisplay.hideLast(endNode.getID()); //hide the last end
             }
             eradicate(tempEnd, false); //completely get rid of the last temp
-            System.out.println("-2");
+            //System.out.println("-2");
             temp = new Landmark(-2, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
         }
 
@@ -526,7 +525,7 @@ public class Controller extends Application {
             INode v = cursor.getValue();
             if(v.isInteresting() && cursor.getKey() != -1 && cursor.getKey() != -2){ //we dont want the name Near Near Stratton Hall
                 if(v.getMap_id() == currentMap.getID() && Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y)) < distance ){
-                    System.out.println("smaller distance found");
+                    //System.out.println("smaller distance found");
                     n = v;
                     distance = Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y));
                 }
@@ -534,7 +533,7 @@ public class Controller extends Application {
         }
 
         if (n == null){
-            System.out.println("NO DISTANCE FOUND OR SOMETHING");
+            //System.out.println("NO DISTANCE FOUND OR SOMETHING");
             return "Entrance";
         }
         return ((Interest)n).getName();
@@ -555,21 +554,23 @@ public class Controller extends Application {
             }
 
             if (start) {
-                System.out.printf("Removing from options tempstart id:%d (should be -1)!\n", tempStart.getID());
+                //System.out.printf("Removing from options tempstart id:%d (should be -1)!\n", tempStart.getID());
                 myDisplay.start.setValue(null);        //set the list value to empty [this won't last very long]
                 myDisplay.start.removeNode(n.getID()); //remove it from the observable list
             } else {
-                System.out.printf("Removing from options tempend id:%d (should be -2)!\n", tempStart.getID());
+                //System.out.printf("Removing from options tempend id:%d (should be -2)!\n", tempStart.getID());
                 myDisplay.end.setValue(null);
                 myDisplay.end.removeNode(n.getID());
             }
 
-            System.out.printf("Removing node  %d from mapdisplay: %d", n.getID(),n.getID());
+            //System.out.printf("Removing node  %d from mapdisplay: %d", n.getID(),n.getID());
             myDisplay.mapDisplay.removeNode(n.getID()); //remove it from the map, visually and from the list
         }
     }
 
-
+    /**
+     * Sets the current map to the campus map
+     */
     public void defaultMap(){
         setCurrentMap(campus.getID());
     }
@@ -740,12 +741,19 @@ public class Controller extends Application {
         nodes = new Parser<INode>().fromFileGraph();
     }
 
+    /**
+     * Loads buildings from file
+     */
     private void buildingsFromFile(){
         buildings = new Parser<Building>().fromFileBuilding();
     }
 
+    /**
+     * Loads maps from file
+     */
     private void mapsFromFile() {
         maps = new Parser<IMap>().fromFileMap();
+        campus = (Campus)maps.get(0);
     }
 
     /****************************************************************************************************************
