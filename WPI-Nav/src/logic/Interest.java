@@ -53,7 +53,7 @@ public abstract class Interest extends Node {
     }
 
     public ImageView getIcon(){
-        Image image = new Image(getClass().getResourceAsStream("../images/pin56_small.svg"), 22, 22, true, true);
+        Image image = FileFetch.getImageFromFile("pin56_small.svg", 22, 22, true, true);
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(22);
         imageView.setFitWidth(22);
