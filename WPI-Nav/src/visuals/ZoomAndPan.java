@@ -55,6 +55,14 @@ public class ZoomAndPan {
         //Scene scene = new Scene(root, 600, 400);
         //primaryStage.setScene(scene);
         //primaryStage.show();
+        double zWidth = panAndZoomPane.getLayoutBounds().getWidth();
+        double zHeight = panAndZoomPane.getLayoutBounds().getHeight();
+        double vpH = scrollPane.getViewportBounds().getHeight();
+        double vpW = scrollPane.getViewportBounds().getWidth();
+        double initialScale = Math.min(vpH/zHeight, vpW/zWidth);
+        double panXTrans = panAndZoomPane.getTranslateX();
+        System.out.println(panXTrans);
+        //panAndZoomPane.setPivot(0,0,1.063);
         return scrollPane;
     }
 /**
@@ -121,12 +129,15 @@ public class ZoomAndPan {
 
         private EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                double ZWidth = panAndZoomPane.getWidth();
-                double ZHeight = panAndZoomPane.getHeight();
-                double viewportH = scrollPane.getLayoutBounds().getHeight();
-                System.out.println("viewportH " + viewportH + " ,ZHeight "+ ZHeight);
-                double viewportW = scrollPane.getLayoutBounds().getWidth();
-                System.out.println("viewportW " + viewportW + " ,ZWidth " + ZWidth);
+                //double ZWidth = panAndZoomPane.getWidth();
+                double ZWidth = panAndZoomPane.getLayoutBounds().getWidth();
+                double ZHeight = panAndZoomPane.getLayoutBounds().getHeight();
+                double vpH = scrollPane.getViewportBounds().getHeight();
+                double vpW = scrollPane.getViewportBounds().getWidth();
+                double scrollH = scrollPane.getLayoutBounds().getHeight();
+                System.out.println("ScrollH " + scrollH + ", ZHeight "+ ZHeight + ", viewH " + vpH);
+                double scrollW = scrollPane.getLayoutBounds().getWidth();
+                System.out.println("ScrollW " + scrollW + ", ZWidth " + ZWidth + ", viewW" + vpW);
                 //double minH = panAndZoomPane.getLayoutY();
 
                 //System.out.println("maxh "+ maxH + " minh " + minH);
