@@ -695,8 +695,10 @@ public class Display {
         mapPane.setAlignment(Pos.CENTER);
 
         Group group = new Group(mapPane);
-        GraphicsScaling graphicsScaling = new GraphicsScaling();
-        Parent zoomPane = graphicsScaling.createZoomPane(group);
+//        GraphicsScaling graphicsScaling = new GraphicsScaling();
+//        Parent zoomPane = graphicsScaling.createZoomPane(group);
+        ZoomAndPan zoomAndPan = new ZoomAndPan();
+        Parent zoomPane = zoomAndPan.createZoomPane(group);
         zoomPane.setOnMouseEntered(e -> {
             zoomPane.requestFocus();
         });
