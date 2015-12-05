@@ -138,7 +138,7 @@ public class Directions {
 
 			//new functionality: special directions for landmarks. Hopefully doesn't return silly grammar.
 			if(turn.isInteresting()){
-				anglePhrase = AngletoString((int) Math.round(angle)) + "at " + turn.toString();
+				anglePhrase = AngletoString((int) Math.round(angle)) + " at " + turn.toString();
 			}
 			
 			else anglePhrase = AngletoString((int) Math.round(angle));
@@ -151,10 +151,10 @@ public class Directions {
 			// specialdirs changed lines ^^
 			//if outside node mapid different then go inside/outside message
 			if (turn.getMap_id()==0 && next.getMap_id()!=0){ //going inside
-				distPhrase = "out the door.";
+				distPhrase = "inside the building";
 			}
 			if (turn.getMap_id()!=0 && next.getMap_id()==0){ //going outside
-				distPhrase = "inside the building";
+				distPhrase = "out the door";
 			}
 			
 			//if (angle<=-10 || angle>=10 || (aStarPath.size()==i+j+2 && veryfirm == false)){
