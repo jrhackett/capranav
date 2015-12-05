@@ -21,7 +21,7 @@ public class Directions {
 	public static ArrayList<ArrayList<Instructions>> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps) {
 		int mapstep=0;
 		double distspec = 0;
-		boolean veryfirm = false;
+		//boolean veryfirm = false;
 
 		//^^NEW LINE, init var distspec
 
@@ -83,7 +83,19 @@ public class Directions {
 		if (angle > 337 && angle <= 360)
 			anglePhrase = "East";
 		
-		String distPhrase = Math.round(dist) + " feet.";
+		int p=0;
+		double distfirst = dist;
+		INode firstprev = aStarPath.get(0);
+		INode firstturn = aStarPath.get(1);
+		INode firstnext = aStarPath.get(2);
+		while(aStarPath.size()>p+2 && getAngle(firstprev,firstturn,firstnext) > 2.87979327 && getAngle(firstprev,firstturn,firstnext) < 3.40339204){
+			firstprev = aStarPath.get(p);
+			firstturn = aStarPath.get(p + 1);
+			firstnext = aStarPath.get(p + 2);
+			distfirst += (Math.sqrt(Math.pow((firstturn.getX_univ() - firstnext.getX_univ()), 2) + Math.pow((firstturn.getY_univ() - firstnext.getY_univ()), 2)));
+			p++;
+		}
+		String distPhrase = Math.round(distfirst) + " feet.";
 		
 		directions.get(0).add(new Instructions("Face " + anglePhrase + ", and walk " + distPhrase,aStarPath.get(0)));
 		
@@ -96,7 +108,7 @@ public class Directions {
             // Set to use universal.
 			dist = Math.sqrt(Math.pow((turn.getX_univ() - next.getX_univ()), 2) + Math.pow((turn.getY_univ() - next.getY_univ()), 2));
 			distspec += dist;
-			//NEW LINE- add CURRENT dist to distspec, which is used for adding culled distances
+			//add CURRENT dist to distspec, which is used for adding culled distances
 			//Future steps' distance will be added to this variable later.
 
 			if(maps.containsKey(turn.getMap_id())){
@@ -115,7 +127,7 @@ public class Directions {
 			if (angle > 180) {
 				angle -= 360;
 			}
-			//NEW CODE VV
+		
 			int j = 1;
 			while(aStarPath.size()>i+j+2 && getAngle(aStarPath.get(i+j),aStarPath.get(i+j+1),aStarPath.get(i+j+2)) > 2.87979327 && getAngle(aStarPath.get(i+j-1),aStarPath.get(i+j),aStarPath.get(i+j+1)) < 3.40339204){
 				//While loop checks if future turns are straight and we have not reached the end
@@ -123,32 +135,42 @@ public class Directions {
 				//Add the distance of a step in the future
 				j++;
 			}
-			//NEW CODE ^^
 
-			anglePhrase = AngletoString((int) Math.round(angle));
+			//new functionality: special directions for landmarks. Hopefully doesn't return silly grammar.
+			if(turn.isInteresting()){
+				anglePhrase = AngletoString((int) Math.round(angle)) + "at " + turn.toString();
+			}
+			
+			else anglePhrase = AngletoString((int) Math.round(angle));
 			distPhrase = Math.round(distspec) + " feet.";
-			//^^EDITED LINE: distPhrase now uses distspec.
+			//distPhrase now uses distspec.
 
 			// specialdirs changed lines VV
 			if (next instanceof Stairs || next instanceof TStairs) distPhrase = "climb the stairs and go " + Math.round(distspec) + " feet.";
 			if (next instanceof Elevator) distPhrase = "enter the elevator."; //TODO: This should include what floor to select
 			// specialdirs changed lines ^^
-			//if (angle<165 || angle>195){
-
-			if (angle<=-10 || angle>=10 || (aStarPath.size()==i+j+2 && veryfirm == false)){
-				//^^NEW LINE: Don't add this step's direction if straight (30 degree window)(don't forget the close squiggly)
-				directions.get(mapstep).add(new Instructions("Turn " + anglePhrase + ", and walk " + distPhrase,turn));
-				if(aStarPath.size()==i+j+2) {
-					veryfirm = true;
-				}
+			//if outside node mapid different then go inside/outside message
+			if (turn.getMap_id()==0 && next.getMap_id()!=0){ //going inside
+				distPhrase = "out the door.";
 			}
+			if (turn.getMap_id()!=0 && next.getMap_id()==0){ //going outside
+				distPhrase = "inside the building";
+			}
+			
+			//if (angle<=-10 || angle>=10 || (aStarPath.size()==i+j+2 && veryfirm == false)){
+			if (angle<=-10 || angle >=10){
+				directions.get(mapstep).add(new Instructions("Turn " + anglePhrase + ", and walk " + distPhrase,turn));
+				//if(aStarPath.size()==i+j+2) {
+					//veryfirm = true;
+				}
+			
 			if(turn.isTransition() && next.getMap_id() != turn.getMap_id()){
 				mapstep++;
 				directions.add(new ArrayList<Instructions>());
 			}
 			distspec = 0;
-			//^^NEW LINE: Clear distspec so the distance is not carried through and counted twice
 		}
+		
 		directions.get(directions.size()-1).add(new Instructions("You have reached your destination.",aStarPath.get(aStarPath.size()-1)));
 		
 		return directions;
