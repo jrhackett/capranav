@@ -150,6 +150,8 @@
     -fx-background-insets: -1.4, 0, 1, 2;
 }*/
 ​
+
+
 .combo-box-base:disabled {
     -fx-opacity: .4;
 }

@@ -1,4 +1,4 @@
-/*
+
 package logic;
 
 import org.junit.Before;
@@ -8,10 +8,10 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 
-*/
+
 /**
  * Created by Josh on 11/29/2015.
- *//*
+ */
 
 
 public class TranslationTesting {
@@ -72,14 +72,14 @@ public class TranslationTesting {
 
 
     }
-    */
-/*@Test
+
+@Test
     public void testInitial1() throws Exception {
         HashMap<Integer, INode> testHashEq = universal1;
         Translate p = new Translate(A1_L, B1_L, A1_U, B1_U);
         assertEquals("Initial test1",universal1,testHashEq);
     }
-*//*
+
 
     @Test
     public void testInitial2() throws Exception {
@@ -157,7 +157,9 @@ public class TranslationTesting {
         Translate p = new Translate(A2_L, B2_L, A2_U, B2_U);
         assertEquals("2nd round test3D", universal2.get(5).getZ_univ(), p.setUniversalCoordinates(local2).get(5).getZ_univ(), 0);
     }
+
+
 }
 
 
-*/
+

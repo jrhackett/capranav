@@ -330,3 +330,6 @@ public abstract class Node implements INode {
 		return result;
 	}
 }
+
+
+// Delete this later its for Travis <3

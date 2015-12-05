@@ -34,7 +34,6 @@ public class Display {
                                               Constants, Variables, Elements
      ****************************************************************************************************************/
 
-
     // logger
     private final Logger logger = LoggerFactory.getLogger(Display.class);
 
@@ -123,7 +122,7 @@ public class Display {
         this.EMAIL_VISIBLE = new SimpleBooleanProperty(true);
 
         this.PHOTO_ICON_VISIBLE = new SimpleBooleanProperty(false);
-        this.ICON_VISIBLE =       new SimpleBooleanProperty(false);
+        this.ICON_VISIBLE = new SimpleBooleanProperty(false);
 
         this.EDGE = GAP * 2 + CONTROL_WIDTH;
     }
@@ -152,7 +151,6 @@ public class Display {
         HBox.setHgrow(map, Priority.ALWAYS);
         HBox.setHgrow(slidingDashboard, Priority.SOMETIMES);
         HBox.setHgrow(directions, Priority.SOMETIMES);
-
 
 
         sections.setStyle("-fx-background-color: #333333");
@@ -250,8 +248,7 @@ public class Display {
         Image gears;
         try {
             gears = new Image(getClass().getResourceAsStream("../images/gears.png"), 20, 20, true, true);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             gears = new Image(getClass().getResourceAsStream("/images/gears.png"), 20, 20, true, true);
         }
 
@@ -489,8 +486,7 @@ public class Display {
         Image directionsArrow;
         try {
             directionsArrow = new Image(getClass().getResourceAsStream("../images/forward.png"), 27, 27, true, true);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             directionsArrow = new Image(getClass().getResourceAsStream("/images/forward.png"), 27, 27, true, true);
         }
 
@@ -530,8 +526,7 @@ public class Display {
         Image leftArrow;
         try {
             leftArrow = new Image(getClass().getResourceAsStream("../images/leftArrow.png"), 24, 24, true, true);
-        }
-        catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             leftArrow = new Image(getClass().getResourceAsStream("/images/leftArrow.png"), 24, 24, true, true);
         }
 
@@ -545,8 +540,7 @@ public class Display {
         Image rightArrow;
         try {
             rightArrow = new Image(getClass().getResourceAsStream("../images/rightArrow.png"), 24, 24, true, true);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             rightArrow = new Image(getClass().getResourceAsStream("/images/rightArrow.png"), 24, 24, true, true);
         }
 
@@ -588,8 +582,7 @@ public class Display {
         Image emailImage;
         try {
             emailImage = new Image(getClass().getResourceAsStream("../images/email109.png"), 25, 25, true, true);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             emailImage = new Image(getClass().getResourceAsStream("/images/email109.png"), 25, 25, true, true);
         }
 
@@ -603,9 +596,6 @@ public class Display {
         emailIconBox.setMaxHeight(20);
         emailIconBox.setStyle("-fx-background-color: #ffffff");
         emailIconBox.setMinHeight(EDGE);*/
-
-
-
 
 
         /** Label **/
@@ -675,10 +665,9 @@ public class Display {
         AnchorPane.setLeftAnchor(slidingEmail, 0.0);
         AnchorPane.setRightAnchor(slidingEmail, 0.0);
 
-        instructions.setOnMouseEntered(e->{
+        instructions.setOnMouseEntered(e -> {
             instructions.requestFocus();
         });
-
 
 
         directions.getChildren().addAll(directionsTitleBox, instructionArrows, instructions, slidingEmail);
@@ -712,7 +701,7 @@ public class Display {
 
         /** Hidden Sliding Panel **/
         //slidingBuilding  = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, BUILDING_VISIBLE, new Text("hidden"));
-        HBox nodeBox     = createNodeBox();
+        HBox nodeBox = createNodeBox();
         HBox buildingBox = createBuildingBox();
         buildingBox.visibleProperty().bind(BUILDING_VISIBLE);
 
@@ -735,7 +724,7 @@ public class Display {
         Group group = new Group(mapPane);
         GraphicsScaling graphicsScaling = new GraphicsScaling();
         Parent zoomPane = graphicsScaling.createZoomPane(group);
-        zoomPane.setOnMouseEntered(e->{
+        zoomPane.setOnMouseEntered(e -> {
             zoomPane.requestFocus();
         });
 
@@ -776,7 +765,7 @@ public class Display {
     }
 
 
-    private HBox createNodeBox(){
+    private HBox createNodeBox() {
         HBox hbox = new HBox();
 
         nodeViewHolder = new StackPane();
@@ -785,10 +774,9 @@ public class Display {
 
         Image nodeIconImage;
         try {
-            nodeIconImage = new Image(getClass().getResourceAsStream("../images/picture.png"), 27,27,true,true);
-        }
-        catch (NullPointerException e) {
-            nodeIconImage = new Image(getClass().getResourceAsStream("/images/picture.png"), 27,27,true,true);
+            nodeIconImage = new Image(getClass().getResourceAsStream("../images/picture.png"), 27, 27, true, true);
+        } catch (NullPointerException e) {
+            nodeIconImage = new Image(getClass().getResourceAsStream("/images/picture.png"), 27, 27, true, true);
         }
 
         ImageView nodeIconView = new ImageView(nodeIconImage);
@@ -817,27 +805,29 @@ public class Display {
     }
 
 
-    public void updatePictureIcon(boolean val){
+    public void updatePictureIcon(boolean val) {
         //change visibility
+        logger.info("Entered updatePictureIcon with {}", val);
         PHOTO_ICON_VISIBLE.setValue(val);
         //change image it is connected with
     }
 
-    public void updateNodeTitle(String s){
+    public void updateNodeTitle(String s) {
         this.nodeTitle.setText(s);
     }
 
-    public void updateNodeIcon(ImageView i, INode iNode){
-        //System.out.println("node view icon");
+    public void updateNodeIcon(ImageView i, INode iNode) {
+        logger.info("Entered updateNodeIcon with iNode {}", iNode.toString());
         this.nodeViewHolder.getChildren().remove(nodeView);
         this.nodeViewHolder.getChildren().add(i); //= i;
         this.nodeView = i;
-        if (iNode.isTransition()){
+        if (iNode.isTransition()) {
             this.nodeTransitionButton.setId("arrow-buttons");
-            this.nodeTransitionButton.setOnAction(e -> controller.handleEnterBuilding((Transition)iNode));
+            this.nodeTransitionButton.setOnAction(e -> controller.handleEnterBuilding((Transition) iNode));
         } else {
             this.nodeTransitionButton.setId("arrow-buttons-grayed2");
-            this.nodeTransitionButton.setOnAction(e -> {});//// TODO: 12/2/15 fix
+            this.nodeTransitionButton.setOnAction(e -> {
+            });//// TODO: 12/2/15 fix
         }
 
 
@@ -855,8 +845,7 @@ public class Display {
         try {
             minus = new Image(getClass().getResourceAsStream("../images/minus104.png"), 20, 20, true, true);
             plus = new Image(getClass().getResourceAsStream("../images/plus79.png"), 20, 20, true, true);
-        }
-        catch  (NullPointerException e) {
+        } catch (NullPointerException e) {
             minus = new Image(getClass().getResourceAsStream("/images/minus104.png"), 20, 20, true, true);
             plus = new Image(getClass().getResourceAsStream("/images/plus79.png"), 20, 20, true, true);
         }
@@ -888,11 +877,11 @@ public class Display {
         return box;
     }
 
-    public void setRightButtonID(String id){
+    public void setRightButtonID(String id) {
         right.setId(id);
     }
 
-    public void setLeftButtonID(String id){
+    public void setLeftButtonID(String id) {
         left.setId(id);
     }
 
@@ -1011,13 +1000,14 @@ public class Display {
         instructions.setMinWidth(0);
         instructions.setMaxWidth(expandedWidth + EDGE * 2);
         instructions.setMinHeight(expandedWidth);
-        instructions.setPrefHeight(MAP_HEIGHT-40-EDGE);
+        instructions.setPrefHeight(MAP_HEIGHT - 40 - EDGE);
         this.instructions.setItems(FXCollections.observableArrayList());
         //instructions.setPrefHeight(TABLE_HEIGHT);
         //instructions.getColumns().addAll(Instructions.getColumn(instructions));
 
 
     }
+
     public void clearInstructions() {
         this.instructions.setItems(null);
     }
@@ -1032,12 +1022,11 @@ public class Display {
     }
 
 
-
     /****************************************************************************************************************
                                                 Llambda Event Handlers
      ****************************************************************************************************************/
 
-    private void handleFullScreenPicture(){
+    private void handleFullScreenPicture() {
         this.controller.showNodeImage();
     }
 
@@ -1053,7 +1042,7 @@ public class Display {
     }
 
     private void handleWalkingInput(Inputs v, boolean START) {
-        visuals.Walking value = (visuals.Walking)v.getValue();
+        visuals.Walking value = (visuals.Walking) v.getValue();
         User.setSpeed(value.getWalkingSpeed());
         //System.out.println(value.getWalkingSpeed()); //TODO Remove
     }
@@ -1063,8 +1052,9 @@ public class Display {
         User.setEmail(v.getText());
 
         //Validate Address
-        try { new InternetAddress(v.getText()).validate(); }
-        catch(AddressException e) { //If invalid, set color to red
+        try {
+            new InternetAddress(v.getText()).validate();
+        } catch (AddressException e) { //If invalid, set color to red
             v.setId("text-field-denied");
             return;
         }
@@ -1085,18 +1075,20 @@ public class Display {
         }
     }
 
-    private void handleRightArrowButton(){
+
+    private void handleRightArrowButton() {
         this.controller.handleIncrementPathMap();
     }
 
-    private void handleLeftArrowButton(){
+    private void handleLeftArrowButton() {
         this.controller.handleDecrementPathMap();
     }
 
-    public void setIDRightArrowButton(String s){
+    public void setIDRightArrowButton(String s) {
         this.rightArrowButton.setId(s);
     }
-    public void setIDLeftArrowButton(String s){
+
+    public void setIDLeftArrowButton(String s) {
         this.leftArrowButton.setId(s);
     }
 
@@ -1122,6 +1114,7 @@ public class Display {
     private HashMap<Integer, logic.IMap> getMaps() {
         return controller.getMaps();
     }
+
     /**
      * find paths calls the controller
      */
@@ -1129,3 +1122,4 @@ public class Display {
         this.controller.findPaths();
     }
 }
+
