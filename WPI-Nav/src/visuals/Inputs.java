@@ -100,6 +100,7 @@ public class Inputs extends ComboBox {
 
 
 	public InputItem addNode(logic.INode v, IMap map) {
+		System.out.println("INode: " + v);
 		InputItem item = null;
 		if (v.isInteresting()) {
 			for (String s : v.getNames()) {// For each of its names
@@ -125,6 +126,7 @@ public class Inputs extends ComboBox {
 				}
 			}
 		} else if (v.isTransition()) {
+			System.out.println("Map: " + map);
 			if (map.inside()) {// FOOD should probably also not have map
 								// extensions
 				for (String m : getNames(((Floor) map).getBuildingID())) {// TODO
