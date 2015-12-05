@@ -4,124 +4,217 @@ import com.google.gson.Gson;
 import com.google.gson.JsonStreamParser;
 import com.google.gson.stream.JsonWriter;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Arrays;
+import java.lang.StringBuilder;
 
-/* A Parser object is used to do translations from JSON files and Nodes.
- * Be sure to use "nodes.json" as the filename upon instantiation.
+/** A Parser object is used to do translations to/from JSON files and Nodes/Maps/Buildings.
+ *
+ * USAGE: Struct should be INode, IMap, or Building
+ * 		  new Parser<INode>().fromFileGraph();       - Returns HashMap<Integer, INode>
+ * 		  new Parser<IMap>().fromFileMap();          - Returns HashMap<Integer, IMap>
+ * 		  new Parser<Building>().fromFileBuilding(); - Returns HashMap<Integer, Building>
+ * 		  new Parser<Struct>().toFile(HashMap<Integer, Struct> collection); - Stores into files based on type
+ *
+ * 		  Added for future iterations:
+ * 		  new Parser<User>().fromFileUser(); - Returns HashMap<String, User> (String is name field)
+ * 		  new Parser<User>().toFile(User u)  - Stores User in file
  */
-public class Parser
+public class Parser<Struct>
 {
-	private String filename;        //File for reading/writing Nodes
-	private JsonWriter writer;
+	//Don't need to set any of these anymore - empty constructor
+	private String           filename; //File for reading/writing Nodes
+	private JsonWriter       writer;
 	private JsonStreamParser parser;
 
-	public static void main(String args[]) {
-		Parser test = new Parser("nodes.json");
-		HashMap<Integer, Node> nodes = new HashMap<Integer, Node>();
-		Node node1 = new Node("five", 1, 1, 1, 1, 1);
-		Node node2 = new Node("two", 2, 2, 2, 2, 2);
-		nodes.put(0, node1);
-		nodes.put(1, node2);
-		Graph graph = new Graph(nodes);
-		test.toFile(graph);
-	}
+	private static final String path = Parser.getPath();
 
-    /**
-     * Parser is used to communicate between the database and the rest of the program
-     * @param name: filename of the database to observe
-     * @return void
-     */
-	public Parser(String name) {
-		this.filename = name;
-		try {
-			this.parser = new JsonStreamParser(new FileReader(filename));
-		}
-		catch (FileNotFoundException e) {
-			System.out.println("nodes.json doesn't exist (opened for reading)");
-		}
-	}
+	//These two sets of arrays must be in parallel !
+	private static final Class[]  mTypes = { Campus.class, Floor.class };
+	private static final String[] mNames = { "campus.json", "floor.json" };
+	private static final Class[]  nTypes = { Bathroom.class, Elevator.class, Food.class, Landmark.class, Path.class,
+											 Room.class, Stairs.class, TStairs.class };
+	private static final String[] nNames = { "bathroom.json", "elevator.json", "food.json", "landmark.json", "path.json",
+											 "room.json", "stair.json", "tstair.json" };
 
-    /**
-     * toFile(Node) is used to append a single node to the JSON database file
-     * @param node: Node to add to the database
-     * @return void
-     */
-	public void toFile(Node node) {
-		try { //Create a JsonWriter to append the file with graph nodes
-			writer = new JsonWriter(new FileWriter(filename, true));
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-		new Gson().toJson(node, Node.class, writer); //Write to file
-		close(); //Close the writer
-	}
+	public Parser() {}
+	///*
+	public static void main(String args[]) { /*
+		Campus c = new Campus(1, "Path", 0.13);
+		Floor f = new Floor(2, "Floor", 0.13, 3, 4);
 
+		Bathroom b = new Bathroom(5, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, "Bathroom");
+		Elevator e = new Elevator(12, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0);
+		Food foo = new Food(19, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, "Food");
+		Landmark l = new Landmark(26, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0, "Landmark");
+		Path p = new Path(33, 34.0, 35.0, 36.0, 37.0, 38.0, 39.0);
+		Room r = new Room(40, 41.0, 42.0, 43.0, 44.0, 45.0, 46.0, "Room");
+		Stairs s = new Stairs(47, 48.0, 49.0, 50.0, 51.0, 52.0, 53.0);
+		TStairs t = new TStairs(54, 55.0, 56.0, 57.0, 58.0, 59.0, 60.0);
+
+		Building build = new Building(7, 100);
+		HashMap<Integer, Building> buildh = new HashMap<>();
+		buildh.put(build.getID(), build);
+
+		HashMap<Integer, Campus> ch = new HashMap<>();
+		ch.put(c.getID(), c);
+
+		HashMap<Integer, Floor> fh = new HashMap<>();
+		fh.put(f.getID(), f);
+
+		HashMap<Integer, Bathroom> bh = new HashMap<>();
+		bh.put(b.getID(), b);
+
+		HashMap<Integer, Elevator> eh = new HashMap<>();
+		eh.put(e.getID(), e);
+
+		HashMap<Integer, Food> fooh = new HashMap<>();
+		fooh.put(foo.getID(), foo);
+
+		HashMap<Integer, Landmark> lh = new HashMap<>();
+		lh.put(l.getID(), l);
+
+		HashMap<Integer, Path> ph = new HashMap<>();
+		ph.put(p.getID(), p);
+
+		HashMap<Integer, Room> rh = new HashMap<>();
+		rh.put(r.getID(), r);
+
+		HashMap<Integer, Stairs> sh = new HashMap<>();
+		sh.put(s.getID(), s);
+
+		HashMap<Integer, TStairs> th = new HashMap<>();
+		th.put(t.getID(), t);
+
+		new Parser<Campus>().toFile(ch);
+		new Parser<Floor>().toFile(fh);
+		new Parser<Bathroom>().toFile(bh);
+		new Parser<Elevator>().toFile(eh);
+		new Parser<Food>().toFile(fooh);
+		new Parser<Landmark>().toFile(lh);
+		new Parser<Path>().toFile(ph);
+		new Parser<Room>().toFile(rh);
+		new Parser<Stairs>().toFile(sh);
+		new Parser<TStairs>().toFile(th);
+
+		new Parser<Building>().toFile(buildh);*/
+
+		HashMap<Integer, IMap> maps = new Parser<>().fromFileMap();
+		HashMap<Integer, INode> nodes = new Parser<>().fromFileGraph();
+		System.out.println(maps.toString());
+		System.out.println(nodes.toString());
+		System.out.println("SUCCESS !");
+	}
 
 	/**
-	 * toFile(Graph) is used to write an entire graph out to a JSON database file
-	 * WARNING: This version will OVERWRITE the given file
+	 * toFile() is used to write an entire HashMap of Struct out to a JSON database file
+	 * WARNING: This will OVERWRITE the given file
 	 *
-	 * @param collection: Graph to write to the database
+	 * @param collection: HashMap of Nodes/Maps/Buildings to write to the database
      */
+	public void toFile(HashMap<Integer, Struct> collection) {
+		reset();
+		Gson gson = new Gson();
 
-	public void toFile(ICollection collection) {
-		try { //Create a JsonWriter to append the file with graph nodes
-			writer = new JsonWriter(new FileWriter(filename, false));
+		Collection<Struct> vals = collection.values();
+		for (Struct s : vals) {
+			int m = Arrays.asList(mTypes).indexOf(s.getClass());
+			int n = Arrays.asList(nTypes).indexOf(s.getClass());
+
+			//Set filename to the correct thing, based on Struct s
+			if      (m != -1) filename = getMName(m);
+			else if (n != -1) filename = getNName(n);
+			else 			  filename = path + "building.json";
+
+			//Write s out to the correct file
+			try { writer = new JsonWriter(new FileWriter(filename, true)); }
+			catch (IOException e) { return; } //Bad bad bad
+			gson.toJson(s, s.getClass(), writer);
+			close(); //Close the writer
+		}
+	}
+
+	/* Each of the below methods return what's expected... */
+
+	public HashMap<Integer, IMap> fromFileMap() {
+		Gson gson = new Gson();
+		HashMap<Integer, IMap> maps = new HashMap<>();
+		IMap temp;
+
+		for (int i = 0; i < mTypes.length; i++) {
+			try { parser = new JsonStreamParser(new FileReader(getMName(i))); }
+			catch (FileNotFoundException e) { return null; } //This is bad - don't let this happen
+
+			while(parser.hasNext()) {
+				temp = (IMap)gson.fromJson(parser.next(), mTypes[i]);
+				maps.put(temp.getID(), temp);
+			}
+		}
+		return maps;
+	}
+
+	public HashMap<Integer, Building> fromFileBuilding() {
+		Gson gson = new Gson();
+		HashMap<Integer, Building> builds = new HashMap<>();
+		Building temp;
+
+		try {
+			parser = new JsonStreamParser(new FileReader(path + "building.json"));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			return;
+			return null; //Bad bad bad
 		}
+
+		while (parser.hasNext()) {
+			temp = gson.fromJson(parser.next(), Building.class);
+			builds.put(temp.getID(), temp);
+		}
+		return builds;
+	}
+
+
+	public HashMap<Integer, INode> fromFileGraph() {
 		Gson gson = new Gson();
-		if(this.filename.equals("nodes.json"))
-		{
-			Collection<Node> nodes = collection.get();
-			for(Node n : nodes) {
-				gson.toJson(n, Node.class, writer); //Write to file
+		HashMap<Integer, INode> graph = new HashMap<>();
+		INode temp;
+
+		for (int i = 0; i < nTypes.length; i++) {
+			try { parser = new JsonStreamParser(new FileReader(getNName(i))); }
+			catch (FileNotFoundException e) { return null; } //This is bad - don't let this happen
+
+			while(parser.hasNext()) {
+				temp = (INode)gson.fromJson(parser.next(), nTypes[i]);
+				graph.put(temp.getID(), temp);
 			}
 		}
-		else {
-			Collection<Map> maps = collection.get();
-			for(Map n : maps) {
-				gson.toJson(n, Map.class, writer); //Write to file
-			}
-		}
+		return graph;
+	}
+
+	public void toFile(User user) {
+		reset();
+		try { writer = new JsonWriter(new FileWriter(path + "user.json", false)); }
+		catch (IOException e) { return; } //Bad bad bad
+		new Gson().toJson(user, user.getClass(), writer);
 		close(); //Close the writer
 	}
 
-    /**
-     * fromFile reads in all Nodes or Maps from database file nodes.json or maps.json
-     * @return ICollection - either a Graph or a Maps
-     */
-	public ICollection fromFile() {
+	//HashMap is Name->User
+	public HashMap<String, User> fromFileUser() {
 		Gson gson = new Gson();
+		HashMap<String,User> users = new HashMap<>();
+		User temp;
 
-		if(this.filename.equals("nodes.json")) {
-			HashMap<Integer, Node> graph = new HashMap<Integer, Node>();
-			Node temp;
-			while(parser.hasNext()){
-				temp = gson.fromJson(parser.next(), Node.class);
-				graph.put(temp.getID(), temp); //Add Node to the map under its ID
-			}
-			System.out.println(new Graph(graph).toString());
-			return new Graph(graph);
+		try { parser = new JsonStreamParser(new FileReader(path + "user.json")); }
+		catch (FileNotFoundException e) { return null; }
+
+		while(parser.hasNext()) {
+			temp = gson.fromJson(parser.next(), User.class);
+			users.put(temp.getName(), temp);
 		}
-		else {
-			HashMap<Integer, Map> maps = new HashMap<Integer, Map>();
-			Map temp;
-			while(parser.hasNext()){
-				temp = gson.fromJson(parser.next(), Map.class);
-				maps.put(temp.getID(), temp); //Add Node to the map under its ID
-			}
-			return new Maps(maps);
-		}
+		return users;
 	}
 
     /**
@@ -137,5 +230,59 @@ public class Parser
 		catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * The three below methods handle figuring out the absolute path on the current machine
+	 * and use it in getting JSON files. Leave these alone.
+	 *
+     */
+
+	private static String getPath() {
+		StringBuilder s = new StringBuilder();
+		String root = new File("").getAbsolutePath();
+		s.append(root);
+		s.append("/json/");
+		String fullPath = s.toString();
+		if (!(new File(fullPath).exists())) { //Fixes file path for Charlie :P
+			s = new StringBuilder();
+			s.append(root);
+			s.append("/WPI-Nav/json/");
+			fullPath = s.toString();
+		}
+		return fullPath;
+	}
+
+	private String getMName(int m) {
+		return path + mNames[m];
+	}
+
+	private String getNName(int n) {
+		return path + nNames[n];
+	}
+
+	//Resets the FileWriters for all JSON files
+	//WARNING: THIS MEANS DELETES
+	//Call this inside every toFile function, first line
+	private void reset() {
+		for (int i = 0; i < mNames.length; i++) {
+			filename = getMName(i);
+			resetInd();
+		}
+		for (int i = 0; i < nNames.length; i++) {
+			filename = getNName(i);
+			resetInd();
+		}
+		filename = path + "user.json";
+		resetInd();
+		filename = path + "building.json";
+		resetInd();
+	}
+
+	//Helper that handles the resetting once filename is set
+	private void resetInd() {
+		try { writer = new JsonWriter(new FileWriter(filename, true)); }
+		catch (IOException e) {}
+		close();
 	}
 }

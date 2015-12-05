@@ -1,38 +1,77 @@
-<project name="Team9" default="dist" basedir=".">
-  <description>
-    simple build file
-  </description>
-  <!-- set global properties for this build -->
-  <property name="src" location="src"/>
-  <property name="build" location="build"/>
-  <property name="dist" location="dist"/>
-
-  <target name="init">
-    <!-- Create the time stamp -->
-    <tstamp/>
-    <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${build}"/>
-  </target>
-
-  <target name="compile" depends="init"
-        description="compile the source">
-    <!-- Compile the java code from ${src} into ${build} -->
-    <javac srcdir="${src}" destdir="${build}"/>
-  </target>
-
-  <target name="dist" depends="compile"
-        description="generate the distribution">
-    <!-- Create the distribution directory -->
-    <mkdir dir="${dist}/lib"/>
-
-    <!-- Put everything in ${build} into the Team9-${DSTAMP}.jar file -->
-    <jar jarfile="${dist}/lib/Team9-${DSTAMP}.jar" basedir="${build}"/>
-  </target>
-
-  <target name="clean"
-        description="clean up">
-    <!-- Delete the ${build} and ${dist} directory trees -->
-    <delete dir="${build}"/>
-    <delete dir="${dist}"/>
-  </target>
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="wpi-nav" default="test" basedir=".">
+	<property name="main.build.dir" value="WPI-Nav/build/main"/>
+	<property name="main.src.dir" value="WPI-Nav/src"/>
+	<property name="test.build.dir" value="WPI-Nav/build/test"/>
+	<property name="test.src.dir" value="WPI-Nav/test" />
+	
+	<path id ="classpath.base">
+		<pathelement location="WPI-Nav/util/junit-4.12.jar" />
+		<pathelement location="WPI-Nav/util/controlsfx-8.40.9.jar" />
+		<pathelement location="WPI-Nav/util/gson-2.4.jar" />
+		<pathelement location="WPI-Nav/util/hamcrest-core-1.3.jar" />
+		<pathelement location="WPI-Nav/util/javax.mail.jar" />
+		<pathelement location="WPI-Nav/util/slf4j-api-1.7.12.jar" />
+		<pathelement location="WPI-Nav/util/slf4j-jdk14-1.7.12.jar" />
+		<pathelement location="WPI-Nav/util/batik-1.8/lib/batik-transcoder-1.8.jar" />
+	</path>
+	
+	<path id ="classpath.test">
+		<pathelement location="WPI-Nav/util/junit-4.12.jar" />
+		<pathelement location="WPI-Nav/util/controlsfx-8.40.9.jar" />
+		<pathelement location="WPI-Nav/util/gson-2.4.jar" />
+		<pathelement location="WPI-Nav/util/hamcrest-core-1.3.jar" />
+		<pathelement location="WPI-Nav/util/javax.mail.jar" />
+		<pathelement location="WPI-Nav/util/slf4j-api-1.7.12.jar" />
+		<pathelement location="WPI-Nav/util/slf4j-jdk14-1.7.12.jar" />
+		<pathelement location="${main.build.dir}" />
+		<pathelement location="WPI-Nav/util/batik-1.8/lib/batik-transcoder-1.8.jar" />
+		<path refid="classpath.base" />
+	</path>
+	
+	<target name="test" depends="run, clean" />
+	
+	<target name="compile">
+		<echo message="Start Compile" />
+		<mkdir dir="${main.build.dir}"/>
+		<javac srcdir ="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false">
+			<classpath refid="classpath.base"/>
+		</javac>
+		<echo message="Compile done!" />
+	</target>
+	
+	<target name="build" depends="compile">
+		<echo message="Start build" />
+		<mkdir dir="${test.build.dir}"/>
+		<javac srcdir="${test.src.dir}" destdir="${test.build.dir}" includeantruntime="false">
+			<classpath refid="classpath.test"/>
+		</javac>
+		<echo message="Build done!"/>
+	</target>
+	
+	<!-- Test and build all -->
+	<!-- Running this in terminal: "ant" -->
+	<target name="run" depends="build">
+		<junit printsummary="on" haltonfailure="yes">
+			<classpath>
+				<path refid="classpath.test" />
+				<pathelement location="${test.build.dir}"/>
+			</classpath>
+			<formatter type="brief" usefile="false" />
+			<!-- Test them all via batch and lots of asterisks -->
+			<batchtest>
+				<fileset dir="${test.src.dir}" includes="**/*Testing*.java" />
+			</batchtest>
+		</junit>
+	</target>
+	
+	<!-- delete all old class files -->
+	<!-- "ant clean" -->
+	<target name="clean">
+		<delete>
+			<fileset dir="${basedir}" includes="**/*.class" />
+		</delete>
+		<echo message="Clean done!" />
+	</target>
 </project>
+		

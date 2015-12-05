@@ -1,59 +1,36 @@
 package logic;
 
 //basic map class
-public class Map {
+abstract public class Map implements IMap{
     private int ID;
-    private double WIDTH;
-    private double HEIGHT;
-    private String name;
-    private String path;
+    private String filePath;
     private double pixelToFeetRatio;
 
-    public Map(int id, double width, double height, String name, String path, double pixelToFeetRatio){
+
+    public Map(int id, String filePath, double pixelToFeetRatio){
         this.ID = id;
-        this.WIDTH = width;
-        this.HEIGHT = height;
-        this.name = name;
-        this.path = path;
+        this.filePath = filePath;
         this.pixelToFeetRatio = pixelToFeetRatio;
     }
 
-    public Map(Map map) {
+    public Map(IMap map) {
         this.ID = map.getID();
-        this.WIDTH = map.getWIDTH();
-        this.HEIGHT = map.getHEIGHT();
-        this.name = map.getName();
-        this.path = map.getPath();
-        //TODO: fix this
+        this.filePath = map.getFilePath();
         this.pixelToFeetRatio = 0;
     }
 
     public Map(){}
 
-    public String toString() { return name; }
-
-    public double getWIDTH() {
-        return WIDTH;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public int getID() {
         return ID;
     }
 
-    public double getHEIGHT() {
-        return HEIGHT;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public double getPixelToFeetRatio() { return this.pixelToFeetRatio;}

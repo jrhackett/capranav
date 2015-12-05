@@ -1,41 +1,44 @@
 package MapBuilder;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import visuals.Inputs;
+//TODO Fix this file
 
+/*
 public class MapBuilderDisplay extends HBox {
-    /* constants */
+    */
+/* constants *//*
+
     private static final double GAP = 5;
 
-    /* variables */
+    */
+/* variables *//*
+
     private double height;
     private double width;
     private double input_width;
 
-    /* visual forms */
+    */
+/* visual forms *//*
+
     VBox options;
     StackPane map_zone;
     public Inputs chooseMap;
 
 
-    /* options */
+    */
+/* options *//*
+
     public VBox mapMenu;
     public VBox nodeMenu;
     public VBox edgeMenu;
 
-    /* map */
+    */
+/* map *//*
+
     MapVisual mapvisual;
 
-    /* controller */
+    */
+/* controller *//*
+
     MapBuilderController controller;
 
 
@@ -66,7 +69,6 @@ public class MapBuilderDisplay extends HBox {
         options.setMinHeight(height);
         options.setStyle("-fx-background-color: #336699;");
         create_options();
-        System.out.println(width / 4);
 
         //right:
         this.map_zone = new StackPane();
@@ -180,7 +182,6 @@ public class MapBuilderDisplay extends HBox {
         //button to create the map -> writes the map to the JSON FILE
         Button saveButton = new Button("Save Edge Information!");
         saveButton.setOnAction(e -> {
-            System.out.println("save button go!");
             controller.addEdges();
             controller.resetPotentialEdges();
             status.setText("Edges saved!");
@@ -241,7 +242,6 @@ public class MapBuilderDisplay extends HBox {
         //button to create the map -> writes the map to the JSON FILE
         Button saveButton = new Button("Save Nodes Information!");
         saveButton.setOnAction(e -> {
-            System.out.println("Add !");
             controller.setNodeName(name.getText());
             mapvisual.deselect(controller.selectedNode.getID());
         });
@@ -285,7 +285,7 @@ public class MapBuilderDisplay extends HBox {
 
         //ComboBox choose Map
         this.chooseMap = new Inputs("maps", input_width);
-        chooseMap.setItems(chooseMap.getMaps(controller.getMaps().getMaps()));
+        chooseMap.setItems(chooseMap.convertMaps(controller.getMaps().getMaps()));
         chooseMap.setOnAction(e -> {
             logic.Map newMap = (logic.Map) chooseMap.getValue();
             controller.setCurrentMap(newMap.getID());
@@ -347,4 +347,5 @@ public class MapBuilderDisplay extends HBox {
 
     }
 }
+*/
 
