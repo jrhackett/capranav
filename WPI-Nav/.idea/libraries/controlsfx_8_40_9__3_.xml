@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="controlsfx-8.40.9 (3)">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/util/controlsfx-8.40.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/gson-2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/hamcrest-core-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/javax.mail.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/junit-4.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/slf4j-api-1.7.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/util/slf4j-jdk14-1.7.12.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

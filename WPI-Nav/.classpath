@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="util/slf4j-api-1.7.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="util/slf4j-jdk14-1.7.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Josh/Documents/cs3733-team9/WPI-Nav/util/gson-2.4.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Josh/Documents/cs3733-team9/WPI-Nav/util/javax.mail.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
