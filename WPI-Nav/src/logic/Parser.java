@@ -298,11 +298,4 @@ public class Parser<Struct> {
 	private String getNName(int n) {
 		return path + nNames[n];
 	}
-
-	//Deletes contents of filename (doesn't actually delete file)
-	private void resetInd() {
-		try { writer = new JsonWriter(new FileWriter(filename, false)); }
-		catch (IOException e) { return; }
-		close();
-	}
 }

@@ -17,6 +17,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import logic.FileFetch;
 import logic.INode;
 import logic.Transition;
 import logic.User;
@@ -244,13 +245,7 @@ public class Display {
         infoView.setTranslateY(-50 * 2 + 14);
         infoView.setId("pinView");
 
-
-        Image gears;
-        try {
-            gears = new Image(getClass().getResourceAsStream("../images/gears.png"), 20, 20, true, true);
-        } catch (NullPointerException e) {
-            gears = new Image(getClass().getResourceAsStream("/images/gears.png"), 20, 20, true, true);
-        }
+        Image gears = FileFetch.getImageFromFile("gears.png", 20, 20, true, true);
 
         ImageView gearsView = new ImageView(gears);
         //gearsView.setStyle("-fx-fill: #eeeeee;");
@@ -483,12 +478,7 @@ public class Display {
 
         VBox directionsControlBox = new VBox();
 
-        Image directionsArrow;
-        try {
-            directionsArrow = new Image(getClass().getResourceAsStream("../images/forward.png"), 27, 27, true, true);
-        } catch (NullPointerException e) {
-            directionsArrow = new Image(getClass().getResourceAsStream("/images/forward.png"), 27, 27, true, true);
-        }
+        Image directionsArrow = FileFetch.getImageFromFile("forward.png", 27, 27, true, true);
 
         ImageView directionsArrowView = new ImageView(directionsArrow);
         directionsArrowView.setTranslateX(8);
@@ -523,12 +513,7 @@ public class Display {
         AnchorPane.setLeftAnchor(instructionArrows, 0.0);
         AnchorPane.setRightAnchor(instructionArrows, 0.0);
 
-        Image leftArrow;
-        try {
-            leftArrow = new Image(getClass().getResourceAsStream("../images/leftArrow.png"), 24, 24, true, true);
-        } catch (NullPointerException e) {
-            leftArrow = new Image(getClass().getResourceAsStream("/images/leftArrow.png"), 24, 24, true, true);
-        }
+        Image leftArrow = FileFetch.getImageFromFile("leftArrow.png", 24, 24, true, true);
 
         ImageView leftArrowView = new ImageView(leftArrow);
 
@@ -537,13 +522,7 @@ public class Display {
         leftArrowButton.setId("arrow-buttons-grayed");
         leftArrowButton.setOnAction(e -> handleLeftArrowButton());
 
-        Image rightArrow;
-        try {
-            rightArrow = new Image(getClass().getResourceAsStream("../images/rightArrow.png"), 24, 24, true, true);
-        } catch (NullPointerException e) {
-            rightArrow = new Image(getClass().getResourceAsStream("/images/rightArrow.png"), 24, 24, true, true);
-        }
-
+        Image rightArrow = FileFetch.getImageFromFile("rightArrow.png", 24, 24, true, true);
 
         ImageView rightArrowView = new ImageView(rightArrow);
 
@@ -578,13 +557,7 @@ public class Display {
         emailBox.setAlignment(Pos.CENTER_LEFT);
         emailBox.setSpacing(GAP * 3);
 
-
-        Image emailImage;
-        try {
-            emailImage = new Image(getClass().getResourceAsStream("../images/email109.png"), 25, 25, true, true);
-        } catch (NullPointerException e) {
-            emailImage = new Image(getClass().getResourceAsStream("/images/email109.png"), 25, 25, true, true);
-        }
+        Image emailImage = FileFetch.getImageFromFile("email109.png", 25, 25, true, true);
 
         ImageView emailView = new ImageView(emailImage);
 
@@ -772,12 +745,7 @@ public class Display {
         nodeTitle = new Label();
         nodeTransitionButton = new javafx.scene.control.Button();
 
-        Image nodeIconImage;
-        try {
-            nodeIconImage = new Image(getClass().getResourceAsStream("../images/picture.png"), 27, 27, true, true);
-        } catch (NullPointerException e) {
-            nodeIconImage = new Image(getClass().getResourceAsStream("/images/picture.png"), 27, 27, true, true);
-        }
+        Image nodeIconImage = FileFetch.getImageFromFile("picture.png", 27, 27, true, true);
 
         ImageView nodeIconView = new ImageView(nodeIconImage);
         nodeTransitionButton.setGraphic(nodeViewHolder);
@@ -840,16 +808,8 @@ public class Display {
         this.left = new javafx.scene.control.Button();
         this.right = new javafx.scene.control.Button();
 
-        Image minus;
-        Image plus;
-        try {
-            minus = new Image(getClass().getResourceAsStream("../images/minus104.png"), 20, 20, true, true);
-            plus = new Image(getClass().getResourceAsStream("../images/plus79.png"), 20, 20, true, true);
-        } catch (NullPointerException e) {
-            minus = new Image(getClass().getResourceAsStream("/images/minus104.png"), 20, 20, true, true);
-            plus = new Image(getClass().getResourceAsStream("/images/plus79.png"), 20, 20, true, true);
-        }
-
+        Image minus = FileFetch.getImageFromFile("minus104.png", 20, 20, true, true);
+        Image plus = FileFetch.getImageFromFile("plus79.png", 20, 20, true, true);
 
         ImageView minusView = new ImageView(minus);
         ImageView plusView = new ImageView(plus);
