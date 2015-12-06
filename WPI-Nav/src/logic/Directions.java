@@ -11,7 +11,7 @@ public class Directions {
 	public Directions(){
 		totalDistance = 0;
 	}
-	//TODO: multiply ALL by campus pixel to feet ratio....which we do not know
+	//TODO: MAKE SURE THAT WE USE THE RATIO OF THE CAMPUS EVERYWHERE
 	/**
 	 * stepByStep takes in an arrayList of Nodes and outputs a list of
 	 *

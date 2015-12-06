@@ -39,7 +39,7 @@ public class MapDisplay extends Pane {
 
 
     private Image mapImage;
-    private ImageView mapView;
+    public ImageView mapView;
 
     private Color last = Color.TRANSPARENT;
     private Color lastStroke = Color.TRANSPARENT;
@@ -109,7 +109,10 @@ public class MapDisplay extends Pane {
      */
     public void setMap(IMap map) {
 
+        //Removes all old nodes, old lines, and old maps
         this.getChildren().remove(0, this.getChildren().size());
+
+        //this.mapImage = FileFetch.getImageFromFile("floorPlans/" + map.getFilePath(), )
 
         try {
             this.mapImage = new Image(getClass().getResourceAsStream("../images/floorPlans/" + map.getFilePath()));//
@@ -123,6 +126,8 @@ public class MapDisplay extends Pane {
 
         this.getChildren().add(mapView);
         drawNodes(controller.getNodesOfMap(map.getID()));
+
+
 
         mapView.setOnMouseClicked(e -> {
             if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() >= 2) createTempLandmark(e);
@@ -156,31 +161,16 @@ public class MapDisplay extends Pane {
      * @param c
      */
     public void normal(Circle c, INode v) {
-        //ultra jank <-- // TODO: 12/2/15
-
-        try {
-            if (v == null) {
-                //System.out.println("INode is null in normal");
-            } else {
-                if (!id_circle.containsKey(v.getID())) {
-                    c = createCircle(v);
-                    id_circle.put(v.getID(), c);
-                }
-
-                if (v != null && v.isTransition()) {
-                    c.setFill(Color.YELLOW);
-                } else {
-                    //System.out.println("TRYING TO TRANSPARENT");
-                    c.setFill(Color.TRANSPARENT);
-                }
-                c.setStrokeWidth(0);
-                c.setRadius(5);
-                c.setOpacity(1);
-                c.setEffect(null);
-            }
-        } catch (NullPointerException e){
-            //System.out.println("TRYING TO HIDE LAST AND THERE IS NO LAST TO HIDE");
+        if (v != null && v.isTransition()) { //v != null &&
+            c.setFill(Color.YELLOW);
+        } else {
+            c.setFill(Color.TRANSPARENT);
         }
+
+        c.setStrokeWidth(0);
+        c.setRadius(5);
+        c.setOpacity(1);
+        c.setEffect(null);
     }
 
 
@@ -192,9 +182,7 @@ public class MapDisplay extends Pane {
 
         if (v.isTransition()) {
             circle.setOnMouseClicked(e -> {
-                if (e.getButton().equals(MouseButton.SECONDARY) && e.getClickCount() == 1) {
-                    controller.handleEnterBuilding((logic.Transition) v);
-                } else if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
+               if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
                     controller.handleMapClick(v);
                 }
             });
@@ -208,9 +196,7 @@ public class MapDisplay extends Pane {
             });
         }
 
-        if(v instanceof Path){
-
-        }else {
+        if (!(v instanceof Path)){
             circle.setOnMouseEntered(e -> {
                 controller.updateNodeInformation(v);
             });
@@ -258,20 +244,19 @@ public class MapDisplay extends Pane {
     }
 
 
-    public void changeBackOldPathNodes(){
+    /**
+     * removes all lines from the display
+     */
+    public void revertPathNodes(){
+        //This removes all lines from the display [overkill
+
         lines.forEach((k,v) -> {
            this.getChildren().removeAll(v);
         });
 
         id_circle.forEach((k,v) -> {
             normal(id_circle.get(k), controller.getNode(k));
-            //System.out.println("TRYING TO NORMAL");
         });
-
-       /* for (INode i :idPath){
-            normal(id_circle.get(i), i);
-            System.out.println("TRYING TO NORMAL");
-        }*/
     }
 
     /**
@@ -280,7 +265,7 @@ public class MapDisplay extends Pane {
 
     public void createPath(ArrayList<ArrayList<Instructions>> path) {
 
-        changeBackOldPathNodes();
+        revertPathNodes();
 
 
         idPath = new ArrayList<>(); //TODO AM I REMVOING THE OLD LINES

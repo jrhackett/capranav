@@ -76,11 +76,11 @@ public class Controller extends Application {
         });
 
         /* basic layout */
-       // s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
+        s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
         campus = (Campus) maps.get(0);
 
 		/* basic layout */
-        s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open [switch to UNDECORATED]
+        //s.initStyle(StageStyle.TRANSPARENT);  // <-- removes the top part of the app close/open [switch to UNDECORATED]
         s.setResizable(true);
 
 		/* setup */
@@ -124,6 +124,9 @@ public class Controller extends Application {
             imageStack.getChildren().add(iv);
 
             this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+
+            //for(Map.Entry<String, Integer> : nodes.entrySet())
+
         }
     }
 
@@ -216,8 +219,8 @@ public class Controller extends Application {
     public void handleSearchInput(int id, boolean START) {
         FIRST = START; //Set START so when / if map clicked properly sets start/end node
 
-        myDisplay.mapDisplay.changeBackOldPathNodes();
-
+        //clears old path lines from display
+        myDisplay.mapDisplay.revertPathNodes();
 
         if (nodes.containsKey(id)) {
 
