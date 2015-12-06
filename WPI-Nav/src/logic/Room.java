@@ -27,4 +27,8 @@ public class Room extends Interest {
         imageView.setFitWidth(22);
         return imageView;
     }
+
+    public boolean isRoom(){
+        return true;
+    }
 }

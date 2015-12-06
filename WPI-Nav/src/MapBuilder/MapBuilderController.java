@@ -334,12 +334,11 @@ public class MapBuilderController extends Application {
 		}
 
 
-		this.buildings.forEach((k,v) -> {
+		/*this.buildings.forEach((k,v) -> {
 			v.translateBuilding(getNodesOfBuilding(k), masterNodeList).forEach((key,value) ->{
 				masterNodeList.put(key, value);
 			});
-		});
-
+		});/*/
 
 		Parser parser = new Parser<INode>();
 		parser.toFile(masterNodeList);

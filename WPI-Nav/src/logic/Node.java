@@ -274,6 +274,8 @@ public abstract class Node implements INode {
 		return false;
 	}
 
+	public boolean isRoom() {return false; }
+
 	public ArrayList<String> getNames() {return new ArrayList<>();}
 
 	public void removeEdge(int id){

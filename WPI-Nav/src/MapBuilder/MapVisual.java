@@ -120,7 +120,7 @@ public class MapVisual extends Pane {
 				controller.deselectNode();
 			} else {
 				// create new node if possible
-				double tolerance = 15.0;
+				double tolerance = 12.0;
 
 				double minDist = tolerance;
 				
@@ -344,6 +344,8 @@ public class MapVisual extends Pane {
 
 					//VBox of buttons
 					VBox buttonBox = new VBox();
+					Button room = new Button("Room");
+
 					Button bathroom = new Button("Bathroom");
 					Button mensroom = new Button("Mens' Bathroom");
 					Button girlsroom = new Button("Womens' Bathroom");
@@ -351,14 +353,15 @@ public class MapVisual extends Pane {
 					Button food = new Button("Food");
 					Button landmark = new Button("Landmark");
 					Button path = new Button("Path");
-					Button room = new Button("Room");
 					Button stairs = new Button("Stairs");
 					Button tstairs = new Button("Transition Stairs");
 					Button transition = new Button("Transition");
 
-					buttonBox.getChildren().addAll(bathroom, mensroom, girlsroom, elevator, food, landmark, path, room, stairs, tstairs, transition);
+					buttonBox.getChildren().addAll(room, bathroom, mensroom, girlsroom, elevator, food, landmark, path, stairs, tstairs, transition);
 
 					//effects of buttons
+					room.setOnAction(c -> handleNodeChoice(new Room(v), infoPopOver));
+
 					mensroom.setOnAction(c -> handleNodeChoiceHelper(new Bathroom(v), BathroomType.MENS, infoPopOver));
 					girlsroom.setOnAction(c -> handleNodeChoiceHelper(new Bathroom(v), BathroomType.WOMAN, infoPopOver));
 					bathroom.setOnAction(c -> handleNodeChoice(new Bathroom(v), infoPopOver));
@@ -366,7 +369,6 @@ public class MapVisual extends Pane {
 					food.setOnAction(c -> handleNodeChoice(new Food(v), infoPopOver));
 					landmark.setOnAction(c -> handleNodeChoice(new Landmark(v), infoPopOver));
 					path.setOnAction(c -> handleNodeChoice(new Path(v), infoPopOver));
-					room.setOnAction(c -> handleNodeChoice(new Room(v), infoPopOver));
 					stairs.setOnAction(c -> handleNodeChoice(new Stairs(v), infoPopOver));
 					tstairs.setOnAction(c -> handleNodeChoice(new TStairs(v), infoPopOver));
 					transition.setOnAction(c -> handleNodeChoice(new Transition(v), infoPopOver));
@@ -393,40 +395,44 @@ public class MapVisual extends Pane {
 						System.out.println("Node Deselected");
 						controller.deselectNode();
 						normal(circle, v);
+					} else if (!controller.isNodeSelected()) {
+						System.out.println("New node selected");
+						controller.selectNode(v.getID());
 					} else {
-						if (!controller.isNodeSelected()) {
-							System.out.println("New node selected");
-							controller.selectNode(v.getID());
-						} else {
-							// Add edge between nodes
+						// Add edge between nodes
 
-							// check to see if there is a new edge to be created
-							boolean isNewEdge = true;
+						// check to see if there is a new edge to be created
+						boolean isNewEdge = true;
 
-							for (Edge edge : controller.getSelectedNode().getAdjacencies()) {
-								if (edge.getTarget() == v.getID()) {
-									isNewEdge = false;
-								}
-							}
-
-							// If there is a new edge, create each direction and
-							// add them to the respective nodes
-							// Also draw the edge
-							if (isNewEdge) {
-								System.out.println("New Edge Created!");
-
-								Edge newCEdge = new Edge(v.getID(), 1);
-								Edge newVEdge = new Edge(controller.getSelectedNode().getID(), 1);
-
-								controller.getSelectedNode().addEdge(newCEdge);
-								v.addEdge(newVEdge);
-
-								drawEdges(controller.getCurrentNodeList());
-								drawNodes(controller.getCurrentNodeList());
-							} else {
-								System.out.println("Edge already exists");
+						for (Edge edge : controller.getSelectedNode().getAdjacencies()) {
+							if (edge.getTarget() == v.getID()) {
+								isNewEdge = false;
 							}
 						}
+
+						// If there is a new edge, create each direction and
+						// add them to the respective nodes
+						// Also draw the edge
+						if (isNewEdge) {
+							System.out.println("New Edge Created!");
+
+							Edge newCEdge = new Edge(v.getID(), 1);
+							Edge newVEdge = new Edge(controller.getSelectedNode().getID(), 1);
+
+							controller.getSelectedNode().addEdge(newCEdge);
+							v.addEdge(newVEdge);
+
+							drawEdges(controller.getCurrentNodeList());
+							drawNodes(controller.getCurrentNodeList());
+						} else {
+							System.out.println("Edge already exists");
+						}
+
+						controller.selectNode(v.getID());
+
+						// The update the visuals
+						drawEdges(controller.getCurrentNodeList());
+						drawNodes(controller.getCurrentNodeList());
 					}
 				}
 			} else if (e.getButton() == MouseButton.SECONDARY) {
@@ -621,12 +627,16 @@ public class MapVisual extends Pane {
 			highlight(c, Color.GOLD, Color.BLACK);
 		} else {
 
-			if (!v.isTransition()) {
-				c.setFill(Color.BLUE);
+			if (v.isTransition()) {
+				c.setFill(Color.HOTPINK);
+				c.setStrokeWidth(0);
+				c.setRadius(5);
+			} else  if(v.isRoom()) {
+				c.setFill(Color.TEAL);
 				c.setStrokeWidth(0);
 				c.setRadius(5);
 			} else {
-				c.setFill(Color.HOTPINK);
+				c.setFill(Color.BLUE);
 				c.setStrokeWidth(0);
 				c.setRadius(5);
 			}
