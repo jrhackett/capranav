@@ -114,7 +114,6 @@ public class Parser<Struct> {
 		 * System.out.println(nodes.toString());
 		 */
 		
-		System.out.println("SUCCESS !");
 	}
 
 	/**
@@ -304,12 +303,5 @@ public class Parser<Struct> {
 		//System.out.println(path + nNames[n]);
 
 		return path + nNames[n];
-	}
-
-	//Deletes contents of filename (doesn't actually delete file)
-	private void resetInd() {
-		try { writer = new JsonWriter(new FileWriter(filename, false)); }
-		catch (IOException e) { return; }
-		close();
 	}
 }

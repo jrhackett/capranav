@@ -100,11 +100,6 @@ public class AStarShortestPath {
 		// the destination Node
 		// back to the start
 
-		for (INode p : path){
-			System.out.println(p.getID());
-		}
-
-		System.out.println(path.size());
 
 		return path;
 	}
