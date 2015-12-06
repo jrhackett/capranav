@@ -3,6 +3,8 @@ package controller;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.animation.Animation;
 import javafx.application.Application;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.application.Preloader;
@@ -32,8 +34,7 @@ public class myPreloader extends javafx.application.Preloader {
         VBox loading = new VBox(20);
         loading.setMaxWidth(Region.USE_PREF_SIZE);
         loading.setMaxHeight(Region.USE_PREF_SIZE);
-        loading.getChildren().add(new ProgressBar());
-        loading.getChildren().add(new Label("Please wait..."));
+        loading.getChildren().add(new ImageView(new Image(myPreloader.class.getResource("../images/goatnav.jpg").toExternalForm())));
 
 
         BorderPane root = new BorderPane(loading);
@@ -49,7 +50,7 @@ public class myPreloader extends javafx.application.Preloader {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Thread.sleep(3000);
+
     }
 
 
@@ -61,6 +62,11 @@ public class myPreloader extends javafx.application.Preloader {
 
 
             System.out.print("ASDASD");
+            try {
+                Thread.sleep(3000);
+            } catch (java.lang.InterruptedException name) {
+
+            }
             preloaderStage.hide();
         }
     }
