@@ -5,7 +5,10 @@ package visuals;
  */
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -17,7 +20,7 @@ import javafx.scene.Parent;
 public class ZoomAndPan {
 
     private static final double MAX_SCALE = 15d;
-    private static final double MIN_SCALE = 1d;
+    public double MIN_SCALE = 1d;
     private ScrollPane scrollPane = new ScrollPane();
 
     private final DoubleProperty zoomProperty = new SimpleDoubleProperty(1.0d);
@@ -51,6 +54,8 @@ public class ZoomAndPan {
         scrollPane.addEventFilter( MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
         scrollPane.addEventFilter( ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
 
+        //TODO add listener for value
+        scrollPane.viewportBoundsProperty().addListener(sceneGestures.getChangeListener());
 //        root.getChildren().add(scrollPane);
         //Scene scene = new Scene(root, 600, 400);
         //primaryStage.setScene(scene);
@@ -62,9 +67,26 @@ public class ZoomAndPan {
         double initialScale = Math.min(vpH/zHeight, vpW/zWidth);
         double panXTrans = panAndZoomPane.getTranslateX();
         System.out.println(panXTrans);
-        //panAndZoomPane.setPivot(0,0,1.063);
+        //panAndZoomPane.setPivot(-40,-20,1.063);
         return scrollPane;
+
     }
+
+    public double clampTranslateXWidth(double value, double scale, double vpW){
+        //TODO finish  X clamp methods
+        double min = -(scale - 1)*(vpW/2);
+        double max = (scale - 1)*(vpW/2);
+
+        if(Double.compare(value, min) < 0)
+            return min;
+
+        if(Double.compare(value, max) > 0)
+            return max;
+
+        return value;
+    }
+
+
 /**
  *
  *
@@ -113,6 +135,8 @@ public class ZoomAndPan {
             return onScrollEventHandler;
         }
 
+        public ChangeListener<Object> getChangeListener(){ return changeListener;}
+
         private EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
 
             public void handle(MouseEvent event) {
@@ -122,7 +146,7 @@ public class ZoomAndPan {
 
                 sceneDragContext.translateAnchorX = panAndZoomPane.getTranslateX();
                 sceneDragContext.translateAnchorY = panAndZoomPane.getTranslateY();
-
+                //System.out.println("Screen Dragged");
             }
 
         };
@@ -135,20 +159,42 @@ public class ZoomAndPan {
                 double vpH = scrollPane.getViewportBounds().getHeight();
                 double vpW = scrollPane.getViewportBounds().getWidth();
                 double scrollH = scrollPane.getLayoutBounds().getHeight();
-                System.out.println("ScrollH " + scrollH + ", ZHeight "+ ZHeight + ", viewH " + vpH);
+                //System.out.println("ScrollH " + scrollH + ", ZHeight "+ ZHeight + ", viewH " + vpH);
                 double scrollW = scrollPane.getLayoutBounds().getWidth();
-                System.out.println("ScrollW " + scrollW + ", ZWidth " + ZWidth + ", viewW" + vpW);
+                //System.out.println("ScrollW " + scrollW + ", ZWidth " + ZWidth + ", viewW" + vpW);
                 //double minH = panAndZoomPane.getLayoutY();
-
-                //System.out.println("maxh "+ maxH + " minh " + minH);
+                double extraWidth = panAndZoomPane.getLayoutBounds().getWidth() - scrollPane.getViewportBounds().getWidth();
+                //System.out.println(extraWidth);
+                //clamp transX
                 double transX = sceneDragContext.translateAnchorX + event.getX() - sceneDragContext.mouseAnchorX;
+                //double transXn = clampTranslateXWidth(transX, panAndZoomPane.getScale(), scrollPane.getViewportBounds().getWidth());
                 panAndZoomPane.setTranslateX(transX);
-                System.out.println("Xtrans " + transX);
+                //System.out.println("Xtrans " + transX);
                 double transY = sceneDragContext.translateAnchorY + event.getY() - sceneDragContext.mouseAnchorY;
                 panAndZoomPane.setTranslateY(transY);
-                System.out.println("Ytrans" +transY);
+                //System.out.println("Ytrans" +transY);
 
                 event.consume();
+            }
+        };
+//TODO change this function to dynamically resize the image
+        private ChangeListener<Object> changeListener = new ChangeListener<Object>() {
+            @Override
+            public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+                Bounds bounds = scrollPane.getViewportBounds();
+                double transX = panAndZoomPane.getTranslateX()-(bounds.getWidth() - 705)/2;
+                double transY = panAndZoomPane.getTranslateY()-(bounds.getHeight() - 530)/2;
+
+                double scale = Math.min((bounds.getWidth()/705),(bounds.getHeight()/530));
+                MIN_SCALE = scale;
+                //if (bounds.getHeight()>530 || bounds.getWidth()>730 ||){
+                    panAndZoomPane.setPivot(transX,transY,scale);
+                //}
+
+//            int left = -1 * (int) bounds.getMinX();
+//            int right = left + (int) bounds.getWidth();
+                //System.out.println("height!!!!!!!!!!!!!:" + scrollPane.getViewportBounds().getHeight());
+                //panAndZoomPane.setPivot(0,0, panAndZoomPane.getScale()*1.05);
             }
         };
 
@@ -173,6 +219,7 @@ public class ZoomAndPan {
                 }
 
                 double newScale = clamp(scale,MIN_SCALE, MAX_SCALE);
+                System.out.println("Scale "+ newScale);
 
                 double f = (scale / oldScale)-1;
 
@@ -182,6 +229,11 @@ public class ZoomAndPan {
                 if (newScale == scale){
                     panAndZoomPane.setPivot(f*dx, f*dy, newScale);
                 }
+
+                if (newScale == MIN_SCALE){
+                    panAndZoomPane.setPivot(0,0,newScale);
+                }
+
 
                 event.consume();
 
@@ -200,4 +252,6 @@ public class ZoomAndPan {
 
         return value;
     }
+
+
 }

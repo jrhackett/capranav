@@ -45,8 +45,8 @@ public class Display {
     private static final double GAP = 5;
     private final double EDGE;
     private static final double expandedWidth = 170;//150
-    private static final double MAP_WIDTH = 660;
-    private static final double MAP_HEIGHT = 495;
+    private static final double MAP_WIDTH = 585; //originally 580+80
+    private static final double MAP_HEIGHT = 460;//originally 455+40
     private static final double MAP_BORDER = 15;
 
     //Variables
@@ -727,7 +727,6 @@ public class Display {
         StackPane mapPane = new StackPane();
         mapPane.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2);
         mapPane.setMinHeight(MAP_HEIGHT);
-
         mapPane.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
         mapPane.setMinWidth(MAP_WIDTH);
 
