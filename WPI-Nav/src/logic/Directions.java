@@ -153,9 +153,36 @@ public class Directions {
 			//distPhrase now uses distspec.
 
 			// specialdirs changed lines VV
-			if (next instanceof Stairs || next instanceof TStairs) distPhrase = "climb the stairs and go " + Math.round(distspec) + " feet.";
-			if (next instanceof Elevator) distPhrase = "enter the elevator."; //TODO: This should include what floor to select
+			int zz = 0;
+			int flights = 0;
+				if (next instanceof TStairs){
+					//i+2 is next
+					//i+3 is next+1, the node on the next floor
+					while(aStarPath.size()>i+zz+3 && aStarPath.get(i+zz+2) instanceof TStairs){
+						flights++;
+						zz++;
+					}
+					if ( (maps.get(aStarPath.get(i+3).getMap_id()).getFloor() > (maps.get(next.getMap_id()).getFloor()))){ //going up
+						distPhrase = "to the stairs, and climb up " +flights+" floor(s)";
+					}
+					else distPhrase ="to the stairs, and climb down "+flights+" floor(s)";
+				}
+			zz = 0;
+			String elevatorend = "somewhere you can fix this bug."; //should never stay as this
+				if (next instanceof Elevator){
+					flights = ((Elevator) aStarPath.get(i+zz+2)).getToFloor(); //initialize so that, in an edge case, it at least says to go where you already are
+					while(aStarPath.size()>i+zz+3 && aStarPath.get(i+zz+2) instanceof Elevator){
+						zz++;
+						flights = ((Elevator) aStarPath.get(i+zz+2)).getToFloor();
+					}
+					if(flights == 0) elevatorend = "the basement";
+					if(flights == -1) elevatorend = "the sub-basement";
+					if(flights < -1) elevatorend = "the depths of the earth"; //should never occur
+					if(flights > 0) elevatorend = "floor "+flights;
+					distPhrase = "enter the elevator and go to "+elevatorend;
+				}
 			// specialdirs changed lines ^^
+
 			//if outside node mapid different then go inside/outside message
 			if (turn.getMap_id()==0 && next.getMap_id()!=0){ //going inside
 				distPhrase = "inside the building";
@@ -165,7 +192,7 @@ public class Directions {
 			}
 			
 			//if (angle<=-10 || angle>=10 || (aStarPath.size()==i+j+2 && veryfirm == false)){
-			if (angle<=-10 || angle >=10){
+			if (angle<=-10 || angle >=10 && !(turn instanceof TStairs) && !(turn instanceof Elevator)){
 				directions.get(mapstep).add(new Instructions("Turn " + anglePhrase + ", and walk " + distPhrase,turn));
 				//if(aStarPath.size()==i+j+2) {
 					//veryfirm = true;
@@ -237,5 +264,19 @@ public class Directions {
 			return "a near U-turn right";
 		return String.valueOf(angle);
 	}
-	
+
+	/*public static String getRelativeCurrentFloorString(INode current, INode next, HashMap<Integer, IMap> maps){
+		if (maps.get(next.getMap_id()).getFloor() > (maps.get(current.getMap_id()).getFloor())){
+			//we know we are going up
+			return "up to" + ((Floor)maps.get(current.getMap_id())).getFloorName();
+		} else {
+			return "down to" + ((Floor)maps.get(current.getMap_id())).getFloorName();
+
+		}
+	}
+	public static String getFloorDifference(INode current, INode next, HashMap<Integer, IMap> maps){
+		if(maps.get(next.getMap_id()).getFloor()>(maps.get(current.getMap_id()).getFloor())){
+			return "up "
+		}
+	}*/
 }
