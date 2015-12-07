@@ -3,19 +3,21 @@ package visuals;
 import controller.Controller;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Transition;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
-import logic.IMap;
-import logic.INode;
-import logic.Path;
+import logic.*;
+import org.controlsfx.control.PopOver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,6 +72,7 @@ public class MapDisplay extends Pane {
         this.idPath = new ArrayList<>();
         this.ste = new ScaleTransition();
         this.sts = new ScaleTransition();
+        this.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
     }
 
 
@@ -211,15 +214,106 @@ public class MapDisplay extends Pane {
         if(v instanceof Path){
 
         }else {
+
+            PopOver popOver = createPopOverForNode(v);
+
             circle.setOnMouseEntered(e -> {
-                controller.updateNodeInformation(v);
+                //content of popover
+                popOver.show(circle);
+                //controller.updateNodeInformation(v);
             });
+
+            /*circle.setOnMouseExited(e -> {
+                popOver.hide();
+            });*/
         }
 
         return circle;
     }
 
+    public PopOver createPopOverForNode(INode v) {
+        PopOver popOver = new PopOver();
+        VBox vbox = new VBox();
 
+        Building building = controller.getBuilding(v.getID());
+        //HashMap<Integer, Integer> floorPlan = controller.getBuilding(v.getID()).getFloorMap();
+
+        Label buildingName = new Label(building.getName());   //TODO add name here later -- null pointer shit
+        buildingName.setStyle("-fx-font-size:9;");
+        buildingName.setTextFill(Color.web("#333333"));
+        Image picture = FileFetch.getImageFromFile("picture.png", 12, 12, true, true);
+        ImageView pictureView = new ImageView(picture);
+
+        HBox hbox = new HBox();
+        hbox.getChildren().addAll(buildingName, pictureView);
+        hbox.setAlignment(Pos.CENTER);
+
+        Label selectFloor = new Label("Select Floor:");
+        selectFloor.setTextFill(Color.web("#333333"));
+        selectFloor.setStyle("-fx-font-size:8;");
+
+        FlowPane flowPane = new FlowPane();
+
+        //TODO uncomment this when nullPointers stop happening
+       /* for(int i = 0; i < floorPlan.size(); i++) {
+            Button button = new Button();
+            button.setId("popover-buttons");
+            String value;
+            Object array[] = floorPlan.keySet().toArray();
+            if(floorPlan.keySet().toArray()[i].equals(-1)) {
+                value = "SB";
+            }
+            else if(floorPlan.keySet().toArray()[i].equals(0)) {
+                value = "B";
+            }
+            else
+            {
+                value = Integer.toString(i);
+            }
+            button.setText(value);
+            flowPane.getChildren().add(button);
+        }*/
+
+        /*Button fourth = new Button();       //4
+        fourth.setText("4");
+        fourth.setId("popover-buttons");
+
+        Button third = new Button();        //3
+        third.setText("3");
+        third.setId("popover-buttons");
+
+        Button second = new Button();       //2
+        second.setText("2");
+        second.setId("popover-buttons");
+
+        Button first = new Button();        //1
+        first.setText("1");
+        first.setId("popover-buttons");
+
+        Button basement = new Button();     //0
+        basement.setText("B");
+        basement.setId("popover-buttons");
+
+        Button subBasement = new Button();  //-1
+        subBasement.setText("SB");
+        subBasement.setId("popover-buttons");
+        subBasement.setStyle("-fx-padding:4 3 4 3;");*/
+
+        //flowPane.getChildren().addAll(fourth, third, second, first, basement, subBasement);
+
+        vbox.setAlignment(Pos.TOP_CENTER);
+        vbox.setId("popover-id");
+        vbox.setSpacing(2);
+        vbox.getChildren().addAll(hbox, flowPane); //select floor? topbuttons, bottombuttons
+        //vbox.getStylesheets().add("../visuals/style.css");
+
+        popOver.setContentNode(vbox);
+        popOver.setArrowLocation(PopOver.ArrowLocation.RIGHT_TOP);
+        popOver.setDetachable(false);
+        popOver.setArrowSize(5.0);
+
+        return popOver;
+    }
 
     /**
      * highlights a circle

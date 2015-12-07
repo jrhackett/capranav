@@ -1,5 +1,15 @@
 package logic;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import org.controlsfx.control.PopOver;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,7 +22,6 @@ public class Building {
     private int universalB;
     private int localA;
     private int localB;
-
 
     //<Integer> maps; //Floor would be easier but easier to just do int for parsing
     private HashMap<Integer, Integer> floorMap; //int -> mapID
@@ -66,6 +75,4 @@ public class Building {
         Translate translate = new Translate(master.get(localA), master.get(localB), master.get(universalA), master.get(universalB));
         return translate.setUniversalCoordinates(nodes);
     }
-
-
 }

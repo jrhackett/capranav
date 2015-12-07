@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import logic.*;
@@ -143,6 +144,7 @@ public class Controller extends Application {
             this.myDisplay.updatePictureIcon(false);
             this.selectedInformationNode = null;
         }
+
     }
 
     /**
@@ -810,6 +812,9 @@ public class Controller extends Application {
         return dir.getTotalDistance() / walkSpeed;
     }
 
+    public Building getBuilding(int nodeID) {
+        return buildings.get(maps.get(nodes.get(nodeID).getMap_id()));
+    }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static void main(String[] args) {
