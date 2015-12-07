@@ -298,10 +298,10 @@ public class Controller extends Application {
      */
     public void handleEnterBuilding(Transition t){
         System.out.println("t.getBuildingID(): " + t.getBuildingID());
-        switchToBuildingView(t.getBuildingID(), t.getToFloor());
         this.currentMap = maps.get(t.getMap_id());
         this.currentBuilding = t.getBuildingID();
         this.currentFloor = t.getToFloor();
+        switchToBuildingView(t.getBuildingID(), t.getToFloor());
         handleMapLines();
     }
 

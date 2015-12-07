@@ -155,7 +155,7 @@ public class MapVisualSecondary extends Pane {
             flowPane.setMaxWidth(40);
             for (Edge edge : v.getAdjacencies()){
                 if (controller.getNodeMaster(edge.getTarget()).isTransition() && (controller.getNodeMaster(edge.getTarget()).getMap_id()) != v.getMap_id()){
-                    Button button = new Button(Integer.toString(controller.getMaps().get(((Transition)controller.getNodeMaster(edge.getTarget())).getMap_id()).getFloor()));
+                    Button button = new Button(Integer.toString(controller.getMaps().get((controller.getNodeMaster(edge.getTarget())).getMap_id()).getFloor()));
                     button.setOnAction(z -> {
                         if (controller.getSelectedMap() == controller.getNodeMaster(edge.getTarget()).getMap_id()){
                             controller.playSoftEdgeAnimation(edge.getTarget());
@@ -207,6 +207,10 @@ public class MapVisualSecondary extends Pane {
 
                         controller.getSelectedNode().addEdge(newCEdge);
                         v.addEdge(newVEdge);
+
+                        System.out.println("Controller Node Map Id: " + controller.getSelectedNode().getMap_id());
+                        System.out.println("V          Node Map Id: " + v.getMap_id());
+
                     } else {
                         //System.out.println("Edge already exists");
                         controller.setEdgeInformation("Edge already exists");
