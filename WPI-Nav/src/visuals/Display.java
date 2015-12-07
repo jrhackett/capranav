@@ -798,11 +798,8 @@ public class Display {
             this.nodeTransitionButton.setOnAction(e -> controller.handleEnterBuilding((Transition) iNode));
         } else {
             this.nodeTransitionButton.setId("arrow-buttons-grayed2");
-            this.nodeTransitionButton.setOnAction(e -> {
-            });//// TODO: 12/2/15 fix
+            this.nodeTransitionButton.setOnAction(e -> {});//// TODO: 12/2/15 fix
         }
-
-
     }
 
     //TODO THIS IS START OF BUILDING BOX PANE!
@@ -1104,11 +1101,5 @@ public class Display {
         return controller.getMaps();
     }
 
-    /**
-     * find paths calls the controller
-     */
-    private void findPaths() {//THIS IS A RELIC NOT CURRENTLY USED
-        this.controller.findPaths();
-    }
 }
 

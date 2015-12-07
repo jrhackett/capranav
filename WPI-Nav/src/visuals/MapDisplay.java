@@ -70,6 +70,12 @@ public class MapDisplay extends Pane {
         this.idPath = new ArrayList<>();
         this.ste = new ScaleTransition();
         this.sts = new ScaleTransition();
+
+        controller.getNodes().forEach((k,v) -> {
+            Circle c = createCircle(v);
+            normal(c, v);
+            id_circle.put(k,c);
+        });
     }
 
 
@@ -84,19 +90,10 @@ public class MapDisplay extends Pane {
      * @param nodes
      */
     public void drawNodes(HashMap<Integer, INode> nodes) {
-        //this.id_circle = new HashMap<>(); <-- dont want this
+        //to make it easy we will create all the nodes
 
         nodes.forEach((k, v) -> {
-            if (id_circle.containsKey(k)) {
-                //System.out.println("Already Had Circle");
-                Circle c = id_circle.get(k);
-                this.getChildren().add(c);
-            } else {
-                Circle c = createCircle(v);
-                id_circle.put(k, c);
-                normal(c, v);
-                this.getChildren().add(c);
-            }
+            this.getChildren().add(id_circle.get(k));
         });
     }
 
@@ -120,13 +117,13 @@ public class MapDisplay extends Pane {
             this.mapImage = new Image(getClass().getResourceAsStream("/images/floorPlans/" + map.getFilePath()));//, IMAGE_WIDTH, IMAGE_HEIGHT, true, true
         }
 
+
         this.mapView = new ImageView(mapImage);
         this.mapView.setFitHeight(IMAGE_HEIGHT);
         this.mapView.setFitWidth(IMAGE_WIDTH);
 
         this.getChildren().add(mapView);
         drawNodes(controller.getNodesOfMap(map.getID()));
-
 
 
         mapView.setOnMouseClicked(e -> {
@@ -249,7 +246,6 @@ public class MapDisplay extends Pane {
      */
     public void revertPathNodes(){
         //This removes all lines from the display [overkill
-
         lines.forEach((k,v) -> {
            this.getChildren().removeAll(v);
         });
@@ -265,18 +261,21 @@ public class MapDisplay extends Pane {
 
     public void createPath(ArrayList<ArrayList<Instructions>> path) {
 
+        //upon creation of a new path fully reset old nodes
         revertPathNodes();
 
-
+        //clears the arraylist of nodes (idPath) and hashmap of arrays lists of lines (lines)
         idPath = new ArrayList<>(); //TODO AM I REMVOING THE OLD LINES
         lines = new HashMap<>();
 
 
-        double coordX = path.get(0).get(0).getNode().getX();
-        double coordY = path.get(0).get(0).getNode().getY();
+
 
         for (ArrayList<Instructions> list : path) {
             ArrayList<Line> lineArrayList = new ArrayList<>();
+            double coordX = path.get(0).get(0).getNode().getX();
+            double coordY = path.get(0).get(0).getNode().getY();
+
             for (Instructions i : list) {
                 /** path nodes highlight blue **/
                 highlightPath(id_circle.get(i.getNode().getID()));
@@ -301,7 +300,8 @@ public class MapDisplay extends Pane {
             lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
         }
 
-
+        setStartNode(idPath.get(0));
+        setEndNode(idPath.get(0), false);
     }
 
     /**
@@ -312,45 +312,70 @@ public class MapDisplay extends Pane {
      * @param mapIdNew
      */
     public void showLines(int mapIdOld, int mapIdNew) {
-        try {
-            if (mapIdOld != -1) {
+        if (mapIdOld != -1) {
+            try {
                 this.getChildren().removeAll(lines.get(mapIdOld));
-                // this.getChildren().removeAll(lines.get(mapIdOld));
-            } else this.getChildren().addAll(lines.get(mapIdNew));
-        } catch (NullPointerException e){
-
+            } catch (NullPointerException e){
+                System.out.println("MAP HAS NO LINES YET");
+            }
         }
+
+        //if map has lines to show, show them
+        if(this.lines.containsKey(mapIdNew)) this.getChildren().addAll(lines.get(mapIdNew));
     }
 
 
     /**
      * The color and effect for when a node is set as a destination
      *
-     * @param id
+     * @param iNode
      */
-    public void setStartNode(int id, boolean START) {
+    public void setStartNode(INode iNode) {
         //NOW WE HAVE TO CHECK IF NODE IS ON THIS MAP
         //I think we should keep all circles
         Circle c;
 
-        if (!id_circle.containsKey(id)){
-            c = createCircle(controller.getNode(id));
+        if (!id_circle.containsKey(iNode.getID())){
+            c = createCircle(controller.getNode(iNode.getID()));
         } else {
-            c = id_circle.get(id);
+            c = id_circle.get(iNode.getID());
         }
 
         c.setRadius(5);
+        highlight(c, Color.GREEN, Color.LIGHTGREEN);
 
-        if (START) {
-            highlight(c, Color.GREEN, Color.LIGHTGREEN);
+
+        if (sts != null) { sts.stop(); }
+
+        ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
+        st.setByX(1.1f);
+        st.setByY(1.1f);
+        st.setCycleCount(4);
+        st.setAutoReverse(true);
+        st.play();
+        sts = st;
+
+        st.setOnFinished(event -> {
             c.setRadius(5);
+        });
+
+    }
 
 
-            if (sts != null) {
-                sts.stop();
-             /*   if((Circle)sts.getNode() == c){ return;}//do nothing _
-                sts.*/
-            }
+    public void setEndNode(INode v, boolean animation) {
+        Circle c;
+
+        if (id_circle.containsKey(v.getID())) {
+            c = id_circle.get(v.getID());
+
+        } else {
+            c = createCircle(v);
+        }
+
+        c.setRadius(5);
+        highlight(c, Color.FIREBRICK, Color.RED);
+
+        if (animation) {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
             st.setByX(1.1f);
             st.setByY(1.1f);
@@ -358,34 +383,13 @@ public class MapDisplay extends Pane {
             st.setAutoReverse(true);
             st.play();
             sts = st;
-        } else {
-            highlight(c, Color.FIREBRICK, Color.RED);
-            if (ste != null) ste.stop();
-            c.setRadius(5);
 
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
-            st.setByX(1.1f);
-            st.setByY(1.1f);
-            st.setCycleCount(4);
-            st.setAutoReverse(true);
-            st.play();
-            ste = st;
+            st.setOnFinished(event -> {
+                c.setRadius(5);
+            });
         }
-    }
 
-
-    public void setEndNode(INode v) {
-        if (id_circle.containsKey(v.getID())) {
-            Circle c = id_circle.get(v.getID());
-            c.setRadius(5);
-            highlight(c, Color.FIREBRICK, Color.RED);
-            id_circle.put(v.getID(), c);
-        } else {
-            Circle c = createCircle(v);
-            c.setRadius(5);
-            highlight(c, Color.FIREBRICK, Color.RED);
-            id_circle.put(v.getID(), c);
-        }
+        id_circle.put(v.getID(), c);
     }
 
 
@@ -403,8 +407,8 @@ public class MapDisplay extends Pane {
         }
     }
 
-    public void hideLast(int id) {
-        normal(id_circle.get(id), null);
+    public void hideLast(INode node) {
+        normal(id_circle.get(node.getID()), node);
     }
 
 

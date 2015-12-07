@@ -26,8 +26,6 @@ public class Controller extends Application {
     private Display myDisplay;
 
     /* information variables */
-    public ArrayList<INode> pathNodes;       /* this is set then used to get instructions from logic.Directions */
-    public ArrayList<ArrayList<Instructions>> currentInstructions;
 
 
     /* nodes and graphs */
@@ -38,7 +36,7 @@ public class Controller extends Application {
     private int currentBuilding = 0;
     private int currentFloor;
     private Campus campus;
-    private logic.IMap currentMap;            /* current map being used */
+    private logic.IMap currentMap;                  /* current map being used */
     private HashMap<Integer, Building> buildings;   /* information on organization of floors */
 
     /* switches */
@@ -52,9 +50,11 @@ public class Controller extends Application {
     public logic.INode endNode;
 
     /* path data */
+    public ArrayList<INode> pathNodes;       /* this is set then used to get instructions from logic.Directions */
     ArrayList<ArrayList<Instructions>> fullPath;
     private int currentIndex;
     private int lastMapID;
+
 
     private INode selectedInformationNode;
 
@@ -158,16 +158,16 @@ public class Controller extends Application {
         String startString = null;
         String endString = null;
         ArrayList<String> simplifiedInstruction = new ArrayList<>();
-        if (currentInstructions == null) return false;
-        for (ArrayList<Instructions> il : currentInstructions){
+        if (fullPath == null) return false;
+        for (ArrayList<Instructions> il : fullPath){
             for (Instructions i : il){
                 simplifiedInstruction.add(i.getInstruction_string());
                 end = i.getNode();
             }
         }
 
-        if (currentInstructions != null) {
-            INode start = currentInstructions.get(0).get(0).getNode();
+        if (fullPath != null) {
+            INode start = fullPath.get(0).get(0).getNode();
             if (start.isInteresting()) {
                 startString = start.getNames().get(0);
             } else if (start.isTransition()) {
@@ -220,135 +220,116 @@ public class Controller extends Application {
         FIRST = START; //Set START so when / if map clicked properly sets start/end node
 
         //clears old path lines from display
-        myDisplay.mapDisplay.revertPathNodes();
+        //myDisplay.mapDisplay.revertPathNodes();
 
         if (nodes.containsKey(id)) {
 
             if (START) {//setting start
                 //System.out.println("START TRUE!");
 
+                //if start is A and end is B and user tries to make start B, then end will be A
+                if (endNode != null && id == endNode.getID() ){ //&& startNode != null
+                    endNode = startNode;
+                }
+
                 if (!FLAG) {//if not from a click on the map hide the last
                     //System.out.println("FLAG FALSE!");
                     if (startNode != null) {
-                        //System.out.println("HIDING START");
-                        this.myDisplay.mapDisplay.hideLast(startNode.getID());
+                        //this visually hides the last start node -> sets it to normal
+                        this.myDisplay.mapDisplay.hideLast(startNode);
                     }
                 }
 
-                if (endNode != null && id == endNode.getID()) {//if end and start will be the same remove the other
-                   // System.out.println("IDS SAME!");
+                //set the startNode id
+                this.startNode = nodes.get(id);
+            //Else we are changing the EndNode
+            } else {
 
-                    endNode = null;
-                    this.myDisplay.end.setValue(null);
+                //flip startNode and endNode if need be
+                if (startNode != null && id == startNode.getID() ){ //&& startNode != null
+                    startNode = endNode;
+                   // this.myDisplay.mapDisplay.setStartNode(endNode);
                 }
 
-                this.startNode = nodes.get(id);
-            } else {
+
                 if (!FLAG) {//if not from a click on the map hide the last
                    // System.out.println("FLAG FALSE!");
                     if (endNode != null) {
                       //  System.out.println("HIDING END!");
-                        this.myDisplay.mapDisplay.hideLast(endNode.getID());
+                        this.myDisplay.mapDisplay.hideLast(endNode);
                     }
-                }
-
-                if (startNode != null && id == startNode.getID()) {//if end and start will be the same remove the other
-                    startNode = null;
-                    this.myDisplay.start.setValue(null);
                 }
 
                 this.endNode = nodes.get(id);
             }
 
-
-
             if (startNode != null && endNode != null) {
                 findPaths();
+            } else {
+                switchMapSetting(startNode.getMap_id());
             }
+
             if (startNode != null) {
                 //TODO if current map contains it, play, if it doesn't - switch and play
-                if (startNode.getMap_id() != currentMap.getID()) {
+                //Hopefully in find paths this is taken care of - will confirm later
+                if (startNode.getMap_id() == currentMap.getID()) {
                     //gotta switch maps
-                    switchMapSetting(startNode.getMap_id());
+                    //switchMapSetting(startNode.getMap_id());
+                    myDisplay.mapDisplay.setStartNode(startNode);
                 }
-                myDisplay.mapDisplay.setStartNode(startNode.getID(), true);
             }
 
             if (endNode != null) {
                // System.out.println("END NODE HIGHLIGHTED!");
                 //TODO if current map contains it, play, if it doesn't - dont play, just set and color
                 if (endNode.getMap_id() == currentMap.getID()) {
-                    myDisplay.mapDisplay.setStartNode(endNode.getID(), false);
+                    myDisplay.mapDisplay.setEndNode(endNode, true);
                 } else {
-                    myDisplay.mapDisplay.setEndNode(endNode);
+                    myDisplay.mapDisplay.setEndNode(endNode, false);
                 }
-                //TODO
             }
 
         }
     }
 
-//TODO MEGAIMPORTANT DO THIS YES DO
+    /**
+     * This function is the one you want when you
+     * @param t
+     */
     public void handleEnterBuilding(Transition t){
-        //System.out.println("Entered handle Enter Building");
-        //remove it from the ends and start??
-
-        //switch to the map it was referencing via the building via the map
-        switchMapSetting(t.getBuildingID(), t.getToFloor());
-
+        switchToBuildingView(t.getBuildingID(), t.getToFloor());
+        this.currentMap = maps.get(t.getMap_id());
+        this.currentBuilding = t.getBuildingID();
+        this.currentFloor = t.getToFloor();
+        handleMapLines();
     }
 
     private void switchMapSetting(int mapId){
         if (maps.get(mapId).getID() == 0){
-            hideBuildingPane();//ONLY SLIDES UP BUILDING VIEW //TODO STILL UNTESTED
+            hideBuildingPane();
             defaultMap();
             this.currentMap = campus;
         } else {
             this.currentMap = maps.get(mapId);
             this.currentBuilding = currentMap.getBuildingID();
             this.currentFloor = currentMap.getFloor();
-            showBuildingPane();//ONLY SLIDE DOWN BUILDING VIEW //TODO STILL UNTESTED
+            System.out.println("SWITCH MAP SETTING");
+            System.out.println("currentMap: " + maps.get(mapId));
+            System.out.println("currentBuilding: " + currentMap.getBuildingID());
+            System.out.println("currentFloor: " + currentMap.getFloor());
+
+            showBuildingPane();//changes the pane to visible
             switchToBuildingView(currentBuilding, currentFloor);
-            myDisplay.mapDisplay.showLines(lastMapID, currentMap.getID());//TODO QESTUISNDFFsadcf
         }
     }
 
-    private void switchMapSetting(int buildingID, int startingFLOOR){
-        if (buildingID == 0){
-           // System.out.println("BUILDING ID 0");
-            //remove the current building info/pane/whatever
-            hideBuildingPane();//ONLY SLIDES UP BUILDING VIEW //TODO STILL UNTESTED
-            //switch to campus map
-            defaultMap();
-        } else {
-           // System.out.println("BUILDING ID >>");
-            //System.out.println(buildingID);
-            this.currentBuilding = buildingID;
-            showBuildingPane();//ONLY SLIDE DOWN BUILDING VIEW //TODO STILL UNTESTED
-            switchToBuildingView(buildingID, startingFLOOR);
-            //myDisplay.mapDisplay.showLines(lastMapID, currentMap.getID());//TODO QESTUISNDFFsadcf
-        }
-    }
 
     private void switchToBuildingView(int buildingID, int startingFLOOR){
-        //the arrows should already be correctly mapped to controller
-        //System.out.println("SWITCH TO BUILDING VIEW");
-        //set the Building Name
+        System.out.println("SWITCH TO BUILDING VIEW");
+        System.out.println("buildingId: " + buildingID);
+        System.out.println("startingfloor: " + startingFLOOR);
         myDisplay.setBuildingName(buildings.get(buildingID).getName());
-
-        //set the correct floor
         setFloor(startingFLOOR);
-        //myDisplay.mapDisplay.showLines(lastMapID, currentMap.getID());//TODO QESTUISNDFFsadcf
-
-
-        //set building info arrows / tab
-
-        // his.myDisplay.populateShowAddBuildingPanel(buildings.get(buildingID));
-
-        //switch to correct view
-
-        //this.myDisplay.setFloorShowing(startingFLOOR);
-//TODO right here
     }
 
     public void handleIncreaseFloorButton(){
@@ -366,51 +347,59 @@ public class Controller extends Application {
     }
 
 
-    public void setFloor(int i){//TODO HARD CODE IN IDS
-        //System.out.println("SET FLOOR");
-        //System.out.println(i);
-        if (buildings.get(currentBuilding).getFloorMap().containsKey(i)){
-            //System.out.println("SET FLOOR IF i");
-            setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(i));
+    public void setFloor(int i){
+        if (buildings.get(currentBuilding).containsFloor(i)) {
+            setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
             this.currentFloor = i;
-            this.myDisplay.setBuildingNumber(i);
+            this.myDisplay.setBuildingNumber(i); //TODO Change this to something better / more informatative
+            handleMapLines(); //removes old lines
 
-            //myDisplay.mapDisplay.showLines(lastMapID, currentMap.getID());//TODO QESTUISNDFFsadcf
-
-        }
-
-        if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)){
-            //set id for normal
-            this.myDisplay.setRightButtonID("arrow-buttons");
-        } else {
-            //set id for grey
-            this.myDisplay.setRightButtonID("arrow-buttons-grayed");
-        }
-        if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)){
-            //set id for normal
-            this.myDisplay.setLeftButtonID("arrow-buttons");
-        } else {
-            //set id for grey
-            this.myDisplay.setLeftButtonID("arrow-buttons-grayed");
+            if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)) {
+                //set id for normal
+                this.myDisplay.setRightButtonID("arrow-buttons");
+            } else {
+                //set id for grey
+                this.myDisplay.setRightButtonID("arrow-buttons-grayed");
+            }
+            if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)) {
+                //set id for normal
+                this.myDisplay.setLeftButtonID("arrow-buttons");
+            } else {
+                //set id for grey
+                this.myDisplay.setLeftButtonID("arrow-buttons-grayed");
+            }
         }
     }
 
+    /**
+     * Hides the pane displaying building pane: name and arrows
+     */
     public void hideBuildingPane(){
-        //if (this.myDisplay.BUILDING_VISIBLE.getValue()){
-          //  myDisplay.slidingBuilding.playHidePane();
-            this.myDisplay.BUILDING_VISIBLE.setValue(false);
-
+        this.myDisplay.BUILDING_VISIBLE.setValue(false);
     }
+
+    /**
+     * Show the pane displaying building pane: names and arrows
+     */
     public void showBuildingPane(){
-       // if (!this.myDisplay.BUILDING_VISIBLE.getValue()){
-      //      myDisplay.slidingBuilding.playShowPane();
-            this.myDisplay.BUILDING_VISIBLE.setValue(true);
-      //  }
+        this.myDisplay.BUILDING_VISIBLE.setValue(true);
     }
 
+    /**
+     * Sets the current map, both the variable and the display
+     * @param id
+     */
     public void setCurrentMap(int id){
         this.currentMap = maps.get(id);
         this.myDisplay.mapDisplay.setMap(maps.get(id));
+    }
+
+    /**
+     * Handles the showing of lines and switching of lastmapid
+     */
+    public void handleMapLines(){
+        myDisplay.mapDisplay.showLines(lastMapID, currentMap.getID());
+        lastMapID = currentMap.getID();
     }
 
 
@@ -439,7 +428,7 @@ public class Controller extends Application {
                 tempStart = n;
                 nodes.put(n.getID(), n);//puts the node in the map!
             } else {
-                if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode.getID());
+                if (startNode != null) this.myDisplay.mapDisplay.hideLast(startNode);
             }
 
             this.FLAG = true;//this is set in attempts to avoid triggering stuff twice
@@ -454,7 +443,7 @@ public class Controller extends Application {
                 tempEnd = n;
                 nodes.put(n.getID(), n);
             } else {
-                if (endNode != null) this.myDisplay.mapDisplay.hideLast(endNode.getID());
+                if (endNode != null) this.myDisplay.mapDisplay.hideLast(endNode);
             }
 
             this.FLAG = true;
@@ -484,7 +473,7 @@ public class Controller extends Application {
         if(!FIRST) {
             if (startNode != null){//have to delete old before creating new one (with same ID)
                 //System.out.println("Hiding old start node");
-                this.myDisplay.mapDisplay.hideLast(startNode.getID()); //hide the last start
+                this.myDisplay.mapDisplay.hideLast(startNode); //hide the last start
             }
             eradicate(tempStart, true); //completely get rid of the last start
             //System.out.println("-1");
@@ -492,7 +481,7 @@ public class Controller extends Application {
         } else {
             if (endNode != null){
                 //System.out.println("Hiding old end node");
-                this.myDisplay.mapDisplay.hideLast(endNode.getID()); //hide the last end
+                this.myDisplay.mapDisplay.hideLast(endNode); //hide the last end
             }
             eradicate(tempEnd, false); //completely get rid of the last temp
             //System.out.println("-2");
@@ -635,8 +624,8 @@ public class Controller extends Application {
      * gets the instructions by via pathNodes set by getPathNodes
      * @return an ArrayList<String?
      */
-    public ArrayList<ArrayList<Instructions>> getInstructions(){
-        return Directions.stepByStep(this.pathNodes, this.maps);
+    public void getInstructions(){
+        this.fullPath =  Directions.stepByStep(this.pathNodes, this.maps);
     }
 
 
@@ -685,11 +674,11 @@ public class Controller extends Application {
      */
     public void findPaths(){
 
-        //MAKE ALL NODES NORMAL
+        //Creates instructions - setting fullPath
+        getPathNodes(startNode, endNode);
+        getInstructions();
 
-
-
-        //set ids
+        //set ids of buttons
         if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
             this.myDisplay.setIDRightArrowButton("arrow-buttons");
         }
@@ -698,15 +687,22 @@ public class Controller extends Application {
             this.myDisplay.setIDLeftArrowButton("arrow-buttons");
         }
 
+        //current index of which arraylist of instructions we are displaying
+        currentIndex = 0;//start off with the first list
 
-        getPathNodes(startNode, endNode);
-        fullPath = getInstructions();
-        currentInstructions = fullPath;
-
-        currentIndex = 0;
+        //the last map we wee showing
         lastMapID = fullPath.get(currentIndex).get(0).getNode().getMap_id();
+
+        //sets the instructions to the corresponding list of instructions to the first path
         myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
+
+        //create the path
         myDisplay.mapDisplay.createPath(fullPath);
+
+        //switch the map to the building
+        switchMapSetting(startNode.getMap_id());
+
+        //shows the lines
         myDisplay.mapDisplay.showLines(-1, lastMapID); //TODO UPDATE showPath
     }
 

@@ -17,7 +17,7 @@ public class Building {
     //<Integer> maps; //Floor would be easier but easier to just do int for parsing
     private HashMap<Integer, Integer> floorMap; //int -> mapID
 
-    ArrayList<String> names;
+    ArrayList<String> names; //the names of the building
 
     public Building(int id, int floors){
         this.id = id;
@@ -33,6 +33,18 @@ public class Building {
     public void   addName(String s){ this.names.add(s);}
     public HashMap<Integer, Integer> getFloorMap(){ //floor -> id map
         return floorMap;
+    }
+    public int    getFloorID(int i){
+        return floorMap.get(i);
+    }
+
+    public boolean containsFloor(int floor){
+        floorMap.forEach((k,v) -> {
+            System.out.println(k);
+            System.out.println(v);
+
+        });
+        return this.floorMap.containsKey(floor);
     }
 
     public void addFloor(int floor, int mapid){
