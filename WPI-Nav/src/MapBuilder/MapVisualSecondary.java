@@ -155,9 +155,9 @@ public class MapVisualSecondary extends Pane {
             flowPane.setMaxWidth(40);
             for (Edge edge : v.getAdjacencies()){
                 if (controller.getNodeMaster(edge.getTarget()).isTransition()){
-                    Button button = new Button(Integer.toString(v.getBuildingID()));
+                    Button button = new Button(Integer.toString(v.getToFloor()));
                     button.setOnAction(z -> {
-                        if (controller.getSelectedMap() == controller.getNode(edge.getTarget()).getMap_id()){
+                        if (controller.getSelectedMap() == controller.getNodeMaster(edge.getTarget()).getMap_id()){
                             controller.playSoftEdgeAnimation(edge.getTarget());
                         }
                     });
