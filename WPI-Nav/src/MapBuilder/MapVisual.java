@@ -79,7 +79,7 @@ public class MapVisual extends Pane {
 	public void setMap(logic.IMap map) {
 		
 		// Set the map image
-		System.out.println("MAP PATH:  " + map.getFilePath());
+		//System.out.println("MAP PATH:  " + map.getFilePath());
 		if (this.getChildren().size() > 0 ) {
 			this.getChildren().remove(0, this.getChildren().size() - 1);
 		}
@@ -337,7 +337,7 @@ public class MapVisual extends Pane {
 					normal(circle, v);
 
 
-					System.out.println("Node double clicked");
+					//System.out.println("Node double clicked");
 					// set selected node to null
 					PopOver infoPopOver = new PopOver();
 					infoPopOver.show(circle);
@@ -392,14 +392,22 @@ public class MapVisual extends Pane {
 					//Redraw all the nodes so that special onces are a certain colour
 				} else {
 					if (controller.isNodeSelected() && controller.getSelectedNode().getID() == v.getID()) {
-						System.out.println("Node Deselected");
+						//System.out.println("Node Deselected");
 						controller.deselectNode();
 						normal(circle, v);
 					} else if (!controller.isNodeSelected()) {
 						System.out.println("New node selected");
 						controller.selectNode(v.getID());
 					} else {
+<<<<<<< HEAD
 						// Add edge between nodes
+=======
+						if (!controller.isNodeSelected()) {
+							//System.out.println("New node selected");
+							controller.selectNode(v.getID());
+						} else {
+							// Add edge between nodes
+>>>>>>> dev
 
 						// check to see if there is a new edge to be created
 						boolean isNewEdge = true;
@@ -410,11 +418,19 @@ public class MapVisual extends Pane {
 							}
 						}
 
+<<<<<<< HEAD
 						// If there is a new edge, create each direction and
 						// add them to the respective nodes
 						// Also draw the edge
 						if (isNewEdge) {
 							System.out.println("New Edge Created!");
+=======
+							// If there is a new edge, create each direction and
+							// add them to the respective nodes
+							// Also draw the edge
+							if (isNewEdge) {
+								//System.out.println("New Edge Created!");
+>>>>>>> dev
 
 							Edge newCEdge = new Edge(v.getID(), 1);
 							Edge newVEdge = new Edge(controller.getSelectedNode().getID(), 1);
@@ -422,10 +438,19 @@ public class MapVisual extends Pane {
 							controller.getSelectedNode().addEdge(newCEdge);
 							v.addEdge(newVEdge);
 
+<<<<<<< HEAD
 							drawEdges(controller.getCurrentNodeList());
 							drawNodes(controller.getCurrentNodeList());
 						} else {
 							System.out.println("Edge already exists");
+=======
+								drawEdges(controller.getCurrentNodeList());
+								drawNodes(controller.getCurrentNodeList());
+							} else {
+								//System.out.println("Edge already exists");
+
+							}
+>>>>>>> dev
 						}
 
 						controller.selectNode(v.getID());
@@ -564,7 +589,7 @@ public class MapVisual extends Pane {
 
 			// Only delete the edge if it is right clicked
 			if (e.getButton() == MouseButton.SECONDARY) {
-				System.out.println("Edge removed");
+//				System.out.println("Edge removed");
 
 				// Remove the line from the animation locations
 				this.edgeLines.getChildren().remove(line);
