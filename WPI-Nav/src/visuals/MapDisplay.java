@@ -203,8 +203,8 @@ public class MapDisplay extends Pane {
             });
         }
 
-        //TODO add this back in && ((logic.Transition)v).getBuildingID() != 0
-        if((v instanceof logic.Transition) && v.getMap_id() == 0 ){
+        //TODO add this back in && ((logic.Transition)v).getBuildingID() != 0 when nullPointers are good
+        if((v instanceof logic.Transition) && v.getMap_id() == 0 && ((logic.Transition)v).getBuildingID() != 0){
 
             PopOver popOver = createPopOverForNode(v);
 
@@ -232,9 +232,9 @@ public class MapDisplay extends Pane {
         VBox vbox = new VBox();
 
         Building building = controller.getBuilding(((logic.Transition)v).getBuildingID());
-        //HashMap<Integer, Integer> floorPlan = building.getFloorMap();
+        HashMap<Integer, Integer> floorPlan = building.getFloorMap();
 
-        Label buildingName = new Label("Stratton Hall");   //TODO add name here later -- null pointer shit
+        Label buildingName = new Label(building.getName());   //TODO add name here later -- null pointer shit
         buildingName.setStyle("-fx-font-size:9;");
         buildingName.setTextFill(Color.web("#333333"));
         Image picture = FileFetch.getImageFromFile("picture.png", 12, 12, true, true);
@@ -251,52 +251,57 @@ public class MapDisplay extends Pane {
 
         FlowPane flowPane = new FlowPane();
 
-        //TODO uncomment this when nullPointers stop happening
-   /* for(int i = 0; i < floorPlan.size(); i++) {
-        Button button = new Button();
-        button.setId("popover-buttons");
-        String value;
-        Object array[] = floorPlan.keySet().toArray();
-        if(floorPlan.keySet().toArray()[i].equals(-1)) {
-            value = "SB";
+        /* displays only the buttons that the building has in rows of up to 3 */
+        for(int i = floorPlan.size() - 1; i >= 0; i--) {
+            Button button = new Button();
+            button.setId("popover-buttons");
+            String value;
+            Object array[] = floorPlan.keySet().toArray();
+            if(floorPlan.keySet().toArray()[i].equals(-1)) {
+                value = "SB";
+            }
+            else if(floorPlan.keySet().toArray()[i].equals(0)) {
+                value = "B";
+            }
+            else
+            {
+                value = Integer.toString(i);
+            }
+            button.setText(value);
+            final int x = i;
+            button.setOnMouseClicked(e -> {
+                controller.setCurrentMap(floorPlan.get(x));
+                popOver.hide();
+            });
+            flowPane.getChildren().add(button);
         }
-        else if(floorPlan.keySet().toArray()[i].equals(0)) {
-            value = "B";
-        }
-        else
-        {
-            value = Integer.toString(i);
-        }
-        button.setText(value);
-        flowPane.getChildren().add(button);
-    }*/
 
-    Button fourth = new Button();       //4
-    fourth.setText("4");
-    fourth.setId("popover-buttons");
+        /*Button fourth = new Button();       //4
+        fourth.setText("4");
+        fourth.setId("popover-buttons");
 
-    Button third = new Button();        //3
-    third.setText("3");
-    third.setId("popover-buttons");
+        Button third = new Button();        //3
+        third.setText("3");
+        third.setId("popover-buttons");
 
-    Button second = new Button();       //2
-    second.setText("2");
-    second.setId("popover-buttons");
+        Button second = new Button();       //2
+        second.setText("2");
+        second.setId("popover-buttons");
 
-    Button first = new Button();        //1
-    first.setText("1");
-    first.setId("popover-buttons");
+        Button first = new Button();        //1
+        first.setText("1");
+        first.setId("popover-buttons");
 
-    Button basement = new Button();     //0
-    basement.setText("B");
-    basement.setId("popover-buttons");
+        Button basement = new Button();     //0
+        basement.setText("B");
+        basement.setId("popover-buttons");
 
-    Button subBasement = new Button();  //-1
-    subBasement.setText("SB");
-    subBasement.setId("popover-buttons");
-    subBasement.setStyle("-fx-padding:4 3 4 3;");
+        Button subBasement = new Button();  //-1
+        subBasement.setText("SB");
+        subBasement.setId("popover-buttons");
+        subBasement.setStyle("-fx-padding:4 3 4 3;");
 
-        flowPane.getChildren().addAll(fourth, third, second, first, basement, subBasement);
+        flowPane.getChildren().addAll(fourth, third, second, first, basement, subBasement);*/
         flowPane.setHgap(2);
         flowPane.setVgap(2);
         flowPane.setTranslateY(4);
