@@ -15,6 +15,7 @@ import visuals.Display;
 import visuals.Instructions;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import com.sun.javafx.application.LauncherImpl;
 
 
@@ -65,11 +66,11 @@ public class Controller extends Application {
 
     private INode selectedInformationNode;
 
-
+    private Scene display;
 
     @Override
-    public void start(Stage s) throws Exception {
-        /* load up svg converter */
+    public void init(){
+         /* load up svg converter */
         SvgImageLoaderFactory.install();
 
 
@@ -85,18 +86,34 @@ public class Controller extends Application {
 
         campus = (Campus)maps.get(0);
 
+        this.myDisplay = new Display(this);    //creates scene
+        display = myDisplay.Init(); //initializes scene
+        display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
+        defaultMap();
+
+//        maps.forEach((k,v) -> {
+//            Image mapImage = null;
+//            try {
+//                mapImage = new Image(getClass().getResourceAsStream("../images/" + v.getFilePath()));//
+//            } catch (NullPointerException e) {
+//                mapImage = new Image(getClass().getResourceAsStream("/images/" + v.getFilePath()));//, IMAGE_WIDTH, IMAGE_HEIGHT, true, true
+//            }
+//        });
+
+
+    }
+
+    @Override
+    public void start(Stage s) throws Exception {
+
+
+
 		/* basic layout */
         s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
-
         s.setResizable(true);
-
 		/* setup */
-        this.myDisplay = new Display(this);    //creates scene
-        Scene display = myDisplay.Init(); //initializes scene
         s.setScene(display); //sets scene to display
-        display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
         s.show();   //shows scene
-        defaultMap();
     }
 
 
@@ -755,5 +772,6 @@ public class Controller extends Application {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         public static void main(String[] args) {
             LauncherImpl.launchApplication(Controller.class, myPreloader.class, args);
-        }}
+        }
+}
 

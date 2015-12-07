@@ -34,15 +34,15 @@ public class myPreloader extends javafx.application.Preloader {
         VBox loading = new VBox(20);
         loading.setMaxWidth(Region.USE_PREF_SIZE);
         loading.setMaxHeight(Region.USE_PREF_SIZE);
-        loading.getChildren().add(new ImageView(new Image(myPreloader.class.getResource("../images/goatnav.jpg").toExternalForm())));
+        loading.getChildren().add(new ImageView(new Image(myPreloader.class.getResource("../images/goatnav.png").toExternalForm())));
 
 
         BorderPane root = new BorderPane(loading);
         Scene scene = new Scene(root);
 
 
-        primaryStage.setWidth(500);
-        primaryStage.setHeight(300);
+        primaryStage.setWidth(560);
+        primaryStage.setHeight(350);
         primaryStage.setScene(scene);
 
         //this.myDisplay = new Display(this);    //creates scene
@@ -62,11 +62,6 @@ public class myPreloader extends javafx.application.Preloader {
 
 
             System.out.print("ASDASD");
-            try {
-                Thread.sleep(3000);
-            } catch (java.lang.InterruptedException name) {
-
-            }
             preloaderStage.hide();
         }
     }
