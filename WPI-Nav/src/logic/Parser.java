@@ -286,8 +286,12 @@ public class Parser<Struct> {
 			s = new StringBuilder();
 			s.append(root);
 			s.append("/WPI-Nav/json/");
+
 			fullPath = s.toString();
 		}
+
+		//System.out.println(fullPath);
+
 		return fullPath;
 	}
 
@@ -296,6 +300,8 @@ public class Parser<Struct> {
 	}
 
 	private String getNName(int n) {
+		//System.out.println(path + nNames[n]);
+
 		return path + nNames[n];
 	}
 }
