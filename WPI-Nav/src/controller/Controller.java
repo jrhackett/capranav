@@ -62,6 +62,7 @@ public class Controller extends Application {
     private Stage stage;
 
     double flipFlop = 1;
+    boolean firstTime = true;
 
     @Override
     public void start(Stage s) throws Exception {
@@ -415,7 +416,17 @@ public class Controller extends Application {
         flipFlop *= -1;
         this.currentMap = maps.get(id);
         this.myDisplay.mapDisplay.setMap(maps.get(id));
-        stage.setWidth(stage.getWidth()-flipFlop);
+        //stage.setWidth(stage.getWidth()-flipFlop);
+        boolean full = stage.isFullScreen();
+
+        if(!firstTime){
+            if(full) {
+                stage.setFullScreen(!full);
+                stage.setFullScreen(full);
+            }
+            else stage.setWidth(stage.getWidth() + flipFlop);
+        }
+        firstTime = false;
     }
 
 
