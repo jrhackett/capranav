@@ -30,9 +30,11 @@ public class MapVisual extends Pane {
 	private double height;
 	private double width;
 	private int currentMapID;
+	private boolean isPopover = false;
 
 	private double IMAGE_WIDTH = 700;//660
 	private double IMAGE_HEIGHT = 525;//495
+	private double nodeDiameter = 5;
 
 	private HashMap<Integer, Circle> id_circle;
 	private MapBuilderController controller;
@@ -118,9 +120,11 @@ public class MapVisual extends Pane {
 			// If a node is currently selected, de-select it
 			if (controller.isNodeSelected()) {
 				controller.deselectNode();
+			} else if (isPopover){
+				isPopover = false;
 			} else {
 				// create new node if possible
-				double tolerance = 12.0;
+				double tolerance = nodeDiameter*2.5;
 
 				double minDist = tolerance;
 				
@@ -142,7 +146,7 @@ public class MapVisual extends Pane {
 
 					if (controller.SNAPPING) {
 
-						double xyTolerance = 5;
+						double xyTolerance = nodeDiameter/2;
 
 						INode closestX = null;
 						double minXDist = xyTolerance;
@@ -219,16 +223,10 @@ public class MapVisual extends Pane {
 			Circle circle = createCircle(v);
 			id_circle.put(k, circle);
 			this.nodeCircles.getChildren().add(circle);
+			normal(circle, v);
 		});
 
-		// If a given node is selected, colour it
-		if (controller.isNodeSelected()) {
-			Circle tempCircle = id_circle.get(controller.getSelectedNode().getID());
 
-			last = (Color) tempCircle.getFill();
-			lastStroke = (Color) tempCircle.getStroke();
-			highlight(tempCircle, Color.GOLD, Color.BLACK);
-		}
 	}
 
 	/**
@@ -306,7 +304,7 @@ public class MapVisual extends Pane {
 		double x = v.getX();
 		double y = v.getY();
 
-		Circle circle = new Circle(x, y, 5);
+		Circle circle = new Circle(x, y, nodeDiameter);
 
 		normal(circle, v);
 
@@ -328,6 +326,8 @@ public class MapVisual extends Pane {
 		circle.setOnMouseClicked(e -> {
 			if (e.getButton() == MouseButton.PRIMARY) {
 				if (e.getClickCount() >= 2) {
+					isPopover = true;
+
 					if(controller.isNodeSelected()){
 						INode selectedNode = controller.getSelectedNode();
 						controller.deselectNode();
@@ -484,8 +484,14 @@ public class MapVisual extends Pane {
 			input.getChildren().addAll(newNodeName, buttonBox);
 			popOver.setContentNode(input);
 
-			doneButton.setOnAction(e -> saveNodeInformation(newNodeName.getText(), iNode, popOver));
-			cancelButton.setOnAction(e -> popOver.hide());
+			doneButton.setOnAction(e -> {
+				saveNodeInformation(newNodeName.getText(), iNode, popOver);
+				isPopover = false;
+			});
+			cancelButton.setOnAction(e -> {
+				popOver.hide();
+				isPopover = false;
+			});
 
 
 		} else {
@@ -630,15 +636,15 @@ public class MapVisual extends Pane {
 			if (v.isTransition()) {
 				c.setFill(Color.HOTPINK);
 				c.setStrokeWidth(0);
-				c.setRadius(5);
+				c.setRadius(nodeDiameter);
 			} else  if(v.isRoom()) {
-				c.setFill(Color.TEAL);
+				c.setFill(Color.LIMEGREEN);
 				c.setStrokeWidth(0);
-				c.setRadius(5);
+				c.setRadius(nodeDiameter);
 			} else {
 				c.setFill(Color.BLUE);
 				c.setStrokeWidth(0);
-				c.setRadius(5);
+				c.setRadius(nodeDiameter);
 			}
 		}
 	}

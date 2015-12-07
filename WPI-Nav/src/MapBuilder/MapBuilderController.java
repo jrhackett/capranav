@@ -49,7 +49,7 @@ public class MapBuilderController extends Application {
 	private HashMap<Integer, INode> secondaryMapNodeList;
 
 
-	public boolean SNAPPING;
+	public boolean SNAPPING = true;
 
 
 	@Override
@@ -324,6 +324,8 @@ public class MapBuilderController extends Application {
 						if (masterNodeList.get(e.getTarget()).isTransition()) {
 							((Transition) nodeEntry.getValue()).setBuildingID(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getBuildingID());
 							((Transition) nodeEntry.getValue()).setToFloor(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getFloor());
+
+							System.out.println("Node Id: " + nodeEntry.getKey() + ", Builder Id:" + ((Transition) nodeEntry.getValue()).getBuildingID() +  ",  Floor number: " +((Transition) nodeEntry.getValue()).getToFloor());
 							break;
 						}
 					} catch (NullPointerException z){
