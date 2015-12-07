@@ -66,7 +66,7 @@ public class MapVisualSecondary extends Pane {
     public void setMap(logic.IMap map) {
 
         // Set the map image
-        System.out.println("MAP PATH:  " + map.getFilePath());
+        //System.out.println("MAP PATH:  " + map.getFilePath());
         this.getChildren().remove(mapView);
 
         try {
@@ -174,7 +174,7 @@ public class MapVisualSecondary extends Pane {
                     // add them to the respective nodes
                     // Also draw the edge
                     if (isNewEdge) {
-                        System.out.println("New Edge Created!");
+                        //System.out.println("New Edge Created!");
                         controller.setEdgeInformation("New Edge Across Maps Created!");
 
 
@@ -184,7 +184,7 @@ public class MapVisualSecondary extends Pane {
                         controller.getSelectedNode().addEdge(newCEdge);
                         v.addEdge(newVEdge);
                     } else {
-                        System.out.println("Edge already exists");
+                        //System.out.println("Edge already exists");
                         controller.setEdgeInformation("Edge already exists");
                     }
                 }

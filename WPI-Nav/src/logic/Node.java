@@ -274,6 +274,8 @@ public abstract class Node implements INode {
 		return false;
 	}
 
+	public boolean isRoom() {return false; }
+
 	public ArrayList<String> getNames() {return new ArrayList<>();}
 
 	public void removeEdge(int id){
@@ -330,3 +332,6 @@ public abstract class Node implements INode {
 		return result;
 	}
 }
+
+
+// Delete this later its for Travis <3

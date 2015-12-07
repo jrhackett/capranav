@@ -49,7 +49,7 @@ public class MapBuilderController extends Application {
 	private HashMap<Integer, INode> secondaryMapNodeList;
 
 
-	public boolean SNAPPING;
+	public boolean SNAPPING = true;
 
 
 	@Override
@@ -161,7 +161,7 @@ public class MapBuilderController extends Application {
 		try {
 			// TODO make this better
 			// This throws an exception if user tries to load a map that DNE
-			System.out.println("PATH ATTEMPT: " + path);
+			//System.out.println("PATH ATTEMPT: " + path);
 			Image mapI = new Image(getClass().getResourceAsStream("../images/" + path + ".png"));
 			ImageView mapV = new ImageView(mapI);
 		} catch (NullPointerException e) {
@@ -324,6 +324,8 @@ public class MapBuilderController extends Application {
 						if (masterNodeList.get(e.getTarget()).isTransition()) {
 							((Transition) nodeEntry.getValue()).setBuildingID(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getBuildingID());
 							((Transition) nodeEntry.getValue()).setToFloor(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getFloor());
+
+							System.out.println("Node Id: " + nodeEntry.getKey() + ", Builder Id:" + ((Transition) nodeEntry.getValue()).getBuildingID() +  ",  Floor number: " +((Transition) nodeEntry.getValue()).getToFloor());
 							break;
 						}
 					} catch (NullPointerException z){
@@ -334,12 +336,11 @@ public class MapBuilderController extends Application {
 		}
 
 
-		this.buildings.forEach((k,v) -> {
+		/*this.buildings.forEach((k,v) -> {
 			v.translateBuilding(getNodesOfBuilding(k), masterNodeList).forEach((key,value) ->{
 				masterNodeList.put(key, value);
 			});
-		});
-
+		});/*/
 
 		Parser parser = new Parser<INode>();
 		parser.toFile(masterNodeList);

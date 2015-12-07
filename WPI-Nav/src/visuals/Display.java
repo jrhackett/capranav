@@ -10,16 +10,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import logic.FileFetch;
 import logic.INode;
 import logic.Transition;
 import logic.User;
@@ -33,47 +31,16 @@ import java.util.HashMap;
 
 
 public class Display {
-    /* logger */
+    /****************************************************************************************************************
+                                              Constants, Variables, Elements
+     ****************************************************************************************************************/
+
+    // logger
     private final Logger logger = LoggerFactory.getLogger(Display.class);
 
-    /* constants */
-    private static final double WIDTH_BUFFER = 15;
-    private static final double HEIGHT_BUFFER = 15;
-    private static final double BUTTON_SIZE = 26;
-    private static double TABLE_WIDTH;
-    private static final double TABLE_HEIGHT = 150;
+
+    //Constants
     private static final double INPUT_WIDTH = 160;
-
-    private Double width;
-    private Double height;
-
-    /* variables */
-    public Controller controller;
-    private boolean MENU_VISIBLE = false;
-
-    final BooleanProperty firstTime = new SimpleBooleanProperty(true);
-
-    /* visuals */
-    private Scene scene;
-    //private StackPane root;
-    private VBox inputs;
-    private Rectangle divide;
-    //private Map map; //TODO CHANGE THIS
-
-    private StackPane mapPane;
-    public MapDisplay mapDisplay;
-    private Inputs chooseMap;
-    //private TableView<Instructions> instructions;
-    public Inputs start;
-    public Inputs end;
-
-    public TextField yourEmail;
-    /*****************************************************************/
-    /**
-     * New Values / Variables for UI Rework
-     **/
-
-    //Constants & Variables
     private static final double CONTROL_WIDTH = 30;
     private static final double GAP = 5;
     private final double EDGE;
@@ -82,12 +49,18 @@ public class Display {
     private static final double MAP_HEIGHT = 495;
     private static final double MAP_BORDER = 15;
 
+    //Variables
+    public Controller controller;
+
+
     private BooleanProperty DASHBOARD_VISIBLE;
     private BooleanProperty SETTINGS_VISIBLE;
     private BooleanProperty EMAIL_VISIBLE;
     public BooleanProperty BUILDING_VISIBLE;
     public BooleanProperty PHOTO_ICON_VISIBLE;
     public BooleanProperty ICON_VISIBLE;
+
+    final BooleanProperty firstTime = new SimpleBooleanProperty(true);
 
 
     private boolean EMAIL = false;
@@ -119,6 +92,18 @@ public class Display {
     javafx.scene.control.Button rightArrowButton;
 
     private javafx.scene.control.Button nodeTransitionButton;
+
+    private StackPane mapPane;
+    public MapDisplay mapDisplay;
+    public Inputs start;
+    public Inputs end;
+
+    public TextField yourEmail;
+
+
+    /****************************************************************************************************************
+                                                      Functions
+     ****************************************************************************************************************/
 
     /**
      * Basic constructor.
@@ -188,7 +173,7 @@ public class Display {
     }
 
     /****************************************************************************************************************
-     * FUNCTIONS SETTING UP BASE DESIGN THAT ALSO CALL THE SPECIFIC CREATION OF FURTHER VISUAL ELEMENTS
+                                Functions that populate base visual features
      ****************************************************************************************************************/
 
     private void initSlidingDashBoard() {
@@ -219,8 +204,6 @@ public class Display {
         AnchorPane.setLeftAnchor(divider_2, GAP);
         AnchorPane.setRightAnchor(divider_2, GAP);
 
-        // divider_3.setTranslateX(GAP);
-        //AnchorPane.setBottomAnchor(divider_3, EDGE - 1);
         divider_3.setTranslateX(GAP);
         AnchorPane.setTopAnchor(divider_3, 0.0);
         AnchorPane.setLeftAnchor(divider_3, GAP);
@@ -262,13 +245,7 @@ public class Display {
         infoView.setTranslateY(-50 * 2 + 14);
         infoView.setId("pinView");
 
-
-        Image gears;
-        try {
-            gears = new Image(getClass().getResourceAsStream("../images/gears.png"), 20, 20, true, true);
-        } catch (NullPointerException e) {
-            gears = new Image(getClass().getResourceAsStream("/images/gears.png"), 20, 20, true, true);
-        }
+        Image gears = FileFetch.getImageFromFile("gears.png", 20, 20, true, true);
 
         ImageView gearsView = new ImageView(gears);
         //gearsView.setStyle("-fx-fill: #eeeeee;");
@@ -370,6 +347,11 @@ public class Display {
         AnchorPane.setTopAnchor(resourcesLabelBox, 3 * EDGE + GAP * .5 + 25);
         AnchorPane.setLeftAnchor(resourcesLabelBox, EDGE);
 
+        //TODO REMOVE THIS TEMP BUTTOn
+        javafx.scene.control.Button goButton = new Button("GO");
+        //goButton.setOnAction();
+
+
         /*****************************************************************/
         /** Change Settings Zone **/
         HBox settingsLabelBox = new HBox();
@@ -460,7 +442,7 @@ public class Display {
 
         /*****************************************************************/
         /** Building of Sliding Dashboard Anchorpane  **/
-        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, dashBoardTitleBox, locationLabelBox, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3,
+        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, divider_2, dashBoardTitleBox, locationLabelBox, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3, // resourcesLabelBox, infoView,
         slidingDashboard.setStyle("-fx-background-color: #333333");
 
         /** STYLE BUTTON HERE **/
@@ -496,12 +478,7 @@ public class Display {
 
         VBox directionsControlBox = new VBox();
 
-        Image directionsArrow;
-        try {
-            directionsArrow = new Image(getClass().getResourceAsStream("../images/forward.png"), 27, 27, true, true);
-        } catch (NullPointerException e) {
-            directionsArrow = new Image(getClass().getResourceAsStream("/images/forward.png"), 27, 27, true, true);
-        }
+        Image directionsArrow = FileFetch.getImageFromFile("forward.png", 27, 27, true, true);
 
         ImageView directionsArrowView = new ImageView(directionsArrow);
         directionsArrowView.setTranslateX(8);
@@ -536,12 +513,7 @@ public class Display {
         AnchorPane.setLeftAnchor(instructionArrows, 0.0);
         AnchorPane.setRightAnchor(instructionArrows, 0.0);
 
-        Image leftArrow;
-        try {
-            leftArrow = new Image(getClass().getResourceAsStream("../images/leftArrow.png"), 24, 24, true, true);
-        } catch (NullPointerException e) {
-            leftArrow = new Image(getClass().getResourceAsStream("/images/leftArrow.png"), 24, 24, true, true);
-        }
+        Image leftArrow = FileFetch.getImageFromFile("leftArrow.png", 24, 24, true, true);
 
         ImageView leftArrowView = new ImageView(leftArrow);
 
@@ -550,13 +522,7 @@ public class Display {
         leftArrowButton.setId("arrow-buttons-grayed");
         leftArrowButton.setOnAction(e -> handleLeftArrowButton());
 
-        Image rightArrow;
-        try {
-            rightArrow = new Image(getClass().getResourceAsStream("../images/rightArrow.png"), 24, 24, true, true);
-        } catch (NullPointerException e) {
-            rightArrow = new Image(getClass().getResourceAsStream("/images/rightArrow.png"), 24, 24, true, true);
-        }
-
+        Image rightArrow = FileFetch.getImageFromFile("rightArrow.png", 24, 24, true, true);
 
         ImageView rightArrowView = new ImageView(rightArrow);
 
@@ -591,13 +557,7 @@ public class Display {
         emailBox.setAlignment(Pos.CENTER_LEFT);
         emailBox.setSpacing(GAP * 3);
 
-
-        Image emailImage;
-        try {
-            emailImage = new Image(getClass().getResourceAsStream("../images/email109.png"), 25, 25, true, true);
-        } catch (NullPointerException e) {
-            emailImage = new Image(getClass().getResourceAsStream("/images/email109.png"), 25, 25, true, true);
-        }
+        Image emailImage = FileFetch.getImageFromFile("email109.png", 25, 25, true, true);
 
         ImageView emailView = new ImageView(emailImage);
 
@@ -758,7 +718,7 @@ public class Display {
     }
 
     /****************************************************************************************************************
-     * FUNCTIONS SETTING UP SPECIFIC VISUAL ELEMENTS AND FURTHER SUBSIDIARIES
+                         Functions that set up further subsidiaries of base visual features
      ****************************************************************************************************************/
 
     private StackPane createMapPane() {
@@ -785,12 +745,7 @@ public class Display {
         nodeTitle = new Label();
         nodeTransitionButton = new javafx.scene.control.Button();
 
-        Image nodeIconImage;
-        try {
-            nodeIconImage = new Image(getClass().getResourceAsStream("../images/picture.png"), 27, 27, true, true);
-        } catch (NullPointerException e) {
-            nodeIconImage = new Image(getClass().getResourceAsStream("/images/picture.png"), 27, 27, true, true);
-        }
+        Image nodeIconImage = FileFetch.getImageFromFile("picture.png", 27, 27, true, true);
 
         ImageView nodeIconView = new ImageView(nodeIconImage);
         nodeTransitionButton.setGraphic(nodeViewHolder);
@@ -853,16 +808,8 @@ public class Display {
         this.left = new javafx.scene.control.Button();
         this.right = new javafx.scene.control.Button();
 
-        Image minus;
-        Image plus;
-        try {
-            minus = new Image(getClass().getResourceAsStream("../images/minus104.png"), 20, 20, true, true);
-            plus = new Image(getClass().getResourceAsStream("../images/plus79.png"), 20, 20, true, true);
-        } catch (NullPointerException e) {
-            minus = new Image(getClass().getResourceAsStream("/images/minus104.png"), 20, 20, true, true);
-            plus = new Image(getClass().getResourceAsStream("/images/plus79.png"), 20, 20, true, true);
-        }
-
+        Image minus = FileFetch.getImageFromFile("minus104.png", 20, 20, true, true);
+        Image plus = FileFetch.getImageFromFile("plus79.png", 20, 20, true, true);
 
         ImageView minusView = new ImageView(minus);
         ImageView plusView = new ImageView(plus);
@@ -904,7 +851,7 @@ public class Display {
 
     public void setBuildingNumber(int i) {
         //TODO ADD FLICKERING ANIMATION
-        System.out.println("building number set called");
+        //System.out.println("building number set called");
         this.buildingNumber.setText(Integer.toString(i));
     }
 
@@ -1075,7 +1022,7 @@ public class Display {
 
 
     /****************************************************************************************************************
-     * FUNCTIONS THAT HANDLE EVENTS
+                                                Llambda Event Handlers
      ****************************************************************************************************************/
 
     private void handleFullScreenPicture() {
@@ -1096,7 +1043,7 @@ public class Display {
     private void handleWalkingInput(Inputs v, boolean START) {
         visuals.Walking value = (visuals.Walking) v.getValue();
         User.setSpeed(value.getWalkingSpeed());
-        System.out.println(value.getWalkingSpeed()); //TODO Remove
+        //System.out.println(value.getWalkingSpeed()); //TODO Remove
     }
 
     //Green if email addr valid, red if not
@@ -1145,7 +1092,7 @@ public class Display {
     }
 
     /****************************************************************************************************************
-     * FUNCTIONS THAT CONTACT THE CONTROLLER FOR INFORMATION
+                                            Semi Facade Interface with Controller
      ****************************************************************************************************************/
     private boolean sendEmail(String email) {
         if (!email.equals("") && !email.equals("Enter Email Here") && !email.equals("Email Sent") && !email.equals("Invalid Email")) {
@@ -1167,4 +1114,11 @@ public class Display {
         return controller.getMaps();
     }
 
+    /**
+     * find paths calls the controller
+     */
+    private void findPaths() {//THIS IS A RELIC NOT CURRENTLY USED
+        this.controller.findPaths();
+    }
 }
+
