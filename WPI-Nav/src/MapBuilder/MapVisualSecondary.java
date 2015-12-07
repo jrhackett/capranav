@@ -154,7 +154,7 @@ public class MapVisualSecondary extends Pane {
             FlowPane flowPane = new FlowPane();
             flowPane.setMaxWidth(40);
             for (Edge edge : v.getAdjacencies()){
-                if (controller.getNodeMaster(edge.getTarget()).isTransition()){
+                if (controller.getNodeMaster(edge.getTarget()).isTransition() && (controller.getNodeMaster(edge.getTarget()).getMap_id()) != v.getMap_id()){
                     Button button = new Button(Integer.toString(controller.getMaps().get(((Transition)controller.getNodeMaster(edge.getTarget())).getMap_id()).getFloor()));
                     button.setOnAction(z -> {
                         if (controller.getSelectedMap() == controller.getNodeMaster(edge.getTarget()).getMap_id()){
@@ -164,9 +164,10 @@ public class MapVisualSecondary extends Pane {
                     flowPane.getChildren().add(button);
                 }
             }
-
-            PopOver edgesShown = new PopOver(flowPane);
-            edgesShown.show(circle, -20);
+            if (flowPane.getChildren().size() > 0) {
+                PopOver edgesShown = new PopOver(flowPane);
+                edgesShown.show(circle, -20);
+            }
 
         });
 
