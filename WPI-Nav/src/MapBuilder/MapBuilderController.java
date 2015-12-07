@@ -335,7 +335,7 @@ public class MapBuilderController extends Application {
 							((Transition) nodeEntry.getValue()).setBuildingID(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getBuildingID());
 							((Transition) nodeEntry.getValue()).setToFloor(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getFloor());
 
-							System.out.println("Node Id: " + nodeEntry.getKey() + ", Builder Id:" + ((Transition) nodeEntry.getValue()).getBuildingID() +  ",  Floor number: " +((Transition) nodeEntry.getValue()).getToFloor());
+							System.out.println("Map id: " + nodeEntry.getValue().getMap_id() + " Node Id: " + nodeEntry.getKey() + ", Builder Id:" + ((Transition) nodeEntry.getValue()).getBuildingID() +  ",  Floor number: " +((Transition) nodeEntry.getValue()).getToFloor());
 							break;
 						}
 					} catch (NullPointerException z){
