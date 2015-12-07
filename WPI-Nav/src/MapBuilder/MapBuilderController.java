@@ -277,6 +277,16 @@ public class MapBuilderController extends Application {
 	}
 
 	/**
+	 * Gets the node given a key
+	 *
+	 * @param id
+	 * @return node
+	 */
+	public INode getNodeMaster(int id) {
+		return masterNodeList.get(id);
+	}
+
+	/**
 	 * This method saves the nodes in nodeList to masterNodeList
 	 */
 	public void saveNodesToMaster(){
@@ -460,5 +470,13 @@ public class MapBuilderController extends Application {
 				}
 			}
 		}
+	}
+
+	public void playSoftEdgeAnimation(int nodeId){
+		this.myDisplay.mapvisual.playSoftEdgeAnimation( nodeId);
+	}
+
+	public int getSelectedMap(){
+		return  this.currentMapID;
 	}
 }

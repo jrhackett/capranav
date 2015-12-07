@@ -2,6 +2,7 @@
 
 package MapBuilder;
 
+import javafx.animation.ScaleTransition;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -15,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import logic.*;
 import org.controlsfx.control.PopOver;
 
@@ -328,7 +330,7 @@ public class MapVisual extends Pane {
 				if (e.getClickCount() >= 2) {
 					isPopover = true;
 
-					if(controller.isNodeSelected()){
+					if (controller.isNodeSelected()) {
 						INode selectedNode = controller.getSelectedNode();
 						controller.deselectNode();
 						normal(id_circle.get(selectedNode.getID()), selectedNode);
@@ -377,17 +379,17 @@ public class MapVisual extends Pane {
 					// Generate pop-over
 					// Add buttons for each kind of node
 					// When a specific button is picked, modify the other elements in the pop-over to display pertinent information
-					
+
 					// Once the information is entered, store it temporarally
-					
+
 					// Once the pop-over is exited (by clicking anywhere else
-						// take the old node
-						// take the INode specific info: Heuristics, x, y, z, etc
-						// Make a new node of the specified type
-						// Enter old node information
-						// Enter new information (i.e. name)
-						// save new node to nodeList in controller
-					
+					// take the old node
+					// take the INode specific info: Heuristics, x, y, z, etc
+					// Make a new node of the specified type
+					// Enter old node information
+					// Enter new information (i.e. name)
+					// save new node to nodeList in controller
+
 					//Close the pop-over
 					//Redraw all the nodes so that special onces are a certain colour
 				} else {
@@ -399,65 +401,48 @@ public class MapVisual extends Pane {
 						System.out.println("New node selected");
 						controller.selectNode(v.getID());
 					} else {
-<<<<<<< HEAD
-						// Add edge between nodes
-=======
+
 						if (!controller.isNodeSelected()) {
 							//System.out.println("New node selected");
 							controller.selectNode(v.getID());
 						} else {
 							// Add edge between nodes
->>>>>>> dev
 
-						// check to see if there is a new edge to be created
-						boolean isNewEdge = true;
+							// check to see if there is a new edge to be created
+							boolean isNewEdge = true;
 
-						for (Edge edge : controller.getSelectedNode().getAdjacencies()) {
-							if (edge.getTarget() == v.getID()) {
-								isNewEdge = false;
+							for (Edge edge : controller.getSelectedNode().getAdjacencies()) {
+								if (edge.getTarget() == v.getID()) {
+									isNewEdge = false;
+								}
 							}
-						}
 
-<<<<<<< HEAD
-						// If there is a new edge, create each direction and
-						// add them to the respective nodes
-						// Also draw the edge
-						if (isNewEdge) {
-							System.out.println("New Edge Created!");
-=======
 							// If there is a new edge, create each direction and
 							// add them to the respective nodes
 							// Also draw the edge
 							if (isNewEdge) {
-								//System.out.println("New Edge Created!");
->>>>>>> dev
+								System.out.println("New Edge Created!");
 
-							Edge newCEdge = new Edge(v.getID(), 1);
-							Edge newVEdge = new Edge(controller.getSelectedNode().getID(), 1);
 
-							controller.getSelectedNode().addEdge(newCEdge);
-							v.addEdge(newVEdge);
+								Edge newCEdge = new Edge(v.getID(), 1);
+								Edge newVEdge = new Edge(controller.getSelectedNode().getID(), 1);
 
-<<<<<<< HEAD
-							drawEdges(controller.getCurrentNodeList());
-							drawNodes(controller.getCurrentNodeList());
-						} else {
-							System.out.println("Edge already exists");
-=======
+								controller.getSelectedNode().addEdge(newCEdge);
+								v.addEdge(newVEdge);
+
 								drawEdges(controller.getCurrentNodeList());
 								drawNodes(controller.getCurrentNodeList());
 							} else {
-								//System.out.println("Edge already exists");
+								System.out.println("Edge already exists");
 
 							}
->>>>>>> dev
+
+							controller.selectNode(v.getID());
+
+							// The update the visuals
+							drawEdges(controller.getCurrentNodeList());
+							drawNodes(controller.getCurrentNodeList());
 						}
-
-						controller.selectNode(v.getID());
-
-						// The update the visuals
-						drawEdges(controller.getCurrentNodeList());
-						drawNodes(controller.getCurrentNodeList());
 					}
 				}
 			} else if (e.getButton() == MouseButton.SECONDARY) {
@@ -683,12 +668,21 @@ public class MapVisual extends Pane {
 
 	}
 
-
 	private void set_up_background() {
 		default_background = new Rectangle(width, height);
 		default_background.setFill(Color.DARKBLUE);
 		default_background.setOpacity(.2);
 		default_background.setArcHeight(7);
 		default_background.setArcWidth(7);
+	}
+
+	public void playSoftEdgeAnimation(int id){
+		Circle c = id_circle.get(id); //TODO confirm we dont need to ensure its on the same map
+		ScaleTransition st = new ScaleTransition(Duration.millis(160), c);
+		st.setByX(1.03f);
+		st.setByY(1.03f);
+		st.setCycleCount(2);
+		st.setAutoReverse(true);
+		st.play();
 	}
 }

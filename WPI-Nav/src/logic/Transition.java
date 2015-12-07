@@ -40,7 +40,6 @@ public class Transition extends Node {
         return "Entrance";
     }
 
-
     public int getBuildingID() {
         return buildingID;
     }

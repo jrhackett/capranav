@@ -2,16 +2,20 @@
 
 package MapBuilder;
 
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import logic.Edge;
 import logic.INode;
+import logic.Transition;
+import org.controlsfx.control.PopOver;
 
 import java.util.HashMap;
 
@@ -115,9 +119,11 @@ public class MapVisualSecondary extends Pane {
         this.id_circle = new HashMap<>();
 
         nodes.forEach((k, v) -> {
-            Circle circle = createCircle(v);
-            id_circle.put(k, circle);
-            this.nodeCircles.getChildren().add(circle);
+            if (v.isTransition()) {
+                Circle circle = createCircle((Transition)v);
+                id_circle.put(k, circle);
+                this.nodeCircles.getChildren().add(circle);
+            }
         });
 
         // If a given node is selected, colour it
@@ -131,8 +137,7 @@ public class MapVisualSecondary extends Pane {
      *            Value, given node
      * @return
      */
-    private Circle createCircle(INode v) {
-
+    private Circle createCircle(Transition v) {
         // the nodes currently have way too small X / Ys - later we'll need to
         // somehow scale
         double x = v.getX();
@@ -145,6 +150,24 @@ public class MapVisualSecondary extends Pane {
             last = (Color) circle.getFill();
             lastStroke = (Color) circle.getStroke();
             highlight(circle, Color.GOLD, Color.BLACK);
+
+            FlowPane flowPane = new FlowPane();
+            flowPane.setMaxWidth(40);
+            for (Edge edge : v.getAdjacencies()){
+                if (controller.getNodeMaster(edge.getTarget()).isTransition()){
+                    Button button = new Button(Integer.toString(v.getBuildingID()));
+                    button.setOnAction(z -> {
+                        if (controller.getSelectedMap() == controller.getNode(edge.getTarget()).getMap_id()){
+                            controller.playSoftEdgeAnimation(edge.getTarget());
+                        }
+                    });
+                    flowPane.getChildren().add(button);
+                }
+            }
+
+            PopOver edgesShown = new PopOver(flowPane);
+            edgesShown.show(circle);
+
         });
 
         // Unhighlight it when exited
