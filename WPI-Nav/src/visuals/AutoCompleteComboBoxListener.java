@@ -18,9 +18,8 @@ public class AutoCompleteComboBoxListener<T> {
 
     public AutoCompleteComboBoxListener(ComboBox<T> comboBox) {
         this.comboBox = comboBox;
-        this.comboBox.setVisibleRowCount(0);//Test this <-- I LIKE IT
-
-
+        this.comboBox.setVisibleRowCount(3);//why is it so long?
+        //this.comboBox.setMaxWidth(160);
         sb = new StringBuilder();
         this.comboBox.setEditable(true);
         this.comboBox.setOnKeyReleased(event -> {
@@ -31,11 +30,11 @@ public class AutoCompleteComboBoxListener<T> {
             if (lastLength != (comboBox.getEditor().getLength() - comboBox.getEditor().getSelectedText().length()))
                 lastLength = comboBox.getEditor().getLength() - comboBox.getEditor().getSelectedText().length();
 
-            if (event.isControlDown() || event.getCode() == KeyCode.BACK_SPACE ||
+            if (    event.isControlDown() || event.getCode() == KeyCode.BACK_SPACE ||
                     event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT ||
                     event.getCode() == KeyCode.DELETE || event.getCode() == KeyCode.HOME ||
-                    event.getCode() == KeyCode.END || event.getCode() == KeyCode.TAB
-                    )
+                    event.getCode() == KeyCode.END  || event.getCode() == KeyCode.TAB
+                    )//
                 return;
 
             if (event.getCode().equals(KeyCode.DOWN)) {
@@ -85,7 +84,7 @@ public class AutoCompleteComboBoxListener<T> {
      * the popup is shown.
      *
      * parameters:
-     *  affect - true if combobox is clicked to show popup so text and caret position will be readjusted.
+     *  affect -  true if combobox is clicked to show popup so text and caret position will be readjusted.
      *  inFocus - true if combobox has focus. If not, programmatically press enter key to add new entry to list.
      *
      */
@@ -122,8 +121,7 @@ public class AutoCompleteComboBoxListener<T> {
         }
 
         if (!inFocus && comboBox.getEditor().getText() != null && comboBox.getEditor().getText().trim().length() > 0) {
-            // press enter key programmatically to have this entry added
-            // KeyEvent ke = new KeyEvent(comboBox, KeyCode.ENTER.toString(), KeyCode.ENTER.getName(), KeyCode.ENTER.impl_getCode(), false, false, false, false, KeyEvent.KEY_RELEASED);
+            //KeyEvent ke = new KeyEvent(comboBox, KeyCode.ENTER.toString(), KeyCode.ENTER.getName(), KeyCode.ENTER.impl_getCode(), false, false, false, false, KeyEvent.KEY_RELEASED);
             KeyEvent ke = new KeyEvent(KeyEvent.KEY_RELEASED, KeyCode.ENTER.toString(), KeyCode.ENTER.toString(), KeyCode.ENTER, false, false, false, false);
             comboBox.fireEvent(ke);
         }
