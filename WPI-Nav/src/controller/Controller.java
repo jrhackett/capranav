@@ -3,6 +3,7 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -58,9 +59,14 @@ public class Controller extends Application {
 
     private INode selectedInformationNode;
 
+    private Stage stage;
+
+    double flipFlop = 1;
 
     @Override
     public void start(Stage s) throws Exception {
+        stage = s;
+
         /* load up svg converter */
         SvgImageLoaderFactory.install(); //TODO FIND A BETTER WAY
 
@@ -406,8 +412,10 @@ public class Controller extends Application {
     }
 
     public void setCurrentMap(int id){
+        flipFlop *= -1;
         this.currentMap = maps.get(id);
         this.myDisplay.mapDisplay.setMap(maps.get(id));
+        stage.setWidth(stage.getWidth()-flipFlop);
     }
 
 
