@@ -1,3 +1,4 @@
+/*
 package logic;
 import static org.junit.Assert.assertEquals;
 
@@ -8,9 +9,11 @@ import logic.Map;
 
 import java.util.HashMap;
 
+*/
 /**
  * Created by Henry on 11/15/2015.
- */
+ *//*
+
 public class MapsTesting {
     Map testMap1;
     Map testMap2;
@@ -56,3 +59,4 @@ public class MapsTesting {
         assertEquals("check test failed", true, testMaps1.check("fir/fir/fir"));
     }
 }
+*/
