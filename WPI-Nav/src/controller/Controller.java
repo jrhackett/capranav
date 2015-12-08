@@ -79,6 +79,9 @@ public class Controller extends Application {
         /* node images */
         //TODO FIX
         nodes.forEach((k,v) -> {
+            /*if(buildings.get(maps.get(v.getMap_id()).getBuildingID()).getName().equals("Stratton Hall")){
+                v.setPicturePath("../images/pictures/StrattonHall.png");
+            }else*/
             v.setPicturePath("../images/Riley.png");
         });
 
@@ -624,7 +627,9 @@ public class Controller extends Application {
         return this.buildings.get(building_id).getNames();
     }
 
-
+    public IMap getCurrentMap() {
+        return this.currentMap;
+    }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
