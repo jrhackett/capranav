@@ -524,7 +524,7 @@ public class Display {
 
         ImageView leftArrowView = new ImageView(leftArrow);
 
-        leftArrowButton = new javafx.scene.control.Button();
+        leftArrowButton = new Button();
         leftArrowButton.setGraphic(leftArrowView);
         leftArrowButton.setId("arrow-buttons-grayed");
         leftArrowButton.setOnAction(e -> {
@@ -537,7 +537,7 @@ public class Display {
 
         ImageView rightArrowView = new ImageView(rightArrow);
 
-        rightArrowButton = new javafx.scene.control.Button();
+        rightArrowButton = new Button();
         rightArrowButton.setGraphic(rightArrowView);
         rightArrowButton.setId("arrow-buttons-grayed");
         rightArrowButton.setOnAction(e -> {
@@ -554,22 +554,28 @@ public class Display {
         AnchorPane.setTopAnchor(rightArrowButton, 5.5);
         AnchorPane.setRightAnchor(rightArrowButton, 8.0);
 
-        totalTimeLabel = new Label();
-        String input;
-        input = "Time Estimation:\n";
+        VBox vbox = new VBox();
 
-        System.out.println("User speed: " + User.getSpeed());
-        input += Directions.getTime(User.getSpeed());
-        totalTimeLabel.setText(input);
+        Label topLabel = new Label("Time Estimation:");
+        topLabel.setId("time-label");
+        topLabel.setTextFill(Color.web("#333"));
+        topLabel.visibleProperty().bind(TIME_VISIBLE);
+
+        totalTimeLabel = new Label();
+        totalTimeLabel.setText(Directions.getTime(User.getSpeed()));
         totalTimeLabel.setId("time-label");
         totalTimeLabel.setTextFill(Color.web("#333"));
-        totalTimeLabel.setAlignment(Pos.CENTER);
         totalTimeLabel.visibleProperty().bind(TIME_VISIBLE);
 
-        AnchorPane.setLeftAnchor(totalTimeLabel, 65.0);
-        AnchorPane.setTopAnchor(totalTimeLabel, 4.0);
+        System.out.println(totalTimeLabel.getText());
 
-        instructionArrows.getChildren().addAll(leftArrowButton, totalTimeLabel, rightArrowButton);
+        vbox.getChildren().addAll(topLabel, totalTimeLabel);
+        vbox.setAlignment(Pos.CENTER);
+
+        AnchorPane.setLeftAnchor(vbox, 65.0);
+        AnchorPane.setTopAnchor(vbox, 4.0);
+
+        instructionArrows.getChildren().addAll(leftArrowButton, vbox, rightArrowButton);
 
         AnchorPane.setTopAnchor(instructions, EDGE + 36);
         AnchorPane.setLeftAnchor(instructions, 0.0);
@@ -616,7 +622,7 @@ public class Display {
         SlidingAnchorPane slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
         slidingEmail.setStyle("-fx-background-color:white;");
 
-        javafx.scene.control.Button slidingEmailButton = slidingEmail.getButton();
+        Button slidingEmailButton = slidingEmail.getButton();
         slidingEmailButton.setId("dashboardButton");
         slidingEmailButton.setStyle("-fx-background-color:white;");
         slidingEmailButton.setMaxWidth(EDGE - 5);
@@ -644,7 +650,7 @@ public class Display {
         yourEmail.setId("email-text-field");
 
         yourEmail.setOnAction(e -> handleEmailInput2(yourEmail, true));
-        javafx.scene.control.Button go = new javafx.scene.control.Button("Send Directions");
+        Button go = new Button("Send Directions");
         go.setId("email-button");
         go.setTranslateX(41);
         emailBoxContent.getChildren().addAll(yourEmail, go);
@@ -881,8 +887,8 @@ public class Display {
     public void updateTimeEstimation() {
         System.out.println("Updating time estimation");
         String input;
-        input = "Time Estimation:\n";
-        input += Directions.getTime(User.getSpeed());
+        //input = "Time Estimation:\n";
+        input = Directions.getTime(User.getSpeed());
         System.out.println(input);
         totalTimeLabel.setText(input);
     }
