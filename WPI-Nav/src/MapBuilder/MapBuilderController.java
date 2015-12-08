@@ -49,7 +49,7 @@ public class MapBuilderController extends Application {
 	private HashMap<Integer, INode> secondaryMapNodeList;
 
 
-	public boolean SNAPPING;
+	public boolean SNAPPING = true;
 
 
 	@Override
@@ -277,6 +277,16 @@ public class MapBuilderController extends Application {
 	}
 
 	/**
+	 * Gets the node given a key
+	 *
+	 * @param id
+	 * @return node
+	 */
+	public INode getNodeMaster(int id) {
+		return masterNodeList.get(id);
+	}
+
+	/**
 	 * This method saves the nodes in nodeList to masterNodeList
 	 */
 	public void saveNodesToMaster(){
@@ -324,6 +334,8 @@ public class MapBuilderController extends Application {
 						if (masterNodeList.get(e.getTarget()).isTransition()) {
 							((Transition) nodeEntry.getValue()).setBuildingID(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getBuildingID());
 							((Transition) nodeEntry.getValue()).setToFloor(maps.get(masterNodeList.get(e.getTarget()).getMap_id()).getFloor());
+
+							//System.out.println("Map id: " + nodeEntry.getValue().getMap_id() + " Node Id: " + nodeEntry.getKey() + ", Builder Id:" + ((Transition) nodeEntry.getValue()).getBuildingID() +  ",  Floor number: " +((Transition) nodeEntry.getValue()).getToFloor());
 							break;
 						}
 					} catch (NullPointerException z){
@@ -334,12 +346,14 @@ public class MapBuilderController extends Application {
 		}
 
 
-		this.buildings.forEach((k,v) -> {
+		/*this.buildings.forEach((k,v) -> {
 			v.translateBuilding(getNodesOfBuilding(k), masterNodeList).forEach((key,value) ->{
 				masterNodeList.put(key, value);
 			});
-		});
+		});/*/
 
+		cleanNodeList(masterNodeList);
+		completeEdges(masterNodeList);
 
 		Parser parser = new Parser<INode>();
 		parser.toFile(masterNodeList);
@@ -451,13 +465,58 @@ public class MapBuilderController extends Application {
 		while (nodeIterator.hasNext()) {
 			HashMap.Entry<Integer, INode> nodeEntry = nodeIterator.next();
 
-			for (int i = 0; i < getNode(nodeEntry.getKey()).getAdjacencies().size(); i++) {
-				Edge currentEdge = getNode(nodeEntry.getKey()).getAdjacencies().get(i);
+			for (int i = 0; i < nodeEntry.getValue().getAdjacencies().size(); i++) {
+				Edge currentEdge = nodeEntry.getValue().getAdjacencies().get(i);
 
 				if (!input.containsKey(currentEdge.getTarget())) {
 					nodeEntry.getValue().getAdjacencies().remove(currentEdge);
+					i--;
+
+					System.out.println("Rouge edge found and removed");
 				}
 			}
 		}
+	}
+
+	// This method iterates throught the given hashmap of nodes
+	// and adds any edges that don't have twins
+	private void completeEdges(HashMap<Integer, INode> input) {
+
+		// Iterate through the entire hashmap
+		// Iterate through each edge
+		// If that edge doesn't have a twin, add one
+		Iterator<HashMap.Entry<Integer, INode>> nodeIterator = input.entrySet().iterator();
+		while (nodeIterator.hasNext()) {
+			HashMap.Entry<Integer, INode> nodeEntry = nodeIterator.next();
+
+			INode currentNode = nodeEntry.getValue();
+
+			for (int i = 0; i < currentNode.getAdjacencies().size(); i++) {
+				INode targetNode = masterNodeList.get(currentNode.getAdjacencies().get(i).getTarget());
+
+				boolean isEdgeThere = false;
+				for (int j = 0; j < targetNode.getAdjacencies().size() && !isEdgeThere; j++) {
+					Edge currentEdge = targetNode.getAdjacencies().get(j);
+
+					if(currentEdge.getTarget() == nodeEntry.getKey()) {
+						isEdgeThere = true;
+					}
+				}
+				if(!isEdgeThere){
+					Edge newEdge = new Edge(nodeEntry.getKey(), 1);
+					targetNode.addEdge(newEdge);
+
+					System.out.println("Single Edge found, twin added from " + targetNode.getID() + " to " + currentNode.getID());
+				}
+			}
+		}
+	}
+
+	public void playSoftEdgeAnimation(int nodeId){
+		this.myDisplay.mapvisual.playSoftEdgeAnimation( nodeId);
+	}
+
+	public int getSelectedMap(){
+		return  this.currentMapID;
 	}
 }

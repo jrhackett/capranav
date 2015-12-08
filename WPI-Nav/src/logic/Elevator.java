@@ -27,4 +27,9 @@ public class Elevator extends Transition {
         imageView.setFitWidth(22);
         return imageView;
     }
+
+    public String toString(){
+        return "Elevator";
+    }
+
 }

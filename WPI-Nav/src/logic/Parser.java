@@ -223,7 +223,10 @@ public class Parser<Struct> {
 
 		for (int i = 0; i < nTypes.length; i++) {
 			try { parser = new JsonStreamParser(new FileReader(getNName(i))); }
-			catch (FileNotFoundException e) { return null; } //This is bad - don't let this happen
+			catch (FileNotFoundException e) {
+				System.out.println("Tried to access: " + getNName(i) + ", but couldn't find it.");
+
+				return null; } //This is bad - don't let this happen
 
 			while(parser.hasNext()) {
 				temp = (INode)gson.fromJson(parser.next(), nTypes[i]);
@@ -286,8 +289,12 @@ public class Parser<Struct> {
 			s = new StringBuilder();
 			s.append(root);
 			s.append("/WPI-Nav/json/");
+
 			fullPath = s.toString();
 		}
+
+		//System.out.println(fullPath);
+
 		return fullPath;
 	}
 
@@ -296,6 +303,8 @@ public class Parser<Struct> {
 	}
 
 	private String getNName(int n) {
+		//System.out.println(path + nNames[n]);
+
 		return path + nNames[n];
 	}
 }

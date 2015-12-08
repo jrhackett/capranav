@@ -3,6 +3,8 @@ package logic;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.util.ArrayList;
+
 /**
  * Created by jacobhackett on 11/24/15.
  */
@@ -11,6 +13,7 @@ public class Transition extends Node {
 
     private int buildingID;
     private int toFloor;
+    private ArrayList<String> name;
 
 
     public Transition(int id, double x, double y, double z, double x1, double y1, double z1){
@@ -37,9 +40,12 @@ public class Transition extends Node {
         return imageView;
     }
     public String toString(){
-        return "Entrance";
+        if(name != null) {
+            return this.name.get(0);
+        } else {
+            return "Entrance";
+        }
     }
-
 
     public int getBuildingID() {
         return buildingID;
@@ -56,4 +62,8 @@ public class Transition extends Node {
     public void setToFloor(int toFloor) {
         this.toFloor = toFloor;
     }
+
+    public void addNames(ArrayList<String> name) {this.name = name;}
+
+    public String getName() {return this.name.get(0);}
 }

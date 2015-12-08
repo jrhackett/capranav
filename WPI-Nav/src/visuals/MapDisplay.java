@@ -46,7 +46,7 @@ public class MapDisplay extends Pane {
     ArrayList<INode> idPath;
 
     /* Visuals */
-    private Transition sts;
+    private ScaleTransition st;
     private Transition ste;
 
 
@@ -83,7 +83,9 @@ public class MapDisplay extends Pane {
         this.lines = new HashMap<>();
         this.idPath = new ArrayList<>();
         this.ste = new ScaleTransition();
-        this.sts = new ScaleTransition();
+        this.st = new ScaleTransition();
+
+
         this.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 
 
@@ -190,6 +192,8 @@ public class MapDisplay extends Pane {
 
 
     private Circle createCircle(INode v) {
+
+
 
         double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
         double y = v.getY();
@@ -480,44 +484,32 @@ public class MapDisplay extends Pane {
      * @param iNode
      */
     public void setStartNode(INode iNode) {
-        //NOW WE HAVE TO CHECK IF NODE IS ON THIS MAP
-        //I think we should keep all circles
-        Circle c;
 
-        this.getChildren().remove(id_circle.get(iNode.getID()));
+        if (st.getNode() == null || !st.getNode().equals(id_circle.get(iNode.getID()))) {
+            Circle c;
 
-        if (!id_circle.containsKey(iNode.getID())){
-            c = createCircle(controller.getNode(iNode.getID()));
-        } else {
-            c = id_circle.get(iNode.getID());
-        }
-
-        c.setRadius(5);
-        highlight(c, Color.GREEN, Color.LIGHTGREEN);
-        id_circle.put(iNode.getID(), c);
-        this.getChildren().add(id_circle.get(iNode.getID()));
-
-        ScaleTransition st = new ScaleTransition(Duration.millis(100), c);
-        st.setByX(1.1f);
-        st.setByY(1.1f);
-        st.setCycleCount(4);
-        st.setAutoReverse(true);
-        st.play();
-        sts = st;
-
-        final Circle x;
-
-
-        st.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                final Circle x = createCircle(iNode);
-                id_circle.put(iNode.getID(), x);
+            if (!id_circle.containsKey(iNode.getID())) {
+                c = createCircle(controller.getNode(iNode.getID()));
+            } else {
+                c = id_circle.get(iNode.getID());
             }
-        });
+
+            //this.getChildren().remove(c);
+            //this.getChildren().add(c);
 
 
+            c.setRadius(5);
+            highlight(c, Color.GREEN, Color.LIGHTGREEN);
+            id_circle.put(iNode.getID(), c);
 
+
+            st = new ScaleTransition(Duration.millis(100), c);
+            st.setByX(1.1f);
+            st.setByY(1.1f);
+            st.setCycleCount(4);
+            st.setAutoReverse(true);
+            st.play();
+        }
     }
 
 
@@ -541,7 +533,6 @@ public class MapDisplay extends Pane {
             st.setCycleCount(4);
             st.setAutoReverse(true);
             st.play();
-            sts = st;
 
             st.setOnFinished(event -> {
                 c.setRadius(5);

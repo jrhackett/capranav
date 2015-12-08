@@ -102,6 +102,9 @@ public class Display {
     public TextField yourEmail;
 
 
+    boolean FLIP = true;
+
+
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -960,6 +963,49 @@ public class Display {
 //        });
 
 
+
+        /*
+        start.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    System.out.println("Start ENTER");
+                    handleSearchInput(start, true);
+                    end.requestFocus();
+                } else if (event.getCode() == KeyCode.ESCAPE) {
+                    System.out.println("Start ESCAPE");
+                    start.setValue(null);
+                    end.setValue(null);
+                } else if (event.getCode() == KeyCode.TAB) {
+                    System.out.println("Start TAB");
+                    end.requestFocus();
+                }
+            }});
+            */
+
+        //start.setOnAction(e -> handleSearchInput(start, true));
+
+		/* end */
+       /*
+        end.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    System.out.println("End ENTER");
+                    handleSearchInput(end, true);
+                } else if (event.getCode() == KeyCode.ESCAPE) {
+                    System.out.println("End ESCAPE");
+                    start.setValue(null);
+                    end.setValue(null);
+                } else if (event.getCode() == KeyCode.TAB) {
+                    System.out.println("End TAB");
+                    handleSearchInput(end, true);
+                }
+            }});
+*/
+
+       // end.setOnAction(e -> handleSearchInput(end, false));
+
 //        start.getStyleClass().add("combo-box");
 
         //      end.getStyleClass().add("combo-box");
@@ -1044,18 +1090,22 @@ public class Display {
         instructions.getSelectionModel().selectedItemProperty()
                 .addListener((ObservableValue<? extends Instructions> obs, Instructions oldinstruction, Instructions selectedInstruction) -> {
                     if (selectedInstruction != null) {
-                        //TODO Set the string of the label to this
-                        //this.controller.updateNodeInformation(selectedInstruction.getNode());
+                        FLIP = false;
+                        System.out.println("FIRST INSTRUCTIONS THING");
                         this.mapDisplay.highlightPath(selectedInstruction.getNode().getID());
                         this.mapDisplay.softSelectAnimation(selectedInstruction.getNode().getID());
+
                     }
                 });
 
         //instructions.setFocusModel();
         instructions.setOnMouseClicked(event -> {
-            //this.controller.updateNodeInformation(instructions.getSelectionModel().getSelectedItem().getNode());
-            this.mapDisplay.highlightPath(instructions.getSelectionModel().getSelectedItem().getNode().getID());
-            this.mapDisplay.softSelectAnimation(instructions.getSelectionModel().getSelectedItem().getNode().getID());
+            if (instructions.getSelectionModel().getSelectedItem() != null && FLIP) {
+                System.out.println("SECOND INSTRUCTIONS THING");
+                this.mapDisplay.highlightPath(instructions.getSelectionModel().getSelectedItem().getNode().getID());
+                this.mapDisplay.softSelectAnimation(instructions.getSelectionModel().getSelectedItem().getNode().getID());
+            }
+            FLIP = true;
         });
 
         instructions.setPlaceholder(new Label(" "));

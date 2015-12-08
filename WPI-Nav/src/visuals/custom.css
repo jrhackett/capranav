@@ -1,3 +1,4 @@
+/*
  .combo-box .text-input
  {
  	-fx-background: #333;
@@ -39,7 +40,9 @@
  {
  	-fx-padding: 4 0 4 5;
 
- 	/* No alternate highlighting */
+ 	*/
+/* No alternate highlighting *//*
+
  	-fx-background-color: white;
  }
 
@@ -56,14 +59,16 @@
  	-fx-text-fill: -fx-text-inner-color;
  }
 
- /*.combo-box-base  
+ */
+/*.combo-box-base
  {
  	-fx-skin: "com.sun.javafx.scene.control.skin.ComboBoxBaseSkin";
  	-fx-background-color: white, white, white, white;
  	-fx-background-radius: 5, 5, 4, 3;
  	-fx-background-insets: 0 0 -1 0, 0, 1, 2;
  	-fx-padding: 0;
- }*/
+ }*//*
+
 
  .combo-box-base:hover
  {
@@ -83,4 +88,4 @@
 
  .combo-box-base:disabled {
  	-fx-opacity: .4;
- }
+ }*/

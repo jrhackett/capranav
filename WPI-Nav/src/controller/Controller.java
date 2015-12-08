@@ -2,7 +2,6 @@ package controller;
 
 import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -276,9 +275,8 @@ public class Controller extends Application {
 
             if (startNode != null && endNode != null) {
                 findPaths();
-            } else {
-                switchMapSetting(startNode.getMap_id());
-            }
+            } else if (startNode != null) switchMapSetting(startNode.getMap_id());
+
 
             if (startNode != null) {
                 //TODO if current map contains it, play, if it doesn't - switch and play
@@ -308,6 +306,7 @@ public class Controller extends Application {
      * @param t
      */
     public void handleEnterBuilding(Transition t){
+
         this.currentMap = maps.get(t.getMap_id());
         this.currentBuilding = t.getBuildingID();
         this.currentFloor = t.getToFloor();
@@ -375,13 +374,17 @@ public class Controller extends Application {
                 //set id for normal
                 this.myDisplay.setRightButtonID("arrow-buttons");
             } else {
+                System.out.println("Current Building: " + currentBuilding);
                 //set id for grey
                 this.myDisplay.setRightButtonID("arrow-buttons-grayed");
             }
+
+
             if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)) {
                 //set id for normal
                 this.myDisplay.setLeftButtonID("arrow-buttons");
             } else {
+                System.out.println("Current Building: " + currentBuilding);
                 //set id for grey
                 this.myDisplay.setLeftButtonID("arrow-buttons-grayed");
             }
