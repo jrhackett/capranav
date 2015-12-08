@@ -1101,6 +1101,7 @@ public class Display {
     private void handleWalkingInput(Inputs v, boolean START) {
         visuals.Walking value = (visuals.Walking) v.getValue();
         User.setSpeed(value.getWalkingSpeed());
+        updateTimeEstimation();
         //System.out.println(value.getWalkingSpeed()); //TODO Remove
     }
 
