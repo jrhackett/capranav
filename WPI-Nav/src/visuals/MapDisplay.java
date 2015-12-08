@@ -3,6 +3,8 @@ package visuals;
 import controller.Controller;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Transition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -271,10 +273,23 @@ public class MapDisplay extends Pane {
             }
             button.setText(value);
             final int x = i;
-            button.setOnMouseClicked(e -> {
-                controller.setCurrentMap(floorPlan.get(x));
-                popOver.hide();
+            button.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    System.out.println("building.getID(): " + building.getID());
+                    System.out.println("x: " + x);
+                    controller.switchToBuildingView(building.getID(), x);
+                    //controller.handleEnterBuilding((logic.Transition)v);
+                    //controller.setCurrentMap(floorPlan.get(x));
+                    popOver.hide();
+                }
             });
+//            button.setOnMouseClicked(e -> {
+//                controller.switchToBuildingView(building.getID(), i);
+//                //controller.handleEnterBuilding((logic.Transition)v);
+//                //controller.setCurrentMap(floorPlan.get(x));
+//                popOver.hide();
+//            });
             flowPane.getChildren().add(button);
         }
 
@@ -387,17 +402,18 @@ public class MapDisplay extends Pane {
         lines = new HashMap<>();
 
 
-
-
         for (ArrayList<Instructions> list : path) {
             ArrayList<Line> lineArrayList = new ArrayList<>();
-            double coordX = path.get(0).get(0).getNode().getX();
-            double coordY = path.get(0).get(0).getNode().getY();
+            double coordX = list.get(0).getNode().getX();
+            double coordY = list.get(0).getNode().getY();
 
             for (Instructions i : list) {
                 /** path nodes highlight blue **/
                 highlightPath(id_circle.get(i.getNode().getID()));
                 idPath.add(i.getNode());
+
+                System.out.println("x: start" + coordX);
+                System.out.println("y: start" + coordY);
 
                 /** create all the lines and add them to a list **/
                 Line line = new Line();
@@ -412,14 +428,18 @@ public class MapDisplay extends Pane {
                 line.setStrokeDashOffset(5);
                 line.getStrokeDashArray().addAll(2d, 7d);
                 lineArrayList.add(line);
-                //System.out.println("lines created");
+                System.out.println("x: end" + coordX);
+                System.out.println("y: end" + coordY);
+                System.out.println("lines created");
+                System.out.println("");
+                System.out.println("");
             }
             //System.out.println("lines put into hashmap");
             lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
         }
 
         setStartNode(idPath.get(0));
-        setEndNode(idPath.get(0), false);
+        setEndNode(idPath.get(idPath.size()-1), false);
     }
 
     /**
@@ -432,6 +452,7 @@ public class MapDisplay extends Pane {
     public void showLines(int mapIdOld, int mapIdNew) {
         if (mapIdOld != -1) {
             try {
+                System.out.println("Removing old map lines: " + mapIdOld);
                 this.getChildren().removeAll(lines.get(mapIdOld));
             } catch (NullPointerException e){
                 System.out.println("MAP HAS NO LINES YET");
@@ -439,7 +460,11 @@ public class MapDisplay extends Pane {
         }
 
         //if map has lines to show, show them
-        if(this.lines.containsKey(mapIdNew)) this.getChildren().addAll(lines.get(mapIdNew));
+        System.out.println("Switching from map: " + mapIdOld + " to map: " + mapIdNew);
+        if(this.lines.containsKey(mapIdNew)){
+            System.out.println("POST CONTAINS");
+            this.getChildren().addAll(lines.get(mapIdNew));
+        }
     }
 
 
