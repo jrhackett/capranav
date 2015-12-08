@@ -59,6 +59,8 @@ public class Display {
     public BooleanProperty ICON_VISIBLE;
     public BooleanProperty TIME_VISIBLE;
 
+    public BooleanProperty DIRECTIONS_VISIBLE;
+
     final BooleanProperty firstTime = new SimpleBooleanProperty(true);
 
 
@@ -106,6 +108,10 @@ public class Display {
     boolean FLIP = true;
     ZoomAndPan zoomAndPan;
 
+
+
+    SlidingAnchorPane    slidingDirections;
+    Button slidingDirectionsButton;
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -127,6 +133,7 @@ public class Display {
         this.BUILDING_VISIBLE = new SimpleBooleanProperty(false);
         this.EMAIL_VISIBLE = new SimpleBooleanProperty(true);
         this.TIME_VISIBLE = new SimpleBooleanProperty(false);
+        this.DIRECTIONS_VISIBLE = new SimpleBooleanProperty(false); // <<<<<
 
         this.PHOTO_ICON_VISIBLE = new SimpleBooleanProperty(false);
         this.ICON_VISIBLE = new SimpleBooleanProperty(false);
@@ -159,11 +166,11 @@ public class Display {
         HBox sections = new HBox();
         HBox.setHgrow(map, Priority.ALWAYS);
         HBox.setHgrow(slidingDashboard, Priority.SOMETIMES);
-        HBox.setHgrow(directions, Priority.SOMETIMES);
+        HBox.setHgrow(slidingDirections, Priority.SOMETIMES); //directions
 
 
         sections.setStyle("-fx-background-color: #333333");
-        sections.getChildren().addAll(slidingDashboard, directions, map); //dashBoardControlBox //, directions, map
+        sections.getChildren().addAll(slidingDashboard, slidingDirections, map); // directions
         /*****************************************************************/
         /** Add sections to Root */
         root = new StackPane();
@@ -426,11 +433,6 @@ public class Display {
 
         emailTextField.setOnAction(e -> handleEmailInput(emailTextField, true));
 
-        /*AnchorPane.setLeftAnchor(settingsWalkingBox, EDGE);
-        AnchorPane.setLeftAnchor(settingsWalkingLabel, EDGE);
-        AnchorPane.setLeftAnchor(setEmailLabel, EDGE);
-        AnchorPane.setLeftAnchor(emailTextField, EDGE);*/
-
         settingsWalkingBox.setTranslateX(EDGE - 7);
         walkingSpeedBox.setTranslateX(EDGE);
         setEmailLabel.setTranslateX(EDGE - 7);
@@ -490,9 +492,9 @@ public class Display {
         Image directionsArrow = FileFetch.getImageFromFile("forward.png", 27, 27, true, true);
 
         ImageView directionsArrowView = new ImageView(directionsArrow);
-        directionsArrowView.setTranslateX(8);
+        //directionsArrowView.setTranslateX(8);
         directionsArrowView.setTranslateY(5);
-        directionsControlBox.getChildren().addAll(directionsArrowView);
+        //directionsControlBox.getChildren().addAll(directionsArrowView); //TODO CHANGE BACK
         directionsControlBox.setStyle("-fx-background-color: #ac2738");
         directionsControlBox.setMinHeight(EDGE);
 
@@ -680,12 +682,33 @@ public class Display {
             instructions.requestFocus();
         });
 
+        slidingDirections = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DIRECTIONS_VISIBLE, directionsArrowView);
+        slidingDirectionsButton = slidingDirections.getButton();
+        slidingDirectionsButton.setId("directionsButton");//TODO jake fix ccs here
+        slidingDirectionsButton.setMaxWidth(EDGE);
+        slidingDirectionsButton.setMinWidth(EDGE);
+        slidingDirectionsButton.setPrefWidth(EDGE);
+        directionsControlBox.getChildren().addAll(slidingDirectionsButton);
+//        directions.getChildren().addAll(directionsTitleBox, instructionArrows, instructions, slidingEmail);
+//        directions.setStyle("-fx-background-color: #ffffff");
+//        directions.setPrefWidth(expandedWidth + EDGE);
+//        directions.setMinWidth(0);
+//        directions.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + EDGE);
+        //directionsTitleBox.visibleProperty().bind(DIRECTIONS_VISIBLE);
+        directionsTitleLabel.visibleProperty().bind(DIRECTIONS_VISIBLE);
+        instructionArrows.visibleProperty().bind(DIRECTIONS_VISIBLE);
+        instructions.visibleProperty().bind(DIRECTIONS_VISIBLE);
+        slidingEmail.visibleProperty().bind(DIRECTIONS_VISIBLE);
 
-        directions.getChildren().addAll(directionsTitleBox, instructionArrows, instructions, slidingEmail);
-        directions.setStyle("-fx-background-color: #ffffff");
-        directions.setPrefWidth(expandedWidth + EDGE);
-        directions.setMinWidth(0);
-        directions.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + EDGE);
+        slidingDirections.getChildren().addAll(directionsTitleBox, instructionArrows, instructions, slidingEmail);
+        slidingDirections.setStyle("-fx-background-color: #ffffff");
+        slidingDirections.setPrefWidth(expandedWidth + EDGE);
+        slidingDirections.setMinWidth(0);
+        slidingDirections.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + EDGE);
+        slidingDirections.playHidePane();
+        //testing sliding stuff:
+        //slidingDirections.getChildren().addAll(directions);
+
 
     }
 
