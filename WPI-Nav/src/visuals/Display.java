@@ -103,7 +103,7 @@ public class Display {
 
 
     boolean FLIP = true;
-
+    ZoomAndPan zoomAndPan;
 
     /****************************************************************************************************************
                                                       Functions
@@ -726,7 +726,7 @@ public class Display {
         Group group = new Group(mapPane);
 //        GraphicsScaling graphicsScaling = new GraphicsScaling();
 //        Parent zoomPane = graphicsScaling.createZoomPane(group);
-        ZoomAndPan zoomAndPan = new ZoomAndPan();
+        zoomAndPan = new ZoomAndPan();
         Parent zoomPane = zoomAndPan.createZoomPane(group);
         zoomPane.setOnMouseEntered(e -> {
             zoomPane.requestFocus();
@@ -1097,6 +1097,7 @@ public class Display {
                         this.mapDisplay.highlightPath(selectedInstruction.getNode().getID());
                         this.mapDisplay.softSelectAnimation(controller.lastSoft, selectedInstruction.getNode().getID());
                         controller.lastSoft = selectedInstruction.getNode().getID();
+                        zoomAndPan.zoomToNode(controller.getNode(selectedInstruction.getNode().getID()));
                     }
                 });
 
@@ -1107,6 +1108,7 @@ public class Display {
                 this.mapDisplay.highlightPath(instructions.getSelectionModel().getSelectedItem().getNode().getID());
                 this.mapDisplay.softSelectAnimation(controller.lastSoft, instructions.getSelectionModel().getSelectedItem().getNode().getID());
                 controller.lastSoft = instructions.getSelectionModel().getSelectedItem().getNode().getID();
+                zoomAndPan.zoomToNode(controller.getNode(instructions.getSelectionModel().getSelectedItem().getNode().getID()));
             }
             FLIP = true;
         });

@@ -89,7 +89,7 @@ public class ZoomAndPan {
 
           x -=((700/2)); //TODO if zooming is off alter these values
           y -=((525/2)); //TODO this too
-          double scaleVal = 5.5;
+          double scaleVal = 4.5;
           //System.out.println("out Scale" + scale);
           //if (bounds.getHeight()>530 || bounds.getWidth()>730 ||){
           panAndZoomPane.setPivot((transX+(x*scaleVal)),(transY+(y*scaleVal)),scaleVal);
