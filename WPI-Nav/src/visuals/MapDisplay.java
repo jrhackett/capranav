@@ -273,13 +273,20 @@ public class MapDisplay extends Pane {
         Label buildingName = new Label(building.getName());
         buildingName.setStyle("-fx-font-size:9;");
         buildingName.setTextFill(Color.web("#333333"));
+        Button pictureButton = new Button();
+
         Image picture = FileFetch.getImageFromFile("picture.png", 12, 12, true, true);
         ImageView pictureView = new ImageView(picture);
+        pictureButton.setGraphic(pictureView);
+        pictureButton.setId("picture-button");
 
-        //TODO make pictureView show picture on clicked
+        pictureButton.setOnMouseClicked(e-> {
+            controller.showNodeImage(v);
+            popOver.hide();
+        });
 
         HBox hbox = new HBox();
-        hbox.getChildren().addAll(buildingName, pictureView);
+        hbox.getChildren().addAll(buildingName, pictureButton);
         hbox.setAlignment(Pos.CENTER);
         hbox.setSpacing(2);
 

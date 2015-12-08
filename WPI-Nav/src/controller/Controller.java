@@ -10,6 +10,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import logic.*;
+import org.controlsfx.control.PopOver;
 import visuals.Display;
 import visuals.Instructions;
 
@@ -88,12 +89,12 @@ public class Controller extends Application {
 
         /* node images */
         //TODO FIX
-//        nodes.forEach((k,v) -> {
-//            /*if(buildings.get(maps.get(v.getMap_id()).getBuildingID()).getName().equals("Stratton Hall")){
-//                v.setPicturePath("../images/pictures/StrattonHall.png");
-//            }else*/
-//            v.setPicturePath("../images/Riley.png");
-//        });
+        nodes.forEach((k,v) -> {
+            /*if(buildings.get(maps.get(v.getMap_id()).getBuildingID()).getName().equals("Stratton Hall")){
+                v.setPicturePath("../images/pictures/StrattonHall.png");
+            }else*/
+            v.setPicturePath("../images/Riley.png");
+        });
 
 
 		/* basic layout */
@@ -162,6 +163,25 @@ public class Controller extends Application {
             //for(Map.Entry<String, Integer> : nodes.entrySet())
 
         }
+    }
+
+    public void showNodeImage(INode node) {
+        StackPane imageStack = new StackPane();
+        StackPane shadowStack = new StackPane();
+        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+
+        imageStack.setOnMouseClicked(e -> {
+            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+        });
+
+        //add image to stack pane -> if no image return void
+        //TODO make this image scale with resizing
+        Image image = FileFetch.getImageFromFile(node.getPicturePath(), 900, 900, true, true);
+        ImageView iv = new ImageView(image);
+
+        imageStack.getChildren().add(iv);
+
+        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
     }
 
     /**
@@ -854,6 +874,10 @@ public class Controller extends Application {
 
     public Building getBuilding(int buildingID) {
         return buildings.get(buildingID);
+    }
+
+    public Display getMyDisplay() {
+        return this.myDisplay;
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
