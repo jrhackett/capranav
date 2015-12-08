@@ -10,7 +10,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import logic.*;
-import org.controlsfx.control.PopOver;
 import visuals.Display;
 import visuals.Instructions;
 
@@ -838,6 +837,7 @@ public class Controller extends Application {
             this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
         }
     }
+
 
 
     /****************************************************************************************************************
