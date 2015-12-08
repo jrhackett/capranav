@@ -24,6 +24,25 @@
     -fx-effect:null;
 }
 
+#directionsButton  {
+    -fx-background-color:#ac2738;
+    -fx-text-fill:#eee;
+    -fx-padding: 0;
+}
+
+/*#dashboardButton:hover
+{
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.6) , 5, 0.0 , 0 , 1 );
+}*/
+
+#directionsButton:pressed
+{
+    -fx-effect:null;
+}
+
+
+
+
 #pinView {
     -fx-fill: #eeeeee;
 }
