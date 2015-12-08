@@ -523,7 +523,10 @@ public class Display {
         leftArrowButton = new javafx.scene.control.Button();
         leftArrowButton.setGraphic(leftArrowView);
         leftArrowButton.setId("arrow-buttons-grayed");
-        leftArrowButton.setOnAction(e -> handleLeftArrowButton());
+        leftArrowButton.setOnAction(e -> {
+            handleLeftArrowButton();
+            controller.handleIncrementPathMap();
+        });
 
         Image rightArrow = FileFetch.getImageFromFile("rightArrow.png", 24, 24, true, true);
 
@@ -532,7 +535,10 @@ public class Display {
         rightArrowButton = new javafx.scene.control.Button();
         rightArrowButton.setGraphic(rightArrowView);
         rightArrowButton.setId("arrow-buttons-grayed");
-        rightArrowButton.setOnAction(e -> handleRightArrowButton());
+        rightArrowButton.setOnAction(e -> {
+            handleRightArrowButton();
+            controller.handleIncrementPathMap();
+        });
 
         AnchorPane.setRightAnchor(leftArrowButton, expandedWidth - 5.5 - leftArrowButton.getPrefWidth());
         AnchorPane.setTopAnchor(leftArrowButton, 5.5);
