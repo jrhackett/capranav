@@ -405,3 +405,12 @@
 {
     -fx-font-size: 10;
 }
+
+#picture-button{
+    -fx-max-height:14;
+    -fx-min-height:14;
+    -fx-min-width:14;
+    -fx-max-width:14;
+    -fx-background-color:white;
+    -fx-border-width:0;
+}
