@@ -84,11 +84,11 @@
     -fx-background-color: transparent;
 }*/
 
-/*.combo-box-base > .arrow-button
+.combo-box-base > .arrow-button
 {
     -fx-background-color: #333;
     -fx-border-radius: 0;
-}*/
+}
 
 ​
 /*.combo-box .list-cell
