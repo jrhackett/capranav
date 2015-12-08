@@ -9,6 +9,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import logic.FileFetch;
 
 /**
  * Created by Kurt on 12/2/15.  Modified by Greg afterwards.
@@ -28,31 +29,31 @@ public class myPreloader extends javafx.application.Preloader {
         VBox loading = new VBox(20);
         loading.setMaxWidth(Region.USE_PREF_SIZE);
         loading.setMaxHeight(Region.USE_PREF_SIZE);
-        loading.getChildren().add(new ImageView(new Image(myPreloader.class.getResource("../images/goatnav.png").toExternalForm())));
 
+        Image goatImage = FileFetch.getImageFromFile("goatnav.png");
+        ImageView goatView = new ImageView(goatImage);
+        goatView.setFitHeight(309);
+        goatView.setFitWidth(550);
+
+        loading.getChildren().addAll(goatView);
 
         BorderPane root = new BorderPane(loading);
         Scene scene = new Scene(root);
 
 
-        primaryStage.setWidth(550);  //550 goatnav.png, 360 Preloader.gif
-        primaryStage.setHeight(309);  //309 goatnav.png, 270 Preloader.gif
+        primaryStage.setWidth(550);  //960 goatnav.png, 360 Preloader.gif
+        primaryStage.setHeight(309);  //540 goatnav.png, 270 Preloader.gif
         primaryStage.setScene(scene);
 
-        //this.myDisplay = new Display(this);    //creates scene
-        //Scene display = myDisplay.Init(); //initializes scene
+
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
     }
 
 
     @Override
     public void handleStateChangeNotification(StateChangeNotification stateChangeNotification) {
         if (stateChangeNotification.getType() == Type.BEFORE_START) {
-
-
 
             System.out.print("ASDASD");
             preloaderStage.hide();
