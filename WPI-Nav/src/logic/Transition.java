@@ -47,7 +47,6 @@ public class Transition extends Node {
         }
     }
 
-
     public int getBuildingID() {
         return buildingID;
     }

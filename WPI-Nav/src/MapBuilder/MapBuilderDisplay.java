@@ -74,7 +74,7 @@ public class MapBuilderDisplay extends StackPane {
 		map_zone.prefWidthProperty().bind(this.widthProperty());
 
 		HBox sections = new HBox();
-		sections.setSpacing(50);
+		sections.setSpacing(5);
 		sections.setStyle("-fx-background-color: #eeeeee;");
 		sections.prefHeightProperty().bind(stage.heightProperty());
 		sections.prefWidthProperty().bind(stage.widthProperty());

@@ -308,6 +308,7 @@ public class Controller extends Application {
      * @param t
      */
     public void handleEnterBuilding(Transition t){
+
         this.currentMap = maps.get(t.getMap_id());
         this.currentBuilding = t.getBuildingID();
         this.currentFloor = t.getToFloor();
@@ -375,13 +376,17 @@ public class Controller extends Application {
                 //set id for normal
                 this.myDisplay.setRightButtonID("arrow-buttons");
             } else {
+                System.out.println("Current Building: " + currentBuilding);
                 //set id for grey
                 this.myDisplay.setRightButtonID("arrow-buttons-grayed");
             }
+
+
             if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)) {
                 //set id for normal
                 this.myDisplay.setLeftButtonID("arrow-buttons");
             } else {
+                System.out.println("Current Building: " + currentBuilding);
                 //set id for grey
                 this.myDisplay.setLeftButtonID("arrow-buttons-grayed");
             }
