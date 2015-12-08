@@ -178,7 +178,6 @@ public class MapDisplay extends Pane {
         this.lastSoft = c.getFill();
         c.setFill(Color.HOTPINK);
 
-
         ScaleTransition st = new ScaleTransition(Duration.millis(160), c);
         st.setByX(1.03f);
         st.setByY(1.03f);
