@@ -56,6 +56,7 @@ public class Display {
     public BooleanProperty BUILDING_VISIBLE;
     public BooleanProperty PHOTO_ICON_VISIBLE;
     public BooleanProperty ICON_VISIBLE;
+    public BooleanProperty TIME_VISIBLE;
 
     final BooleanProperty firstTime = new SimpleBooleanProperty(true);
 
@@ -121,6 +122,7 @@ public class Display {
         this.SETTINGS_VISIBLE = new SimpleBooleanProperty(true);
         this.BUILDING_VISIBLE = new SimpleBooleanProperty(false);
         this.EMAIL_VISIBLE = new SimpleBooleanProperty(true);
+        this.TIME_VISIBLE = new SimpleBooleanProperty(false);
 
         this.PHOTO_ICON_VISIBLE = new SimpleBooleanProperty(false);
         this.ICON_VISIBLE = new SimpleBooleanProperty(false);
@@ -550,6 +552,7 @@ public class Display {
         totalTimeLabel.setId("time-label");
         totalTimeLabel.setTextFill(Color.web("#333"));
         totalTimeLabel.setAlignment(Pos.CENTER);
+        totalTimeLabel.visibleProperty().bind(TIME_VISIBLE);
 
         AnchorPane.setLeftAnchor(totalTimeLabel, 65.0);
         AnchorPane.setTopAnchor(totalTimeLabel, 4.0);

@@ -2,6 +2,7 @@ package controller;
 
 import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -738,6 +739,7 @@ public class Controller extends Application {
         //myDisplay.mapDisplay.showLines(-1, lastMapID); //TODO UPDATE showPath
 
         myDisplay.updateTimeEstimation();
+        myDisplay.TIME_VISIBLE.setValue(true);
     }
 
     public void handleIncrementPathMap(){

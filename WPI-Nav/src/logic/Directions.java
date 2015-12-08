@@ -307,7 +307,7 @@ public class Directions {
 	 */
 	public static double timeEst(double walkSpeed) {
 		if (walkSpeed != 0)
-			return (getTotalDistance() / (walkSpeed*10));
+			return (getTotalDistance() / (walkSpeed/2.5));
 		else return 0;
 	}
 
