@@ -211,7 +211,7 @@ public class MapDisplay extends Pane {
                 //content of popover
                 System.out.println("showing popover for ID: " + v.getID());
                 if(!(previousPopOver.equals(popOver))) {
-                    popOver.show(circle);
+                    popOver.show(circle, -7);
                     previousPopOver.hide();
                     previousPopOver = popOver;
                     //controller.updateNodeInformation(v);
@@ -318,6 +318,7 @@ public class MapDisplay extends Pane {
         popOver.setArrowLocation(PopOver.ArrowLocation.RIGHT_TOP);
         popOver.setDetachable(false);
         popOver.setArrowSize(5.0);
+
         return popOver;
     }
 

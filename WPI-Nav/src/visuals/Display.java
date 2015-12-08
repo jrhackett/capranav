@@ -746,7 +746,7 @@ public class Display {
     private HBox createNodeBox() {
         HBox hbox = new HBox();
 
-        nodeViewHolder = new StackPane();
+        /*nodeViewHolder = new StackPane();
         nodeTitle = new Label();
         nodeTransitionButton = new javafx.scene.control.Button();
 
@@ -766,7 +766,7 @@ public class Display {
         nodeIconViewButton.setGraphic(nodeIconView);
         nodeIconViewButton.setOnAction(event -> handleFullScreenPicture());
         nodeIconViewButton.setId("arrow-buttons");
-        nodeIconViewButton.setStyle("-fx-background-color: #eeeeee");
+        nodeIconViewButton.setStyle("-fx-background-color: #eeeeee");*/
 
         Button backToCampus = new Button();
         backToCampus.setText("Back to Campus");
