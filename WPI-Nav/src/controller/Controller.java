@@ -3,7 +3,6 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.TreeTableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -735,7 +734,7 @@ public class Controller extends Application {
         switchMapSetting(startNode.getMap_id());
 
         //shows the lines
-        myDisplay.mapDisplay.showLines(-1, lastMapID); //TODO UPDATE showPath
+        //myDisplay.mapDisplay.showLines(-1, lastMapID); //TODO UPDATE showPath
     }
 
     public void handleIncrementPathMap(){
