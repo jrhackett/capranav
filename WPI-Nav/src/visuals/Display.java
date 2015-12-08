@@ -772,12 +772,41 @@ public class Display {
         backToCampus.setText("Back to Campus");
         backToCampus.setId("campus-button");
         backToCampus.setOnMouseClicked(e -> {
-            if(controller.getCurrentMap().getID() != 0)
+            if(controller.getCurrentMap().getID() != 0) {
                 controller.setCurrentMap(0);
+                controller.hideBuildingPane();
+            }
+
         });
 
-        hbox.getChildren().add(backToCampus);
-        hbox.visibleProperty().bind(BUILDING_VISIBLE);
+
+        HBox box = new HBox();
+        this.left = new javafx.scene.control.Button();
+        this.right = new javafx.scene.control.Button();
+
+        Image minus = FileFetch.getImageFromFile("minus104.png", 20, 20, true, true);
+        Image plus = FileFetch.getImageFromFile("plus79.png", 20, 20, true, true);
+
+        ImageView minusView = new ImageView(minus);
+        ImageView plusView = new ImageView(plus);
+
+        this.left.setGraphic(minusView);
+        this.right.setGraphic(plusView);
+
+        this.left.setStyle("-fx-background-color:#eee;");
+        this.right.setStyle("-fx-background-color:#eee;");
+
+        buildingName = new Label();
+        buildingNumber = new Label();
+
+        left.setOnMouseClicked(e -> controller.handleDecreaseFloorButton());
+        right.setOnMouseClicked(e -> controller.handleIncreaseFloorButton());
+
+
+
+
+        hbox.getChildren().addAll(left, backToCampus, right);
+        hbox.visibleProperty().bind( BUILDING_VISIBLE);
         hbox.setMaxHeight(EDGE);
         hbox.setMinHeight(EDGE);
         hbox.setAlignment(Pos.CENTER);
@@ -815,36 +844,36 @@ public class Display {
     //TODO THIS IS START OF BUILDING BOX PANE!
     private HBox createBuildingBox() { //its going to be an HBox with stuff inside of the sliding anchorpane
 
-        HBox box = new HBox();
-        this.left = new javafx.scene.control.Button();
-        this.right = new javafx.scene.control.Button();
-
-        Image minus = FileFetch.getImageFromFile("minus104.png", 20, 20, true, true);
-        Image plus = FileFetch.getImageFromFile("plus79.png", 20, 20, true, true);
-
-        ImageView minusView = new ImageView(minus);
-        ImageView plusView = new ImageView(plus);
-
-        this.left.setGraphic(minusView);
-        this.right.setGraphic(plusView);
-
-        this.left.setStyle("-fx-background-color:#eee;");
-        this.right.setStyle("-fx-background-color:#eee;");
-
-        buildingName = new Label();
-        buildingNumber = new Label();
-
-        left.setOnMouseClicked(e -> controller.handleDecreaseFloorButton());
-        right.setOnMouseClicked(e -> controller.handleIncreaseFloorButton());
+          HBox box = new HBox();
+//        this.left = new javafx.scene.control.Button();
+//        this.right = new javafx.scene.control.Button();
+//
+//        Image minus = FileFetch.getImageFromFile("minus104.png", 20, 20, true, true);
+//        Image plus = FileFetch.getImageFromFile("plus79.png", 20, 20, true, true);
+//
+//        ImageView minusView = new ImageView(minus);
+//        ImageView plusView = new ImageView(plus);
+//
+//        this.left.setGraphic(minusView);
+//        this.right.setGraphic(plusView);
+//
+//        this.left.setStyle("-fx-background-color:#eee;");
+//        this.right.setStyle("-fx-background-color:#eee;");
+//
+          buildingName = new Label();
+          buildingNumber = new Label();
+//
+//        left.setOnMouseClicked(e -> controller.handleDecreaseFloorButton());
+//        right.setOnMouseClicked(e -> controller.handleIncreaseFloorButton());
 
         box.setMaxHeight(EDGE);
         box.setMinHeight(0);
         box.setPrefHeight(0);
 
-        //TODO set min widths
+        //TODO LEFT AND RIGHT HERE
         box.setAlignment(Pos.CENTER);
         box.setSpacing(GAP);
-        box.getChildren().addAll(left, buildingName, buildingNumber, right);
+        box.getChildren().addAll( buildingName, buildingNumber);
         return box;
     }
 

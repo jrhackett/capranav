@@ -451,6 +451,7 @@ public class MapDisplay extends Pane {
     public void showLines(int mapIdOld, int mapIdNew) {
         if (mapIdOld != -1) {
             try {
+                System.out.println("Removing old map lines: " + mapIdOld);
                 this.getChildren().removeAll(lines.get(mapIdOld));
             } catch (NullPointerException e){
                 System.out.println("MAP HAS NO LINES YET");
