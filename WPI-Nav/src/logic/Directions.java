@@ -11,7 +11,7 @@ public class Directions {
 	public Directions(){
 		totalDistance = 0;
 	}
-	//TODO: multiply ALL by campus pixel to feet ratio....which we do not know
+	//TODO: MAKE SURE THAT WE USE THE RATIO OF THE CAMPUS EVERYWHERE
 	/**
 	 * stepByStep takes in an arrayList of Nodes and outputs a list of
 	 *
@@ -260,6 +260,7 @@ public class Directions {
 		return String.valueOf(angle);
 	}
 
+
 	/*public static String getRelativeCurrentFloorString(INode current, INode next, HashMap<Integer, IMap> maps){
 		if (maps.get(next.getMap_id()).getFloor() > (maps.get(current.getMap_id()).getFloor())){
 			//we know we are going up
@@ -274,4 +275,34 @@ public class Directions {
 			return "up "
 		}
 	}*/
+
+	/****************************************************************************************************************
+	 												TIME ESTIMATION
+	 ****************************************************************************************************************/
+
+	/**
+	 * Returns a String with the time calculated to min/sec.
+	 * Rounds sec value so that second values are either 0, 15, 30, 45
+	 * (Would be a poor estimation if it said it takes 23 seconds to get somewhere)
+	 */
+	public String getTime(double walkSpeed) {
+		double time = timeEst(walkSpeed); //Get raw time
+		long min = 0;
+		while(time >= 60) { //Convert time in seconds to minutes + seconds
+			min++;
+			time -= 60;
+		}
+		long sec = Math.round(time/15) * 15; //Rounds seconds to the nearest 1/4 minute
+		return min + " minutes, " + sec + " seconds";
+	}
+
+	/**
+	 * Returns the time estimation for a given route in seconds
+	 * @param walkSpeed Person's walking speed in mph
+	 *                     Assumes distance is in feet
+	 * @return Time in seconds
+	 */
+	public double timeEst(double walkSpeed) { return (getTotalDistance() / 5280.0) / (walkSpeed * 3600); }
+
+
 }

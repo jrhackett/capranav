@@ -1,8 +1,5 @@
 package logic;
 
-/**
- * Created by Xenocidist on 11/26/15.
- */
 public class Floor extends Map {
     private int floor;
     private int buildingID;
@@ -11,6 +8,7 @@ public class Floor extends Map {
         super(id, path, pixelToFeetRatio);
         this.floor = floor;
         this.buildingID = buildingID;
+
     }
 
     public Floor(IMap map) {//this might need to be IMap

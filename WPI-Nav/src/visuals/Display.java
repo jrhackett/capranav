@@ -45,8 +45,8 @@ public class Display {
     private static final double GAP = 5;
     private final double EDGE;
     private static final double expandedWidth = 170;//150
-    private static final double MAP_WIDTH = 660;
-    private static final double MAP_HEIGHT = 495;
+    private static final double MAP_WIDTH = 585; //originally 580+80
+    private static final double MAP_HEIGHT = 460;//originally 455+40
     private static final double MAP_BORDER = 15;
 
     //Variables
@@ -95,8 +95,8 @@ public class Display {
 
     private StackPane mapPane;
     public MapDisplay mapDisplay;
-    public Inputs start;
-    public Inputs end;
+    public Inputs<InputItem> start;
+    public Inputs<InputItem> end;
 
     public TextField yourEmail;
 
@@ -695,8 +695,10 @@ public class Display {
         mapPane.setAlignment(Pos.CENTER);
 
         Group group = new Group(mapPane);
-        GraphicsScaling graphicsScaling = new GraphicsScaling();
-        Parent zoomPane = graphicsScaling.createZoomPane(group);
+//        GraphicsScaling graphicsScaling = new GraphicsScaling();
+//        Parent zoomPane = graphicsScaling.createZoomPane(group);
+        ZoomAndPan zoomAndPan = new ZoomAndPan();
+        Parent zoomPane = zoomAndPan.createZoomPane(group);
         zoomPane.setOnMouseEntered(e -> {
             zoomPane.requestFocus();
         });
@@ -705,6 +707,10 @@ public class Display {
         AnchorPane.setLeftAnchor(zoomPane, MAP_BORDER);//00
         AnchorPane.setRightAnchor(zoomPane, MAP_BORDER);
         AnchorPane.setBottomAnchor(zoomPane, EDGE * 2); //+ GAP + 2 * EDGE
+        //ImageView imageView = new ImageView();
+       // mapDisplay.mapView.fitHeightProperty().bind(map.layoutYProperty());
+       // mapDisplay.mapView.fitWidthProperty().bind(map.layoutXProperty());
+
 
         map.setMinWidth(MAP_WIDTH);
         map.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
@@ -725,7 +731,6 @@ public class Display {
         StackPane mapPane = new StackPane();
         mapPane.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2);
         mapPane.setMinHeight(MAP_HEIGHT);
-
         mapPane.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
         mapPane.setMinWidth(MAP_WIDTH);
 
@@ -794,11 +799,8 @@ public class Display {
             this.nodeTransitionButton.setOnAction(e -> controller.handleEnterBuilding((Transition) iNode));
         } else {
             this.nodeTransitionButton.setId("arrow-buttons-grayed2");
-            this.nodeTransitionButton.setOnAction(e -> {
-            });//// TODO: 12/2/15 fix
+            this.nodeTransitionButton.setOnAction(e -> {});//// TODO: 12/2/15 fix
         }
-
-
     }
 
     //TODO THIS IS START OF BUILDING BOX PANE!
@@ -858,12 +860,36 @@ public class Display {
     private VBox createInput() {
 
 		/* start */
-        this.start = new Inputs("Search WPI Maps", INPUT_WIDTH, controller);
+        this.start = new Inputs<InputItem>("Search WPI Maps", INPUT_WIDTH, controller);
         start.setOnAction(e -> handleSearchInput(start, true));
+//        start.setOnKeyPressed(new EventHandler<KeyEvent>() {
+//            @Override
+//            public void handle(KeyEvent event) {
+//                //.getSelectionModel().getSelectedItem();
+//                if (event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.TAB){
+//                    //handleSearchInput(start, true);
+//                    handleSearchInput(start, true);
+//                    end.requestFocus();
+//                }
+//            }
+//        });
+
+
 
 		/* end */
-        this.end = new Inputs("For Destination", INPUT_WIDTH, controller);
+        this.end = new Inputs<InputItem>("For Destination", INPUT_WIDTH, controller);
         end.setOnAction(e -> handleSearchInput(end, false));
+//        end.setOnKeyPressed(new EventHandler<KeyEvent>() {
+//            @Override
+//            public void handle(KeyEvent event) {
+//                //.getSelectionModel().getSelectedItem();
+//                if (event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.TAB){
+//                    handleSearchInput(end, true);
+//                    root.requestFocus();
+//                }
+//            }
+//        });
+
 
 //        start.getStyleClass().add("combo-box");
 
@@ -901,8 +927,8 @@ public class Display {
             }
         }));
 
-        AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
-        AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
+        //AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
+        //AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
 
         return inputs;
     }
@@ -993,12 +1019,13 @@ public class Display {
     private void handleSearchInput(Inputs v, boolean START) {
         if (v.getValue() != null && !v.getValue().toString().isEmpty())
             try {
-                logger.info("FOUND A NODE!");
-                controller.handleSearchInput(((InputItem) v.getValue()).getId(), START);
+               // v.getSelectionModel().getSelectedItem();
+               // v.getValue();
+                controller.handleSearchInput(((InputItem)v.getValue()).getId(), START);
+                logger.info("FOUND A NODE! {}", v.getSelectionModel().getSelectedItem().toString());
             } catch (ClassCastException cce) {
                 logger.error("INPUT VALUE IS NOT YET A FULL INPUT, IT IS JUST A STRING: {}", v.getValue());
             }
-
     }
 
     private void handleWalkingInput(Inputs v, boolean START) {
@@ -1075,11 +1102,5 @@ public class Display {
         return controller.getMaps();
     }
 
-    /**
-     * find paths calls the controller
-     */
-    private void findPaths() {//THIS IS A RELIC NOT CURRENTLY USED
-        this.controller.findPaths();
-    }
 }
 

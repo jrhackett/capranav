@@ -399,16 +399,7 @@ public class MapVisual extends Pane {
 						System.out.println("New node selected");
 						controller.selectNode(v.getID());
 					} else {
-<<<<<<< HEAD
 						// Add edge between nodes
-=======
-						if (!controller.isNodeSelected()) {
-							//System.out.println("New node selected");
-							controller.selectNode(v.getID());
-						} else {
-							// Add edge between nodes
->>>>>>> dev
-
 						// check to see if there is a new edge to be created
 						boolean isNewEdge = true;
 
@@ -418,40 +409,24 @@ public class MapVisual extends Pane {
 							}
 						}
 
-<<<<<<< HEAD
 						// If there is a new edge, create each direction and
 						// add them to the respective nodes
 						// Also draw the edge
 						if (isNewEdge) {
-							System.out.println("New Edge Created!");
-=======
-							// If there is a new edge, create each direction and
-							// add them to the respective nodes
-							// Also draw the edge
-							if (isNewEdge) {
-								//System.out.println("New Edge Created!");
->>>>>>> dev
+							//System.out.println("New Edge Created!");
 
 							Edge newCEdge = new Edge(v.getID(), 1);
 							Edge newVEdge = new Edge(controller.getSelectedNode().getID(), 1);
 
 							controller.getSelectedNode().addEdge(newCEdge);
 							v.addEdge(newVEdge);
-
-<<<<<<< HEAD
 							drawEdges(controller.getCurrentNodeList());
 							drawNodes(controller.getCurrentNodeList());
 						} else {
-							System.out.println("Edge already exists");
-=======
-								drawEdges(controller.getCurrentNodeList());
-								drawNodes(controller.getCurrentNodeList());
-							} else {
-								//System.out.println("Edge already exists");
+							//System.out.println("Edge already exists");
 
-							}
->>>>>>> dev
 						}
+
 
 						controller.selectNode(v.getID());
 
@@ -494,7 +469,7 @@ public class MapVisual extends Pane {
 	 * @param iNode
      */
 	private void handleNodeChoice(INode iNode, PopOver popOver){
-		if (iNode.isInteresting()){
+		if (iNode.isInteresting() || (iNode instanceof Transition && !(iNode instanceof TStairs || iNode instanceof Elevator))){
 			VBox input = new VBox();
 			TextField newNodeName = new TextField();
 

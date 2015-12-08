@@ -15,14 +15,13 @@ import java.util.HashMap;
  * Currently using a 'simple' ComboBox. Looking into alternate/advanced/accurate
  * options
  */
-public class Inputs extends ComboBox {
+public class Inputs<T> extends ComboBox<T> {
 	private String initial;
 	ObservableList<InputItem> data;
 	Application controller;
 	ObservableList<Walking> walking;
 
-	@SuppressWarnings("unchecked") /* probably should remove this */
-	public Inputs(String s, double WIDTH, Application controller) {
+	public Inputs(String s, double WIDTH, Application controller ) {
 		super();
 		initial = s;
 		this.controller = controller;
@@ -44,16 +43,16 @@ public class Inputs extends ComboBox {
 
 		/*
 		 * this.setCellFactory(new Callback<ListView<Node>, ListCell<Node>>() {
-		 * 
+		 *
 		 * @Override public ListCell<Node> call(ListView<Node> param) {
 		 * ListCell<Node> cell = new ListCell<>(){
-		 * 
+		 *
 		 * @Override public void updateItem(Node node, boolean empty){ if (node
 		 * != null){ setText(node.toString());
-		 * 
-		 * 
+		 *
+		 *
 		 * } setTextFill(Color.GREEN); } } return null; }
-		 * 
+		 *
 		 * });
 		 */
 	}
@@ -100,25 +99,16 @@ public class Inputs extends ComboBox {
 
 
 	public InputItem addNode(logic.INode v, IMap map) {
-		System.out.println("INode: " + v);
+		//System.out.println("INode: " + v);
 		InputItem item = null;
 		if (v.isInteresting()) {
 			for (String s : v.getNames()) {// For each of its names
 				if (map.inside()) {// FOOD should probably also not have map
 									// extensions
-					for (String m : getNames(((Floor) map).getBuildingID())) {// TODO
-																				// we
-																				// should
-																				// just
-																				// do
-																				// buildings
-																				// and
-																				// campus
-																				// separately
+					for (String m : getNames(((Floor) map).getBuildingID())) {
 						item = new InputItem(v.getID(), m + " " + s);
 						if (!data.contains(item))
-							data.add(item); // TODO this work around will
-											// probably not work
+							data.add(item);
 					}
 				} else {
 					item = new InputItem(v.getID(), s);
@@ -126,18 +116,10 @@ public class Inputs extends ComboBox {
 				}
 			}
 		} else if (v.isTransition()) {
-			System.out.println("Map: " + map);
+			//System.out.println("Map: " + map);
 			if (map.inside()) {// FOOD should probably also not have map
 								// extensions
-				for (String m : getNames(((Floor) map).getBuildingID())) {// TODO
-																			// we
-																			// should
-																			// just
-																			// do
-																			// buildings
-																			// and
-																			// campus
-																			// separately
+				for (String m : getNames(((Floor) map).getBuildingID())) {
 					item = new InputItem(v.getID(), m + " " + v.toString());
 					if (!data.contains(item))
 						data.add(item); // TODO this work around will probably

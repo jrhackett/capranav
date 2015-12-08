@@ -1,5 +1,15 @@
 package logic;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import org.controlsfx.control.PopOver;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,11 +23,10 @@ public class Building {
     private int localA;
     private int localB;
 
-
     //<Integer> maps; //Floor would be easier but easier to just do int for parsing
     private HashMap<Integer, Integer> floorMap; //int -> mapID
 
-    ArrayList<String> names;
+    ArrayList<String> names; //the names of the building
 
     public Building(int id, int floors){
         this.id = id;
@@ -33,6 +42,18 @@ public class Building {
     public void   addName(String s){ this.names.add(s);}
     public HashMap<Integer, Integer> getFloorMap(){ //floor -> id map
         return floorMap;
+    }
+    public int    getFloorID(int i){
+        return floorMap.get(i);
+    }
+
+    public boolean containsFloor(int floor){
+        floorMap.forEach((k,v) -> {
+            System.out.println(k);
+            System.out.println(v);
+
+        });
+        return this.floorMap.containsKey(floor);
     }
 
     public void addFloor(int floor, int mapid){
@@ -66,6 +87,4 @@ public class Building {
         Translate translate = new Translate(master.get(localA), master.get(localB), master.get(universalA), master.get(universalB));
         return translate.setUniversalCoordinates(nodes);
     }
-
-
 }
