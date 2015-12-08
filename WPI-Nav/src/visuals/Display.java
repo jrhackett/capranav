@@ -1018,6 +1018,7 @@ public class Display {
                         this.mapDisplay.softSelectAnimation(selectedInstruction.getNode().getID());
                     }
                 });
+        //instructions.setFocusModel();
 
 
         instructions.setPlaceholder(new Label(" "));
