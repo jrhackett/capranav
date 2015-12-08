@@ -3,6 +3,7 @@ package visuals;
 import controller.Controller;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -1008,17 +1009,17 @@ public class Display {
                 }
         );
 
-        /*
+
         instructions.getSelectionModel().selectedItemProperty()
                 .addListener((ObservableValue<? extends Instructions> obs, Instructions oldinstruction, Instructions selectedInstruction) -> {
                     if (selectedInstruction != null) {
                         //TODO Set the string of the label to this
-                        this.controller.updateNodeInformation(selectedInstruction.getNode());
+                        //this.controller.updateNodeInformation(selectedInstruction.getNode());
                         this.mapDisplay.highlightPath(selectedInstruction.getNode().getID());
                         this.mapDisplay.softSelectAnimation(selectedInstruction.getNode().getID());
                     }
                 });
-                */
+
         //instructions.setFocusModel();
         instructions.setOnMouseClicked(event -> {
             //this.controller.updateNodeInformation(instructions.getSelectionModel().getSelectedItem().getNode());

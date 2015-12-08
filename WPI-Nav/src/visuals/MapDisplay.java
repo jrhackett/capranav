@@ -13,12 +13,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
-import logic.*;
+import logic.Building;
+import logic.FileFetch;
+import logic.IMap;
+import logic.INode;
 import org.controlsfx.control.PopOver;
 
 import java.util.ArrayList;
@@ -478,6 +484,8 @@ public class MapDisplay extends Pane {
         //I think we should keep all circles
         Circle c;
 
+        this.getChildren().remove(id_circle.get(iNode.getID()));
+
         if (!id_circle.containsKey(iNode.getID())){
             c = createCircle(controller.getNode(iNode.getID()));
         } else {
@@ -486,9 +494,8 @@ public class MapDisplay extends Pane {
 
         c.setRadius(5);
         highlight(c, Color.GREEN, Color.LIGHTGREEN);
-
-
-        if (sts != null) { sts.stop(); }
+        id_circle.put(iNode.getID(), c);
+        this.getChildren().add(id_circle.get(iNode.getID()));
 
         ScaleTransition st = new ScaleTransition(Duration.millis(100), c);
         st.setByX(1.1f);
@@ -498,9 +505,18 @@ public class MapDisplay extends Pane {
         st.play();
         sts = st;
 
-        st.setOnFinished(event -> {
-            c.setRadius(5);
+        final Circle x;
+
+
+        st.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                final Circle x = createCircle(iNode);
+                id_circle.put(iNode.getID(), x);
+            }
         });
+
+
 
     }
 
