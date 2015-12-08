@@ -376,6 +376,10 @@ public class MapDisplay extends Pane {
         popOver.setDetachable(false);
         popOver.setArrowSize(5.0);
 
+        if(v.getPicturePath() == null) {
+            pictureButton.setOpacity(0.0);
+        }
+
         return popOver;
     }
 

@@ -106,8 +106,8 @@ public class Controller extends Application {
                 } catch(NullPointerException e) {          //TODO bad bad bad -- need rest of pictures
                     v.setPicturePath("../images/Riley.png");
                 }
-            }else
-            v.setPicturePath("../images/Riley.png");
+            }/*else
+            v.setPicturePath("../images/Riley.png");*/
         });
 
 
