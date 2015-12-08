@@ -767,7 +767,16 @@ public class Display {
         nodeIconViewButton.setId("arrow-buttons");
         nodeIconViewButton.setStyle("-fx-background-color: #eeeeee");
 
-        hbox.getChildren().addAll(nodeTransitionButton, nodeTitle, nodeIconViewButton);
+        Button backToCampus = new Button();
+        backToCampus.setText("Back to Campus");
+        backToCampus.setId("campus-button");
+        backToCampus.setOnMouseClicked(e -> {
+            if(controller.getCurrentMap().getID() != 0)
+                controller.setCurrentMap(0);
+        });
+
+        hbox.getChildren().add(backToCampus);
+        hbox.visibleProperty().bind(BUILDING_VISIBLE);
         hbox.setMaxHeight(EDGE);
         hbox.setMinHeight(EDGE);
         hbox.setAlignment(Pos.CENTER);
