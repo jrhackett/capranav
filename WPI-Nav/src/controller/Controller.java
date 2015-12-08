@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import logic.*;
@@ -299,10 +298,10 @@ public class Controller extends Application {
      * @param t
      */
     public void handleEnterBuilding(Transition t){
-        switchToBuildingView(t.getBuildingID(), t.getToFloor());
         this.currentMap = maps.get(t.getMap_id());
         this.currentBuilding = t.getBuildingID();
         this.currentFloor = t.getToFloor();
+        switchToBuildingView(t.getBuildingID(), t.getToFloor());
         handleMapLines();
     }
 
@@ -326,11 +325,16 @@ public class Controller extends Application {
     }
 
 
-    private void switchToBuildingView(int buildingID, int startingFLOOR){
+    public void switchToBuildingView(int buildingID, int startingFLOOR){
+        this.currentBuilding = buildingID;
+        this.currentMap      = maps.get(buildings.get(buildingID).getFloorID(startingFLOOR));
+        this.currentFloor    = startingFLOOR;
+
         System.out.println("SWITCH TO BUILDING VIEW");
         System.out.println("buildingId: " + buildingID);
         System.out.println("startingfloor: " + startingFLOOR);
         myDisplay.setBuildingName(buildings.get(buildingID).getName());
+        showBuildingPane();
         setFloor(startingFLOOR);
     }
 
@@ -351,10 +355,11 @@ public class Controller extends Application {
 
     public void setFloor(int i){
         if (buildings.get(currentBuilding).containsFloor(i)) {
-            setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
+
             this.currentFloor = i;
             this.myDisplay.setBuildingNumber(i); //TODO Change this to something better / more informatative
-            handleMapLines(); //removes old lines
+            //handleMapLines(); //removes old lines
+            setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
 
             if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)) {
                 //set id for normal
@@ -394,6 +399,7 @@ public class Controller extends Application {
     public void setCurrentMap(int id){
         this.currentMap = maps.get(id);
         this.myDisplay.mapDisplay.setMap(maps.get(id));
+        handleMapLines();
     }
 
     /**
