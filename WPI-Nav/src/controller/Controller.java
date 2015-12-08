@@ -3,6 +3,7 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -58,9 +59,15 @@ public class Controller extends Application {
 
     private INode selectedInformationNode;
 
+    private Stage stage;
+
+    double flipFlop = 1;
+    boolean firstTime = true;
 
     @Override
     public void start(Stage s) throws Exception {
+        stage = s;
+
         /* load up svg converter */
         SvgImageLoaderFactory.install(); //TODO FIND A BETTER WAY
 
@@ -397,9 +404,21 @@ public class Controller extends Application {
      * @param id
      */
     public void setCurrentMap(int id){
+        flipFlop *= -1;
         this.currentMap = maps.get(id);
         this.myDisplay.mapDisplay.setMap(maps.get(id));
         handleMapLines();
+        //stage.setWidth(stage.getWidth()-flipFlop);
+        boolean full = stage.isFullScreen();
+
+        if(!firstTime){
+            if(full) {
+                stage.setFullScreen(!full);
+                stage.setFullScreen(full);
+            }
+            else stage.setWidth(stage.getWidth() + flipFlop);
+        }
+        firstTime = false;
     }
 
     /**
@@ -777,38 +796,6 @@ public class Controller extends Application {
     private void mapsFromFile() {
         maps = new Parser<IMap>().fromFileMap();
         campus = (Campus)maps.get(0);
-    }
-
-
-    /****************************************************************************************************************
-                                                     TIME ESTIMATION
-     ****************************************************************************************************************/
-
-    /**
-     * Returns a String with the time calculated to min/sec.
-     * Rounds sec value so that second values are either 0, 15, 30, 45
-     * (Would be a poor estimation if it said it takes 23 seconds to get somewhere)
-     */
-    public String getTime(Directions dir, double walkSpeed) {
-        double time = timeEst(dir, walkSpeed);
-        long min = 0, sec;
-        while(time >= 60) {
-            min++;
-            time -= 60;
-        }
-        sec = Math.round(time/15) * 15; //Rounds seconds to the nearest 1/4 minute
-        return min + " minutes, " + sec + " seconds";
-    }
-
-    /**
-     * Returns the time estimation for a given route
-     * TODO Need some way to get directions.. not available in this class?
-     * @param dir Directions object for the given route
-     * @param walkSpeed Person's walking speed in some distance per second
-     * @return Time in seconds
-     */
-    public double timeEst(Directions dir, double walkSpeed) {
-        return dir.getTotalDistance() / walkSpeed;
     }
 
     public Building getBuilding(int buildingID) {

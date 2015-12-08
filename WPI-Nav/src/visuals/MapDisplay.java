@@ -205,7 +205,6 @@ public class MapDisplay extends Pane {
             });
         }
 
-        //TODO add this back in && ((logic.Transition)v).getBuildingID() != 0 when nullPointers are good
         if((v instanceof logic.Transition) && v.getMap_id() == 0 && ((logic.Transition)v).getBuildingID() != 0){
 
             PopOver popOver = createPopOverForNode(v);
@@ -236,11 +235,13 @@ public class MapDisplay extends Pane {
         Building building = controller.getBuilding(((logic.Transition)v).getBuildingID());
         HashMap<Integer, Integer> floorPlan = building.getFloorMap();
 
-        Label buildingName = new Label(building.getName());   //TODO add name here later -- null pointer shit
+        Label buildingName = new Label(building.getName());
         buildingName.setStyle("-fx-font-size:9;");
         buildingName.setTextFill(Color.web("#333333"));
         Image picture = FileFetch.getImageFromFile("picture.png", 12, 12, true, true);
         ImageView pictureView = new ImageView(picture);
+
+        //TODO make pictureView show picture on clicked
 
         HBox hbox = new HBox();
         hbox.getChildren().addAll(buildingName, pictureView);
@@ -261,6 +262,7 @@ public class MapDisplay extends Pane {
             Object array[] = floorPlan.keySet().toArray();
             if(floorPlan.keySet().toArray()[i].equals(-1)) {
                 value = "SB";
+                button.setStyle("-fx-padding:4 3 4 3;");
             }
             else if(floorPlan.keySet().toArray()[i].equals(0)) {
                 value = "B";
