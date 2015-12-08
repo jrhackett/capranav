@@ -76,8 +76,9 @@ public class ZoomAndPan {
 //    public void zoomToNode(INode node){
 //        double x = node.getX();
 //        double y = node.getY();
-      public  void zoomToNode(double x, double y){
-
+      public  void zoomToNode(INode node){
+          double x = node.getX();
+          double y = node.getY();
           Bounds bounds = scrollPane.getViewportBounds();
           //System.out.println("viewport bounds: " + bounds.getWidth()+ " width, " + bounds.getHeight() +" height");
           double transX = panAndZoomPane.getTranslateX()-(bounds.getWidth() - 705)/2; //TODO important values
@@ -88,10 +89,10 @@ public class ZoomAndPan {
 
           x -=((700/2)); //TODO if zooming is off alter these values
           y -=((525/2)); //TODO this too
+          double scaleVal = 5.5;
           //System.out.println("out Scale" + scale);
           //if (bounds.getHeight()>530 || bounds.getWidth()>730 ||){
-          panAndZoomPane.setPivot((transX+(x*5.5)),(transY+(y*5.5)),5.5);
-          System.out.println("wutwut");
+          panAndZoomPane.setPivot((transX+(x*scaleVal)),(transY+(y*scaleVal)),scaleVal);
     }
 
 //    public double clampTranslateXWidth(double value, double scale, double vpW){
@@ -169,7 +170,6 @@ public class ZoomAndPan {
                 sceneDragContext.translateAnchorX = panAndZoomPane.getTranslateX();
                 sceneDragContext.translateAnchorY = panAndZoomPane.getTranslateY();
                 //System.out.println("Screen Dragged");
-                zoomToNode(313,204);
             }
 
         };
