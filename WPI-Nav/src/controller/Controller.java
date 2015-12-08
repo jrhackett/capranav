@@ -736,6 +736,8 @@ public class Controller extends Application {
 
         //shows the lines
         myDisplay.mapDisplay.showLines(-1, lastMapID); //TODO UPDATE showPath
+
+        myDisplay.updateTimeEstimation();
     }
 
     public void handleIncrementPathMap(){
