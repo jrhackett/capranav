@@ -17,6 +17,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import javafx.scene.text.Text;
 import logic.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1081,6 +1082,8 @@ public class Display {
 
     private void createInstructionListView() {
         this.instructions = new ListView<Instructions>();
+        this.instructions.setPrefWidth(expandedWidth-10);
+
         instructions.setCellFactory((ListView<Instructions> lv) ->
                 new ListCell<Instructions>() {
                     @Override
@@ -1091,7 +1094,11 @@ public class Display {
                         } else {
                             // use whatever data you need from the album
                             // object to get the correct displayed value:
-                            setText(in.toString());
+                            Text text = new Text(in.toString());
+                            text.setWrappingWidth(expandedWidth-10);
+                            //setText(in.toString());
+                            setGraphic(text);
+
                         }
                     }
                 }
