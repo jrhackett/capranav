@@ -22,6 +22,12 @@ public class Weighted {
                 //set all edges for this Node to new weight
                 for (Edge e : v.getAdjacencies()) {
                     e.setWeight(handicapWeight);
+                    INode targetNode = allNodes.get(e.getTarget());
+                    for (Edge a : targetNode.getAdjacencies()){
+                        if (allNodes.get(a.getTarget()) == v){
+                            a.setWeight(handicapWeight);
+                        }
+                    }
                 }
                 //set Nodes' edges that connect to this Node to new weight
                 //TODO this stufff
