@@ -5,3 +5,6 @@ WPI-Nav/bin/*
 .recommenders/
 .idea/*
 out/*
+*.DS_Store
+WP_-Nav/.DS_STORE
+
