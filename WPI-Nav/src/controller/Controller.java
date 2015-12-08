@@ -3,23 +3,30 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import logic.*;
 import visuals.Display;
 import visuals.Instructions;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.sun.javafx.application.LauncherImpl;
+
+
 
 
 /**
  * IMPORTANT: This Class will 'launch' the application.
  *            And control the application
  */
+
+
 public class Controller extends Application {
 
     /* visual component */
@@ -58,6 +65,7 @@ public class Controller extends Application {
 
     private INode selectedInformationNode;
 
+
     private Stage stage;
 
     double flipFlop = 1;
@@ -65,9 +73,12 @@ public class Controller extends Application {
 
     public int lastSoft = -1;
 
+    private Scene display;
+
+
     @Override
-    public void start(Stage s) throws Exception {
-        stage = s;
+    public void init(){
+         /* load up svg converter */
 
         /* load up svg converter */
         SvgImageLoaderFactory.install(); //TODO FIND A BETTER WAY
@@ -79,30 +90,44 @@ public class Controller extends Application {
 
         /* node images */
         //TODO FIX
-        nodes.forEach((k,v) -> {
-            /*if(buildings.get(maps.get(v.getMap_id()).getBuildingID()).getName().equals("Stratton Hall")){
-                v.setPicturePath("../images/pictures/StrattonHall.png");
-            }else*/
-            v.setPicturePath("../images/Riley.png");
-        });
+//        nodes.forEach((k,v) -> {
+//            /*if(buildings.get(maps.get(v.getMap_id()).getBuildingID()).getName().equals("Stratton Hall")){
+//                v.setPicturePath("../images/pictures/StrattonHall.png");
+//            }else*/
+//            v.setPicturePath("../images/Riley.png");
+//        });
 
-        /* basic layout */
-        s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
-        campus = (Campus) maps.get(0);
 
 		/* basic layout */
         //s.initStyle(StageStyle.TRANSPARENT);  // <-- removes the top part of the app close/open [switch to UNDECORATED]
+
+        this.myDisplay = new Display(this);    //creates scene
+        display = myDisplay.Init(); //initializes scene
+        display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
+
+    }
+
+    @Override
+    public void start(Stage s) throws Exception {
+
+        stage = s;
+
+		/* basic layout */
+        s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
         s.setResizable(true);
 
-		/* setup */
-        this.myDisplay = new Display(this);    //creates scene
-        Scene display = myDisplay.Init();      //initializes scene
+        /* setup */
+        //this.myDisplay = new Display(this);    //creates scene
+        //display = myDisplay.Init();      //initializes scene
+
+
         s.setScene(display);                   //sets scene to display
         display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
         s.show();   //shows scene
-
-       /* sets the campus map as the loaded map */
         defaultMap();
+
+        /* sets the campus map as the loaded map */
+       // defaultMap();
     }
 
 
@@ -834,7 +859,8 @@ public class Controller extends Application {
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public static void main(String[] args) {
-        launch(args);
-    }
+        public static void main(String[] args) {
+            LauncherImpl.launchApplication(Controller.class, myPreloader.class, args);
+        }
 }
+

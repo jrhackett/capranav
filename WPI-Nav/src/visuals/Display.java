@@ -134,6 +134,8 @@ public class Display {
         this.EDGE = GAP * 2 + CONTROL_WIDTH;
     }
 
+
+
     /**
      * This sets up the GUI interface - both visuals and interactions.
      *
