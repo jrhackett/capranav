@@ -101,6 +101,9 @@ public class Display {
     public TextField yourEmail;
 
 
+    boolean FLIP = true;
+
+
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -1013,18 +1016,22 @@ public class Display {
         instructions.getSelectionModel().selectedItemProperty()
                 .addListener((ObservableValue<? extends Instructions> obs, Instructions oldinstruction, Instructions selectedInstruction) -> {
                     if (selectedInstruction != null) {
-                        //TODO Set the string of the label to this
-                        //this.controller.updateNodeInformation(selectedInstruction.getNode());
+                        FLIP = false;
+                        System.out.println("FIRST INSTRUCTIONS THING");
                         this.mapDisplay.highlightPath(selectedInstruction.getNode().getID());
                         this.mapDisplay.softSelectAnimation(selectedInstruction.getNode().getID());
+
                     }
                 });
 
         //instructions.setFocusModel();
         instructions.setOnMouseClicked(event -> {
-            //this.controller.updateNodeInformation(instructions.getSelectionModel().getSelectedItem().getNode());
-            this.mapDisplay.highlightPath(instructions.getSelectionModel().getSelectedItem().getNode().getID());
-            this.mapDisplay.softSelectAnimation(instructions.getSelectionModel().getSelectedItem().getNode().getID());
+            if (instructions.getSelectionModel().getSelectedItem() != null && FLIP) {
+                System.out.println("SECOND INSTRUCTIONS THING");
+                this.mapDisplay.highlightPath(instructions.getSelectionModel().getSelectedItem().getNode().getID());
+                this.mapDisplay.softSelectAnimation(instructions.getSelectionModel().getSelectedItem().getNode().getID());
+            }
+            FLIP = true;
         });
 
         instructions.setPlaceholder(new Label(" "));
