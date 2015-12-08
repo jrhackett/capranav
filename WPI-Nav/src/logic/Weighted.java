@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.HashMap;
+
 /**
  * Created by Kurt on 12/7/15.
  *
@@ -8,7 +10,30 @@ package logic;
  */
 public class Weighted {
 
+    private double weatherWeight = 15;
+    private double handicapWeight = 10;
+    /**
+     * changes edge weights for all Tstairs Nodes to handicap weight
+     * @param allNodes
+     */
+    public void makeEdgesHandicapped(HashMap<Integer, INode> allNodes){
 
+    }
 
+    /**
+     * changes all Nodes with map id of "0" to
+     * @param allNodes
+     */
+    public void makeEdgesWeather(HashMap<Integer, INode> allNodes){
+
+    }
+
+    /**
+     * resets edges back to value of 1
+     * @param allNodes
+     */
+    public void resetEdges(HashMap<Integer, INode> allNodes){
+
+    }
 
 }
