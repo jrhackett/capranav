@@ -3,7 +3,6 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.TreeTableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -63,6 +62,8 @@ public class Controller extends Application {
 
     double flipFlop = 1;
     boolean firstTime = true;
+
+    public int lastSoft = -1;
 
     @Override
     public void start(Stage s) throws Exception {
@@ -276,9 +277,8 @@ public class Controller extends Application {
 
             if (startNode != null && endNode != null) {
                 findPaths();
-            } else {
-                switchMapSetting(startNode.getMap_id());
-            }
+            } else if (startNode != null) switchMapSetting(startNode.getMap_id());
+
 
             if (startNode != null) {
                 //TODO if current map contains it, play, if it doesn't - switch and play
@@ -308,6 +308,7 @@ public class Controller extends Application {
      * @param t
      */
     public void handleEnterBuilding(Transition t){
+
         this.currentMap = maps.get(t.getMap_id());
         this.currentBuilding = t.getBuildingID();
         this.currentFloor = t.getToFloor();
@@ -318,7 +319,12 @@ public class Controller extends Application {
     private void switchMapSetting(int mapId){
         if (maps.get(mapId).getID() == 0){
             hideBuildingPane();
+            if (currentMap.getID() == 0) {
+                System.out.println("HERE 4");
+                firstTime = true;
+            }
             defaultMap();
+
             this.currentMap = campus;
         } else {
             this.currentMap = maps.get(mapId);
@@ -369,19 +375,27 @@ public class Controller extends Application {
             this.currentFloor = i;
             this.myDisplay.setBuildingNumber(i); //TODO Change this to something better / more informatative
             //handleMapLines(); //removes old lines
+//            if (currentMap.getID() == buildings.get(currentBuilding).getFloorID(i)) {
+//                System.out.println("HERE 4");
+//                firstTime = true;
+//            }
             setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
 
             if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)) {
                 //set id for normal
                 this.myDisplay.setRightButtonID("arrow-buttons");
             } else {
+                System.out.println("Current Building: " + currentBuilding);
                 //set id for grey
                 this.myDisplay.setRightButtonID("arrow-buttons-grayed");
             }
+
+
             if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)) {
                 //set id for normal
                 this.myDisplay.setLeftButtonID("arrow-buttons");
             } else {
+                System.out.println("Current Building: " + currentBuilding);
                 //set id for grey
                 this.myDisplay.setLeftButtonID("arrow-buttons-grayed");
             }
@@ -416,10 +430,16 @@ public class Controller extends Application {
 
         if(!firstTime){
             if(full) {
+                System.out.println("HERE 1");
                 stage.setFullScreen(!full);
                 stage.setFullScreen(full);
             }
-            else stage.setWidth(stage.getWidth() + flipFlop);
+            else {
+                System.out.println("HERE 2");
+                stage.setWidth(stage.getWidth() + flipFlop);
+            }
+            System.out.println("HERE 3");
+
         }
         firstTime = false;
     }
@@ -615,6 +635,9 @@ public class Controller extends Application {
      * Sets the current map to the campus map
      */
     public void defaultMap(){
+       // if (currentMap.getID() == buildings.get(currentBuilding).getFloorID(i)) {
+        System.out.println("HERE 4");
+
         setCurrentMap(campus.getID());
     }
 
@@ -633,10 +656,7 @@ public class Controller extends Application {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void reset(){
-        defaultMap(); //TODO CONSIDER THIS
-        this.pathNodes = new ArrayList<>();
-    }
+
 
     private boolean validateNotEquality(INode n, INode m){
         if (n.getID() == m.getID()){
@@ -705,7 +725,7 @@ public class Controller extends Application {
      * We also have to think about clearing things
      */
     public void findPaths(){
-
+        lastSoft = -1;
         //Creates instructions - setting fullPath
         getPathNodes(startNode, endNode);
         getInstructions();
@@ -735,7 +755,11 @@ public class Controller extends Application {
         switchMapSetting(startNode.getMap_id());
 
         //shows the lines
-        myDisplay.mapDisplay.showLines(-1, lastMapID); //TODO UPDATE showPath
+
+        //myDisplay.mapDisplay.showLines(-1, lastMapID); //TODO UPDATE showPath
+
+        myDisplay.updateTimeEstimation();
+        myDisplay.TIME_VISIBLE.setValue(true);
     }
 
     public void handleIncrementPathMap(){
@@ -743,7 +767,8 @@ public class Controller extends Application {
         if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
             myDisplay.setInstructions(fullPath.get(++currentIndex)); //TODO UPDATE setInstructions
             switchMapSetting(fullPath.get(currentIndex).get(0).getNode().getMap_id());
-            this.myDisplay.mapDisplay.softSelectAnimation(fullPath.get(currentIndex).get(0).getNode().getID());
+            this.myDisplay.mapDisplay.softSelectAnimation(lastSoft, fullPath.get(currentIndex).get(0).getNode().getID());
+            lastSoft = fullPath.get(currentIndex).get(0).getNode().getID();
             this.myDisplay.mapDisplay.showLines(lastMapID, fullPath.get(currentIndex).get(0).getNode().getMap_id()); //TODO UPDATE showPath
         }
 
@@ -760,7 +785,8 @@ public class Controller extends Application {
         if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1){
             myDisplay.setInstructions(fullPath.get(--currentIndex)); //TODO UPDATE setInstructions
             switchMapSetting(fullPath.get(currentIndex).get(0).getNode().getMap_id());
-            this.myDisplay.mapDisplay.softSelectAnimation(fullPath.get(currentIndex).get(0).getNode().getID());
+            this.myDisplay.mapDisplay.softSelectAnimation(lastSoft, fullPath.get(currentIndex).get(0).getNode().getID());
+            lastSoft = fullPath.get(currentIndex).get(0).getNode().getID();
         }
 
         if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {

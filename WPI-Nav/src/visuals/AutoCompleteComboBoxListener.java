@@ -19,7 +19,7 @@ public class AutoCompleteComboBoxListener<T> {
     public AutoCompleteComboBoxListener(ComboBox<T> comboBox) {
         this.comboBox = comboBox;
         this.comboBox.setVisibleRowCount(3);//why is it so long?
-        //this.comboBox.setMaxWidth(160);
+
         sb = new StringBuilder();
         this.comboBox.setEditable(true);
         this.comboBox.setOnKeyReleased(event -> {

@@ -1,10 +1,13 @@
 package logic;
+
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Henry on 11/15/2015.

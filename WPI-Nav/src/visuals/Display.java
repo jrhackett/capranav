@@ -17,10 +17,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
-import logic.FileFetch;
-import logic.INode;
-import logic.Transition;
-import logic.User;
+import logic.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +56,7 @@ public class Display {
     public BooleanProperty BUILDING_VISIBLE;
     public BooleanProperty PHOTO_ICON_VISIBLE;
     public BooleanProperty ICON_VISIBLE;
+    public BooleanProperty TIME_VISIBLE;
 
     final BooleanProperty firstTime = new SimpleBooleanProperty(true);
 
@@ -75,6 +73,9 @@ public class Display {
     private ListView<Instructions> instructions; //ListView<Instruction>
     private javafx.scene.control.Button hiddenHandler;
 
+    private Label totalTimeLabel;
+
+    private ArrayList<Walking> walkingArrayList;
 
     private Label buildingName;
     private Label buildingNumber;
@@ -101,6 +102,9 @@ public class Display {
     public TextField yourEmail;
 
 
+    boolean FLIP = true;
+
+
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -121,6 +125,7 @@ public class Display {
         this.SETTINGS_VISIBLE = new SimpleBooleanProperty(true);
         this.BUILDING_VISIBLE = new SimpleBooleanProperty(false);
         this.EMAIL_VISIBLE = new SimpleBooleanProperty(true);
+        this.TIME_VISIBLE = new SimpleBooleanProperty(false);
 
         this.PHOTO_ICON_VISIBLE = new SimpleBooleanProperty(false);
         this.ICON_VISIBLE = new SimpleBooleanProperty(false);
@@ -390,7 +395,7 @@ public class Display {
 
         settingsWalkingBox.getChildren().addAll(settingsWalkingLabel);
 
-        ArrayList<Walking> walkingArrayList = new ArrayList<>();
+        walkingArrayList = new ArrayList<>();
         walkingArrayList.add(new Walking("Casual (Walking with your Grandmother)", 2.0));
         walkingArrayList.add(new Walking("Quick  (Walking to Class)", 3.0));
         walkingArrayList.add(new Walking("Fast   (Late to Class)", 4.0));
@@ -399,6 +404,7 @@ public class Display {
         walkingSpeedBox.setTranslateX(8);  //TODO fix width of this?
         walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
         walkingSpeedBox.setValue(walkingArrayList.get(1));
+        User.setSpeed(3.0);
 
         walkingSpeedBox.setOnAction(e -> handleWalkingInput(walkingSpeedBox, true));    //TODO finish handleWalkingInput
 
@@ -520,7 +526,11 @@ public class Display {
         leftArrowButton = new javafx.scene.control.Button();
         leftArrowButton.setGraphic(leftArrowView);
         leftArrowButton.setId("arrow-buttons-grayed");
-        leftArrowButton.setOnAction(e -> handleLeftArrowButton());
+        leftArrowButton.setOnAction(e -> {
+            handleLeftArrowButton();
+            rightArrowButton.setId("arrow-buttons");
+            //controller.handleIncrementPathMap();
+        });
 
         Image rightArrow = FileFetch.getImageFromFile("rightArrow.png", 24, 24, true, true);
 
@@ -529,7 +539,11 @@ public class Display {
         rightArrowButton = new javafx.scene.control.Button();
         rightArrowButton.setGraphic(rightArrowView);
         rightArrowButton.setId("arrow-buttons-grayed");
-        rightArrowButton.setOnAction(e -> handleRightArrowButton());
+        rightArrowButton.setOnAction(e -> {
+            handleRightArrowButton();
+            leftArrowButton.setId("arrow-buttons");
+            //controller.handleIncrementPathMap();
+        });
 
         AnchorPane.setRightAnchor(leftArrowButton, expandedWidth - 5.5 - leftArrowButton.getPrefWidth());
         AnchorPane.setTopAnchor(leftArrowButton, 5.5);
@@ -539,7 +553,22 @@ public class Display {
         AnchorPane.setTopAnchor(rightArrowButton, 5.5);
         AnchorPane.setRightAnchor(rightArrowButton, 8.0);
 
-        instructionArrows.getChildren().addAll(leftArrowButton, rightArrowButton);
+        totalTimeLabel = new Label();
+        String input;
+        input = "Time Estimation:\n";
+
+        System.out.println("User speed: " + User.getSpeed());
+        input += Directions.getTime(User.getSpeed());
+        totalTimeLabel.setText(input);
+        totalTimeLabel.setId("time-label");
+        totalTimeLabel.setTextFill(Color.web("#333"));
+        totalTimeLabel.setAlignment(Pos.CENTER);
+        totalTimeLabel.visibleProperty().bind(TIME_VISIBLE);
+
+        AnchorPane.setLeftAnchor(totalTimeLabel, 65.0);
+        AnchorPane.setTopAnchor(totalTimeLabel, 4.0);
+
+        instructionArrows.getChildren().addAll(leftArrowButton, totalTimeLabel, rightArrowButton);
 
         AnchorPane.setTopAnchor(instructions, EDGE + 36);
         AnchorPane.setLeftAnchor(instructions, 0.0);
@@ -803,8 +832,6 @@ public class Display {
         right.setOnMouseClicked(e -> controller.handleIncreaseFloorButton());
 
 
-
-
         hbox.getChildren().addAll(left, backToCampus, right);
         hbox.visibleProperty().bind( BUILDING_VISIBLE);
         hbox.setMaxHeight(EDGE);
@@ -839,6 +866,15 @@ public class Display {
             this.nodeTransitionButton.setId("arrow-buttons-grayed2");
             this.nodeTransitionButton.setOnAction(e -> {});//// TODO: 12/2/15 fix
         }
+    }
+
+    public void updateTimeEstimation() {
+        System.out.println("Updating time estimation");
+        String input;
+        input = "Time Estimation:\n";
+        input += Directions.getTime(User.getSpeed());
+        System.out.println(input);
+        totalTimeLabel.setText(input);
     }
 
     //TODO THIS IS START OF BUILDING BOX PANE!
@@ -929,6 +965,49 @@ public class Display {
 //        });
 
 
+
+        /*
+        start.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    System.out.println("Start ENTER");
+                    handleSearchInput(start, true);
+                    end.requestFocus();
+                } else if (event.getCode() == KeyCode.ESCAPE) {
+                    System.out.println("Start ESCAPE");
+                    start.setValue(null);
+                    end.setValue(null);
+                } else if (event.getCode() == KeyCode.TAB) {
+                    System.out.println("Start TAB");
+                    end.requestFocus();
+                }
+            }});
+            */
+
+        //start.setOnAction(e -> handleSearchInput(start, true));
+
+		/* end */
+       /*
+        end.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    System.out.println("End ENTER");
+                    handleSearchInput(end, true);
+                } else if (event.getCode() == KeyCode.ESCAPE) {
+                    System.out.println("End ESCAPE");
+                    start.setValue(null);
+                    end.setValue(null);
+                } else if (event.getCode() == KeyCode.TAB) {
+                    System.out.println("End TAB");
+                    handleSearchInput(end, true);
+                }
+            }});
+*/
+
+       // end.setOnAction(e -> handleSearchInput(end, false));
+
 //        start.getStyleClass().add("combo-box");
 
         //      end.getStyleClass().add("combo-box");
@@ -1009,17 +1088,28 @@ public class Display {
                 }
         );
 
+
         instructions.getSelectionModel().selectedItemProperty()
                 .addListener((ObservableValue<? extends Instructions> obs, Instructions oldinstruction, Instructions selectedInstruction) -> {
                     if (selectedInstruction != null) {
-                        //TODO Set the string of the label to this
-                        this.controller.updateNodeInformation(selectedInstruction.getNode());
+                        FLIP = false;
+                        System.out.println("FIRST INSTRUCTIONS THING");
                         this.mapDisplay.highlightPath(selectedInstruction.getNode().getID());
-                        this.mapDisplay.softSelectAnimation(selectedInstruction.getNode().getID());
+                        this.mapDisplay.softSelectAnimation(controller.lastSoft, selectedInstruction.getNode().getID());
+                        controller.lastSoft = selectedInstruction.getNode().getID();
                     }
                 });
-        //instructions.setFocusModel();
 
+        //instructions.setFocusModel();
+        instructions.setOnMouseClicked(event -> {
+            if (instructions.getSelectionModel().getSelectedItem() != null && FLIP) {
+                System.out.println("SECOND INSTRUCTIONS THING");
+                this.mapDisplay.highlightPath(instructions.getSelectionModel().getSelectedItem().getNode().getID());
+                this.mapDisplay.softSelectAnimation(controller.lastSoft, instructions.getSelectionModel().getSelectedItem().getNode().getID());
+                controller.lastSoft = instructions.getSelectionModel().getSelectedItem().getNode().getID();
+            }
+            FLIP = true;
+        });
 
         instructions.setPlaceholder(new Label(" "));
         instructions.setMinWidth(0);
@@ -1070,6 +1160,7 @@ public class Display {
     private void handleWalkingInput(Inputs v, boolean START) {
         visuals.Walking value = (visuals.Walking) v.getValue();
         User.setSpeed(value.getWalkingSpeed());
+        updateTimeEstimation();
         //System.out.println(value.getWalkingSpeed()); //TODO Remove
     }
 

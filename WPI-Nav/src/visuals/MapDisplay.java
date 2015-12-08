@@ -13,12 +13,19 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
-import logic.*;
+import logic.Building;
+import logic.FileFetch;
+import logic.IMap;
+import logic.INode;
 import org.controlsfx.control.PopOver;
 
 import java.util.ArrayList;
@@ -40,7 +47,7 @@ public class MapDisplay extends Pane {
     ArrayList<INode> idPath;
 
     /* Visuals */
-    private Transition sts;
+    private ScaleTransition st;
     private Transition ste;
 
 
@@ -51,6 +58,7 @@ public class MapDisplay extends Pane {
 
     private Color last = Color.TRANSPARENT;
     private Color lastStroke = Color.TRANSPARENT;
+    private Paint lastSoft = Color.TRANSPARENT;
 
     private boolean HIGLIGHTED = false;
 
@@ -77,7 +85,9 @@ public class MapDisplay extends Pane {
         this.lines = new HashMap<>();
         this.idPath = new ArrayList<>();
         this.ste = new ScaleTransition();
-        this.sts = new ScaleTransition();
+        this.st = new ScaleTransition();
+
+
         this.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 
 
@@ -154,8 +164,20 @@ public class MapDisplay extends Pane {
         controller.handleMapClick(temp);
     }
 
-    public void softSelectAnimation(int id) {
-        Circle c = id_circle.get(id); //TODO confirm we dont need to ensure its on the same map
+    public void softSelectAnimation(int idOld, int idNew) {
+        System.out.println("idOld: " + idOld);
+        System.out.println("idNew: " + idNew);
+
+
+        if (idOld > -1) {
+            Circle c = id_circle.get(idOld); //TODO confirm we dont need to ensure its on the same map
+            c.setFill(this.lastSoft);
+        }
+
+        Circle c = id_circle.get(idNew); //TODO confirm we dont need to ensure its on the same map
+        this.lastSoft = c.getFill();
+        c.setFill(Color.HOTPINK);
+
         ScaleTransition st = new ScaleTransition(Duration.millis(160), c);
         st.setByX(1.03f);
         st.setByY(1.03f);
@@ -184,6 +206,8 @@ public class MapDisplay extends Pane {
 
 
     private Circle createCircle(INode v) {
+
+
 
         double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
         double y = v.getY();
@@ -474,34 +498,32 @@ public class MapDisplay extends Pane {
      * @param iNode
      */
     public void setStartNode(INode iNode) {
-        //NOW WE HAVE TO CHECK IF NODE IS ON THIS MAP
-        //I think we should keep all circles
-        Circle c;
 
-        if (!id_circle.containsKey(iNode.getID())){
-            c = createCircle(controller.getNode(iNode.getID()));
-        } else {
-            c = id_circle.get(iNode.getID());
-        }
+       // if (st.getNode() == null || !st.getNode().equals(id_circle.get(iNode.getID()))) {
+            Circle c;
 
-        c.setRadius(5);
-        highlight(c, Color.GREEN, Color.LIGHTGREEN);
+            if (!id_circle.containsKey(iNode.getID())) {
+                c = createCircle(controller.getNode(iNode.getID()));
+            } else {
+                c = id_circle.get(iNode.getID());
+            }
+
+            //this.getChildren().remove(c);
+            //this.getChildren().add(c);
 
 
-        if (sts != null) { sts.stop(); }
-
-        ScaleTransition st = new ScaleTransition(Duration.millis(100), c);
-        st.setByX(1.1f);
-        st.setByY(1.1f);
-        st.setCycleCount(4);
-        st.setAutoReverse(true);
-        st.play();
-        sts = st;
-
-        st.setOnFinished(event -> {
             c.setRadius(5);
-        });
+            highlight(c, Color.GREEN, Color.LIGHTGREEN);
+            id_circle.put(iNode.getID(), c);
 
+
+            st = new ScaleTransition(Duration.millis(100), c);
+            st.setByX(1.1f);
+            st.setByY(1.1f);
+            st.setCycleCount(4);
+            st.setAutoReverse(true);
+            st.play();
+      //  }
     }
 
 
@@ -525,7 +547,6 @@ public class MapDisplay extends Pane {
             st.setCycleCount(4);
             st.setAutoReverse(true);
             st.play();
-            sts = st;
 
             st.setOnFinished(event -> {
                 c.setRadius(5);

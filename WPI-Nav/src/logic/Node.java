@@ -215,7 +215,16 @@ public abstract class Node implements INode {
 
 
 	public void addEdge(Edge edge) {
-		this.adjacencies.add(edge);
+		boolean alreadyExists = false;
+		for(int i = 0; i < adjacencies.size(); i++){
+			if(adjacencies.get(i).getTarget() == edge.getTarget()){
+				alreadyExists = true;
+			}
+		}
+
+		if(!alreadyExists){
+			this.adjacencies.add(edge);
+		}
 	}
 
 	/**
@@ -274,13 +283,20 @@ public abstract class Node implements INode {
 		return false;
 	}
 
+	public boolean isRoom() {return false; }
+
 	public ArrayList<String> getNames() {return new ArrayList<>();}
 
 	public void removeEdge(int id){
+		ArrayList<Edge> toRemove = new ArrayList<>();
 		for(Edge e : adjacencies){
 			if (e.getTarget() == id){
-				adjacencies.remove(e);
+				toRemove.add(e);
+				//adjacencies.remove(e);
 			}
+		}
+		for (Edge e : toRemove){
+			adjacencies.remove(e);
 		}
 	}
 
