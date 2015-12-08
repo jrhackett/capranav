@@ -277,10 +277,15 @@ public abstract class Node implements INode {
 	public ArrayList<String> getNames() {return new ArrayList<>();}
 
 	public void removeEdge(int id){
+		ArrayList<Edge> toRemove = new ArrayList<>();
 		for(Edge e : adjacencies){
 			if (e.getTarget() == id){
-				adjacencies.remove(e);
+				toRemove.add(e);
+				//adjacencies.remove(e);
 			}
+		}
+		for (Edge e : toRemove){
+			adjacencies.remove(e);
 		}
 	}
 
