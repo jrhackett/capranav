@@ -141,6 +141,8 @@ public interface INode {
 
     public boolean isInteresting();
 
+    public boolean isRoom();
+
     public ArrayList<String> getNames();
 
     public void removeEdge(int id);

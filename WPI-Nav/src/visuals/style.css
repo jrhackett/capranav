@@ -80,11 +80,15 @@
     -fx-background-color: #888;
 }
 
-.combo-box-base > .arrow-button
+/*.combo-box .arrow, .combo-box .arrow-button{
+    -fx-background-color: transparent;
+}*/
+
+/*.combo-box-base > .arrow-button
 {
     -fx-background-color: #333;
     -fx-border-radius: 0;
-}
+}*/
 
 ​
 /*.combo-box .list-cell
@@ -395,4 +399,9 @@
 #campus-button:pressed
 {
     -fx-effect:null;
+}
+
+#time-label
+{
+    -fx-font-size: 10;
 }

@@ -733,7 +733,11 @@ public class Controller extends Application {
         switchMapSetting(startNode.getMap_id());
 
         //shows the lines
+
         //myDisplay.mapDisplay.showLines(-1, lastMapID); //TODO UPDATE showPath
+
+        myDisplay.updateTimeEstimation();
+        myDisplay.TIME_VISIBLE.setValue(true);
     }
 
     public void handleIncrementPathMap(){

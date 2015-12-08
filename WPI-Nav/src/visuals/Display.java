@@ -17,10 +17,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
-import logic.FileFetch;
-import logic.INode;
-import logic.Transition;
-import logic.User;
+import logic.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +56,7 @@ public class Display {
     public BooleanProperty BUILDING_VISIBLE;
     public BooleanProperty PHOTO_ICON_VISIBLE;
     public BooleanProperty ICON_VISIBLE;
+    public BooleanProperty TIME_VISIBLE;
 
     final BooleanProperty firstTime = new SimpleBooleanProperty(true);
 
@@ -75,6 +73,9 @@ public class Display {
     private ListView<Instructions> instructions; //ListView<Instruction>
     private javafx.scene.control.Button hiddenHandler;
 
+    private Label totalTimeLabel;
+
+    private ArrayList<Walking> walkingArrayList;
 
     private Label buildingName;
     private Label buildingNumber;
@@ -124,6 +125,7 @@ public class Display {
         this.SETTINGS_VISIBLE = new SimpleBooleanProperty(true);
         this.BUILDING_VISIBLE = new SimpleBooleanProperty(false);
         this.EMAIL_VISIBLE = new SimpleBooleanProperty(true);
+        this.TIME_VISIBLE = new SimpleBooleanProperty(false);
 
         this.PHOTO_ICON_VISIBLE = new SimpleBooleanProperty(false);
         this.ICON_VISIBLE = new SimpleBooleanProperty(false);
@@ -393,7 +395,7 @@ public class Display {
 
         settingsWalkingBox.getChildren().addAll(settingsWalkingLabel);
 
-        ArrayList<Walking> walkingArrayList = new ArrayList<>();
+        walkingArrayList = new ArrayList<>();
         walkingArrayList.add(new Walking("Casual (Walking with your Grandmother)", 2.0));
         walkingArrayList.add(new Walking("Quick  (Walking to Class)", 3.0));
         walkingArrayList.add(new Walking("Fast   (Late to Class)", 4.0));
@@ -402,6 +404,7 @@ public class Display {
         walkingSpeedBox.setTranslateX(8);  //TODO fix width of this?
         walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
         walkingSpeedBox.setValue(walkingArrayList.get(1));
+        User.setSpeed(3.0);
 
         walkingSpeedBox.setOnAction(e -> handleWalkingInput(walkingSpeedBox, true));    //TODO finish handleWalkingInput
 
@@ -542,7 +545,22 @@ public class Display {
         AnchorPane.setTopAnchor(rightArrowButton, 5.5);
         AnchorPane.setRightAnchor(rightArrowButton, 8.0);
 
-        instructionArrows.getChildren().addAll(leftArrowButton, rightArrowButton);
+        totalTimeLabel = new Label();
+        String input;
+        input = "Time Estimation:\n";
+
+        System.out.println("User speed: " + User.getSpeed());
+        input += Directions.getTime(User.getSpeed());
+        totalTimeLabel.setText(input);
+        totalTimeLabel.setId("time-label");
+        totalTimeLabel.setTextFill(Color.web("#333"));
+        totalTimeLabel.setAlignment(Pos.CENTER);
+        totalTimeLabel.visibleProperty().bind(TIME_VISIBLE);
+
+        AnchorPane.setLeftAnchor(totalTimeLabel, 65.0);
+        AnchorPane.setTopAnchor(totalTimeLabel, 4.0);
+
+        instructionArrows.getChildren().addAll(leftArrowButton, totalTimeLabel, rightArrowButton);
 
         AnchorPane.setTopAnchor(instructions, EDGE + 36);
         AnchorPane.setLeftAnchor(instructions, 0.0);
@@ -806,8 +824,6 @@ public class Display {
         right.setOnMouseClicked(e -> controller.handleIncreaseFloorButton());
 
 
-
-
         hbox.getChildren().addAll(left, backToCampus, right);
         hbox.visibleProperty().bind( BUILDING_VISIBLE);
         hbox.setMaxHeight(EDGE);
@@ -842,6 +858,15 @@ public class Display {
             this.nodeTransitionButton.setId("arrow-buttons-grayed2");
             this.nodeTransitionButton.setOnAction(e -> {});//// TODO: 12/2/15 fix
         }
+    }
+
+    public void updateTimeEstimation() {
+        System.out.println("Updating time estimation");
+        String input;
+        input = "Time Estimation:\n";
+        input += Directions.getTime(User.getSpeed());
+        System.out.println(input);
+        totalTimeLabel.setText(input);
     }
 
     //TODO THIS IS START OF BUILDING BOX PANE!
@@ -1083,6 +1108,7 @@ public class Display {
     private void handleWalkingInput(Inputs v, boolean START) {
         visuals.Walking value = (visuals.Walking) v.getValue();
         User.setSpeed(value.getWalkingSpeed());
+        updateTimeEstimation();
         //System.out.println(value.getWalkingSpeed()); //TODO Remove
     }
 
