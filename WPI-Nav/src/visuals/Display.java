@@ -824,12 +824,21 @@ public class Display {
 
         this.left.setStyle("-fx-background-color:#eee;");
         this.right.setStyle("-fx-background-color:#eee;");
-
+        left.setId("arrow-buttons");
+        right.setId("arrow-buttons");
         buildingName = new Label();
         buildingNumber = new Label();
 
         left.setOnMouseClicked(e -> controller.handleDecreaseFloorButton());
         right.setOnMouseClicked(e -> controller.handleIncreaseFloorButton());
+
+        left.setMaxWidth(24);
+        left.setMinWidth(24);
+        left.setMaxHeight(24);
+        left.setMinHeight(24);
+
+        right.setMaxWidth(24);
+        right.setMinWidth(24);
 
 
         hbox.getChildren().addAll(left, backToCampus, right);

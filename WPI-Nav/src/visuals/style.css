@@ -381,9 +381,9 @@
 {
     -fx-min-height: 27;
     -fx-max-height: 27;
-    -fx-min-width:100;
-    -fx-max-width: 100;
-    -fx-font-size: 10;
+    -fx-min-width:107;
+    -fx-max-width: 107;
+    -fx-font-size: 12;
     -fx-padding: 4 4 4 4;
     /*-fx-border-color: #888888;*/
     -fx-border-width: 0;
