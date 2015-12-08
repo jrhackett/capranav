@@ -381,18 +381,18 @@
     -fx-max-width: 100;
     -fx-font-size: 10;
     -fx-padding: 4 4 4 4;
-    -fx-border-color: #888888;
-    -fx-border-width: 1;
+    /*-fx-border-color: #888888;*/
+    -fx-border-width: 0;
     -fx-border-radius:5;
-    -fx-background-color: white;
+    -fx-background-color: #eeeeee;
 }
 
 #campus-button:hover
 {
-    -fx-border-color: #aaaaaa;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 
-#campus-button:pressed, #popover-buttons:focused
+#campus-button:pressed
 {
-    -fx-border-color:#888888;
+    -fx-effect:null;
 }
