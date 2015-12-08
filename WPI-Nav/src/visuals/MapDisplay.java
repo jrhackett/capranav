@@ -3,6 +3,8 @@ package visuals;
 import controller.Controller;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Transition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,12 +13,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
-import logic.*;
+import logic.Building;
+import logic.FileFetch;
+import logic.IMap;
+import logic.INode;
 import org.controlsfx.control.PopOver;
 
 import java.util.ArrayList;
@@ -211,7 +219,7 @@ public class MapDisplay extends Pane {
                 //content of popover
                 System.out.println("showing popover for ID: " + v.getID());
                 if(!(previousPopOver.equals(popOver))) {
-                    popOver.show(circle);
+                    popOver.show(circle, -7);
                     previousPopOver.hide();
                     previousPopOver = popOver;
                     //controller.updateNodeInformation(v);
@@ -271,10 +279,23 @@ public class MapDisplay extends Pane {
             }
             button.setText(value);
             final int x = i;
-            button.setOnMouseClicked(e -> {
-                controller.setCurrentMap(floorPlan.get(x));
-                popOver.hide();
+            button.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    System.out.println("building.getID(): " + building.getID());
+                    System.out.println("x: " + x);
+                    controller.switchToBuildingView(building.getID(), x);
+                    //controller.handleEnterBuilding((logic.Transition)v);
+                    //controller.setCurrentMap(floorPlan.get(x));
+                    popOver.hide();
+                }
             });
+//            button.setOnMouseClicked(e -> {
+//                controller.switchToBuildingView(building.getID(), i);
+//                //controller.handleEnterBuilding((logic.Transition)v);
+//                //controller.setCurrentMap(floorPlan.get(x));
+//                popOver.hide();
+//            });
             flowPane.getChildren().add(button);
         }
 
@@ -318,6 +339,7 @@ public class MapDisplay extends Pane {
         popOver.setArrowLocation(PopOver.ArrowLocation.RIGHT_TOP);
         popOver.setDetachable(false);
         popOver.setArrowSize(5.0);
+
         return popOver;
     }
 
@@ -386,17 +408,18 @@ public class MapDisplay extends Pane {
         lines = new HashMap<>();
 
 
-
-
         for (ArrayList<Instructions> list : path) {
             ArrayList<Line> lineArrayList = new ArrayList<>();
-            double coordX = path.get(0).get(0).getNode().getX();
-            double coordY = path.get(0).get(0).getNode().getY();
+            double coordX = list.get(0).getNode().getX();
+            double coordY = list.get(0).getNode().getY();
 
             for (Instructions i : list) {
                 /** path nodes highlight blue **/
                 highlightPath(id_circle.get(i.getNode().getID()));
                 idPath.add(i.getNode());
+
+                System.out.println("x: start" + coordX);
+                System.out.println("y: start" + coordY);
 
                 /** create all the lines and add them to a list **/
                 Line line = new Line();
@@ -411,14 +434,18 @@ public class MapDisplay extends Pane {
                 line.setStrokeDashOffset(5);
                 line.getStrokeDashArray().addAll(2d, 7d);
                 lineArrayList.add(line);
-                //System.out.println("lines created");
+                System.out.println("x: end" + coordX);
+                System.out.println("y: end" + coordY);
+                System.out.println("lines created");
+                System.out.println("");
+                System.out.println("");
             }
             //System.out.println("lines put into hashmap");
             lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
         }
 
         setStartNode(idPath.get(0));
-        setEndNode(idPath.get(0), false);
+        setEndNode(idPath.get(idPath.size()-1), false);
     }
 
     /**
@@ -431,6 +458,7 @@ public class MapDisplay extends Pane {
     public void showLines(int mapIdOld, int mapIdNew) {
         if (mapIdOld != -1) {
             try {
+                System.out.println("Removing old map lines: " + mapIdOld);
                 this.getChildren().removeAll(lines.get(mapIdOld));
             } catch (NullPointerException e){
                 System.out.println("MAP HAS NO LINES YET");
@@ -438,7 +466,11 @@ public class MapDisplay extends Pane {
         }
 
         //if map has lines to show, show them
-        if(this.lines.containsKey(mapIdNew)) this.getChildren().addAll(lines.get(mapIdNew));
+        System.out.println("Switching from map: " + mapIdOld + " to map: " + mapIdNew);
+        if(this.lines.containsKey(mapIdNew)){
+            System.out.println("POST CONTAINS");
+            this.getChildren().addAll(lines.get(mapIdNew));
+        }
     }
 
 
@@ -452,6 +484,8 @@ public class MapDisplay extends Pane {
         //I think we should keep all circles
         Circle c;
 
+        this.getChildren().remove(id_circle.get(iNode.getID()));
+
         if (!id_circle.containsKey(iNode.getID())){
             c = createCircle(controller.getNode(iNode.getID()));
         } else {
@@ -460,9 +494,8 @@ public class MapDisplay extends Pane {
 
         c.setRadius(5);
         highlight(c, Color.GREEN, Color.LIGHTGREEN);
-
-
-        if (sts != null) { sts.stop(); }
+        id_circle.put(iNode.getID(), c);
+        this.getChildren().add(id_circle.get(iNode.getID()));
 
         ScaleTransition st = new ScaleTransition(Duration.millis(100), c);
         st.setByX(1.1f);
@@ -472,9 +505,18 @@ public class MapDisplay extends Pane {
         st.play();
         sts = st;
 
-        st.setOnFinished(event -> {
-            c.setRadius(5);
+        final Circle x;
+
+
+        st.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                final Circle x = createCircle(iNode);
+                id_circle.put(iNode.getID(), x);
+            }
         });
+
+
 
     }
 

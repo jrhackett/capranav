@@ -224,7 +224,7 @@ public class ZoomAndPan {
                 MIN_SCALE = scale;
                 //System.out.println("out Scale" + scale);
                 //if (bounds.getHeight()>530 || bounds.getWidth()>730 ||){
-                    panAndZoomPane.setPivot(transX,transY,scale);
+                panAndZoomPane.setPivot(transX,transY,scale);
                 //}
 
 //            int left = -1 * (int) bounds.getMinX();
@@ -267,7 +267,15 @@ public class ZoomAndPan {
                 }
 
                 if (newScale == MIN_SCALE){
-                    panAndZoomPane.setPivot(0,0,newScale);
+//                    panAndZoomPane.setPivot(0,0,newScale);
+                    Bounds bounds = scrollPane.getViewportBounds();
+                    //System.out.println("viewport bounds: " + bounds.getWidth()+ " width, " + bounds.getHeight() +" height");
+                    double transX = panAndZoomPane.getTranslateX()-(bounds.getWidth() - 705)/2; //TODO important values
+                    double transY = panAndZoomPane.getTranslateY()-(bounds.getHeight() - 530)/2; //TODO important values
+
+                    //System.out.println("out Scale" + scale);
+                    //if (bounds.getHeight()>530 || bounds.getWidth()>730 ||){
+                    panAndZoomPane.setPivot(transX,transY,MIN_SCALE);
                 }
                 //System.out.println("scale" + panAndZoomPane.getScale());
                 event.consume();

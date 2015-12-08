@@ -2,12 +2,11 @@ package controller;
 
 import SVGConverter.SvgImageLoaderFactory;
 import javafx.application.Application;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Scene;
-import javafx.scene.control.TreeTableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import logic.*;
@@ -80,6 +79,9 @@ public class Controller extends Application {
         /* node images */
         //TODO FIX
         nodes.forEach((k,v) -> {
+            /*if(buildings.get(maps.get(v.getMap_id()).getBuildingID()).getName().equals("Stratton Hall")){
+                v.setPicturePath("../images/pictures/StrattonHall.png");
+            }else*/
             v.setPicturePath("../images/Riley.png");
         });
 
@@ -306,10 +308,10 @@ public class Controller extends Application {
      * @param t
      */
     public void handleEnterBuilding(Transition t){
-        switchToBuildingView(t.getBuildingID(), t.getToFloor());
         this.currentMap = maps.get(t.getMap_id());
         this.currentBuilding = t.getBuildingID();
         this.currentFloor = t.getToFloor();
+        switchToBuildingView(t.getBuildingID(), t.getToFloor());
         handleMapLines();
     }
 
@@ -333,11 +335,16 @@ public class Controller extends Application {
     }
 
 
-    private void switchToBuildingView(int buildingID, int startingFLOOR){
+    public void switchToBuildingView(int buildingID, int startingFLOOR){
+        this.currentBuilding = buildingID;
+        this.currentMap      = maps.get(buildings.get(buildingID).getFloorID(startingFLOOR));
+        this.currentFloor    = startingFLOOR;
+
         System.out.println("SWITCH TO BUILDING VIEW");
         System.out.println("buildingId: " + buildingID);
         System.out.println("startingfloor: " + startingFLOOR);
         myDisplay.setBuildingName(buildings.get(buildingID).getName());
+        showBuildingPane();
         setFloor(startingFLOOR);
     }
 
@@ -358,10 +365,11 @@ public class Controller extends Application {
 
     public void setFloor(int i){
         if (buildings.get(currentBuilding).containsFloor(i)) {
-            setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
+
             this.currentFloor = i;
             this.myDisplay.setBuildingNumber(i); //TODO Change this to something better / more informatative
-            handleMapLines(); //removes old lines
+            //handleMapLines(); //removes old lines
+            setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
 
             if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)) {
                 //set id for normal
@@ -402,6 +410,7 @@ public class Controller extends Application {
         flipFlop *= -1;
         this.currentMap = maps.get(id);
         this.myDisplay.mapDisplay.setMap(maps.get(id));
+        handleMapLines();
         //stage.setWidth(stage.getWidth()-flipFlop);
         boolean full = stage.isFullScreen();
 
@@ -618,7 +627,9 @@ public class Controller extends Application {
         return this.buildings.get(building_id).getNames();
     }
 
-
+    public IMap getCurrentMap() {
+        return this.currentMap;
+    }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -724,7 +735,11 @@ public class Controller extends Application {
         switchMapSetting(startNode.getMap_id());
 
         //shows the lines
-        myDisplay.mapDisplay.showLines(-1, lastMapID); //TODO UPDATE showPath
+
+        //myDisplay.mapDisplay.showLines(-1, lastMapID); //TODO UPDATE showPath
+
+        myDisplay.updateTimeEstimation();
+        myDisplay.TIME_VISIBLE.setValue(true);
     }
 
     public void handleIncrementPathMap(){
