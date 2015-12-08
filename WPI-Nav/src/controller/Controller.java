@@ -91,8 +91,22 @@ public class Controller extends Application {
         //TODO FIX
         nodes.forEach((k,v) -> {
             /*if(buildings.get(maps.get(v.getMap_id()).getBuildingID()).getName().equals("Stratton Hall")){
-                v.setPicturePath("../images/pictures/StrattonHall.png");
+                v.setPicturePath("../images/pictures/Stratton Hall.png");
             }else*/
+            if((v instanceof Transition) && v.getMap_id() == 0 && ((logic.Transition)v).getBuildingID() != 0) {
+                //v.setPicturePath("../images/pictures/Stratton Hall.png");//TODO change this from always Stratton to the right picture
+                String path;
+                try {
+                    Building building = this.getBuilding(((logic.Transition)v).getBuildingID());
+                    path = building.getName();
+                    path += ".png";
+                    System.out.println("path: " + path);
+                    v.setPicturePath(path);
+                    //FileFetch.getImageForPictures(path); //TODO make this image scale with resizing
+                } catch(NullPointerException e) {          //TODO bad bad bad -- need rest of pictures
+                    v.setPicturePath("../images/Riley.png");
+                }
+            }else
             v.setPicturePath("../images/Riley.png");
         });
 
@@ -176,7 +190,7 @@ public class Controller extends Application {
 
         //add image to stack pane -> if no image return void
         //TODO make this image scale with resizing
-        Image image = FileFetch.getImageFromFile(node.getPicturePath(), 900, 900, true, true);
+        Image image = FileFetch.getImageForPictures(node.getPicturePath(), 900, 900, true, true);
         ImageView iv = new ImageView(image);
 
         imageStack.getChildren().add(iv);
