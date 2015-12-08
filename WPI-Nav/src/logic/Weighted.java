@@ -17,7 +17,16 @@ public class Weighted {
      * @param allNodes
      */
     public void makeEdgesHandicapped(HashMap<Integer, INode> allNodes){
-
+        allNodes.forEach((k, v) -> {
+            if (v instanceof TStairs){
+                //set all edges for this Node to new weight
+                for (Edge e : v.getAdjacencies()) {
+                    e.setWeight(handicapWeight);
+                }
+                //set Nodes' edges that connect to this Node to new weight
+                //TODO this stufff
+            }
+        });
     }
 
     /**

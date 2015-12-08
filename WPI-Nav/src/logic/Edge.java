@@ -19,6 +19,8 @@ public class Edge{
 
     public int getTarget() { return this.target; }
 
+    public void setWeight(double t){this.weight = t;}
+
 	/**
 	 * @warning do not generate hashcode/equals, it creates a Stack Overflow in
 	 *          JUnit
