@@ -275,9 +275,8 @@ public class Controller extends Application {
 
             if (startNode != null && endNode != null) {
                 findPaths();
-            } else {
-                switchMapSetting(startNode.getMap_id());
-            }
+            } else if (startNode != null) switchMapSetting(startNode.getMap_id());
+
 
             if (startNode != null) {
                 //TODO if current map contains it, play, if it doesn't - switch and play
