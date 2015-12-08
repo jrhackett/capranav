@@ -526,7 +526,11 @@ public class Display {
         leftArrowButton = new javafx.scene.control.Button();
         leftArrowButton.setGraphic(leftArrowView);
         leftArrowButton.setId("arrow-buttons-grayed");
-        leftArrowButton.setOnAction(e -> handleLeftArrowButton());
+        leftArrowButton.setOnAction(e -> {
+            handleLeftArrowButton();
+            rightArrowButton.setId("arrow-buttons");
+            //controller.handleIncrementPathMap();
+        });
 
         Image rightArrow = FileFetch.getImageFromFile("rightArrow.png", 24, 24, true, true);
 
@@ -535,7 +539,11 @@ public class Display {
         rightArrowButton = new javafx.scene.control.Button();
         rightArrowButton.setGraphic(rightArrowView);
         rightArrowButton.setId("arrow-buttons-grayed");
-        rightArrowButton.setOnAction(e -> handleRightArrowButton());
+        rightArrowButton.setOnAction(e -> {
+            handleRightArrowButton();
+            leftArrowButton.setId("arrow-buttons");
+            //controller.handleIncrementPathMap();
+        });
 
         AnchorPane.setRightAnchor(leftArrowButton, expandedWidth - 5.5 - leftArrowButton.getPrefWidth());
         AnchorPane.setTopAnchor(leftArrowButton, 5.5);
@@ -816,12 +824,21 @@ public class Display {
 
         this.left.setStyle("-fx-background-color:#eee;");
         this.right.setStyle("-fx-background-color:#eee;");
-
+        left.setId("arrow-buttons");
+        right.setId("arrow-buttons");
         buildingName = new Label();
         buildingNumber = new Label();
 
         left.setOnMouseClicked(e -> controller.handleDecreaseFloorButton());
         right.setOnMouseClicked(e -> controller.handleIncreaseFloorButton());
+
+        left.setMaxWidth(24);
+        left.setMinWidth(24);
+        left.setMaxHeight(24);
+        left.setMinHeight(24);
+
+        right.setMaxWidth(24);
+        right.setMinWidth(24);
 
 
         hbox.getChildren().addAll(left, backToCampus, right);
