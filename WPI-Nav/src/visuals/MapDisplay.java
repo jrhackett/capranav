@@ -178,12 +178,23 @@ public class MapDisplay extends Pane {
         this.lastSoft = c.getFill();
         c.setFill(Color.HOTPINK);
 
-        ScaleTransition st = new ScaleTransition(Duration.millis(160), c);
-        st.setByX(1.03f);
-        st.setByY(1.03f);
-        st.setCycleCount(2);
-        st.setAutoReverse(true);
+        ScaleTransition st = new ScaleTransition(Duration.millis(75), c);
+        //st.setByX(1.1f);
+        //st.setByY(1.1f);
+        st.setToX(2);
+        st.setToY(2);
+        st.setCycleCount(1);
         st.play();
+
+        ScaleTransition st2 = new ScaleTransition(Duration.millis(65), c);
+        st2.setToX(1);
+        st2.setToY(1);
+        st2.setCycleCount(1);
+
+
+        st.setOnFinished(event -> {
+            st2.play();
+        });
     }
 
     /**
@@ -447,10 +458,18 @@ public class MapDisplay extends Pane {
                 coordY = i.getNode().getY();
                 line.setEndX(coordX);
                 line.setEndY(coordY);
-                line.setStroke(Color.web("#00CCFF", 0.7));
-                line.setStrokeWidth(2);
+                line.setStroke(Color.web("#00CCFF", 0.85));
+                line.setStrokeWidth(3);
                 line.setStrokeDashOffset(5);
                 line.getStrokeDashArray().addAll(2d, 7d);
+
+                DropShadow dropShadow = new DropShadow();
+                dropShadow.setRadius(5.0);
+                dropShadow.setOffsetX(2.0);
+                dropShadow.setOffsetY(2.0);
+                dropShadow.setColor(Color.BLACK);
+
+                line.setEffect(dropShadow);
                 lineArrayList.add(line);
                 System.out.println("x: end" + coordX);
                 System.out.println("y: end" + coordY);
@@ -517,12 +536,24 @@ public class MapDisplay extends Pane {
             id_circle.put(iNode.getID(), c);
 
 
-            st = new ScaleTransition(Duration.millis(100), c);
-            st.setByX(1.1f);
-            st.setByY(1.1f);
-            st.setCycleCount(4);
-            st.setAutoReverse(true);
-            st.play();
+        ScaleTransition st = new ScaleTransition(Duration.millis(75), c);
+        //st.setByX(1.1f);
+        //st.setByY(1.1f);
+        st.setToX(2);
+        st.setToY(2);
+        st.setCycleCount(1);
+        st.play();
+
+        ScaleTransition st2 = new ScaleTransition(Duration.millis(65), c);
+        st2.setToX(1);
+        st2.setToY(1);
+        st2.setCycleCount(1);
+        st2.play();
+
+
+        st.setOnFinished(event -> {
+            st2.play();
+        });
       //  }
     }
 
@@ -541,15 +572,23 @@ public class MapDisplay extends Pane {
         highlight(c, Color.FIREBRICK, Color.RED);
 
         if (animation) {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
-            st.setByX(1.1f);
-            st.setByY(1.1f);
-            st.setCycleCount(4);
-            st.setAutoReverse(true);
+            ScaleTransition st = new ScaleTransition(Duration.millis(75), c);
+            //st.setByX(1.1f);
+            //st.setByY(1.1f);
+            st.setToX(2);
+            st.setToY(2);
+            st.setCycleCount(1);
             st.play();
 
+            ScaleTransition st2 = new ScaleTransition(Duration.millis(65), c);
+            st2.setToX(1);
+            st2.setToY(1);
+            st2.setCycleCount(1);
+            st2.play();
+
+
             st.setOnFinished(event -> {
-                c.setRadius(5);
+                st2.play();
             });
         }
 

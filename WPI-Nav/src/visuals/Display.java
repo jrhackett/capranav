@@ -71,7 +71,7 @@ public class Display {
     private AnchorPane map; //VBox
     public StackPane root;
     private HBox dashBoardTitleBox;
-    private ListView<Instructions> instructions; //ListView<Instruction>
+    public ListView<Instructions> instructions; //ListView<Instruction>
     private javafx.scene.control.Button hiddenHandler;
 
     private Label totalTimeLabel;
@@ -1098,7 +1098,6 @@ public class Display {
                             text.setWrappingWidth(expandedWidth-10);
                             //setText(in.toString());
                             setGraphic(text);
-
                         }
                     }
                 }
@@ -1142,13 +1141,22 @@ public class Display {
     }
 
     public void clearInstructions() {
-        this.instructions.setItems(null);
-    }
+        instructions.setCellFactory((ListView<Instructions> lv) ->
+                new ListCell<Instructions>() {
+                    @Override
+                    public void updateItem(Instructions in, boolean empty) {
+                        setText(null);
+                        setGraphic(null);
+                    }
+                }
+        );    }
 
     /**
      * Call to set the instructions
      */
     public void setInstructions(ArrayList<Instructions> instructions) {
+
+
         ObservableList<Instructions> data = FXCollections.observableArrayList();
         data.addAll(instructions);
         this.instructions.setItems(data);
