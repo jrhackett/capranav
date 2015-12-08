@@ -16,10 +16,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import visuals.Display;
 
 /**
- * Created by Kurt on 12/2/15.
+ * Created by Kurt on 12/2/15.  Modified by Greg afterwards.
  */
 
 
@@ -31,6 +32,8 @@ public class myPreloader extends javafx.application.Preloader {
     public void start(Stage primaryStage) throws Exception {
         this.preloaderStage = primaryStage;
 
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+
         VBox loading = new VBox(20);
         loading.setMaxWidth(Region.USE_PREF_SIZE);
         loading.setMaxHeight(Region.USE_PREF_SIZE);
@@ -41,8 +44,8 @@ public class myPreloader extends javafx.application.Preloader {
         Scene scene = new Scene(root);
 
 
-        primaryStage.setWidth(560);
-        primaryStage.setHeight(350);
+        primaryStage.setWidth(550);  //550 goatnav.png, 360 Preloader.gif
+        primaryStage.setHeight(309);  //309 goatnav.png, 270 Preloader.gif
         primaryStage.setScene(scene);
 
         //this.myDisplay = new Display(this);    //creates scene
