@@ -27,5 +27,6 @@
         <jarDirectory url="file://$MODULE_DIR$/util/batik-1.8/lib" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="controlsfx-8.40.10 (2)" level="project" />
   </component>
 </module>
