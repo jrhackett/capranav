@@ -308,7 +308,6 @@ public class Directions {
 	 */
 	public static String getTime(double walkSpeed) {
 		double time = timeEst(walkSpeed); //Get raw time
-		System.out.println("Inside getTime: " + time);
 		long min = 0;
 		while (time >= 60) { //Convert time in seconds to minutes + seconds
 			min++;
@@ -320,7 +319,6 @@ public class Directions {
 			min++;
 			sec = 0;
 		} //leet hack
-		System.out.println("Inside getTime: " + min + " " + sec);
 		return min + " min, " + sec + " sec";
 	}
 
