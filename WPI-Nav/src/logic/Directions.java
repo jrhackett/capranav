@@ -161,7 +161,7 @@ public class Directions {
 			// specialdirs changed lines VV
 			int zz = 0;
 			int flights = 0;
-				if (next instanceof TStairs){
+				if (next instanceof TStairs && next.getMap_id() != aStarPath.get(i+3).getMap_id()){
 					//i+2 is next
 					//i+3 is next+1, the node on the next floor
 					while(aStarPath.size()>i+zz+3 && aStarPath.get(i+zz+2) instanceof TStairs){
@@ -175,7 +175,7 @@ public class Directions {
 				}
 			zz = 0;
 			String elevatorend = "somewhere you can fix this bug."; //should never stay as this
-				if (next instanceof Elevator){
+				if (next instanceof Elevator && next.getMap_id() != aStarPath.get(i+3).getMap_id()){
 					flights = ((Elevator) aStarPath.get(i+zz+2)).getToFloor(); //initialize so that, in an edge case, it at least says to go where you already are
 					while(aStarPath.size()>i+zz+3 && aStarPath.get(i+zz+2) instanceof Elevator){
 						zz++;
@@ -198,7 +198,7 @@ public class Directions {
 			}
 			
 			//if (angle<=-10 || angle>=10 || (aStarPath.size()==i+j+2 && veryfirm == false)){
-			if (angle<=-10 || angle >=10 && !(turn instanceof TStairs) && !(turn instanceof Elevator)){
+			if (angle<=-15 || angle >=15 && !(turn instanceof TStairs) && !(turn instanceof Elevator)){
 				directions.get(mapstep).add(new Instructions("Turn " + anglePhrase + ", and walk " + distPhrase,turn));
 				//if(aStarPath.size()==i+j+2) {
 					//veryfirm = true;
