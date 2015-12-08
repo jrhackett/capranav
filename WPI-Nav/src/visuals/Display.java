@@ -386,7 +386,7 @@ public class Display {
 
 
         //settings a sliding pane!
-        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView);
+        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth + EDGE * 2, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2
         slidingSettings.setStyle("-fx-background-color: #333333");
 
         javafx.scene.control.Button slidingButton = slidingSettings.getButton();
@@ -438,10 +438,22 @@ public class Display {
         setEmailLabel.setTranslateX(EDGE - 7);
         emailTextField.setTranslateX(EDGE);
 
+        //buttons for handicap / weather
+
+        RadioButton handicapRadioButton = new RadioButton();
+        handicapRadioButton.setText("Handicap");
+        handicapRadioButton.setTextFill(Color.web("eee"));
+        RadioButton weatherRadioButton  = new RadioButton("Weather");
+        weatherRadioButton.setText("Weather");
+        weatherRadioButton.setTextFill(Color.web("eee"));
+        handicapRadioButton.setTranslateX(EDGE);
+        handicapRadioButton.setTranslateY(8);
+        weatherRadioButton.setTranslateX(EDGE);
+        weatherRadioButton.setTranslateY(11);
 
         VBox settingsVbox = new VBox();
         settingsVbox.visibleProperty().bind(DASHBOARD_VISIBLE);
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, handicapRadioButton, weatherRadioButton,  settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
@@ -705,7 +717,7 @@ public class Display {
         slidingDirections.setPrefWidth(expandedWidth + EDGE);
         slidingDirections.setMinWidth(0);
         slidingDirections.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + EDGE);
-        slidingDirections.playHidePane();
+        slidingDirections.playHidePane(DIRECTIONS_VISIBLE);
         //testing sliding stuff:
         //slidingDirections.getChildren().addAll(directions);
 
@@ -1187,10 +1199,13 @@ public class Display {
      */
     public void setInstructions(ArrayList<Instructions> instructions) {
 
+        //this.SETTINGS_VISIBLE.setValue(!SETTINGS_VISIBLE.getValue());
 
         ObservableList<Instructions> data = FXCollections.observableArrayList();
         data.addAll(instructions);
         this.instructions.setItems(data);
+        if (DIRECTIONS_VISIBLE.getValue() == false) this.slidingDirections.playShowPane(DIRECTIONS_VISIBLE);
+
     }
 
 
