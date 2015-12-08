@@ -3,7 +3,6 @@ package visuals;
 import controller.Controller;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -1029,6 +1028,7 @@ public class Display {
                 }
         );
 
+        /*
         instructions.getSelectionModel().selectedItemProperty()
                 .addListener((ObservableValue<? extends Instructions> obs, Instructions oldinstruction, Instructions selectedInstruction) -> {
                     if (selectedInstruction != null) {
@@ -1038,7 +1038,13 @@ public class Display {
                         this.mapDisplay.softSelectAnimation(selectedInstruction.getNode().getID());
                     }
                 });
-
+                */
+        //instructions.setFocusModel();
+        instructions.setOnMouseClicked(event -> {
+            //this.controller.updateNodeInformation(instructions.getSelectionModel().getSelectedItem().getNode());
+            this.mapDisplay.highlightPath(instructions.getSelectionModel().getSelectedItem().getNode().getID());
+            this.mapDisplay.softSelectAnimation(instructions.getSelectionModel().getSelectedItem().getNode().getID());
+        });
 
         instructions.setPlaceholder(new Label(" "));
         instructions.setMinWidth(0);
