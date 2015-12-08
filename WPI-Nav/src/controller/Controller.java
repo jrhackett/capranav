@@ -190,7 +190,7 @@ public class Controller extends Application {
 
         //add image to stack pane -> if no image return void
         //TODO make this image scale with resizing
-        Image image = FileFetch.getImageForPictures(node.getPicturePath(), 900, 900, true, true);
+        Image image = FileFetch.getImageForPictures(node.getPicturePath(), 800, 800, true, true);
         ImageView iv = new ImageView(image);
 
         imageStack.getChildren().add(iv);
