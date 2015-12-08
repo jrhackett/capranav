@@ -319,7 +319,12 @@ public class Controller extends Application {
     private void switchMapSetting(int mapId){
         if (maps.get(mapId).getID() == 0){
             hideBuildingPane();
+            if (currentMap.getID() == 0) {
+                System.out.println("HERE 4");
+                firstTime = true;
+            }
             defaultMap();
+
             this.currentMap = campus;
         } else {
             this.currentMap = maps.get(mapId);
@@ -370,6 +375,10 @@ public class Controller extends Application {
             this.currentFloor = i;
             this.myDisplay.setBuildingNumber(i); //TODO Change this to something better / more informatative
             //handleMapLines(); //removes old lines
+//            if (currentMap.getID() == buildings.get(currentBuilding).getFloorID(i)) {
+//                System.out.println("HERE 4");
+//                firstTime = true;
+//            }
             setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
 
             if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)) {
@@ -421,10 +430,16 @@ public class Controller extends Application {
 
         if(!firstTime){
             if(full) {
+                System.out.println("HERE 1");
                 stage.setFullScreen(!full);
                 stage.setFullScreen(full);
             }
-            else stage.setWidth(stage.getWidth() + flipFlop);
+            else {
+                System.out.println("HERE 2");
+                stage.setWidth(stage.getWidth() + flipFlop);
+            }
+            System.out.println("HERE 3");
+
         }
         firstTime = false;
     }
@@ -620,6 +635,9 @@ public class Controller extends Application {
      * Sets the current map to the campus map
      */
     public void defaultMap(){
+       // if (currentMap.getID() == buildings.get(currentBuilding).getFloorID(i)) {
+        System.out.println("HERE 4");
+
         setCurrentMap(campus.getID());
     }
 
@@ -638,10 +656,7 @@ public class Controller extends Application {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void reset(){
-        defaultMap(); //TODO CONSIDER THIS
-        this.pathNodes = new ArrayList<>();
-    }
+
 
     private boolean validateNotEquality(INode n, INode m){
         if (n.getID() == m.getID()){
@@ -710,7 +725,7 @@ public class Controller extends Application {
      * We also have to think about clearing things
      */
     public void findPaths(){
-
+        lastSoft = -1;
         //Creates instructions - setting fullPath
         getPathNodes(startNode, endNode);
         getInstructions();
