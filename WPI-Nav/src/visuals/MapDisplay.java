@@ -18,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
@@ -57,6 +58,7 @@ public class MapDisplay extends Pane {
 
     private Color last = Color.TRANSPARENT;
     private Color lastStroke = Color.TRANSPARENT;
+    private Paint lastSoft = Color.TRANSPARENT;
 
     private boolean HIGLIGHTED = false;
 
@@ -162,8 +164,21 @@ public class MapDisplay extends Pane {
         controller.handleMapClick(temp);
     }
 
-    public void softSelectAnimation(int id) {
-        Circle c = id_circle.get(id); //TODO confirm we dont need to ensure its on the same map
+    public void softSelectAnimation(int idOld, int idNew) {
+        System.out.println("idOld: " + idOld);
+        System.out.println("idNew: " + idNew);
+
+
+        if (idOld > -1) {
+            Circle c = id_circle.get(idOld); //TODO confirm we dont need to ensure its on the same map
+            c.setFill(this.lastSoft);
+        }
+
+        Circle c = id_circle.get(idNew); //TODO confirm we dont need to ensure its on the same map
+        this.lastSoft = c.getFill();
+        c.setFill(Color.HOTPINK);
+
+
         ScaleTransition st = new ScaleTransition(Duration.millis(160), c);
         st.setByX(1.03f);
         st.setByY(1.03f);
@@ -485,7 +500,7 @@ public class MapDisplay extends Pane {
      */
     public void setStartNode(INode iNode) {
 
-        if (st.getNode() == null || !st.getNode().equals(id_circle.get(iNode.getID()))) {
+       // if (st.getNode() == null || !st.getNode().equals(id_circle.get(iNode.getID()))) {
             Circle c;
 
             if (!id_circle.containsKey(iNode.getID())) {
@@ -509,7 +524,7 @@ public class MapDisplay extends Pane {
             st.setCycleCount(4);
             st.setAutoReverse(true);
             st.play();
-        }
+      //  }
     }
 
 

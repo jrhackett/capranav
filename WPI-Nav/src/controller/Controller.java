@@ -63,6 +63,8 @@ public class Controller extends Application {
     double flipFlop = 1;
     boolean firstTime = true;
 
+    public int lastSoft = -1;
+
     @Override
     public void start(Stage s) throws Exception {
         stage = s;
@@ -745,7 +747,8 @@ public class Controller extends Application {
         if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
             myDisplay.setInstructions(fullPath.get(++currentIndex)); //TODO UPDATE setInstructions
             switchMapSetting(fullPath.get(currentIndex).get(0).getNode().getMap_id());
-            this.myDisplay.mapDisplay.softSelectAnimation(fullPath.get(currentIndex).get(0).getNode().getID());
+            this.myDisplay.mapDisplay.softSelectAnimation(lastSoft, fullPath.get(currentIndex).get(0).getNode().getID());
+            lastSoft = fullPath.get(currentIndex).get(0).getNode().getID();
             this.myDisplay.mapDisplay.showLines(lastMapID, fullPath.get(currentIndex).get(0).getNode().getMap_id()); //TODO UPDATE showPath
         }
 
@@ -762,7 +765,8 @@ public class Controller extends Application {
         if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1){
             myDisplay.setInstructions(fullPath.get(--currentIndex)); //TODO UPDATE setInstructions
             switchMapSetting(fullPath.get(currentIndex).get(0).getNode().getMap_id());
-            this.myDisplay.mapDisplay.softSelectAnimation(fullPath.get(currentIndex).get(0).getNode().getID());
+            this.myDisplay.mapDisplay.softSelectAnimation(lastSoft, fullPath.get(currentIndex).get(0).getNode().getID());
+            lastSoft = fullPath.get(currentIndex).get(0).getNode().getID();
         }
 
         if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {

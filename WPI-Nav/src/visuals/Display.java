@@ -1044,8 +1044,8 @@ public class Display {
                         FLIP = false;
                         System.out.println("FIRST INSTRUCTIONS THING");
                         this.mapDisplay.highlightPath(selectedInstruction.getNode().getID());
-                        this.mapDisplay.softSelectAnimation(selectedInstruction.getNode().getID());
-
+                        this.mapDisplay.softSelectAnimation(controller.lastSoft, selectedInstruction.getNode().getID());
+                        controller.lastSoft = selectedInstruction.getNode().getID();
                     }
                 });
 
@@ -1054,7 +1054,8 @@ public class Display {
             if (instructions.getSelectionModel().getSelectedItem() != null && FLIP) {
                 System.out.println("SECOND INSTRUCTIONS THING");
                 this.mapDisplay.highlightPath(instructions.getSelectionModel().getSelectedItem().getNode().getID());
-                this.mapDisplay.softSelectAnimation(instructions.getSelectionModel().getSelectedItem().getNode().getID());
+                this.mapDisplay.softSelectAnimation(controller.lastSoft, instructions.getSelectionModel().getSelectedItem().getNode().getID());
+                controller.lastSoft = instructions.getSelectionModel().getSelectedItem().getNode().getID();
             }
             FLIP = true;
         });
