@@ -58,9 +58,13 @@ public class Controller extends Application {
 
     private INode selectedInformationNode;
 
+    Scene display;
 
     @Override
     public void start(Stage s) throws Exception {
+
+        System.setProperty("glass.accessible.force", "false");
+
         /* load up svg converter */
         SvgImageLoaderFactory.install();
 
@@ -84,7 +88,7 @@ public class Controller extends Application {
 
 		/* setup */
         this.myDisplay = new Display(this);    //creates scene
-        Scene display = myDisplay.Init();      //initializes scene
+        display = myDisplay.Init();      //initializes scene
         s.setScene(display);                   //sets scene to display
         display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
         s.show();                              //shows scene
@@ -95,6 +99,15 @@ public class Controller extends Application {
     /****************************************************************************************************************
                                     FUNCTIONS THAT ARE CALLED FROM UI AND CONTACT UI
      ****************************************************************************************************************/
+
+    /**
+     * Changes the Style Sheet
+     * @param style the directory of the .css
+     */
+    public void setStyleSheet(String style){
+        display.getStylesheets().clear();
+        display.getStylesheets().add(getClass().getResource(style).toExternalForm());
+    }
 
     /**
      * Brings up the picture of the node on to the screen and greys out the screen

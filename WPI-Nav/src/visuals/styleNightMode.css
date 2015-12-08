@@ -6,6 +6,7 @@
 .root {
     -fx-font-family: HelveticaNeueLight;
     -fx-font-size: 20;
+    -fx-background-color:black;
 }
 
 #dashboardButton  {
@@ -25,7 +26,7 @@
 }
 
 #pinView {
-    -fx-fill: #eeeeee;
+    -fx-fill: #1b1b1b;
 }
 
 /*#pinView:hover {
@@ -77,7 +78,7 @@
 
 .combo-box-base:hover
 {
-    -fx-background-color: #888;
+    -fx-background-color: #363636;
 }
 
 /*.combo-box .arrow, .combo-box .arrow-button{
@@ -170,7 +171,7 @@
 
 .list-cell:odd
 {
-    -fx-background-color:#eee;
+    -fx-background-color:#1b1b1b;
 }
 
 .list-cell:filled:selected:focused, .list-cell:filled:selected, .list-cell:filled:hover {
@@ -180,7 +181,7 @@
 
 .button
 {
-    -fx-background-color: #888;
+    -fx-background-color: #888
 }
 
 .button:hover
@@ -190,7 +191,7 @@
 
 #arrow-buttons:pressed
 {
-    -fx-background-color: #eee;
+    -fx-background-color: #1b1b1b;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
 
 }
@@ -198,9 +199,9 @@
 #text-field
 {
     -fx-background-color:#333;
-    -fx-text-fill:#eee;
+    -fx-text-fill:#1b1b1b;
     -fx-border-width:1;
-    -fx-border-color:#eee;
+    -fx-border-color:#1b1b1b;
     -fx-border-radius:3;
     -fx-padding:3 3;
     -fx-font-size:12;
@@ -209,7 +210,7 @@
 #text-field-confirmed
 {
 -fx-background-color:#333;
-    -fx-text-fill:#eee;
+    -fx-text-fill:#1b1b1b;
     -fx-border-width:1;
     -fx-border-color:green;
     -fx-border-radius:3;
@@ -219,7 +220,7 @@
 #text-field-denied
 {
 -fx-background-color:#333;
-    -fx-text-fill:#eee;
+    -fx-text-fill:#1b1b1b;
     -fx-border-width:1;
     -fx-border-color:red;
     -fx-border-radius:3;
@@ -230,7 +231,7 @@
 
 #email-button{
     -fx-font-size:12;
-    -fx-background-color:white;
+    -fx-background-color:#1b1b1b;
     -fx-border-width:1;
     -fx-border-radius:2;
     -fx-border-color:#333;
@@ -253,7 +254,7 @@
     -fx-pref-height:26 !important;
     -fx-min-height:26 !important;
     -fx-max-height:26 !important;
-    -fx-background-color:white;
+    -fx-background-color:#1b1b1b;
     -fx-border-width:0;
     -fx-text-fill:#333;
 }
@@ -268,14 +269,14 @@
     -fx-pref-height:26 !important;
     -fx-min-height:26 !important;
     -fx-max-height:26 !important;
-    -fx-background-color:white;
-    -fx-text-fill:#aaa;
+    -fx-background-color:#1b1b1b;
+    -fx-text-fill:#838383;
     -fx-opacity:0.4;
 }
 
 #arrow-buttons-grayed:pressed
 {
-    -fx-background-color:white;
+    -fx-background-color:#1b1b1b;
     -fx-effect:null;
 }
 
@@ -284,13 +285,13 @@
     -fx-pref-height:26 !important;
     -fx-min-height:26 !important;
     -fx-max-height:26 !important;
-    -fx-background-color:white;
+    -fx-background-color:#1b1b1b;
     -fx-text-fill:#aaa;
 }
 
 #arrow-buttons-grayed2:pressed
 {
-    -fx-background-color:white;
+    -fx-background-color:#1b1b1b;
     -fx-effect:null;
 }
 
@@ -308,7 +309,7 @@
 
 #email-text-field
 {
--fx-background-color:white;
+-fx-background-color:#1b1b1b;
     -fx-text-fill:#333;
     -fx-border-width:1;
     -fx-border-color:#333;
@@ -319,7 +320,7 @@
 
 #email-text-field-confirmed
 {
--fx-background-color:white;
+-fx-background-color:#1b1b1b;
     -fx-text-fill:#333;
     -fx-border-width:1;
     -fx-border-color:green;
@@ -330,7 +331,7 @@
 
 #email-text-field-denied
 {
--fx-background-color:white;
+-fx-background-color:#1b1b1b;
     -fx-text-fill:#333;
     -fx-border-width:1;
     -fx-border-color:red;
@@ -342,7 +343,7 @@
 .radio-button .radio {
     -fx-border-width: 1px;
     -fx-border-color: TRANSPARENT;
-    -fx-background-color: white;
+    -fx-background-color: #1b1b1b;
     -fx-background-image: null;
     -fx-border-radius: 15px;
     -fx-padding: 4px;

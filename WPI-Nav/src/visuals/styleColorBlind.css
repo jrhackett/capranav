@@ -25,7 +25,7 @@
 }
 
 #pinView {
-    -fx-fill: #eeeeee;
+    -fx-fill: #171717;
 }
 
 /*#pinView:hover {
@@ -170,7 +170,7 @@
 
 .list-cell:odd
 {
-    -fx-background-color:#eee;
+    -fx-background-color:#171717;
 }
 
 .list-cell:filled:selected:focused, .list-cell:filled:selected, .list-cell:filled:hover {
@@ -190,7 +190,7 @@
 
 #arrow-buttons:pressed
 {
-    -fx-background-color: #eee;
+    -fx-background-color: #171717;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
 
 }
@@ -200,7 +200,7 @@
     -fx-background-color:#333;
     -fx-text-fill:#eee;
     -fx-border-width:1;
-    -fx-border-color:#eee;
+    -fx-border-color:#171717;
     -fx-border-radius:3;
     -fx-padding:3 3;
     -fx-font-size:12;
@@ -209,7 +209,7 @@
 #text-field-confirmed
 {
 -fx-background-color:#333;
-    -fx-text-fill:#eee;
+    -fx-text-fill:#171717;
     -fx-border-width:1;
     -fx-border-color:green;
     -fx-border-radius:3;
@@ -219,7 +219,7 @@
 #text-field-denied
 {
 -fx-background-color:#333;
-    -fx-text-fill:#eee;
+    -fx-text-fill:#171717;
     -fx-border-width:1;
     -fx-border-color:red;
     -fx-border-radius:3;
@@ -253,7 +253,7 @@
     -fx-pref-height:26 !important;
     -fx-min-height:26 !important;
     -fx-max-height:26 !important;
-    -fx-background-color:white;
+    -fx-background-color:#171717;
     -fx-border-width:0;
     -fx-text-fill:#333;
 }
@@ -268,14 +268,14 @@
     -fx-pref-height:26 !important;
     -fx-min-height:26 !important;
     -fx-max-height:26 !important;
-    -fx-background-color:white;
+    -fx-background-color:black;
     -fx-text-fill:#aaa;
     -fx-opacity:0.4;
 }
 
 #arrow-buttons-grayed:pressed
 {
-    -fx-background-color:white;
+    -fx-background-color:#171717;
     -fx-effect:null;
 }
 
@@ -284,13 +284,13 @@
     -fx-pref-height:26 !important;
     -fx-min-height:26 !important;
     -fx-max-height:26 !important;
-    -fx-background-color:white;
+    -fx-background-color:#171717;
     -fx-text-fill:#aaa;
 }
 
 #arrow-buttons-grayed2:pressed
 {
-    -fx-background-color:white;
+    -fx-background-color:#171717;
     -fx-effect:null;
 }
 
@@ -308,7 +308,7 @@
 
 #email-text-field
 {
--fx-background-color:white;
+-fx-background-color:#171717;
     -fx-text-fill:#333;
     -fx-border-width:1;
     -fx-border-color:#333;
@@ -319,7 +319,7 @@
 
 #email-text-field-confirmed
 {
--fx-background-color:white;
+-fx-background-color:#171717;
     -fx-text-fill:#333;
     -fx-border-width:1;
     -fx-border-color:green;
@@ -330,7 +330,7 @@
 
 #email-text-field-denied
 {
--fx-background-color:white;
+-fx-background-color:#171717;
     -fx-text-fill:#333;
     -fx-border-width:1;
     -fx-border-color:red;
