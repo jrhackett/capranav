@@ -458,11 +458,14 @@ public class MapDisplay extends Pane {
                 coordY = i.getNode().getY();
                 line.setEndX(coordX);
                 line.setEndY(coordY);
+
+                /** below is the line [color] [dashed] [size] **/
                 line.setStroke(Color.web("#00CCFF", 0.85));
                 line.setStrokeWidth(3);
                 line.setStrokeDashOffset(5);
                 line.getStrokeDashArray().addAll(2d, 7d);
 
+                /** shadow effect on the line **/
                 DropShadow dropShadow = new DropShadow();
                 dropShadow.setRadius(5.0);
                 dropShadow.setOffsetX(2.0);
