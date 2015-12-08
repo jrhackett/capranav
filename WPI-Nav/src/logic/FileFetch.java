@@ -37,4 +37,12 @@ public class FileFetch {
         catch (FileNotFoundException e) { e.printStackTrace(); return null; } //BAD
         return img;
     }
+
+    private static InputStream makeStream(String root, String path) {
+        String fp = new File("").getAbsolutePath() + root + path;
+        InputStream img;
+        try { img = new FileInputStream(fp); }
+        catch (FileNotFoundException e) { e.printStackTrace(); return null; } //BAD
+        return img;
+    }
 }

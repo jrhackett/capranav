@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import logic.*;
@@ -146,6 +147,7 @@ public class Controller extends Application {
             this.myDisplay.updatePictureIcon(false);
             this.selectedInformationNode = null;
         }
+
     }
 
     /**
@@ -769,6 +771,42 @@ public class Controller extends Application {
     private void mapsFromFile() {
         maps = new Parser<IMap>().fromFileMap();
         campus = (Campus)maps.get(0);
+    }
+
+
+    /****************************************************************************************************************
+                                                     TIME ESTIMATION
+     ****************************************************************************************************************/
+
+    /**
+     * Returns a String with the time calculated to min/sec.
+     * Rounds sec value so that second values are either 0, 15, 30, 45
+     * (Would be a poor estimation if it said it takes 23 seconds to get somewhere)
+     */
+    public String getTime(Directions dir, double walkSpeed) {
+        double time = timeEst(dir, walkSpeed);
+        long min = 0, sec;
+        while(time >= 60) {
+            min++;
+            time -= 60;
+        }
+        sec = Math.round(time/15) * 15; //Rounds seconds to the nearest 1/4 minute
+        return min + " minutes, " + sec + " seconds";
+    }
+
+    /**
+     * Returns the time estimation for a given route
+     * TODO Need some way to get directions.. not available in this class?
+     * @param dir Directions object for the given route
+     * @param walkSpeed Person's walking speed in some distance per second
+     * @return Time in seconds
+     */
+    public double timeEst(Directions dir, double walkSpeed) {
+        return dir.getTotalDistance() / walkSpeed;
+    }
+
+    public Building getBuilding(int buildingID) {
+        return buildings.get(buildingID);
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
