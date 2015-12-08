@@ -15,6 +15,7 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.Parent;
+import logic.*;
 
 
 public class ZoomAndPan {
@@ -25,7 +26,7 @@ public class ZoomAndPan {
 
     private final DoubleProperty zoomProperty = new SimpleDoubleProperty(1.0d);
     private final DoubleProperty deltaY = new SimpleDoubleProperty(0.0d);
-
+    public PanAndZoomPane panAndZoomPane = new PanAndZoomPane();
     //private final Group group = new Group();
 
     //@Override
@@ -41,7 +42,7 @@ public class ZoomAndPan {
 
 //        AnchorPane root = new AnchorPane();
 
-        PanAndZoomPane panAndZoomPane = new PanAndZoomPane();
+
         zoomProperty.bind(panAndZoomPane.myScale);
         deltaY.bind(panAndZoomPane.deltaY);
         panAndZoomPane.getChildren().add(group);
@@ -72,19 +73,41 @@ public class ZoomAndPan {
 
     }
 
-    public double clampTranslateXWidth(double value, double scale, double vpW){
-        //TODO finish  X clamp methods
-        double min = -(scale - 1)*(vpW/2);
-        double max = (scale - 1)*(vpW/2);
+//    public void zoomToNode(INode node){
+//        double x = node.getX();
+//        double y = node.getY();
+      public  void zoomToNode(INode node){
+          double x = node.getX();
+          double y = node.getY();
+          Bounds bounds = scrollPane.getViewportBounds();
+          //System.out.println("viewport bounds: " + bounds.getWidth()+ " width, " + bounds.getHeight() +" height");
+          double transX = panAndZoomPane.getTranslateX()-(bounds.getWidth() - 705)/2; //TODO important values
+          double transY = panAndZoomPane.getTranslateY()-(bounds.getHeight() - 530)/2; //TODO important values
 
-        if(Double.compare(value, min) < 0)
-            return min;
+          double scale = Math.min((bounds.getWidth()/705),(bounds.getHeight()/530));
+          MIN_SCALE = scale;
 
-        if(Double.compare(value, max) > 0)
-            return max;
-
-        return value;
+          x -=((700/2)); //TODO if zooming is off alter these values
+          y -=((525/2)); //TODO this too
+          double scaleVal = 5.5;
+          //System.out.println("out Scale" + scale);
+          //if (bounds.getHeight()>530 || bounds.getWidth()>730 ||){
+          panAndZoomPane.setPivot((transX+(x*scaleVal)),(transY+(y*scaleVal)),scaleVal);
     }
+
+//    public double clampTranslateXWidth(double value, double scale, double vpW){
+//        //TODO finish  X clamp methods
+//        double min = -(scale - 1)*(vpW/2);
+//        double max = (scale - 1)*(vpW/2);
+//
+//        if(Double.compare(value, min) < 0)
+//            return min;
+//
+//        if(Double.compare(value, max) > 0)
+//            return max;
+//
+//        return value;
+//    }
 
 
 /**
