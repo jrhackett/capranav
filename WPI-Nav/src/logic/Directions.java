@@ -19,6 +19,7 @@ public class Directions {
 	 * @return
 	 */
 	public static ArrayList<ArrayList<Instructions>> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps) {
+		totalDistance = 0;
 		int mapstep=0;
 		double distspec = 0;
 		boolean veryfirm = false;
@@ -177,7 +178,7 @@ public class Directions {
 		return angle;
 	}
 	
-	public double getTotalDistance() {
+	public static double getTotalDistance() {
 		return totalDistance;
 	}
 	
@@ -213,15 +214,19 @@ public class Directions {
 	 * Rounds sec value so that second values are either 0, 15, 30, 45
 	 * (Would be a poor estimation if it said it takes 23 seconds to get somewhere)
 	 */
-	public String getTime(double walkSpeed) {
+	public static String getTime(double walkSpeed) {
 		double time = timeEst(walkSpeed); //Get raw time
+		System.out.println("Inside getTime: " + time);
 		long min = 0;
 		while(time >= 60) { //Convert time in seconds to minutes + seconds
 			min++;
 			time -= 60;
 		}
+
 		long sec = Math.round(time/15) * 15; //Rounds seconds to the nearest 1/4 minute
-		return min + " minutes, " + sec + " seconds";
+		if (sec == 60) { min++; sec = 0; } //leet hack
+		System.out.println("Inside getTime: " + min + " " + sec);
+		return min + " min, " + sec + " sec";
 	}
 
 	/**
@@ -230,6 +235,10 @@ public class Directions {
 	 *                     Assumes distance is in feet
 	 * @return Time in seconds
 	 */
-	public double timeEst(double walkSpeed) { return (getTotalDistance() / 5280.0) / (walkSpeed * 3600); }
+	public static double timeEst(double walkSpeed) {
+		if (walkSpeed != 0)
+			return (getTotalDistance() / (walkSpeed*10));
+		else return 0;
+	}
 
 }

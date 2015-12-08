@@ -396,3 +396,8 @@
 {
     -fx-effect:null;
 }
+
+#time-label
+{
+    -fx-font-size: 10;
+}

@@ -854,9 +854,11 @@ public class Display {
     }
 
     public void updateTimeEstimation() {
+        System.out.println("Updating time estimation");
         String input;
         input = "Time Estimation:\n";
         input += Directions.getTime(User.getSpeed());
+        System.out.println(input);
         totalTimeLabel.setText(input);
     }
 
