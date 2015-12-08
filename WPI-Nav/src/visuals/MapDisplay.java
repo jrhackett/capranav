@@ -3,22 +3,34 @@ package visuals;
 import controller.Controller;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Transition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
+import logic.Building;
+import logic.FileFetch;
 import logic.IMap;
 import logic.INode;
-import logic.Path;
+import org.controlsfx.control.PopOver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+
 
 
 public class MapDisplay extends Pane {
@@ -34,12 +46,14 @@ public class MapDisplay extends Pane {
     ArrayList<INode> idPath;
 
     /* Visuals */
-    private Transition sts;
+    private ScaleTransition st;
     private Transition ste;
 
 
     private Image mapImage;
     public ImageView mapView;
+
+    private PopOver previousPopOver;
 
     private Color last = Color.TRANSPARENT;
     private Color lastStroke = Color.TRANSPARENT;
@@ -69,13 +83,19 @@ public class MapDisplay extends Pane {
         this.lines = new HashMap<>();
         this.idPath = new ArrayList<>();
         this.ste = new ScaleTransition();
-        this.sts = new ScaleTransition();
+        this.st = new ScaleTransition();
+
+
+        this.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+
 
         controller.getNodes().forEach((k,v) -> {
             Circle c = createCircle(v);
             normal(c, v);
             id_circle.put(k,c);
         });
+
+        previousPopOver = new PopOver();
     }
 
 
@@ -173,6 +193,8 @@ public class MapDisplay extends Pane {
 
     private Circle createCircle(INode v) {
 
+
+
         double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
         double y = v.getY();
         Circle circle = new Circle(x, y, 5);
@@ -193,16 +215,137 @@ public class MapDisplay extends Pane {
             });
         }
 
-        if (!(v instanceof Path)){
+        if((v instanceof logic.Transition) && v.getMap_id() == 0 && ((logic.Transition)v).getBuildingID() != 0){
+
+            PopOver popOver = createPopOverForNode(v);
+
             circle.setOnMouseEntered(e -> {
-                controller.updateNodeInformation(v);
+                //content of popover
+                System.out.println("showing popover for ID: " + v.getID());
+                if(!(previousPopOver.equals(popOver))) {
+                    popOver.show(circle, -7);
+                    previousPopOver.hide();
+                    previousPopOver = popOver;
+                    //controller.updateNodeInformation(v);
+                }
             });
+
+            /*circle.setOnMouseExited(e -> {
+                popOver.hide();
+            });*/
         }
 
         return circle;
     }
 
+    public PopOver createPopOverForNode(INode v) {
+        PopOver popOver = new PopOver();
+        VBox vbox = new VBox();
 
+        Building building = controller.getBuilding(((logic.Transition)v).getBuildingID());
+        HashMap<Integer, Integer> floorPlan = building.getFloorMap();
+
+        Label buildingName = new Label(building.getName());
+        buildingName.setStyle("-fx-font-size:9;");
+        buildingName.setTextFill(Color.web("#333333"));
+        Image picture = FileFetch.getImageFromFile("picture.png", 12, 12, true, true);
+        ImageView pictureView = new ImageView(picture);
+
+        //TODO make pictureView show picture on clicked
+
+        HBox hbox = new HBox();
+        hbox.getChildren().addAll(buildingName, pictureView);
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setSpacing(2);
+
+        Label selectFloor = new Label("Select Floor:");
+        selectFloor.setTextFill(Color.web("#333333"));
+        selectFloor.setStyle("-fx-font-size:8;");
+
+        FlowPane flowPane = new FlowPane();
+
+        /* displays only the buttons that the building has in rows of up to 3 */
+        for(int i = floorPlan.size() - 1; i >= 0; i--) {
+            Button button = new Button();
+            button.setId("popover-buttons");
+            String value;
+            Object array[] = floorPlan.keySet().toArray();
+            if(floorPlan.keySet().toArray()[i].equals(-1)) {
+                value = "SB";
+                button.setStyle("-fx-padding:4 3 4 3;");
+            }
+            else if(floorPlan.keySet().toArray()[i].equals(0)) {
+                value = "B";
+            }
+            else
+            {
+                value = Integer.toString(i);
+            }
+            button.setText(value);
+            final int x = i;
+            button.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    System.out.println("building.getID(): " + building.getID());
+                    System.out.println("x: " + x);
+                    controller.switchToBuildingView(building.getID(), x);
+                    //controller.handleEnterBuilding((logic.Transition)v);
+                    //controller.setCurrentMap(floorPlan.get(x));
+                    popOver.hide();
+                }
+            });
+//            button.setOnMouseClicked(e -> {
+//                controller.switchToBuildingView(building.getID(), i);
+//                //controller.handleEnterBuilding((logic.Transition)v);
+//                //controller.setCurrentMap(floorPlan.get(x));
+//                popOver.hide();
+//            });
+            flowPane.getChildren().add(button);
+        }
+
+        /*Button fourth = new Button();       //4
+        fourth.setText("4");
+        fourth.setId("popover-buttons");
+
+        Button third = new Button();        //3
+        third.setText("3");
+        third.setId("popover-buttons");
+
+        Button second = new Button();       //2
+        second.setText("2");
+        second.setId("popover-buttons");
+
+        Button first = new Button();        //1
+        first.setText("1");
+        first.setId("popover-buttons");
+
+        Button basement = new Button();     //0
+        basement.setText("B");
+        basement.setId("popover-buttons");
+
+        Button subBasement = new Button();  //-1
+        subBasement.setText("SB");
+        subBasement.setId("popover-buttons");
+        subBasement.setStyle("-fx-padding:4 3 4 3;");
+
+        flowPane.getChildren().addAll(fourth, third, second, first, basement, subBasement);*/
+        flowPane.setHgap(2);
+        flowPane.setVgap(2);
+        flowPane.setTranslateY(4);
+
+        vbox.setAlignment(Pos.TOP_CENTER);
+        vbox.setId("popover-id");
+        vbox.setSpacing(2);
+        vbox.getChildren().addAll(hbox, flowPane); //select floor? topbuttons, bottombuttons
+        //vbox.getStylesheets().add("../visuals/style.css");
+
+        popOver.setContentNode(vbox);
+        popOver.setArrowLocation(PopOver.ArrowLocation.RIGHT_TOP);
+        popOver.setDetachable(false);
+        popOver.setArrowSize(5.0);
+
+        return popOver;
+    }
 
     /**
      * highlights a circle
@@ -269,17 +412,18 @@ public class MapDisplay extends Pane {
         lines = new HashMap<>();
 
 
-
-
         for (ArrayList<Instructions> list : path) {
             ArrayList<Line> lineArrayList = new ArrayList<>();
-            double coordX = path.get(0).get(0).getNode().getX();
-            double coordY = path.get(0).get(0).getNode().getY();
+            double coordX = list.get(0).getNode().getX();
+            double coordY = list.get(0).getNode().getY();
 
             for (Instructions i : list) {
                 /** path nodes highlight blue **/
                 highlightPath(id_circle.get(i.getNode().getID()));
                 idPath.add(i.getNode());
+
+                System.out.println("x: start" + coordX);
+                System.out.println("y: start" + coordY);
 
                 /** create all the lines and add them to a list **/
                 Line line = new Line();
@@ -294,14 +438,18 @@ public class MapDisplay extends Pane {
                 line.setStrokeDashOffset(5);
                 line.getStrokeDashArray().addAll(2d, 7d);
                 lineArrayList.add(line);
-                //System.out.println("lines created");
+                System.out.println("x: end" + coordX);
+                System.out.println("y: end" + coordY);
+                System.out.println("lines created");
+                System.out.println("");
+                System.out.println("");
             }
             //System.out.println("lines put into hashmap");
             lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
         }
 
         setStartNode(idPath.get(0));
-        setEndNode(idPath.get(0), false);
+        setEndNode(idPath.get(idPath.size()-1), false);
     }
 
     /**
@@ -314,6 +462,7 @@ public class MapDisplay extends Pane {
     public void showLines(int mapIdOld, int mapIdNew) {
         if (mapIdOld != -1) {
             try {
+                System.out.println("Removing old map lines: " + mapIdOld);
                 this.getChildren().removeAll(lines.get(mapIdOld));
             } catch (NullPointerException e){
                 System.out.println("MAP HAS NO LINES YET");
@@ -321,7 +470,11 @@ public class MapDisplay extends Pane {
         }
 
         //if map has lines to show, show them
-        if(this.lines.containsKey(mapIdNew)) this.getChildren().addAll(lines.get(mapIdNew));
+        System.out.println("Switching from map: " + mapIdOld + " to map: " + mapIdNew);
+        if(this.lines.containsKey(mapIdNew)){
+            System.out.println("POST CONTAINS");
+            this.getChildren().addAll(lines.get(mapIdNew));
+        }
     }
 
 
@@ -331,34 +484,32 @@ public class MapDisplay extends Pane {
      * @param iNode
      */
     public void setStartNode(INode iNode) {
-        //NOW WE HAVE TO CHECK IF NODE IS ON THIS MAP
-        //I think we should keep all circles
-        Circle c;
 
-        if (!id_circle.containsKey(iNode.getID())){
-            c = createCircle(controller.getNode(iNode.getID()));
-        } else {
-            c = id_circle.get(iNode.getID());
-        }
+        if (st.getNode() == null || !st.getNode().equals(id_circle.get(iNode.getID()))) {
+            Circle c;
 
-        c.setRadius(5);
-        highlight(c, Color.GREEN, Color.LIGHTGREEN);
+            if (!id_circle.containsKey(iNode.getID())) {
+                c = createCircle(controller.getNode(iNode.getID()));
+            } else {
+                c = id_circle.get(iNode.getID());
+            }
+
+            //this.getChildren().remove(c);
+            //this.getChildren().add(c);
 
 
-        if (sts != null) { sts.stop(); }
-
-        ScaleTransition st = new ScaleTransition(Duration.millis(150), c);
-        st.setByX(1.1f);
-        st.setByY(1.1f);
-        st.setCycleCount(4);
-        st.setAutoReverse(true);
-        st.play();
-        sts = st;
-
-        st.setOnFinished(event -> {
             c.setRadius(5);
-        });
+            highlight(c, Color.GREEN, Color.LIGHTGREEN);
+            id_circle.put(iNode.getID(), c);
 
+
+            st = new ScaleTransition(Duration.millis(100), c);
+            st.setByX(1.1f);
+            st.setByY(1.1f);
+            st.setCycleCount(4);
+            st.setAutoReverse(true);
+            st.play();
+        }
     }
 
 
@@ -382,7 +533,6 @@ public class MapDisplay extends Pane {
             st.setCycleCount(4);
             st.setAutoReverse(true);
             st.play();
-            sts = st;
 
             st.setOnFinished(event -> {
                 c.setRadius(5);

@@ -338,3 +338,70 @@
     -fx-padding:3 3;
     -fx-font-size:12;
 }
+
+#popover-buttons
+{
+    -fx-background-color: white;
+    -fx-max-width: 28 !important;
+    -fx-min-width: 28 !important;
+    -fx-max-height: 15 !important;
+    -fx-font-size:10;
+    -fx-border-width:1;
+    -fx-border-color:#888888;
+    -fx-border-radius:5;
+}
+
+#popover-buttons:pressed, #popover-buttons:focused
+{
+    -fx-border-color:#888888;
+}
+
+#popover-buttons:hover
+{
+    -fx-border-color:#aaaaaa;
+}
+
+.popover
+{
+    -fx-max-width: 95 !important;
+    -fx-background-color: white;
+    -fx-padding:0;
+}
+
+#popover-id
+{
+    -fx-min-height:95 !important;
+    -fx-max-height:95 !important;
+    -fx-max-width: 95 !important;
+    -fx-background-color: white;
+    -fx-padding:3 3 3 3;
+}
+
+#campus-button
+{
+    -fx-min-height: 27;
+    -fx-max-height: 27;
+    -fx-min-width:100;
+    -fx-max-width: 100;
+    -fx-font-size: 10;
+    -fx-padding: 4 4 4 4;
+    /*-fx-border-color: #888888;*/
+    -fx-border-width: 0;
+    -fx-border-radius:5;
+    -fx-background-color: #eeeeee;
+}
+
+#campus-button:hover
+{
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+#campus-button:pressed
+{
+    -fx-effect:null;
+}
+
+#time-label
+{
+    -fx-font-size: 10;
+}

@@ -34,6 +34,22 @@ public class FileFetch {
         String fp = new File("").getAbsolutePath() + "/WPI-Nav/src/images/" + path;
         InputStream img;
         try { img = new FileInputStream(fp); }
+        catch (FileNotFoundException e) {
+            try {
+                fp = new File("").getAbsolutePath() + "/src/images/" + path;
+                img = new FileInputStream(fp);
+            } catch (FileNotFoundException f) {
+                f.printStackTrace();
+                return null;
+            }
+        }
+        return img;
+    }
+
+    private static InputStream makeStream(String root, String path) {
+        String fp = new File("").getAbsolutePath() + root + path;
+        InputStream img;
+        try { img = new FileInputStream(fp); }
         catch (FileNotFoundException e) { e.printStackTrace(); return null; } //BAD
         return img;
     }

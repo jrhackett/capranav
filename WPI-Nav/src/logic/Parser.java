@@ -225,6 +225,7 @@ public class Parser<Struct> {
 			try { parser = new JsonStreamParser(new FileReader(getNName(i))); }
 			catch (FileNotFoundException e) {
 				System.out.println("Tried to access: " + getNName(i) + ", but couldn't find it.");
+
 				return null; } //This is bad - don't let this happen
 
 			while(parser.hasNext()) {

@@ -411,19 +411,19 @@ public class MapVisual extends Pane {
 							// check to see if there is a new edge to be created
 							boolean isNewEdge = true;
 
+
 							for (Edge edge : controller.getSelectedNode().getAdjacencies()) {
 								if (edge.getTarget() == v.getID()) {
 									isNewEdge = false;
 								}
 							}
 
+
 							// If there is a new edge, create each direction and
 							// add them to the respective nodes
 							// Also draw the edge
 							if (isNewEdge) {
 								System.out.println("New Edge Created!");
-
-
 								Edge newCEdge = new Edge(v.getID(), 1);
 								Edge newVEdge = new Edge(controller.getSelectedNode().getID(), 1);
 
@@ -438,6 +438,7 @@ public class MapVisual extends Pane {
 							}
 
 							controller.selectNode(v.getID());
+
 
 							// The update the visuals
 							drawEdges(controller.getCurrentNodeList());
@@ -479,7 +480,7 @@ public class MapVisual extends Pane {
 	 * @param iNode
      */
 	private void handleNodeChoice(INode iNode, PopOver popOver){
-		if (iNode.isInteresting()){
+		if (iNode.isInteresting() || (iNode instanceof Transition && !(iNode instanceof TStairs || iNode instanceof Elevator))){
 			VBox input = new VBox();
 			TextField newNodeName = new TextField();
 
