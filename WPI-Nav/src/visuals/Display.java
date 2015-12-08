@@ -528,7 +528,8 @@ public class Display {
         leftArrowButton.setId("arrow-buttons-grayed");
         leftArrowButton.setOnAction(e -> {
             handleLeftArrowButton();
-            controller.handleIncrementPathMap();
+            rightArrowButton.setId("arrow-buttons");
+            //controller.handleIncrementPathMap();
         });
 
         Image rightArrow = FileFetch.getImageFromFile("rightArrow.png", 24, 24, true, true);
@@ -540,7 +541,8 @@ public class Display {
         rightArrowButton.setId("arrow-buttons-grayed");
         rightArrowButton.setOnAction(e -> {
             handleRightArrowButton();
-            controller.handleIncrementPathMap();
+            leftArrowButton.setId("arrow-buttons");
+            //controller.handleIncrementPathMap();
         });
 
         AnchorPane.setRightAnchor(leftArrowButton, expandedWidth - 5.5 - leftArrowButton.getPrefWidth());
