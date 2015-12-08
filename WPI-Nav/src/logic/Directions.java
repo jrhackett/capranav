@@ -161,34 +161,36 @@ public class Directions {
 			// specialdirs changed lines VV
 			int zz = 0;
 			int flights = 0;
-				if (next instanceof TStairs && next.getMap_id() != aStarPath.get(i+3).getMap_id()){
+			if(next instanceof TStairs && aStarPath.size() == i+3) distPhrase = "to the stairs.";
+			if(next instanceof Elevator && aStarPath.size() == i+3) distPhrase = "to the elevator.";
+			if(aStarPath.size() > i+3) {
+				if (next instanceof TStairs && next.getMap_id() != aStarPath.get(i + 3).getMap_id()) {
 					//i+2 is next
 					//i+3 is next+1, the node on the next floor
-					while(aStarPath.size()>i+zz+3 && aStarPath.get(i+zz+2) instanceof TStairs){
+					while (aStarPath.size() > i + zz + 3 && aStarPath.get(i + zz + 2) instanceof TStairs) {
 						flights++;
 						zz++;
 					}
-					if ( (maps.get(aStarPath.get(i+3).getMap_id()).getFloor() > (maps.get(next.getMap_id()).getFloor()))){ //going up
-						distPhrase = "to the stairs, and climb up " +flights+" floor(s)";
-					}
-					else distPhrase ="to the stairs, and climb down "+flights+" floor(s)";
+					if ((maps.get(aStarPath.get(i + 3).getMap_id()).getFloor() > (maps.get(next.getMap_id()).getFloor()))) { //going up
+						distPhrase = "to the stairs, and climb up " + flights + " floor(s)";
+					} else distPhrase = "to the stairs, and climb down " + flights + " floor(s)";
 				}
-			zz = 0;
-			String elevatorend = "somewhere you can fix this bug."; //should never stay as this
-				if (next instanceof Elevator && next.getMap_id() != aStarPath.get(i+3).getMap_id()){
-					flights = ((Elevator) aStarPath.get(i+zz+2)).getToFloor(); //initialize so that, in an edge case, it at least says to go where you already are
-					while(aStarPath.size()>i+zz+3 && aStarPath.get(i+zz+2) instanceof Elevator){
+				zz = 0;
+				String elevatorend = "somewhere you can fix this bug."; //should never stay as this
+				if (next instanceof Elevator && next.getMap_id() != aStarPath.get(i + 3).getMap_id()) {
+					flights = ((Elevator) aStarPath.get(i + zz + 2)).getToFloor(); //initialize so that, in an edge case, it at least says to go where you already are
+					while (aStarPath.size() > i + zz + 3 && aStarPath.get(i + zz + 2) instanceof Elevator) {
 						zz++;
-						flights = ((Elevator) aStarPath.get(i+zz+2)).getToFloor();
+						flights = ((Elevator) aStarPath.get(i + zz + 2)).getToFloor();
 					}
-					if(flights == 0) elevatorend = "the basement";
-					if(flights == -1) elevatorend = "the sub-basement";
-					if(flights < -1) elevatorend = "the depths of the earth"; //should never occur
-					if(flights > 0) elevatorend = "floor "+flights;
-					distPhrase = "enter the elevator and go to "+elevatorend;
+					if (flights == 0) elevatorend = "the basement";
+					if (flights == -1) elevatorend = "the sub-basement";
+					if (flights < -1) elevatorend = "the depths of the earth"; //should never occur
+					if (flights > 0) elevatorend = "floor " + flights;
+					distPhrase = "enter the elevator and go to " + elevatorend;
 				}
-			// specialdirs changed lines ^^
-
+				// specialdirs changed lines ^^
+			}
 			//if outside node mapid different then go inside/outside message
 			if (turn.getMap_id()==0 && next.getMap_id()!=0){ //going inside
 				distPhrase = "inside the building";
