@@ -165,7 +165,6 @@ public class Inputs<T> extends ComboBox<T> {
 			return v.toString() + " near " + ((Controller)controller).nearestNamedNodeName(v.getX(), v.getY(), 0);
 
 		}
-		System.out.println("Curious");
 		return item;
 	}
 

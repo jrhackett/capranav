@@ -38,11 +38,6 @@ public class Building {
     }
 
     public boolean containsFloor(int floor){
-        floorMap.forEach((k,v) -> {
-            System.out.println(k);
-            System.out.println(v);
-
-        });
         return this.floorMap.containsKey(floor);
     }
 
