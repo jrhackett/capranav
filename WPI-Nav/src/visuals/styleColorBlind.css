@@ -24,6 +24,25 @@
     -fx-effect:null;
 }
 
+#directionsButton  {
+    -fx-background-color:#ffa500;
+    -fx-text-fill:#eee;
+    -fx-padding: 0;
+}
+
+/*#dashboardButton:hover
+{
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.6) , 5, 0.0 , 0 , 1 );
+}*/
+
+#directionsButton:pressed
+{
+    -fx-effect:null;
+}
+
+
+
+
 #pinView {
     -fx-fill: #eeeeee;
 }
@@ -79,6 +98,10 @@
 {
     -fx-background-color: #888;
 }
+
+/*.combo-box .arrow, .combo-box .arrow-button{
+    -fx-background-color: transparent;
+}*/
 
 .combo-box-base > .arrow-button
 {
@@ -150,6 +173,8 @@
     -fx-background-insets: -1.4, 0, 1, 2;
 }*/
 ​
+
+
 .combo-box-base:disabled {
     -fx-opacity: .4;
 }
@@ -199,6 +224,28 @@
     -fx-padding:3 3;
     -fx-font-size:12;
 }
+
+#text-field-confirmed
+{
+-fx-background-color:#333;
+    -fx-text-fill:#eee;
+    -fx-border-width:1;
+    -fx-border-color:green;
+    -fx-border-radius:3;
+    -fx-padding:3 3;
+    -fx-font-size:12;}
+
+#text-field-denied
+{
+-fx-background-color:#333;
+    -fx-text-fill:#eee;
+    -fx-border-width:1;
+    -fx-border-color:red;
+    -fx-border-radius:3;
+    -fx-padding:3 3;
+    -fx-font-size:12;
+    }
+
 
 #email-button{
     -fx-font-size:12;
@@ -251,6 +298,21 @@
     -fx-effect:null;
 }
 
+#arrow-buttons-grayed2
+{
+    -fx-pref-height:26 !important;
+    -fx-min-height:26 !important;
+    -fx-max-height:26 !important;
+    -fx-background-color:white;
+    -fx-text-fill:#aaa;
+}
+
+#arrow-buttons-grayed2:pressed
+{
+    -fx-background-color:white;
+    -fx-effect:null;
+}
+
 .list-view:focused
 {
     -fx-effect:null;
@@ -263,3 +325,156 @@
     -fx-background-insets: 0 ;
 }
 
+#email-text-field
+{
+-fx-background-color:white;
+    -fx-text-fill:#333;
+    -fx-border-width:1;
+    -fx-border-color:#333;
+    -fx-border-radius:3;
+    -fx-padding:3 3;
+    -fx-font-size:12;
+}
+
+#email-text-field-confirmed
+{
+-fx-background-color:white;
+    -fx-text-fill:#333;
+    -fx-border-width:1;
+    -fx-border-color:green;
+    -fx-border-radius:3;
+    -fx-padding:3 3;
+    -fx-font-size:12;
+}
+
+#email-text-field-denied
+{
+-fx-background-color:white;
+    -fx-text-fill:#333;
+    -fx-border-width:1;
+    -fx-border-color:red;
+    -fx-border-radius:3;
+    -fx-padding:3 3;
+    -fx-font-size:12;
+}
+
+#popover-buttons
+{
+    -fx-background-color: white;
+    -fx-max-width: 28 !important;
+    -fx-min-width: 28 !important;
+    -fx-max-height: 15 !important;
+    -fx-font-size:10;
+    -fx-border-width:1;
+    -fx-border-color:#888888;
+    -fx-border-radius:5;
+}
+
+#popover-buttons:pressed, #popover-buttons:focused
+{
+    -fx-border-color:#888888;
+}
+
+#popover-buttons:hover
+{
+    -fx-border-color:#aaaaaa;
+}
+
+.popover
+{
+    -fx-max-width: 95 !important;
+    -fx-background-color: white;
+    -fx-padding:0;
+}
+
+#popover-id
+{
+    -fx-min-height:95 !important;
+    -fx-max-height:95 !important;
+    -fx-max-width: 95 !important;
+    -fx-background-color: white;
+    -fx-padding:3 3 3 3;
+}
+
+#campus-button
+{
+    -fx-min-height: 27;
+    -fx-max-height: 27;
+    -fx-min-width:107;
+    -fx-max-width: 107;
+    -fx-font-size: 12;
+    -fx-padding: 4 4 4 4;
+    /*-fx-border-color: #888888;*/
+    -fx-border-width: 0;
+    -fx-border-radius:5;
+    -fx-background-color: #eeeeee;
+}
+
+#campus-button:hover
+{
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+#campus-button:pressed
+{
+    -fx-effect:null;
+}
+
+#time-label
+{
+    -fx-font-size: 10;
+    -fx-text-fill:#333;
+}
+
+#picture-button{
+    -fx-max-height:14;
+    -fx-min-height:14;
+    -fx-min-width:14;
+    -fx-max-width:14;
+    -fx-background-color:white;
+    -fx-border-width:0;
+}
+
+.radio-button .radio {
+    -fx-border-width: 1px;
+    -fx-border-color: TRANSPARENT;
+    -fx-background-color: white;
+    -fx-background-image: null;
+    -fx-border-radius: 15px;
+    -fx-padding: 2px;
+
+}
+
+.radio-button .radio:selected {
+    -fx-background-color: white;
+    -fx-background-image: null;
+}
+.radio-button -radio:armed {
+    -fx-background-color: white;
+    -fx-background-image: null;
+}
+.radio-button -radio:determinate {
+    -fx-background-color: white;
+    -fx-background-image: null;
+}
+.radio-button -radio:indeterminate {
+    -fx-background-color: white;
+    -fx-background-image: null;
+}
+.radio-button .dot {
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+}
+.transition-node {
+    -fx-fill:yellow;
+    -fx-border-color:yellow;}
+
+#normallyWhiteBG{
+    -fx-background-color: white;}
+
+#normallyEEEEEEBG{
+    -fx-text-fill:white;
+    -fx-background-color: #EEEEEE;}
+
+#normally333Text{
+    -fx-text-fill:black;}

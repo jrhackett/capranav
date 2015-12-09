@@ -72,6 +72,13 @@ public class MapDisplay extends Pane {
     private Color startBorderColor = Color.LIGHTGREEN;
     /**--------------------------------------------------------------*/
 
+    private INode startNode;
+    private INode endNode;
+    private HashMap<Integer, INode> nodeMap;
+    private ArrayList<ArrayList<Instructions>> pathList;
+    private int mapIdOldInt;
+    private int mapIdNewInt;
+
     private boolean HIGLIGHTED = false;
 
     private ArrayList<INode> path; //last set path
@@ -124,6 +131,7 @@ public class MapDisplay extends Pane {
      * @param nodes
      */
     public void drawNodes(HashMap<Integer, INode> nodes) {
+        nodeMap = nodes;
         //to make it easy we will create all the nodes
 
         nodes.forEach((k, v) -> {
@@ -314,7 +322,10 @@ public class MapDisplay extends Pane {
         /* displays only the buttons that the building has in rows of up to 3 */
         for(int i = floorPlan.size() - 1; i >= 0; i--) {
             Button button = new Button();
-            button.setId("popover-buttons");
+            if(((logic.Transition) v).getToFloor() == i)
+                button.setId("popover-buttons-highlighted");
+            else
+                button.setId("popover-buttons");
             String value;
             Object array[] = floorPlan.keySet().toArray();
             if(floorPlan.keySet().toArray()[i].equals(-1)) {
@@ -339,6 +350,8 @@ public class MapDisplay extends Pane {
                     popOver.hide();
                 }
             });
+
+            button.setOnMouseEntered(e -> requestFocus());
 //            button.setOnMouseClicked(e -> {
 //                controller.switchToBuildingView(building.getID(), i);
 //                popOver.hide();
@@ -450,6 +463,7 @@ public class MapDisplay extends Pane {
 
     public void createPath(ArrayList<ArrayList<Instructions>> path) {
 
+        pathList = path;
         //upon creation of a new path fully reset old nodes
         revertPathNodes();
 
@@ -517,6 +531,8 @@ public class MapDisplay extends Pane {
      * @param mapIdNew
      */
     public void showLines(int mapIdOld, int mapIdNew) {
+        mapIdNewInt = mapIdNew;
+        mapIdOldInt = mapIdOld;
         if (mapIdOld != -1) {
             try {
                 System.out.println("Removing old map lines: " + mapIdOld);
@@ -541,6 +557,7 @@ public class MapDisplay extends Pane {
      * @param iNode
      */
     public void setStartNode(INode iNode) {
+        startNode = iNode;
 
        // if (st.getNode() == null || !st.getNode().equals(id_circle.get(iNode.getID()))) {
             Circle c;
@@ -583,6 +600,7 @@ public class MapDisplay extends Pane {
 
 
     public void setEndNode(INode v, boolean animation) {
+        endNode = v;
         Circle c;
 
         if (id_circle.containsKey(v.getID())) {
@@ -699,19 +717,35 @@ public class MapDisplay extends Pane {
      Color Change CODE
      ****************************************************************************************************************/
 
+    public void updateAll(){
+
+        this.revertPathNodes();
+        //this.drawNodes(nodeMap);
+        try {
+            this.createPath(pathList);
+            this.showLines(mapIdNewInt, mapIdOldInt);
+            this.setStartNode(startNode);
+            this.setEndNode(endNode, true);
+        }catch(Exception e){
+
+        }
+    }
 
     public void setNodePathDefault() {
         setPathColor(Color.BLUE, Color.LIGHTBLUE, Color.web("#00CCFF", 0.7));
         setStartColor(Color.GREEN, Color.LIGHTGREEN);
         setEndColor(Color.FIREBRICK, Color.RED);
         setTransitionColor(Color.YELLOW);
+        updateAll();
     }
     public void setNodePathColorBlind(){
         setPathColor(Color.BLUE, Color.LIGHTBLUE, Color.web("#00CCFF", 0.7));
         setStartColor(Color.GREEN, Color.LIGHTGREEN);
         setEndColor(Color.DARKVIOLET, Color.LIGHTPINK);
-        setTransitionColor(Color.DARKGOLDENROD);
+        setTransitionColor(Color.ORANGE);
+        updateAll();
     }
+
     public void setTransitionColor(Color body){
         transitionColor = body;
     }

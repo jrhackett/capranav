@@ -14,6 +14,7 @@ import org.controlsfx.control.PopOver;
 import visuals.Display;
 import visuals.Instructions;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -116,7 +117,6 @@ public class Controller extends Application {
 
         this.myDisplay = new Display(this);    //creates scene
         display = myDisplay.Init(); //initializes scene
-        display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
 
     }
 
@@ -135,7 +135,9 @@ public class Controller extends Application {
 
 
         s.setScene(display);                   //sets scene to display
-        display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
+        display.getStylesheets().add(myDisplay.getClass().getResource("style.css").toExternalForm());
+
+
         s.show();   //shows scene
         defaultMap();
 
@@ -156,6 +158,7 @@ public class Controller extends Application {
     public void setStyleSheet(String style){
         display.getStylesheets().clear();
         display.getStylesheets().add(getClass().getResource(style).toExternalForm());
+        System.out.println("Stylesheet set to " + display.getStylesheets().get(0).toString());
     }
 
     /**
@@ -348,6 +351,7 @@ public class Controller extends Application {
 
 
             if (startNode != null) {
+                System.out.println("The START NODE: " + startNode.toString());
                 //TODO if current map contains it, play, if it doesn't - switch and play
                 //Hopefully in find paths this is taken care of - will confirm later
                 if (startNode.getMap_id() == currentMap.getID()) {
@@ -359,6 +363,7 @@ public class Controller extends Application {
 
             if (endNode != null) {
                // System.out.println("END NODE HIGHLIGHTED!");
+                System.out.println("THE END NODE: " + endNode.toString());
                 //TODO if current map contains it, play, if it doesn't - dont play, just set and color
                 if (endNode.getMap_id() == currentMap.getID()) {
                     myDisplay.mapDisplay.setEndNode(endNode, true);
