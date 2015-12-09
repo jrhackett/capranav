@@ -361,8 +361,6 @@ public class MapDisplay extends Pane {
             button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    System.out.println("building.getID(): " + building.getID());
-                    System.out.println("x: " + x);
                     controller.switchToBuildingView(building.getID(), x);
                     popOver.hide();
                 }
@@ -500,8 +498,7 @@ public class MapDisplay extends Pane {
                 highlightPath(id_circle.get(i.getNode().getID()));
                 idPath.add(i.getNode());
 
-                System.out.println("x: start" + coordX);
-                System.out.println("y: start" + coordY);
+
 
                 /** create all the lines and add them to a list **/
                 Line line = new Line();
@@ -527,11 +524,6 @@ public class MapDisplay extends Pane {
 
                 line.setEffect(dropShadow);
                 lineArrayList.add(line);
-                System.out.println("x: end" + coordX);
-                System.out.println("y: end" + coordY);
-                System.out.println("lines created");
-                System.out.println("");
-                System.out.println("");
             }
             //System.out.println("lines put into hashmap");
             lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
@@ -555,17 +547,14 @@ public class MapDisplay extends Pane {
 
         if (mapIdOld != -1) {
             try {
-                System.out.println("Removing old map lines: " + mapIdOld);
                 this.getChildren().removeAll(lines.get(mapIdOld));
             } catch (NullPointerException e){
-                System.out.println("MAP HAS NO LINES YET");
+               // System.out.println("MAP HAS NO LINES YET");
             }
         }
 
         //if map has lines to show, show them
-        System.out.println("Switching from map: " + mapIdOld + " to map: " + mapIdNew);
         if(this.lines.containsKey(mapIdNew)){
-            System.out.println("POST CONTAINS");
             this.getChildren().addAll(lines.get(mapIdNew));
         }
     }
@@ -1001,7 +990,6 @@ public class MapDisplay extends Pane {
                             popOver.setArrowSize(0);
                             previousPopOver.hide();
                             previousPopOver = popOver;
-
                         }
                     }
                 });

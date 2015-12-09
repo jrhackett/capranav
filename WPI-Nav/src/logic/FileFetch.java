@@ -77,11 +77,9 @@ public class FileFetch {
 
     private static String CSSHelper(String path) {
         String fp = new File("").getAbsolutePath() + "/WPI-Nav/src/visuals/" + path;
-        System.out.println("First: " + fp);
 
         if (!(new File(fp).exists())) {
             fp = new File("").getAbsolutePath() + "/src/visuals/" + path;
-            System.out.println("Second" + fp);
         }
 
         return fp;

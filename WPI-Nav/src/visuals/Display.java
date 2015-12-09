@@ -507,11 +507,9 @@ public class Display {
                                 Toggle old_toggle, Toggle new_toggle) {
                 if (weightgroup.getSelectedToggle() != null) {
                     if(weightgroup.getSelectedToggle().getUserData().toString().equals("Handicap")){
-                        System.out.println("Handicap toggled!");
                     }
 
                     if(weightgroup.getSelectedToggle().getUserData().toString().equals("Inside Preferred")){
-                        System.out.println("Inside toggled!");
                     }
 
                 }
@@ -738,8 +736,6 @@ public class Display {
         totalTimeLabel.setId("time-label");
         totalTimeLabel.setTextFill(Color.web("#333"));
         totalTimeLabel.visibleProperty().bind(TIME_VISIBLE);
-
-        System.out.println(totalTimeLabel.getText());
 
         vbox.getChildren().addAll(topLabel, totalTimeLabel);
         vbox.setAlignment(Pos.CENTER);
@@ -1080,7 +1076,6 @@ public class Display {
     }
 
     public void updateTimeEstimation() {
-        System.out.println("Updating time estimation");
         String input;
         //input = "Time Estimation:\n";
         input = Directions.getTime(User.getSpeed());
@@ -1310,7 +1305,6 @@ public class Display {
                 .addListener((ObservableValue<? extends Instructions> obs, Instructions oldinstruction, Instructions selectedInstruction) -> {
                     if (selectedInstruction != null) {
                         FLIP = false;
-                        System.out.println("FIRST INSTRUCTIONS THING");
                         this.mapDisplay.highlightPath(selectedInstruction.getNode().getID());
                         this.mapDisplay.softSelectAnimation(controller.lastSoft, selectedInstruction.getNode().getID());
                         controller.lastSoft = selectedInstruction.getNode().getID();
@@ -1321,7 +1315,6 @@ public class Display {
         //instructions.setFocusModel();
         instructions.setOnMouseClicked(event -> {
             if (instructions.getSelectionModel().getSelectedItem() != null && FLIP) {
-                System.out.println("SECOND INSTRUCTIONS THING");
                 this.mapDisplay.highlightPath(instructions.getSelectionModel().getSelectedItem().getNode().getID());
                 this.mapDisplay.softSelectAnimation(controller.lastSoft, instructions.getSelectionModel().getSelectedItem().getNode().getID());
                 controller.lastSoft = instructions.getSelectionModel().getSelectedItem().getNode().getID();
@@ -1411,98 +1404,99 @@ public class Display {
     }
 
     private void handleSearchInput(Inputs v, boolean START) {
-        System.out.println("handleSearchInput called.");
 
-        if (v.getValue() != null && !v.getValue().toString().isEmpty()){
-            if(v.containsNode(v.getValue().toString())) {
+        if (v.getValue() != null && !v.getValue().toString().isEmpty()) {
+            if (v.containsNode(v.getValue().toString())) {
                 controller.handleSearchInput(v.getNode(v.getValue().toString()), START);
-            } else {
-                System.out.println("BAD 1");
-                System.out.println("DID NOT CONTAIN: " + v.getValue().toString());
-            }
-        } else {
-            System.out.println("BAD 2");
-        }
+//            } else {
+//                System.out.println("BAD 1");
+//                System.out.println("DID NOT CONTAIN: " + v.getValue().toString());
+//            }
+//        } else {
+//            System.out.println("BAD 2");
+//        }
 
-    }
-
-    private void handleWalkingInput(Inputs v, boolean START) {
-        visuals.Walking value = (visuals.Walking) v.getValue();
-        User.setSpeed(value.getWalkingSpeed());
-        updateTimeEstimation();
-        //System.out.println(value.getWalkingSpeed()); //TODO Remove
-    }
-
-    //Green if email addr valid, red if not
-    private void handleEmailInput(TextField v, boolean START) {
-        User.setEmail(v.getText());
-
-        //Validate Address
-        try {
-            new InternetAddress(v.getText()).validate();
-        } catch (AddressException e) { //If invalid, set color to red
-            v.setId("text-field-denied");
-            return;
-        }
-        //If valid, set other textbox & color
-        yourEmail.setText(User.getEmail());
-        v.setId("text-field-confirmed");
-    }
-
-    //Green if email is sent, red if not
-    private void handleEmailInput2(TextField v, boolean START) {
-        if (yourEmail.getText() != null) {
-            if (sendEmail(yourEmail.getText())) {
-                yourEmail.setId("email-text-field-confirmed");
-                EMAIL = false;
-            } else {
-                yourEmail.setId("email-text-field-denied");
             }
         }
     }
 
-
-    private void handleRightArrowButton() {
-        this.controller.handleIncrementPathMap();
-    }
-
-    private void handleLeftArrowButton() {
-        this.controller.handleDecrementPathMap();
-    }
-
-    public void setIDRightArrowButton(String s) {
-        this.rightArrowButton.setId(s);
-    }
-
-    public void setIDLeftArrowButton(String s) {
-        this.leftArrowButton.setId(s);
-    }
-
-    /****************************************************************************************************************
-                                            Semi Facade Interface with Controller
-     ****************************************************************************************************************/
-    private boolean sendEmail(String email) {
-        if (!email.equals("") && !email.equals("Enter Email Here") && !email.equals("Email Sent") && !email.equals("Invalid Email")) {
-            return controller.sendEmail(email); //Should return true if the email goes through
-        } else {
-            return false;
+        private void handleWalkingInput (Inputs v,boolean START){
+            visuals.Walking value = (visuals.Walking) v.getValue();
+            User.setSpeed(value.getWalkingSpeed());
+            updateTimeEstimation();
+            //System.out.println(value.getWalkingSpeed()); //TODO Remove
         }
-    }
 
-    private HashMap<Integer, logic.INode> getInterestingNodes() {
-        return controller.getInterestingNodes();
-    }
+        //Green if email addr valid, red if not
+        private void handleEmailInput (TextField v,boolean START){
+            User.setEmail(v.getText());
 
-    private HashMap<Integer, logic.INode> getNodes() {
-        return controller.getNodes();
-    }
+            //Validate Address
+            try {
+                new InternetAddress(v.getText()).validate();
+            } catch (AddressException e) { //If invalid, set color to red
+                v.setId("text-field-denied");
+                return;
+            }
+            //If valid, set other textbox & color
+            yourEmail.setText(User.getEmail());
+            v.setId("text-field-confirmed");
+        }
 
-    private HashMap<Integer, logic.IMap> getMaps() {
-        return controller.getMaps();
-    }
+        //Green if email is sent, red if not
+        private void handleEmailInput2 (TextField v,boolean START){
+            if (yourEmail.getText() != null) {
+                if (sendEmail(yourEmail.getText())) {
+                    yourEmail.setId("email-text-field-confirmed");
+                    EMAIL = false;
+                } else {
+                    yourEmail.setId("email-text-field-denied");
+                }
+            }
+        }
 
-    public void setDirectionStyle(String s){
-        this.directionStyle = s;
-    }
-}
+
+        private void handleRightArrowButton () {
+            this.controller.handleIncrementPathMap();
+        }
+
+        private void handleLeftArrowButton () {
+            this.controller.handleDecrementPathMap();
+        }
+
+        public void setIDRightArrowButton (String s){
+            this.rightArrowButton.setId(s);
+        }
+
+        public void setIDLeftArrowButton (String s){
+            this.leftArrowButton.setId(s);
+        }
+
+        /****************************************************************************************************************
+         Semi Facade Interface with Controller
+         ****************************************************************************************************************/
+        private boolean sendEmail (String email){
+            if (!email.equals("") && !email.equals("Enter Email Here") && !email.equals("Email Sent") && !email.equals("Invalid Email")) {
+                return controller.sendEmail(email); //Should return true if the email goes through
+            } else {
+                return false;
+            }
+        }
+
+        private HashMap<Integer, logic.INode> getInterestingNodes () {
+            return controller.getInterestingNodes();
+        }
+
+        private HashMap<Integer, logic.INode> getNodes () {
+            return controller.getNodes();
+        }
+
+        private HashMap<Integer, logic.IMap> getMaps () {
+            return controller.getMaps();
+        }
+
+        public void setDirectionStyle (String s){
+            this.directionStyle = s;
+        }
+        }
 
