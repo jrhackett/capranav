@@ -195,6 +195,12 @@ public abstract class Node implements INode {
 		this.adjacencies = adjacencies;
 	}
 
+	public void setAdjacenciesBothWays(ArrayList<Edge> a, ArrayList<INode> nodes) {
+		for(int i = 0; i < a.size(); i++){
+			this.addEdge(a.get(i), nodes.get(i));
+		}
+	}
+
 	/**
 	 * getParent is used to return the parent of this node
 	 * 
@@ -226,6 +232,32 @@ public abstract class Node implements INode {
 			this.adjacencies.add(edge);
 		}
 	}
+
+	public void addEdge(Edge edge, INode from) {
+		boolean alreadyExists = false;
+		for(int i = 0; i < adjacencies.size(); i++){
+			if(adjacencies.get(i).getTarget() == edge.getTarget()){
+				alreadyExists = true;
+			}
+		}
+
+		if(!alreadyExists){
+			this.adjacencies.add(edge);
+		}
+
+		alreadyExists = false;
+		for(int i = 0; i < from.getAdjacencies().size(); i++){
+			if(from.getAdjacencies().get(i).getTarget() == this.getID()){
+				alreadyExists = true;
+			}
+		}
+
+		if(!alreadyExists){
+			from.addEdge(new Edge(this.getID(), 1));
+		}
+	}
+
+
 
 	/**
 	 * toString is used to print the node in a readable format

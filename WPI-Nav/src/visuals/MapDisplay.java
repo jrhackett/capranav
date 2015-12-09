@@ -161,40 +161,41 @@ public class MapDisplay extends Pane {
 
 
         mapView.setOnMouseClicked(e -> {
-            if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() >= 2) createTempLandmark(e);
+            if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() >= 2) selectNearestNode(e);
         });
     }
 
+    private void selectNearestNode(MouseEvent e){
+        controller.handleMapClick(controller.nearestNode(e.getX(), e.getY()));
+   }
 
-    private void createTempLandmark(MouseEvent e) {
-        //CREATE TEMPORARY POINT ->
-        INode temp = controller.createTempLandmark(e.getX(), e.getY());
-        Circle c = createCircle(temp);
-        id_circle.put(temp.getID(), c);
-        normal(c, temp);
-        this.getChildren().add(c);
-        controller.handleMapClick(temp);
-    }
+//    private void createTempLandmark(MouseEvent e) {
+//        //CREATE TEMPORARY POINT ->
+//        INode temp = controller.createTempLandmark(e.getX(), e.getY());
+//        Circle c = createCircle(temp);
+//        id_circle.put(temp.getID(), c);
+//        normal(c, temp);
+//        this.getChildren().add(c);
+//        controller.handleMapClick(temp);
+//    }
 
     public void softSelectAnimation(int idOld, int idNew) {
         Circle c;
 
         if(idOld > -1) {
-            c = id_circle.get(idOld);
-            if (controller.endNode.getID() == idOld) {
+            if ((controller.endNode.getID() == idOld)||(controller.startNode.getID() == idOld)) {
+                c = id_circle.get(controller.endNode.getID());
                 c.setFill(Color.FIREBRICK);
-            } else if (controller.startNode.getID() == idOld) {
+                c = id_circle.get(controller.startNode.getID());
                 c.setFill(Color.GREEN);
             } else {
+                c = id_circle.get(idOld);
                 c.setFill(Color.BLUE);
             }
-
         }
 
         c = id_circle.get(idNew);
-
         c.setFill(Color.HOTPINK);
-
 
         ScaleTransition st = new ScaleTransition(Duration.millis(75), c);
         //st.setByX(1.1f);
@@ -531,8 +532,6 @@ public class MapDisplay extends Pane {
                 System.out.println("MAP HAS NO LINES YET");
             }
         }
-
-
 
         //if map has lines to show, show them
         System.out.println("Switching from map: " + mapIdOld + " to map: " + mapIdNew);
