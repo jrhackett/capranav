@@ -1418,6 +1418,7 @@ public class Display {
                 controller.handleSearchInput(v.getNode(v.getValue().toString()), START);
             } else {
                 System.out.println("BAD 1");
+                System.out.println("DID NOT CONTAIN: " + v.getValue().toString());
             }
         } else {
             System.out.println("BAD 2");

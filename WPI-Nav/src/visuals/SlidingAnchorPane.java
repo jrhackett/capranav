@@ -186,9 +186,11 @@ public class SlidingAnchorPane extends AnchorPane {
                 if (showSidebar.statusProperty().get() == Animation.Status.STOPPED && hideSidebar.statusProperty().get() == Animation.Status.STOPPED) {
                     if (prop.getValue()) {
                         hideSidebar.play();
+                        //playHidePane(prop);
                     } else {
                         //setVisible(true);
                         showSidebar.play();
+                        //playShowPane(prop);
                     }
                 }
             }

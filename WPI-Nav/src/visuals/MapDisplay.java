@@ -29,9 +29,7 @@ import logic.IMap;
 import logic.INode;
 import org.controlsfx.control.PopOver;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -57,7 +55,7 @@ public class MapDisplay extends Pane {
     private Image mapImage;
     public ImageView mapView;
 
-    private PopOver previousPopOver;
+    public PopOver previousPopOver;
 
     private Color last = Color.TRANSPARENT;
     private Color lastStroke = Color.TRANSPARENT;
@@ -100,7 +98,7 @@ public class MapDisplay extends Pane {
     public MapDisplay(Controller controller) {
         super();
         this.controller = controller;
-        this.setStyle("-fx-background-color: #F5F5DC");
+        //this.setStyle("-fx-background-color: #F5F5DC");
         this.mapView = new ImageView();
         this.setMaxWidth(IMAGE_WIDTH);
         this.setMaxHeight(IMAGE_HEIGHT);
@@ -237,12 +235,13 @@ public class MapDisplay extends Pane {
      * @param c
      */
     public void normal(Circle c, INode v) {
-        if (v != null && v.isTransition()) { //v != null &&
-            c.setFill(transitionColor);
-        } else {
-            c.setFill(Color.TRANSPARENT);
-        }
+//        if (v != null && v.isTransition()) { //v != null &&
+//            c.setFill(transitionColor);
+//        } else {
+//            c.setFill(Color.TRANSPARENT);
+//        }
 
+        c.setFill(Color.TRANSPARENT);
         c.setStrokeWidth(0);
         c.setRadius(5);
         c.setOpacity(1);
@@ -258,39 +257,45 @@ public class MapDisplay extends Pane {
         double y = v.getY();
         Circle circle = new Circle(x, y, 5);
 
-        if (v.isTransition()) {
-            circle.setOnMouseClicked(e -> {
-               if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
-                    controller.handleMapClick(v);
-                }
-            });
-        } else {
-            circle.setOnMouseClicked(e -> {
-                if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
-                    controller.handleMapClick(v);
-                }
-            });
-        }
+        circle.setOnMouseClicked(e -> {
+            if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2) {
+                controller.handleMapClick(v);
+            }
+        });
 
-        if((v instanceof logic.Transition) && v.getMap_id() == 0 && ((logic.Transition)v).getBuildingID() != 0){
+//        if (v.isTransition()) {
+//            circle.setOnMouseClicked(e -> {
+//               if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
+//                    controller.handleMapClick(v);
+//                }
+//            });
+//        } else {
+//            circle.setOnMouseClicked(e -> {
+//                if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
+//                    controller.handleMapClick(v);
+//                }
+//            });
+//        }
 
-            PopOver popOver = createPopOverForNode(v);
-
-            circle.setOnMouseEntered(e -> {
-                //content of popover
-                System.out.println("showing popover for ID: " + v.getID());
-                if(!(previousPopOver.equals(popOver))) {
-                    popOver.show(circle, -13);
-                    previousPopOver.hide();
-                    previousPopOver = popOver;
-                    //controller.updateNodeInformation(v);
-                }
-            });
+//        if((v instanceof logic.Transition) && v.getMap_id() == 0 && ((logic.Transition)v).getBuildingID() != 0){
+//
+//            PopOver popOver = createPopOverForNode(v);
+//
+//            circle.setOnMouseEntered(e -> {
+//                //content of popover
+//                System.out.println("showing popover for ID: " + v.getID());
+//                if(!(previousPopOver.equals(popOver))) {
+//                    popOver.show(circle, -13);
+//                    previousPopOver.hide();
+//                    previousPopOver = popOver;
+//                    //controller.updateNodeInformation(v);
+//                }
+//            });
 
             /*circle.setOnMouseExited(e -> {
                 popOver.hide();
             });*/
-        }
+
 
         return circle;
     }
@@ -993,8 +998,10 @@ public class MapDisplay extends Pane {
                         PopOver popOver = createPopOverForNode(controller.getNode(key));
                         if (!(previousPopOver.equals(popOver))) {
                             popOver.show(p, 4);
+                            popOver.setArrowSize(0);
                             previousPopOver.hide();
                             previousPopOver = popOver;
+
                         }
                     }
                 });

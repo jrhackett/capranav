@@ -135,7 +135,7 @@ public class Inputs<T> extends ComboBox<T> {
 				if (!data.contains(item)) {
 					data.remove(item);
 				}
-				item = v.toString();
+				item = v.toString() + " near " + ((Controller)controller).nearestNamedNodeName(v.getX(), v.getY(), 0);
 				data.add(item);
 				stringToInt.put(item, v.getID());
 			}
@@ -151,24 +151,21 @@ public class Inputs<T> extends ComboBox<T> {
 			String s = v.toString();
 
 			if (map.inside()){
-				String m = map.toString();
+				String m = getNames(map.getBuildingID()).get(0);
 				s = m + " " + s;
 				return s;
 			}
 
 			return s;
 
-
 		} else if (v instanceof Transition && !(v instanceof TStairs || v instanceof Elevator)) {
 			String s = ((Transition) v).getName();
 			item = s;
-			if (!data.contains(item)) {
-				return item;
-			}
 		} else {
-			return v.toString();
+			return v.toString() + " near " + ((Controller)controller).nearestNamedNodeName(v.getX(), v.getY(), 0);
+
 		}
-		System.out.println("ERRRROR");
+		System.out.println("Curious");
 		return item;
 	}
 

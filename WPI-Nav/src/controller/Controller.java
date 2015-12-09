@@ -524,9 +524,9 @@ public class Controller extends Application {
 
             System.out.println("HERE 22");
 
-            //item = myDisplay.start.addNode(n, currentMap);
-            //System.out.println(item);
-            myDisplay.start.setValue(myDisplay.start.nodeToString(n, currentMap));
+            item = myDisplay.start.nodeToString(n, currentMap);
+            System.out.println(item);
+            myDisplay.start.setValue(item);
 
 
         } else {
@@ -536,7 +536,8 @@ public class Controller extends Application {
 //            }
             System.out.println("HERE 33");
 
-            //item = myDisplay.end.addNode(n, currentMap);
+            item = myDisplay.end.nodeToString(n, currentMap);
+            System.out.println(item);
             myDisplay.end.setValue(myDisplay.start.nodeToString(n, currentMap));
         }
     }
@@ -846,6 +847,8 @@ public class Controller extends Application {
         //myDisplay.mapDisplay.showLines(-1, lastMapID); //TODO UPDATE showPath
         myDisplay.updateTimeEstimation();
         myDisplay.TIME_VISIBLE.setValue(true);
+
+        myDisplay.mapDisplay.previousPopOver.hide();
     }
 
     public void handleIncrementPathMap(){
