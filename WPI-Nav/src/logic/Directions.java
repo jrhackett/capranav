@@ -189,6 +189,7 @@ public class Directions {
 					while (aStarPath.size() > i + zz + 3 && aStarPath.get(i + zz + 2) instanceof TStairs) {
 						flights++;
 						zz++;
+						zz++;
 					}
 					if ((maps.get(aStarPath.get(i + 3).getMap_id()).getFloor() > (maps.get(next.getMap_id()).getFloor()))) { //going up
 						distPhrase = "to the stairs, and climb up " + flights + " floor(s)";
@@ -207,7 +208,7 @@ public class Directions {
 					if (flights == -1) elevatorend = "the sub-basement";
 					if (flights < -1) elevatorend = "the depths of the earth"; //should never occur
 					if (flights > 0) elevatorend = "floor " + flights;
-					distPhrase = "enter the elevator and go to " + elevatorend;
+					distPhrase = "into the elevator and go to " + elevatorend; //me inglish good
 				}
 				// specialdirs changed lines ^^
 			}
@@ -236,7 +237,10 @@ public class Directions {
 		}
 
 		directions.get(directions.size() - 1).add(new Instructions("You have reached your destination.", aStarPath.get(aStarPath.size() - 1)));
-
+		int tt;
+		for (tt = 0; tt<mapstep;tt++){ //this loop clears out maps you're just passing through
+			if (directions.get(tt).isEmpty()) directions.remove(tt);
+		}
 		return directions;
 	}
 
