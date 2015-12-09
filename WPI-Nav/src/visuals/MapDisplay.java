@@ -98,7 +98,7 @@ public class MapDisplay extends Pane {
     public MapDisplay(Controller controller) {
         super();
         this.controller = controller;
-        //this.setStyle("-fx-background-color: #F5F5DC");
+        this.setStyle("-fx-background-color: #EEEEEE");
         this.mapView = new ImageView();
         this.setMaxWidth(IMAGE_WIDTH);
         this.setMaxHeight(IMAGE_HEIGHT);
