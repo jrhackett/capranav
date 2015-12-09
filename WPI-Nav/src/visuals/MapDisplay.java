@@ -968,16 +968,22 @@ public class MapDisplay extends Pane {
     }
     private void addPolygonEvents(Polygon p, Integer key){
         this.getChildren().add(p);
+        PopOver popOver;
         p.addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET,
                 new EventHandler<MouseEvent>() {
                     public void handle(MouseEvent event) {
                         p.setFill(Color.web("red", 0.5));
+                    }
+                });
+        p.addEventFilter(MouseEvent.MOUSE_CLICKED,
+                new EventHandler<MouseEvent>() {
+                    public void handle(MouseEvent event) {
+                        controller.getMyDisplay().zoomAndPan.zoomToNode(controller.getNode(key));
                         PopOver popOver = createPopOverForNode(controller.getNode(key));
                         if (!(previousPopOver.equals(popOver))) {
-                            popOver.show(p, -9);
+                            popOver.show(p, 4);
                             previousPopOver.hide();
                             previousPopOver = popOver;
-                            //controller.updateNodeInformation(v);
                         }
                     }
                 });
@@ -985,9 +991,11 @@ public class MapDisplay extends Pane {
                 new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
+                        //previousPopOver.hide();//test
                         p.setFill(Color.TRANSPARENT);
                     }
                 });
+
     }
 
 }
