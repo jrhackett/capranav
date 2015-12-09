@@ -13,7 +13,7 @@ public class Transition extends Node {
 
     private int buildingID;
     private int toFloor;
-    private ArrayList<String> name;
+    private ArrayList<String> name = new ArrayList<>();
 
 
     public Transition(int id, double x, double y, double z, double x1, double y1, double z1){
@@ -66,4 +66,6 @@ public class Transition extends Node {
     public void addNames(ArrayList<String> name) {this.name = name;}
 
     public String getName() {return this.name.get(0);}
+
+    public ArrayList<String> getNames() {return this.name;}
 }
