@@ -314,7 +314,10 @@ public class MapDisplay extends Pane {
         /* displays only the buttons that the building has in rows of up to 3 */
         for(int i = floorPlan.size() - 1; i >= 0; i--) {
             Button button = new Button();
-            button.setId("popover-buttons");
+            if(((logic.Transition) v).getToFloor() == i)
+                button.setId("popover-buttons-highlighted");
+            else
+                button.setId("popover-buttons");
             String value;
             Object array[] = floorPlan.keySet().toArray();
             if(floorPlan.keySet().toArray()[i].equals(-1)) {
@@ -339,6 +342,8 @@ public class MapDisplay extends Pane {
                     popOver.hide();
                 }
             });
+
+            button.setOnMouseEntered(e -> requestFocus());
 //            button.setOnMouseClicked(e -> {
 //                controller.switchToBuildingView(building.getID(), i);
 //                popOver.hide();

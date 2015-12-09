@@ -1173,8 +1173,8 @@ public class Display {
             }
         }));
 
-        //AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
-        //AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
+        AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
+        AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
 
         return inputs;
     }
