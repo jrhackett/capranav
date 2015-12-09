@@ -156,6 +156,7 @@ public class Controller extends Application {
     public void setStyleSheet(String style){
         display.getStylesheets().clear();
         display.getStylesheets().add(getClass().getResource(style).toExternalForm());
+        System.out.println("Stylesheet set to " + display.getStylesheets().get(0).toString());
     }
 
     /**

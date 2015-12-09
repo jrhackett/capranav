@@ -109,7 +109,7 @@ public class Display {
     boolean FLIP = true;
     ZoomAndPan zoomAndPan;
 
-
+    String directionStyle = "-fx-background-color: #ac2738";
 
     SlidingAnchorPane    slidingDirections;
     Button slidingDirectionsButton;
@@ -387,7 +387,8 @@ public class Display {
 
 
         //settings a sliding pane!
-        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth + EDGE * 2, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2
+
+        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth + EDGE * 2 + 7 * 3, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2
         slidingSettings.setStyle("-fx-background-color: #333333");
 
         javafx.scene.control.Button slidingButton = slidingSettings.getButton();
@@ -410,8 +411,28 @@ public class Display {
         settingsColorLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
         settingsColorLabel.setTextFill(Color.web("#eeeeee"));
 
+        HBox settingsWeightBox = new HBox();
+        Label settingsWeightLabel = new Label("Path Preferences:");
+        settingsWeightLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        settingsWeightLabel.setTextFill(Color.web("#eeeeee"));
+
         //TODO: Force all nodes/etc. to update on interaction with checkbox
         final ToggleGroup colorgroup = new ToggleGroup();
+        final ToggleGroup weightgroup = new ToggleGroup();
+        RadioButton w1 = new RadioButton("Handicap");
+        RadioButton w2 = new RadioButton("Inside Preferred");
+        w1.setToggleGroup(weightgroup);
+        w1.setUserData("Handicap");
+        w1.setText("Handicap");
+        w1.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        w1.setTextFill(Color.web("#eeeeee"));
+
+        w2.setToggleGroup(weightgroup);
+        w2.setUserData("Inside Preferred");
+        w2.setText("Inside Preferred");
+        w2.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        w2.setTextFill(Color.web("#eeeeee"));
+
 
         RadioButton rb1 = new RadioButton("Colorblind");
         rb1.setToggleGroup(colorgroup);
@@ -448,7 +469,7 @@ public class Display {
 
                     if(colorgroup.getSelectedToggle().getUserData().toString().equals("Colorblind")){
                         mapDisplay.setNodePathColorBlind();
-                        controller.setStyleSheet("../visuals/style.css");
+                        controller.setStyleSheet("../visuals/styleColorBlind.css");
                      //   mapDisplay.changeBackOldPathNodes();
                         //controller.updateNodeInformation(controller.getNode(mapDisplay.getStartID()));
                     }
@@ -463,12 +484,33 @@ public class Display {
             }
         });
 
+
+        weightgroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            public void changed(ObservableValue<? extends Toggle> ov,
+                                Toggle old_toggle, Toggle new_toggle) {
+                if (weightgroup.getSelectedToggle() != null) {
+                    if(weightgroup.getSelectedToggle().getUserData().toString().equals("Handicap")){
+                        System.out.println("Handicap toggled!");
+                    }
+
+                    if(weightgroup.getSelectedToggle().getUserData().toString().equals("Inside Preferred")){
+                        System.out.println("Inside toggled!");
+                    }
+
+                }
+            }
+        });
+
         settingsColorBox.getChildren().add(settingsColorLabel);
         settingsColorBox.getChildren().add(rb2);
         settingsColorBox.getChildren().add(rb1);
         //settingsColorBoxLine2.getChildren().add(rb3);
 
+        settingsWeightBox.getChildren().add(settingsWeightLabel);
+        settingsWeightBox.getChildren().add(w1);
+        settingsWeightBox.getChildren().add(w2);
         /**-------------------------------------------------------------------------------------------*/
+
         HBox settingsWalkingBox = new HBox();
         Label settingsWalkingLabel = new Label("Set walking speed:");
         settingsWalkingLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
@@ -505,30 +547,22 @@ public class Display {
         emailTextField.setOnAction(e -> handleEmailInput(emailTextField, true));
 
         settingsWalkingBox.setTranslateX(EDGE - 7);
-        walkingSpeedBox.setTranslateX(EDGE);
+        walkingSpeedBox.setTranslateX(EDGE - 42 + 7);
         setEmailLabel.setTranslateX(EDGE - 7);
-        emailTextField.setTranslateX(EDGE);
+        emailTextField.setTranslateX(EDGE - 42 + 7);
         /**---------------------------------------*/
         settingsColorLabel.setTranslateX(EDGE - 7);
-        settingsColorBox.setTranslateX(EDGE);
-        settingsColorBoxLine2.setTranslateX(EDGE);
+        settingsColorBox.setTranslateX(EDGE - 42);
+        settingsColorBoxLine2.setTranslateX(EDGE - 42);
         /**---------------------------------------*/
         //buttons for handicap / weather
+        settingsWeightLabel.setTranslateX(EDGE - 7);
+        settingsWeightBox.setTranslateX(EDGE - 42);
 
-        RadioButton handicapRadioButton = new RadioButton();
-        handicapRadioButton.setText("Handicap");
-        handicapRadioButton.setTextFill(Color.web("eee"));
-        RadioButton weatherRadioButton  = new RadioButton("Weather");
-        weatherRadioButton.setText("Weather");
-        weatherRadioButton.setTextFill(Color.web("eee"));
-        handicapRadioButton.setTranslateX(EDGE);
-        handicapRadioButton.setTranslateY(8);
-        weatherRadioButton.setTranslateX(EDGE);
-        weatherRadioButton.setTranslateY(11);
 
         VBox settingsVbox = new VBox();
         settingsVbox.visibleProperty().bind(DASHBOARD_VISIBLE);
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, handicapRadioButton, weatherRadioButton,  settingsWalkingBox, walkingSpeedBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
@@ -567,6 +601,7 @@ public class Display {
 
         /** Title Box **/
         HBox directionsTitleBox = new HBox();
+        //directionsTitleBox.getStyleClass().add("directionLabel");
         directionsTitleBox.setStyle("-fx-background-color: #ac2738");
         directionsTitleBox.setMinHeight(EDGE);
         directionsTitleBox.setMaxHeight(EDGE);
@@ -575,6 +610,7 @@ public class Display {
         directionsTitleBox.setSpacing(GAP * 3);
 
         VBox directionsControlBox = new VBox();
+        directionsControlBox.setStyle("-fx-background-color: #ac2738");
 
         Image directionsArrow = FileFetch.getImageFromFile("forward.png", 27, 27, true, true);
 
@@ -582,7 +618,8 @@ public class Display {
         //directionsArrowView.setTranslateX(8);
         directionsArrowView.setTranslateY(5);
         //directionsControlBox.getChildren().addAll(directionsArrowView); //TODO CHANGE BACK
-        directionsControlBox.setStyle("-fx-background-color: #ac2738");
+        //directionsControlBox.getStyleClass().add("directionLabel");
+        //directionsControlBox.setStyle("-fx-background-color: #ac2738");
         directionsControlBox.setMinHeight(EDGE);
 
 
@@ -1379,5 +1416,8 @@ public class Display {
         return controller.getMaps();
     }
 
+    public void setDirectionStyle(String s){
+        this.directionStyle = s;
+    }
 }
 
