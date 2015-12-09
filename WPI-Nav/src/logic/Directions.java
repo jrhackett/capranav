@@ -109,7 +109,14 @@ public class Directions {
 		if (distfirst < 8) distfirst = 5;
 		distPhrase = Math.round(distfirst) + " feet.";
 
-		directions.get(0).add(new Instructions("Face " + anglePhrase + ", and walk " + distPhrase, aStarPath.get(0)));
+		if (aStarPath.get(0).isTransition() && aStarPath.get(1).getMap_id() != aStarPath.get(0).getMap_id()) { //Damage Control
+			directions.get(0).add(new Instructions("You're already on a map transition! Hit next map...", aStarPath.get(0)));
+			mapstep++;
+			directions.add(new ArrayList<Instructions>());
+		}
+
+		else directions.get(0).add(new Instructions("Face " + anglePhrase + ", and walk " + distPhrase, aStarPath.get(0)));
+
 
 		for (int i = 0; i < aStarPath.size() - 2; i++) {
 			INode prev = aStarPath.get(i);
@@ -196,13 +203,20 @@ public class Directions {
 					} else distPhrase = "to the stairs, and climb down " + flights + " floor(s)";
 				}
 				zz = 0;
+				boolean eee = false;
 				String elevatorend = "somewhere you can fix this bug."; //should never stay as this
 				if (next instanceof Elevator && next.getMap_id() != aStarPath.get(i + 3).getMap_id()) {
 					flights = ((Elevator) aStarPath.get(i + zz + 2)).getToFloor(); //initialize so that, in an edge case, it at least says to go where you already are
 					while (aStarPath.size() > i + zz + 3 && aStarPath.get(i + zz + 2) instanceof Elevator) {
-						flights = ((Elevator) aStarPath.get(i + zz + 2)).getToFloor();
-						zz++;
-						if (aStarPath.size() == i + zz + 3) flights = maps.get(aStarPath.get(i+zz+2).getMap_id()).getFloor();
+						if (aStarPath.size() == i + zz + 3)
+							flights = maps.get(aStarPath.get(i + zz + 2).getMap_id()).getFloor();
+						else {
+							while (!eee) {
+								if (!(aStarPath.get(i + zz + 2) instanceof Elevator)) eee = true;
+								flights = maps.get(aStarPath.get(i + zz + 2).getMap_id()).getFloor();
+								zz++;
+							}
+						}
 					}
 					if (flights == 0) elevatorend = "the basement";
 					if (flights == -1) elevatorend = "the sub-basement";
