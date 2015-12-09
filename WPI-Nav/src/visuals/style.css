@@ -380,18 +380,11 @@
     -fx-border-color:#aaaaaa;
 }
 
-.popover
-{
-    -fx-max-width: 95 !important;
-    -fx-background-color: white;
-    -fx-padding:0;
-}
-
 #popover-id
 {
-    -fx-min-height:95 !important;
-    -fx-max-height:95 !important;
-    -fx-max-width: 95 !important;
+    -fx-min-height:80 !important;
+    -fx-max-height:80 !important;
+    -fx-max-width: 100 !important;
     -fx-background-color: white;
     -fx-padding:3 3 3 3;
 }

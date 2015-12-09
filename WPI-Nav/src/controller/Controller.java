@@ -597,7 +597,7 @@ public class Controller extends Application {
             }
             eradicate(tempStart, true); //completely get rid of the last start
             //System.out.println("-1");
-            temp = new Landmark(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
+            temp =  new Landmark(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
         } else {
             if (endNode != null){
                 //System.out.println("Hiding old end node");
@@ -797,6 +797,7 @@ public class Controller extends Application {
     public void findPaths(){
         lastSoft = -1;
         //Creates instructions - setting fullPath
+        //this.myDisplay.clearInstructions();
         getPathNodes(startNode, endNode);
         getInstructions();
 

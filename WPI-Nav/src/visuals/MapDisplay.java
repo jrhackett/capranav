@@ -285,6 +285,7 @@ public class MapDisplay extends Pane {
 
     public PopOver createPopOverForNode(INode v) {
         PopOver popOver = new PopOver();
+        popOver.setId("popover-id");
         VBox vbox = new VBox();
 
         Building building = controller.getBuilding(((logic.Transition)v).getBuildingID());
@@ -315,6 +316,8 @@ public class MapDisplay extends Pane {
         selectFloor.setStyle("-fx-font-size:8;");
 
         FlowPane flowPane = new FlowPane();
+        flowPane.setId("popover-id");
+
 
         /* displays only the buttons that the building has in rows of up to 3 */
         for(int i = floorPlan.size() - 1; i >= 0; i--) {
@@ -379,13 +382,12 @@ public class MapDisplay extends Pane {
         flowPane.getChildren().addAll(fourth, third, second, first, basement, subBasement);*/
         flowPane.setHgap(2);
         flowPane.setVgap(2);
-        flowPane.setTranslateY(4);
+        flowPane.setTranslateY(-2);
 
         vbox.setAlignment(Pos.TOP_CENTER);
         vbox.setId("popover-id");
         vbox.setSpacing(2);
         vbox.getChildren().addAll(hbox, flowPane); //select floor? topbuttons, bottombuttons
-        //vbox.getStylesheets().add("../visuals/style.css");
 
         popOver.setContentNode(vbox);
         popOver.setArrowLocation(PopOver.ArrowLocation.RIGHT_TOP);
