@@ -274,6 +274,7 @@ public class Controller extends Application {
         //clears old path lines from display
         //myDisplay.mapDisplay.revertPathNodes();
 
+
         if (nodes.containsKey(id)) {
 
             if (START) {//setting start
@@ -282,6 +283,7 @@ public class Controller extends Application {
                 //if start is A and end is B and user tries to make start B, then end will be A
                 if (endNode != null && id == endNode.getID() ){ //&& startNode != null
                     endNode = startNode;
+                    this.myDisplay.start.setValue(this.myDisplay.end.getValue());
                 }
 
                 if (!FLAG) {//if not from a click on the map hide the last
@@ -300,7 +302,8 @@ public class Controller extends Application {
                 //flip startNode and endNode if need be
                 if (startNode != null && id == startNode.getID() ){ //&& startNode != null
                     startNode = endNode;
-                   // this.myDisplay.mapDisplay.setStartNode(endNode);
+                    this.myDisplay.end.setValue(null);//this.myDisplay.start.getValue()
+                    // this.myDisplay.mapDisplay.setStartNode(endNode);
                 }
 
 
