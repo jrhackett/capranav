@@ -29,7 +29,9 @@ import logic.IMap;
 import logic.INode;
 import org.controlsfx.control.PopOver;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -80,6 +82,7 @@ public class MapDisplay extends Pane {
     //////////////////////// ICON CODE ///////////////////////////
     private HashMap<Integer, ImageView> id_ICON;
 
+    private Integer i;
 
     /**
      * Constructor
@@ -738,40 +741,67 @@ public class MapDisplay extends Pane {
     /****************************************************************************************************************
      NOT UPDATED CODE BELOW
      ****************************************************************************************************************/
-    private Polygon createPoly() {
+
+
+    /**
+     * Below is the Polygon Code
+     */
+    private ArrayList<Polygon> createPoly() {
+        //Create Atwater Kent ID 1883
+        ArrayList<Polygon> polys = new ArrayList<>();
         Polygon atwaterKent = new Polygon();
         atwaterKent.getPoints().addAll(new Double[]{
-                0.0, 0.0,
-                0.0, 100.0,
-                100.0, 100.0,
-                100.0, 0.0
+                435.369,118.974,
+                416.409,151.917,
+                427.074,158.079,
+                423.756,164.004,
+                459.069,184.386,
+                462.861,178.224,
+                473.526,184.386,
+                492.486,152.391,
+                476.133,142.2,
+                467.601,156.183,
+                443.427,142.437,
+                452.433,127.98
+
+
+
         });
         atwaterKent.setFill(Color.TRANSPARENT);
-        return atwaterKent;
+        polys.add(atwaterKent);
+
+        //Create campus center
+
+        return polys;
     }
 
-private void makePolygons() {
-    Polygon poly1 = createPoly();
-    this.getChildren().add(poly1);
-    poly1.addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET,
-            new EventHandler<MouseEvent>() {
-                public void handle(MouseEvent event) {
-                    poly1.setFill(Color.RED);
-                    PopOver popOver = createPopOverForNode(controller.getNode(1883));
-                    if (!(previousPopOver.equals(popOver))) {
-                        popOver.show(poly1, -9);
-                        previousPopOver.hide();
-                        previousPopOver = popOver;
-                        //controller.updateNodeInformation(v);
-                    }
-                }
-            });
-    poly1.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET,
-            new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    poly1.setFill(Color.TRANSPARENT);
-                }
-            });
+    private void makePolygons() {
+        ArrayList<Integer> nodeKeys = new ArrayList<>();
+        nodeKeys.addAll(Arrays.asList(1883));
+        i = -1;
+        for (Polygon p : createPoly()) {
+            i+=1;
+            this.getChildren().add(p);
+            p.addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET,
+                    new EventHandler<MouseEvent>() {
+                        public void handle(MouseEvent event) {
+                            p.setFill(Color.web("red", 0.5));
+                            PopOver popOver = createPopOverForNode(controller.getNode(nodeKeys.get(i)));
+                            if (!(previousPopOver.equals(popOver))) {
+                                popOver.show(p, -9);
+                                previousPopOver.hide();
+                                previousPopOver = popOver;
+                                //controller.updateNodeInformation(v);
+                            }
+                        }
+                    });
+            p.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET,
+                    new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            p.setFill(Color.TRANSPARENT);
+                        }
+                    });
+            }
     }
 }
