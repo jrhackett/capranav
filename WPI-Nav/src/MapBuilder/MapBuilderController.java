@@ -350,7 +350,7 @@ public class MapBuilderController extends Application {
 			v.translateBuilding(getNodesOfBuilding(k), masterNodeList).forEach((key,value) ->{
 				masterNodeList.put(key, value);
 			});
-		});/*/
+		});*/
 
 		cleanNodeList(masterNodeList);
 		completeEdges(masterNodeList);

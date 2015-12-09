@@ -75,6 +75,13 @@ public class MapDisplay extends Pane {
     private Color startBorderColor = Color.LIGHTGREEN;
     /**--------------------------------------------------------------*/
 
+    private INode startNode;
+    private INode endNode;
+    private HashMap<Integer, INode> nodeMap;
+    private ArrayList<ArrayList<Instructions>> pathList;
+    private int mapIdOldInt;
+    private int mapIdNewInt;
+
     private boolean HIGLIGHTED = false;
 
     private ArrayList<INode> path; //last set path
@@ -128,6 +135,7 @@ public class MapDisplay extends Pane {
      * @param nodes
      */
     public void drawNodes(HashMap<Integer, INode> nodes) {
+        nodeMap = nodes;
         //to make it easy we will create all the nodes
 
         nodes.forEach((k, v) -> {
@@ -283,6 +291,7 @@ public class MapDisplay extends Pane {
 
     public PopOver createPopOverForNode(INode v) {
         PopOver popOver = new PopOver();
+        popOver.setId("popover-id");
         VBox vbox = new VBox();
 
         Building building = controller.getBuilding(((logic.Transition)v).getBuildingID());
@@ -313,11 +322,16 @@ public class MapDisplay extends Pane {
         selectFloor.setStyle("-fx-font-size:8;");
 
         FlowPane flowPane = new FlowPane();
+        flowPane.setId("popover-id");
+
 
         /* displays only the buttons that the building has in rows of up to 3 */
         for(int i = floorPlan.size() - 1; i >= 0; i--) {
             Button button = new Button();
-            button.setId("popover-buttons");
+            if(((logic.Transition) v).getToFloor() == i)
+                button.setId("popover-buttons-highlighted");
+            else
+                button.setId("popover-buttons");
             String value;
             Object array[] = floorPlan.keySet().toArray();
             if(floorPlan.keySet().toArray()[i].equals(-1)) {
@@ -339,15 +353,13 @@ public class MapDisplay extends Pane {
                     System.out.println("building.getID(): " + building.getID());
                     System.out.println("x: " + x);
                     controller.switchToBuildingView(building.getID(), x);
-                    //controller.handleEnterBuilding((logic.Transition)v);
-                    //controller.setCurrentMap(floorPlan.get(x));
                     popOver.hide();
                 }
             });
+
+            button.setOnMouseEntered(e -> requestFocus());
 //            button.setOnMouseClicked(e -> {
 //                controller.switchToBuildingView(building.getID(), i);
-//                //controller.handleEnterBuilding((logic.Transition)v);
-//                //controller.setCurrentMap(floorPlan.get(x));
 //                popOver.hide();
 //            });
             flowPane.getChildren().add(button);
@@ -381,13 +393,12 @@ public class MapDisplay extends Pane {
         flowPane.getChildren().addAll(fourth, third, second, first, basement, subBasement);*/
         flowPane.setHgap(2);
         flowPane.setVgap(2);
-        flowPane.setTranslateY(4);
+        flowPane.setTranslateY(-2);
 
         vbox.setAlignment(Pos.TOP_CENTER);
         vbox.setId("popover-id");
         vbox.setSpacing(2);
         vbox.getChildren().addAll(hbox, flowPane); //select floor? topbuttons, bottombuttons
-        //vbox.getStylesheets().add("../visuals/style.css");
 
         popOver.setContentNode(vbox);
         popOver.setArrowLocation(PopOver.ArrowLocation.RIGHT_TOP);
@@ -458,6 +469,7 @@ public class MapDisplay extends Pane {
 
     public void createPath(ArrayList<ArrayList<Instructions>> path) {
 
+        pathList = path;
         //upon creation of a new path fully reset old nodes
         revertPathNodes();
 
@@ -525,6 +537,8 @@ public class MapDisplay extends Pane {
      * @param mapIdNew
      */
     public void showLines(int mapIdOld, int mapIdNew) {
+        mapIdNewInt = mapIdNew;
+        mapIdOldInt = mapIdOld;
         if (mapIdOld != -1) {
             try {
                 System.out.println("Removing old map lines: " + mapIdOld);
@@ -549,6 +563,7 @@ public class MapDisplay extends Pane {
      * @param iNode
      */
     public void setStartNode(INode iNode) {
+        startNode = iNode;
 
        // if (st.getNode() == null || !st.getNode().equals(id_circle.get(iNode.getID()))) {
             Circle c;
@@ -591,6 +606,7 @@ public class MapDisplay extends Pane {
 
 
     public void setEndNode(INode v, boolean animation) {
+        endNode = v;
         Circle c;
 
         if (id_circle.containsKey(v.getID())) {
@@ -707,19 +723,35 @@ public class MapDisplay extends Pane {
      Color Change CODE
      ****************************************************************************************************************/
 
+    public void updateAll(){
+
+        this.revertPathNodes();
+        //this.drawNodes(nodeMap);
+        try {
+            this.createPath(pathList);
+            this.showLines(mapIdNewInt, mapIdOldInt);
+            this.setStartNode(startNode);
+            this.setEndNode(endNode, true);
+        }catch(Exception e){
+
+        }
+    }
 
     public void setNodePathDefault() {
         setPathColor(Color.BLUE, Color.LIGHTBLUE, Color.web("#00CCFF", 0.7));
         setStartColor(Color.GREEN, Color.LIGHTGREEN);
         setEndColor(Color.FIREBRICK, Color.RED);
         setTransitionColor(Color.YELLOW);
+        updateAll();
     }
     public void setNodePathColorBlind(){
         setPathColor(Color.BLUE, Color.LIGHTBLUE, Color.web("#00CCFF", 0.7));
         setStartColor(Color.GREEN, Color.LIGHTGREEN);
         setEndColor(Color.DARKVIOLET, Color.LIGHTPINK);
-        setTransitionColor(Color.DARKGOLDENROD);
+        setTransitionColor(Color.ORANGE);
+        updateAll();
     }
+
     public void setTransitionColor(Color body){
         transitionColor = body;
     }
