@@ -1296,7 +1296,9 @@ public class Display {
     }
 
     public void clearInstructions() {
-        instructions.setCellFactory((ListView<Instructions> lv) ->
+
+        this.instructions.getSelectionModel().clearSelection();
+        /*instructions.setCellFactory((ListView<Instructions> lv) ->
                 new ListCell<Instructions>() {
                     @Override
                     public void updateItem(Instructions in, boolean empty) {
@@ -1304,7 +1306,8 @@ public class Display {
                         setGraphic(null);
                     }
                 }
-        );    }
+        );*/
+    }
 
     /**
      * Call to set the instructions
@@ -1312,6 +1315,8 @@ public class Display {
     public void setInstructions(ArrayList<Instructions> instructions) {
 
         //this.SETTINGS_VISIBLE.setValue(!SETTINGS_VISIBLE.getValue());
+
+        clearInstructions();
 
         ObservableList<Instructions> data = FXCollections.observableArrayList();
         data.addAll(instructions);
