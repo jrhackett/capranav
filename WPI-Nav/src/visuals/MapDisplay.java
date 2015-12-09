@@ -746,9 +746,12 @@ public class MapDisplay extends Pane {
     /**
      * Below is the Polygon Code
      */
-    private ArrayList<Polygon> createPoly() {
+    private void createPoly() {
+
+    }
+
+    private void makePolygons() {
         //Create Atwater Kent ID 1883
-        ArrayList<Polygon> polys = new ArrayList<>();
         Polygon atwaterKent = new Polygon();
         atwaterKent.getPoints().addAll(new Double[]{
                 435.369,118.974,
@@ -768,40 +771,93 @@ public class MapDisplay extends Pane {
 
         });
         atwaterKent.setFill(Color.TRANSPARENT);
-        polys.add(atwaterKent);
+        addPolygonEvents(atwaterKent, 1883);
 
         //Create campus center
+        Polygon campusCenter = new Polygon();
+        campusCenter.getPoints().addAll(new Double[]{
+                299.331,202.872,
+                295.6575,225.624,
+                324.69,230.0085,
+                326.349,220.5285,
+                328.77825,221.121,
+                327.534,222.8985,
+                328.3635,228.05325,
+                332.6295,231.1935,
+                337.962,230.30475,
+                341.043,226.098,
+                340.2135,220.82475,
+                335.355,217.6845,
+                335.7105,216.2625,
+                346.07925,217.74375,
+                353.9595,168.3885,
+                332.09625,164.89275,
+                331.62225,167.796,
+                330.378,167.49975,
+                323.8605,176.9205,
+                329.48925,180.65325,
+                324.927,186.69675,
+                322.49775,185.03775,
+                317.99475,185.86725,
+                315.21,189.6,
+                315.98025,194.2215,
+                318.1725,195.762,
+                313.49175,202.10175,
+                319.29825,205.953,
+                315.98025,205.479,
+                313.077,209.745,
+                304.95975,203.7015,
 
-        return polys;
+        });
+        campusCenter.setFill(Color.TRANSPARENT);
+        addPolygonEvents(campusCenter, 1876);
+
+        //Stratton Hall
+        Polygon stratton = new Polygon();
+        stratton.getPoints().addAll(new Double[]{
+                391.05,295.6575,
+                384.414,333.696,
+                402.189,336.777,
+                408.588,298.146,
+
+        });
+        stratton.setFill(Color.TRANSPARENT);
+        addPolygonEvents(stratton, 1899);
+
+        Polygon project = new Polygon();
+        project.getPoints().addAll(new Double[]{
+                397.5675,257.5005,
+                392.709,287.1255,
+                410.484,290.088,
+                415.3425,260.463,
+
+        });
+        project.setFill(Color.TRANSPARENT);
+        addPolygonEvents(project, 2029);
+
+    }
+    private void addPolygonEvents(Polygon p, Integer key){
+        this.getChildren().add(p);
+        p.addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET,
+                new EventHandler<MouseEvent>() {
+                    public void handle(MouseEvent event) {
+                        p.setFill(Color.web("red", 0.5));
+                        PopOver popOver = createPopOverForNode(controller.getNode(key));
+                        if (!(previousPopOver.equals(popOver))) {
+                            popOver.show(p, -9);
+                            previousPopOver.hide();
+                            previousPopOver = popOver;
+                            //controller.updateNodeInformation(v);
+                        }
+                    }
+                });
+        p.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        p.setFill(Color.TRANSPARENT);
+                    }
+                });
     }
 
-    private void makePolygons() {
-        ArrayList<Integer> nodeKeys = new ArrayList<>();
-        nodeKeys.addAll(Arrays.asList(1883));
-        i = -1;
-        for (Polygon p : createPoly()) {
-            i+=1;
-            this.getChildren().add(p);
-            p.addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET,
-                    new EventHandler<MouseEvent>() {
-                        public void handle(MouseEvent event) {
-                            p.setFill(Color.web("red", 0.5));
-                            PopOver popOver = createPopOverForNode(controller.getNode(nodeKeys.get(i)));
-                            if (!(previousPopOver.equals(popOver))) {
-                                popOver.show(p, -9);
-                                previousPopOver.hide();
-                                previousPopOver = popOver;
-                                //controller.updateNodeInformation(v);
-                            }
-                        }
-                    });
-            p.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET,
-                    new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent event) {
-                            p.setFill(Color.TRANSPARENT);
-                        }
-                    });
-            }
-    }
 }
