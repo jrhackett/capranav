@@ -321,15 +321,11 @@ public class MapDisplay extends Pane {
                     System.out.println("building.getID(): " + building.getID());
                     System.out.println("x: " + x);
                     controller.switchToBuildingView(building.getID(), x);
-                    //controller.handleEnterBuilding((logic.Transition)v);
-                    //controller.setCurrentMap(floorPlan.get(x));
                     popOver.hide();
                 }
             });
 //            button.setOnMouseClicked(e -> {
 //                controller.switchToBuildingView(building.getID(), i);
-//                //controller.handleEnterBuilding((logic.Transition)v);
-//                //controller.setCurrentMap(floorPlan.get(x));
 //                popOver.hide();
 //            });
             flowPane.getChildren().add(button);
