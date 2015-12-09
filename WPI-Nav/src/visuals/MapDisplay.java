@@ -973,6 +973,7 @@ public class MapDisplay extends Pane {
                 new EventHandler<MouseEvent>() {
                     public void handle(MouseEvent event) {
                         p.setFill(Color.web("red", 0.5));
+                        p.setStroke(Color.RED);
                     }
                 });
         p.addEventFilter(MouseEvent.MOUSE_CLICKED,
@@ -993,6 +994,7 @@ public class MapDisplay extends Pane {
                     public void handle(MouseEvent event) {
                         //previousPopOver.hide();//test
                         p.setFill(Color.TRANSPARENT);
+                        p.setStroke(Color.TRANSPARENT);
                     }
                 });
 
