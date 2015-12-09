@@ -82,6 +82,10 @@ public class Directions {
 			anglePhrase = "East";
 
 		if (aStarPath.size() == 2) {
+			dist /= 10;
+			dist = Math.round(dist);
+			dist *= 10;
+			if (dist < 8) dist = 5;
 			distPhrase = Math.round(dist) + " feet.";
 			directions.get(0).add(new Instructions("Face " + anglePhrase + ", and walk " + distPhrase, aStarPath.get(0)));
 			return directions;
@@ -99,6 +103,10 @@ public class Directions {
 			distfirst += (Math.sqrt(Math.pow((firstturn.getX_univ() - firstnext.getX_univ()), 2) + Math.pow((firstturn.getY_univ() - firstnext.getY_univ()), 2)));
 			p++;
 		}
+		distfirst /= 10;
+		distfirst = Math.round(distfirst);
+		distfirst *= 10;
+		if (distfirst < 8) distfirst = 5;
 		distPhrase = Math.round(distfirst) + " feet.";
 
 		directions.get(0).add(new Instructions("Face " + anglePhrase + ", and walk " + distPhrase, aStarPath.get(0)));
@@ -161,7 +169,12 @@ public class Directions {
 				anglePhrase = AngletoString((int) Math.round(angle));
 			}
 
+			distspec /= 10;
+			distspec = Math.round(distspec);
+			distspec *= 10;
+			if (distspec < 8) distspec = 5;
 			distPhrase = Math.round(distspec) + " feet.";
+
 			//distPhrase now uses distspec.
 
 			// specialdirs changed lines VV
