@@ -744,7 +744,7 @@ public class MapDisplay extends Pane {
 
 
     /**
-     * Below is the Polygon Code
+     * Below is the Polygon Code - Josh
      */
     private void createPoly() {
 
@@ -905,10 +905,33 @@ public class MapDisplay extends Pane {
 
         Polygon library = new Polygon();
         library.getPoints().addAll(new Double[]{
-
+                500.1885,248.0205,
+                497.5815,253.9455,
+                494.9745,261.5295,
+                492.96,267.573,
+                491.6565,272.9055,
+                490.827,277.29,
+                489.9975,282.267,
+                489.405,288.192,
+                488.931,294.591,
+                488.5755,302.649,
+                516.66,308.4555,
+                518.319,300.99,
+                517.4895,300.753,
+                518.9115,297.0795,
+                520.689,292.221,
+                521.9925,287.718,
+                522.822,284.4,
+                523.6515,278.5935,
+                524.3625,273.8535,
+                524.8365,268.521,
+                525.192,263.781,
+                525.3105,260.937,
+                526.0215,260.937,
+                527.6805,253.59,
         });
         library.setFill(Color.TRANSPARENT);
-        addPolygonEvents(library, 2148); //
+        addPolygonEvents(library, 2148);
 
     }
     private void addPolygonEvents(Polygon p, Integer key){
