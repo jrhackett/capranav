@@ -158,6 +158,7 @@ public class Controller extends Application {
     public void setStyleSheet(String style){
         display.getStylesheets().clear();
         display.getStylesheets().add(getClass().getResource(style).toExternalForm());
+        System.out.println("Stylesheet set to " + display.getStylesheets().get(0).toString());
     }
 
     /**
@@ -350,6 +351,7 @@ public class Controller extends Application {
 
 
             if (startNode != null) {
+                System.out.println("The START NODE: " + startNode.toString());
                 //TODO if current map contains it, play, if it doesn't - switch and play
                 //Hopefully in find paths this is taken care of - will confirm later
                 if (startNode.getMap_id() == currentMap.getID()) {
@@ -361,6 +363,7 @@ public class Controller extends Application {
 
             if (endNode != null) {
                // System.out.println("END NODE HIGHLIGHTED!");
+                System.out.println("THE END NODE: " + endNode.toString());
                 //TODO if current map contains it, play, if it doesn't - dont play, just set and color
                 if (endNode.getMap_id() == currentMap.getID()) {
                     myDisplay.mapDisplay.setEndNode(endNode, true);
@@ -596,7 +599,7 @@ public class Controller extends Application {
             }
             eradicate(tempStart, true); //completely get rid of the last start
             //System.out.println("-1");
-            temp = new Landmark(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
+            temp =  new Landmark(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
         } else {
             if (endNode != null){
                 //System.out.println("Hiding old end node");
@@ -796,6 +799,7 @@ public class Controller extends Application {
     public void findPaths(){
         lastSoft = -1;
         //Creates instructions - setting fullPath
+        //this.myDisplay.clearInstructions();
         getPathNodes(startNode, endNode);
         getInstructions();
 
