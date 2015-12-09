@@ -25,7 +25,7 @@ public class SlidingAnchorPane extends AnchorPane {
 
     final Animation hideSidebar = new Transition() {
         {
-            setCycleDuration(Duration.millis(250));
+            setCycleDuration(Duration.millis(350));
         }
 
         protected void interpolate(double t) {
@@ -60,7 +60,7 @@ public class SlidingAnchorPane extends AnchorPane {
 
     final Animation showSidebar = new Transition() {
         {
-            setCycleDuration(Duration.millis(250));
+            setCycleDuration(Duration.millis(350));
         }
 
         protected void interpolate(double t) {
@@ -100,6 +100,7 @@ public class SlidingAnchorPane extends AnchorPane {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     prop.setValue(!prop.getValue()); //this should flip the MISC_VISIBLE
+                    System.out.println("IN PLAY HIDE PANE");
 
                     //TODO change the look of bars here
                     //bars.getStyleClass().remove("hide-left");
@@ -117,7 +118,7 @@ public class SlidingAnchorPane extends AnchorPane {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     prop.setValue(!prop.getValue()); //this should flip the MISC_VISIBLE
-
+                    System.out.println("IN PLAY SHOW PANE");
                     //TODO change the look of bars here
                     //bars.getStyleClass().remove("hide-left");
                     //bars.getStyleClass().add("show-right");
