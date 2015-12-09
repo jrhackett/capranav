@@ -112,7 +112,7 @@ public class Directions {
 			// Set to use universal.
 			dist = Math.sqrt(Math.pow((turn.getX_univ() - next.getX_univ()), 2) + Math.pow((turn.getY_univ() - next.getY_univ()), 2));
 
-			distspec += dist;
+			//distspec = dist; //was += //nvm this is here twice i'm dumb
 
 			//add CURRENT dist to distspec, which is used for adding culled distances
 			//Future steps' distance will be added to this variable later.
@@ -125,7 +125,7 @@ public class Directions {
 			} else {
 				// throw exception
 			}
-			distspec += dist;
+			distspec = dist;
 			totalDistance += dist;
 			angle = getAngle(prev, turn, next);
 			angle = angle * 180 / Math.PI - 180;
@@ -138,7 +138,7 @@ public class Directions {
 
 			int j = 1;
 			double futuredist = 0;
-			while (aStarPath.size() > i + j + 2 && getAngle(aStarPath.get(i + j), aStarPath.get(i + j + 1), aStarPath.get(i + j + 2)) > 2.87979327 && getAngle(aStarPath.get(i + j - 1), aStarPath.get(i + j), aStarPath.get(i + j + 1)) < 3.40339204) {
+			while (aStarPath.size() > i + j + 2 && getAngle(aStarPath.get(i + j), aStarPath.get(i + j + 1), aStarPath.get(i + j + 2)) > 2.87979327 && getAngle(aStarPath.get(i + j), aStarPath.get(i + j + 1), aStarPath.get(i + j + 2)) < 3.40339204) {
 				//While loop checks if future turns are straight and we have not reached the end
 				futuredist = (Math.sqrt(Math.pow((aStarPath.get(i + j + 1).getX_univ() - aStarPath.get(i + j + 2).getX_univ()), 2) + Math.pow((aStarPath.get(i + j + 1).getY_univ() - aStarPath.get(i + j + 2).getY_univ()), 2)));
 				if (maps.containsKey(turn.getMap_id())) {
@@ -208,9 +208,9 @@ public class Directions {
 
 			//if (angle<=-10 || angle>=10 || (aStarPath.size()==i+j+2 && veryfirm == false)){
 
-			if (angle <= -10 || angle >= 10 && !(turn instanceof TStairs) && !(turn instanceof Elevator)) {
+			if (angle <= -15 || angle >= 15 && !(turn instanceof TStairs) && !(turn instanceof Elevator)) {
 
-				directions.get(mapstep).add(new Instructions("Turn " + anglePhrase + ", and walk " + distPhrase, turn));
+				directions.get(mapstep).add(new Instructions("Make a " + anglePhrase + ", and walk " + distPhrase, turn));
 				//if(aStarPath.size()==i+j+2) {
 				//veryfirm = true;
 			}
@@ -258,27 +258,22 @@ public class Directions {
 
 	// This method converts a given angle into the proper string
 	public static String AngletoString(int angle) {
-		if (angle <= 10 && angle >= -10)
+		if (angle <= 15 && angle >= -15) //old thresholds were: 10 35 60 110
 			return "straight ahead";
-		if (angle < -10 && angle >= -35)
+		if (angle < -15 && angle >= -45)
 			return "slight left";
-		if (angle < -35 && angle >= -60)
+		if (angle < -45 && angle >= -100)
 			return "left";
-		if (angle < -60 && angle >= -110)
+		if (angle < -100 && angle >= -180)
 			return "hard left";
-		if (angle < -110 && angle >= -180)
-			return "very hard left";
-		if (angle > 10 && angle <= 35)
+		if (angle > 15 && angle <= 45)
 			return "slight right";
-		if (angle > 35 && angle <= 60)
+		if (angle > 45 && angle <= 100)
 			return "right";
-		if (angle > 60 && angle <= 110)
+		if (angle > 100 && angle <= 180)
 			return "hard right";
-		if (angle > 110 && angle <= 180)
-			return "very hard right";
 		return String.valueOf(angle);
 	}
-
 
 	/*public static String getRelativeCurrentFloorString(INode current, INode next, HashMap<Integer, IMap> maps){
 		if (maps.get(next.getMap_id()).getFloor() > (maps.get(current.getMap_id()).getFloor())){
