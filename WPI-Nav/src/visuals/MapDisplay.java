@@ -872,6 +872,41 @@ public class MapDisplay extends Pane {
         boynton.setFill(Color.TRANSPARENT);
         addPolygonEvents(boynton, 1895);
 
+        Polygon higgins = new Polygon();
+        higgins.getPoints().addAll(new Double[]{
+                273.6165,116.2485,
+                269.05425,122.82525,
+                283.03725,132.6015,
+                277.58625,140.6595,
+                289.0215,148.42125,
+                299.568,133.431,
+                301.701,134.79375,
+                304.308,131.12025,
+                302.2935,129.69825,
+                306.915,122.94375,
+                312.30675,126.73575,
+                317.9355,118.67775,
+                311.2995,114.1155,
+                305.55225,122.23275,
+                295.24275,115.182,
+                293.58375,117.4335,
+                292.75425,116.13,
+                290.14725,116.07075,
+                288.84375,118.3815,
+                290.088,120.57375,
+                291.3915,120.5145,
+                290.26575,122.1735,
+                287.5995,120.45525,
+                284.9925,123.951,
+
+        });
+        higgins.setFill(Color.TRANSPARENT);
+        addPolygonEvents(higgins, 1881);
+
+        Polygon library = new Polygon();
+        library.getPoints().addAll(new Double[]{
+
+        });
 
     }
     private void addPolygonEvents(Polygon p, Integer key){
