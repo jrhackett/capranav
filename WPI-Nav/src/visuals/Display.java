@@ -314,8 +314,8 @@ public class Display {
             Rectangle bar = new Rectangle(CONTROL_WIDTH - 8, 3);
             bar.setArcHeight(3);
             bar.setArcWidth(3);
-            //bar.setFill(Color.web("#eeeeee"));
-            bar.setId("normallyEEEEEEBG");
+            bar.setFill(Color.web("#eeeeee"));
+            //bar.setId("normallyEEEEEEBG");
             bars.getChildren().add(bar);
         }
         bars.setTranslateX(1);
