@@ -774,6 +774,7 @@ public class Controller extends Application {
     public void findPaths(){
         lastSoft = -1;
         //Creates instructions - setting fullPath
+        //this.myDisplay.clearInstructions();
         getPathNodes(startNode, endNode);
         getInstructions();
 

@@ -27,6 +27,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class Display {
@@ -1268,11 +1269,39 @@ public class Display {
         //instructions.getColumns().addAll(Instructions.getColumn(instructions));
 
 
+
     }
 
     public void clearInstructions() {
-
-        this.instructions.getSelectionModel().clearSelection();
+        instructions.setCellFactory((ListView<Instructions> lv) ->
+                new ListCell<Instructions>() {
+                    @Override
+                    public void updateItem(Instructions in, boolean empty) {
+                        super.updateItem(in, empty);
+                        setGraphic(null);
+                    }
+                }
+        );
+        this.instructions.setItems(FXCollections.observableArrayList());
+        instructions.setCellFactory((ListView<Instructions> lv) ->
+                new ListCell<Instructions>() {
+                    @Override
+                    public void updateItem(Instructions in, boolean empty) {
+                        super.updateItem(in, empty);
+                        if (empty) {
+                            setText(null);
+                        } else {
+                            // use whatever data you need from the album
+                            // object to get the correct displayed value:
+                            Text text = new Text(in.toString());
+                            text.setWrappingWidth(expandedWidth-10);
+                            //setText(in.toString());
+                            setGraphic(text);
+                        }
+                    }
+                }
+        );
+        //this.instructions.getSelectionModel().clearSelection();
         /*instructions.setCellFactory((ListView<Instructions> lv) ->
                 new ListCell<Instructions>() {
                     @Override
