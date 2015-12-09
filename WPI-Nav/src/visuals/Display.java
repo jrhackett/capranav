@@ -100,8 +100,8 @@ public class Display {
 
     private StackPane mapPane;
     public MapDisplay mapDisplay;
-    public Inputs<InputItem> start;
-    public Inputs<InputItem> end;
+    public Inputs<String> start;
+    public Inputs<String> end;
 
     public TextField yourEmail;
 
@@ -109,12 +109,17 @@ public class Display {
     boolean FLIP = true;
     ZoomAndPan zoomAndPan;
 
-
-
+    String directionStyle = "-fx-background-color: #ac2738";
+    String whiteBGStyle = "-fx-background-color: #FFFFFF";
     SlidingAnchorPane    slidingDirections;
     Button slidingDirectionsButton;
+
     RadioButton handicapRadioButton;
     RadioButton weatherRadioButton;
+
+    HBox directionsTitleBox;
+    VBox directionsControlBox;
+    HBox emailBox;
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -313,6 +318,7 @@ public class Display {
             bar.setArcHeight(3);
             bar.setArcWidth(3);
             bar.setFill(Color.web("#eeeeee"));
+            //bar.setId("normallyEEEEEEBG");
             bars.getChildren().add(bar);
         }
         bars.setTranslateX(1);
@@ -389,7 +395,8 @@ public class Display {
 
 
         //settings a sliding pane!
-        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth + EDGE * 2, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2
+
+        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth + EDGE * 2 + 7 * 6, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2
         slidingSettings.setStyle("-fx-background-color: #333333");
 
         javafx.scene.control.Button slidingButton = slidingSettings.getButton();
@@ -412,8 +419,28 @@ public class Display {
         settingsColorLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
         settingsColorLabel.setTextFill(Color.web("#eeeeee"));
 
+        HBox settingsWeightBox = new HBox();
+        Label settingsWeightLabel = new Label("Path Preferences:");
+        settingsWeightLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        settingsWeightLabel.setTextFill(Color.web("#eeeeee"));
+
         //TODO: Force all nodes/etc. to update on interaction with checkbox
         final ToggleGroup colorgroup = new ToggleGroup();
+        final ToggleGroup weightgroup = new ToggleGroup();
+        RadioButton w1 = new RadioButton("Handicap");
+        RadioButton w2 = new RadioButton("Inside Preferred");
+        w1.setToggleGroup(weightgroup);
+        w1.setUserData("Handicap");
+        w1.setText("Handicap");
+        w1.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        w1.setTextFill(Color.web("#eeeeee"));
+
+        w2.setToggleGroup(weightgroup);
+        w2.setUserData("Inside Preferred");
+        w2.setText("Inside Preferred");
+        w2.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        w2.setTextFill(Color.web("#eeeeee"));
+
 
         RadioButton rb1 = new RadioButton("Colorblind");
         rb1.setToggleGroup(colorgroup);
@@ -444,21 +471,47 @@ public class Display {
                     if(colorgroup.getSelectedToggle().getUserData().toString().equals("Default")){
                         mapDisplay.setNodePathDefault();
                         controller.setStyleSheet("../visuals/style.css");
+                        directionStyle = "-fx-background-color: #ac2738";
+                        directionsTitleBox.setStyle("-fx-background-color: #ac2738");
+                        directionsControlBox.setStyle("-fx-background-color: #ac2738");
+
                         //mapDisplay.changeBackOldPathNodes();
                         //controller.updateNodeInformation(controller.getNode(mapDisplay.getStartID()));
                     }
 
                     if(colorgroup.getSelectedToggle().getUserData().toString().equals("Colorblind")){
                         mapDisplay.setNodePathColorBlind();
-                        controller.setStyleSheet("../visuals/style.css");
-                     //   mapDisplay.changeBackOldPathNodes();
+                        controller.setStyleSheet("../visuals/styleColorBlind.css");
+                        directionStyle = "-fx-background-color: #ffa500";
+                        directionsTitleBox.setStyle("-fx-background-color: #ffa500");
+                        directionsControlBox.setStyle("-fx-background-color: #ffa500");
+
+                        //   mapDisplay.changeBackOldPathNodes();
                         //controller.updateNodeInformation(controller.getNode(mapDisplay.getStartID()));
                     }
 
                     if(colorgroup.getSelectedToggle().getUserData().toString().equals("Night Mode")){
                         mapDisplay.setNodePathDefault();
                         controller.setStyleSheet("../visuals/styleNightMode.css");
+
                        // mapDisplay.changeBackOldPathNodes();
+                    }
+
+                }
+            }
+        });
+
+
+        weightgroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            public void changed(ObservableValue<? extends Toggle> ov,
+                                Toggle old_toggle, Toggle new_toggle) {
+                if (weightgroup.getSelectedToggle() != null) {
+                    if(weightgroup.getSelectedToggle().getUserData().toString().equals("Handicap")){
+                        System.out.println("Handicap toggled!");
+                    }
+
+                    if(weightgroup.getSelectedToggle().getUserData().toString().equals("Inside Preferred")){
+                        System.out.println("Inside toggled!");
                     }
 
                 }
@@ -470,7 +523,11 @@ public class Display {
         settingsColorBox.getChildren().add(rb1);
         //settingsColorBoxLine2.getChildren().add(rb3);
 
+        settingsWeightBox.getChildren().add(settingsWeightLabel);
+        settingsWeightBox.getChildren().add(w1);
+        settingsWeightBox.getChildren().add(w2);
         /**-------------------------------------------------------------------------------------------*/
+
         HBox settingsWalkingBox = new HBox();
         Label settingsWalkingLabel = new Label("Set walking speed:");
         settingsWalkingLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
@@ -507,15 +564,16 @@ public class Display {
         emailTextField.setOnAction(e -> handleEmailInput(emailTextField, true));
 
         settingsWalkingBox.setTranslateX(EDGE - 7);
-        walkingSpeedBox.setTranslateX(EDGE);
+        walkingSpeedBox.setTranslateX(EDGE/* - 42*/ + 7);
         setEmailLabel.setTranslateX(EDGE - 7);
-        emailTextField.setTranslateX(EDGE);
+        emailTextField.setTranslateX(EDGE/* - 42*/ + 7);
         /**---------------------------------------*/
         settingsColorLabel.setTranslateX(EDGE - 7);
-        settingsColorBox.setTranslateX(EDGE);
-        settingsColorBoxLine2.setTranslateX(EDGE);
+        settingsColorBox.setTranslateX(EDGE/* - 42*/);
+        settingsColorBoxLine2.setTranslateX(EDGE/* - 42*/);
         /**---------------------------------------*/
         //buttons for handicap / weather
+
         /*
 
         handicapRadioButton = new RadioButton();
@@ -538,8 +596,17 @@ public class Display {
 
         VBox settingsVbox = new VBox();
         settingsVbox.visibleProperty().bind(DASHBOARD_VISIBLE);
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox,  settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
+        //settingsVbox.getChildren().addAll(divider_3, settingsLabelBox,  settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
 
+        settingsWeightLabel.setTranslateX(EDGE - 7);
+        settingsWeightBox.setTranslateX(EDGE/* - 42*/);
+
+
+
+        /** has weight settings */
+        //settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
+        /** doesn't have weight settings */
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
@@ -577,15 +644,17 @@ public class Display {
          **/
 
         /** Title Box **/
-        HBox directionsTitleBox = new HBox();
-        directionsTitleBox.setStyle("-fx-background-color: #ac2738");
+        directionsTitleBox = new HBox();
+        //directionsTitleBox.getStyleClass().add("directionLabel");
+        directionsTitleBox.setStyle(directionStyle);
         directionsTitleBox.setMinHeight(EDGE);
         directionsTitleBox.setMaxHeight(EDGE);
         directionsTitleBox.setPrefHeight(EDGE);
         directionsTitleBox.setAlignment(Pos.CENTER_LEFT);
         directionsTitleBox.setSpacing(GAP * 3);
 
-        VBox directionsControlBox = new VBox();
+        directionsControlBox = new VBox();
+        directionsControlBox.setStyle(directionStyle);
 
         Image directionsArrow = FileFetch.getImageFromFile("forward.png", 27, 27, true, true);
 
@@ -593,7 +662,8 @@ public class Display {
         //directionsArrowView.setTranslateX(8);
         directionsArrowView.setTranslateY(5);
         //directionsControlBox.getChildren().addAll(directionsArrowView); //TODO CHANGE BACK
-        directionsControlBox.setStyle("-fx-background-color: #ac2738");
+        //directionsControlBox.getStyleClass().add("directionLabel");
+        //directionsControlBox.setStyle("-fx-background-color: #ac2738");
         directionsControlBox.setMinHeight(EDGE);
 
 
@@ -687,8 +757,8 @@ public class Display {
 
         /** Email Box **/
 
-        HBox emailBox = new HBox();
-        emailBox.setStyle("-fx-background-color: #ffffff");
+        emailBox = new HBox();
+        emailBox.setId("normallyWhiteBG");
         emailBox.setMinHeight(EDGE);
         emailBox.setMaxHeight(EDGE);
         emailBox.setPrefHeight(EDGE);
@@ -712,8 +782,10 @@ public class Display {
         /** Label **/
         Label emailLabel = new Label("Email Me");
         emailLabel.setTextFill(Color.web("#333333"));
-        emailLabel.setStyle("-fx-background-color:white;");
-        emailBox.setStyle("-fx-background-color:white;");
+        emailLabel.setId("normallyWhiteBG");
+
+        //emailLabel.setStyle("-fx-background-color:white;");
+        //emailBox.setStyle("-fx-background-color:white;");
 
         //emailBox.getChildren().addAll(emailIconBox, emailLabel);
 
@@ -722,11 +794,11 @@ public class Display {
 
         /** Sliding Anchor Pane **/
         SlidingAnchorPane slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
-        slidingEmail.setStyle("-fx-background-color:white;");
+        slidingEmail.setId("normallyWhiteBG");
 
         Button slidingEmailButton = slidingEmail.getButton();
         slidingEmailButton.setId("dashboardButton");
-        slidingEmailButton.setStyle("-fx-background-color:white;");
+        slidingEmailButton.setId("normallyWhiteBG");
         slidingEmailButton.setMaxWidth(EDGE - 5);
         slidingEmailButton.setMinWidth(EDGE - 5);
         slidingEmailButton.setPrefWidth(EDGE - 5);
@@ -799,7 +871,7 @@ public class Display {
         slidingEmail.visibleProperty().bind(DIRECTIONS_VISIBLE);
 
         slidingDirections.getChildren().addAll(directionsTitleBox, instructionArrows, instructions, slidingEmail);
-        slidingDirections.setStyle("-fx-background-color: #ffffff");
+        slidingDirections.setId("normallyWhiteBG");
         slidingDirections.setPrefWidth(expandedWidth + EDGE);
         slidingDirections.setMinWidth(0);
         slidingDirections.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + EDGE);
@@ -878,7 +950,7 @@ public class Display {
         map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE + EDGE); // + EDGE for NODE INFO
 
         map.getChildren().addAll(mapTitle, zoomPane, information);
-        map.setStyle("-fx-background-color:#eeeeee ;");
+        map.setId("normallyEEEEEEBG");
 
     }
 
@@ -893,7 +965,7 @@ public class Display {
         mapPane.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
         mapPane.setMinWidth(MAP_WIDTH);
 
-        mapPane.setStyle("-fx-background-color: #eeeeee");
+        mapPane.setId("normallyEEEEEEBG");
         this.mapDisplay = new MapDisplay(this.controller); //(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER),
         mapPane.getChildren().add(mapDisplay);
         //mapPane.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
@@ -952,8 +1024,8 @@ public class Display {
         this.left.setGraphic(minusView);
         this.right.setGraphic(plusView);
 
-        this.left.setStyle("-fx-background-color:#eee;");
-        this.right.setStyle("-fx-background-color:#eee;");
+        this.left.setId("normallyEEEEEEBG");
+        this.right.setId("normallyEEEEEEBG");
         left.setId("arrow-buttons");
         right.setId("arrow-buttons");
         buildingName = new Label();
@@ -1073,7 +1145,7 @@ public class Display {
     private VBox createInput() {
 
 		/* start */
-        this.start = new Inputs<InputItem>("Search WPI Maps", INPUT_WIDTH, controller);
+        this.start = new Inputs<String>("Search WPI Maps", INPUT_WIDTH, controller);
         start.setOnAction(e -> handleSearchInput(start, true));
 //        start.setOnKeyPressed(new EventHandler<KeyEvent>() {
 //            @Override
@@ -1090,7 +1162,7 @@ public class Display {
 
 
 		/* end */
-        this.end = new Inputs<InputItem>("For Destination", INPUT_WIDTH, controller);
+        this.end = new Inputs<String>("For Destination", INPUT_WIDTH, controller);
         end.setOnAction(e -> handleSearchInput(end, false));
 //        end.setOnKeyPressed(new EventHandler<KeyEvent>() {
 //            @Override
@@ -1183,8 +1255,8 @@ public class Display {
             }
         }));
 
-        //AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
-        //AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
+        AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
+        AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
 
         return inputs;
     }
@@ -1211,6 +1283,7 @@ public class Display {
 
     private void createInstructionListView() {
         this.instructions = new ListView<Instructions>();
+        this.instructions.setId("normallyEEEEEEBG");
         this.instructions.setPrefWidth(expandedWidth-10);
 
         instructions.setCellFactory((ListView<Instructions> lv) ->
@@ -1338,15 +1411,13 @@ public class Display {
     }
 
     private void handleSearchInput(Inputs v, boolean START) {
-        if (v.getValue() != null && !v.getValue().toString().isEmpty())
-            try {
-               // v.getSelectionModel().getSelectedItem();
-               // v.getValue();
-                controller.handleSearchInput(((InputItem)v.getValue()).getId(), START);
-                logger.info("FOUND A NODE! {}", v.getSelectionModel().getSelectedItem().toString());
-            } catch (ClassCastException cce) {
-                logger.error("INPUT VALUE IS NOT YET A FULL INPUT, IT IS JUST A STRING: {}", v.getValue());
+        System.out.println("handleSearchInput called.");
+
+        if (v.getValue() != null && !v.getValue().toString().isEmpty()){
+            if(v.containsNode(v.getValue().toString())) {
+                controller.handleSearchInput(v.getNode(v.getValue().toString()), START);
             }
+        }
     }
 
     private void handleWalkingInput(Inputs v, boolean START) {
@@ -1424,5 +1495,8 @@ public class Display {
         return controller.getMaps();
     }
 
+    public void setDirectionStyle(String s){
+        this.directionStyle = s;
+    }
 }
 

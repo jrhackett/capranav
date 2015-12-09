@@ -148,7 +148,7 @@ public class MapVisual extends Pane {
 
 					if (controller.SNAPPING) {
 
-						double xyTolerance = nodeDiameter/2;
+						double xyTolerance = nodeDiameter*1.0;
 
 						INode closestX = null;
 						double minXDist = xyTolerance;
