@@ -60,6 +60,18 @@ public class MapDisplay extends Pane {
     private Color lastStroke = Color.TRANSPARENT;
     private Paint lastSoft = Color.TRANSPARENT;
 
+
+    /**--------------------------------------------------------*/
+    private Color lineColor = Color.web("#00CCFF", 0.7);
+    private Color transitionColor = Color.YELLOW;
+    private Color pathBodyColor = Color.BLUE;
+    private Color pathBorderColor = Color.LIGHTBLUE;
+    private Color endBodyColor = Color.FIREBRICK;
+    private Color endBorderColor = Color.RED;
+    private Color startBodyColor = Color.GREEN;
+    private Color startBorderColor = Color.LIGHTGREEN;
+    /**--------------------------------------------------------------*/
+
     private boolean HIGLIGHTED = false;
 
     private ArrayList<INode> path; //last set path
@@ -210,7 +222,7 @@ public class MapDisplay extends Pane {
      */
     public void normal(Circle c, INode v) {
         if (v != null && v.isTransition()) { //v != null &&
-            c.setFill(Color.YELLOW);
+            c.setFill(transitionColor);
         } else {
             c.setFill(Color.TRANSPARENT);
         }
@@ -325,15 +337,11 @@ public class MapDisplay extends Pane {
                     System.out.println("building.getID(): " + building.getID());
                     System.out.println("x: " + x);
                     controller.switchToBuildingView(building.getID(), x);
-                    //controller.handleEnterBuilding((logic.Transition)v);
-                    //controller.setCurrentMap(floorPlan.get(x));
                     popOver.hide();
                 }
             });
 //            button.setOnMouseClicked(e -> {
 //                controller.switchToBuildingView(building.getID(), i);
-//                //controller.handleEnterBuilding((logic.Transition)v);
-//                //controller.setCurrentMap(floorPlan.get(x));
 //                popOver.hide();
 //            });
             flowPane.getChildren().add(button);
@@ -380,6 +388,10 @@ public class MapDisplay extends Pane {
         popOver.setDetachable(false);
         popOver.setArrowSize(5.0);
 
+        if(v.getPicturePath() == null) {
+            pictureButton.setOpacity(0.0);
+        }
+
         return popOver;
     }
 
@@ -410,7 +422,7 @@ public class MapDisplay extends Pane {
         //c.setFill(Color.web("#00CCFF"));
         // c.setStroke(Color.web("#0018A8"));
         c.setRadius(5);
-        highlight(c, Color.BLUE, Color.LIGHTBLUE);
+        highlight(c, pathBodyColor, pathBorderColor);
 
         DropShadow ds = new DropShadow();
         ds.setColor(Color.WHITE);
@@ -472,7 +484,7 @@ public class MapDisplay extends Pane {
                 line.setEndY(coordY);
 
                 /** below is the line [color] [dashed] [size] **/
-                line.setStroke(Color.web("#00CCFF", 0.85));
+                line.setStroke(lineColor);
                 line.setStrokeWidth(3);
                 line.setStrokeDashOffset(5);
                 line.getStrokeDashArray().addAll(2d, 7d);
@@ -551,7 +563,7 @@ public class MapDisplay extends Pane {
 
 
             c.setRadius(5);
-            highlight(c, Color.GREEN, Color.LIGHTGREEN);
+            highlight(c, startBodyColor, startBorderColor);
             id_circle.put(iNode.getID(), c);
 
 
@@ -588,7 +600,7 @@ public class MapDisplay extends Pane {
         }
 
         c.setRadius(5);
-        highlight(c, Color.FIREBRICK, Color.RED);
+        highlight(c, endBodyColor, endBorderColor);
 
         if (animation) {
             ScaleTransition st = new ScaleTransition(Duration.millis(75), c);
@@ -689,6 +701,40 @@ public class MapDisplay extends Pane {
         this.getChildren().add(c);
         controller.handleMapClick(temp);
     }*/
+
+    /****************************************************************************************************************
+     Color Change CODE
+     ****************************************************************************************************************/
+
+
+    public void setNodePathDefault() {
+        setPathColor(Color.BLUE, Color.LIGHTBLUE, Color.web("#00CCFF", 0.7));
+        setStartColor(Color.GREEN, Color.LIGHTGREEN);
+        setEndColor(Color.FIREBRICK, Color.RED);
+        setTransitionColor(Color.YELLOW);
+    }
+    public void setNodePathColorBlind(){
+        setPathColor(Color.BLUE, Color.LIGHTBLUE, Color.web("#00CCFF", 0.7));
+        setStartColor(Color.GREEN, Color.LIGHTGREEN);
+        setEndColor(Color.DARKVIOLET, Color.LIGHTPINK);
+        setTransitionColor(Color.DARKGOLDENROD);
+    }
+    public void setTransitionColor(Color body){
+        transitionColor = body;
+    }
+    public void setPathColor(Color body, Color border, Color path){
+        lineColor = path;
+        pathBodyColor = body;
+        pathBorderColor = border;
+    }
+    public void setStartColor(Color body, Color border){
+        startBodyColor = body;
+        startBorderColor = border;
+    }
+    public void setEndColor(Color body, Color border){
+        endBodyColor = body;
+        endBorderColor = border;
+    }
 
 
     /****************************************************************************************************************

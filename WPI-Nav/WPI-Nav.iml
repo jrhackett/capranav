@@ -28,5 +28,18 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="controlsfx-8.40.10 (2)" level="project" />
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/util/controlsfx-8.40.10" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/util/controlsfx-8.40.10" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/util/controlsfx-8.40.10" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/util/controlsfx-8.40.10" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
   </component>
 </module>
