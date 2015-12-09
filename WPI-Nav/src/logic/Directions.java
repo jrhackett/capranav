@@ -200,9 +200,9 @@ public class Directions {
 				if (next instanceof Elevator && next.getMap_id() != aStarPath.get(i + 3).getMap_id()) {
 					flights = ((Elevator) aStarPath.get(i + zz + 2)).getToFloor(); //initialize so that, in an edge case, it at least says to go where you already are
 					while (aStarPath.size() > i + zz + 3 && aStarPath.get(i + zz + 2) instanceof Elevator) {
-
-						zz++;
 						flights = ((Elevator) aStarPath.get(i + zz + 2)).getToFloor();
+						zz++;
+						if (aStarPath.size() == i + zz + 3) flights = maps.get(aStarPath.get(i+zz+2).getMap_id()).getFloor();
 					}
 					if (flights == 0) elevatorend = "the basement";
 					if (flights == -1) elevatorend = "the sub-basement";
