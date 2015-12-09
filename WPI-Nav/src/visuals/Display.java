@@ -699,9 +699,13 @@ public class Display {
         leftArrowButton = new Button();
         leftArrowButton.setGraphic(leftArrowView);
         leftArrowButton.setId("arrow-buttons-grayed");
+        leftArrowButton.setStyle("-fx-background-color:white;");
+
         leftArrowButton.setOnAction(e -> {
             handleLeftArrowButton();
             rightArrowButton.setId("arrow-buttons");
+            rightArrowButton.setStyle("-fx-background-color:white;");
+
             //controller.handleIncrementPathMap();
         });
 
@@ -712,9 +716,12 @@ public class Display {
         rightArrowButton = new Button();
         rightArrowButton.setGraphic(rightArrowView);
         rightArrowButton.setId("arrow-buttons-grayed");
+        rightArrowButton.setStyle("-fx-background-color:white;");
         rightArrowButton.setOnAction(e -> {
             handleRightArrowButton();
             leftArrowButton.setId("arrow-buttons");
+            leftArrowButton.setStyle("-fx-background-color:white;");
+
             //controller.handleIncrementPathMap();
         });
 

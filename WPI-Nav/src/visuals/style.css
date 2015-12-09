@@ -170,7 +170,7 @@
     -fx-pref-height:26 !important;
     -fx-min-height:26 !important;
     -fx-max-height:26 !important;
-    -fx-background-color:white;
+    -fx-background-color:#eeeeee;
     -fx-border-width:0;
     -fx-text-fill:#333;
 }
