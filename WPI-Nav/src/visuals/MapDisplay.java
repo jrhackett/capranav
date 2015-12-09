@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 import logic.Building;
 import logic.FileFetch;
@@ -157,8 +158,10 @@ public class MapDisplay extends Pane {
         this.mapView.setFitWidth(IMAGE_WIDTH);
 
         this.getChildren().add(mapView);
+        if(map.getID() == 0){
+            makePolygons();
+        }
         drawNodes(controller.getNodesOfMap(map.getID()));
-
 
         mapView.setOnMouseClicked(e -> {
             if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() >= 2) createTempLandmark(e);
@@ -735,5 +738,40 @@ public class MapDisplay extends Pane {
     /****************************************************************************************************************
      NOT UPDATED CODE BELOW
      ****************************************************************************************************************/
+    private Polygon createPoly() {
+        Polygon atwaterKent = new Polygon();
+        atwaterKent.getPoints().addAll(new Double[]{
+                0.0, 0.0,
+                0.0, 100.0,
+                100.0, 100.0,
+                100.0, 0.0
+        });
+        atwaterKent.setFill(Color.TRANSPARENT);
+        return atwaterKent;
+    }
 
+private void makePolygons() {
+    Polygon poly1 = createPoly();
+    this.getChildren().add(poly1);
+    poly1.addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET,
+            new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    poly1.setFill(Color.RED);
+                    PopOver popOver = createPopOverForNode(controller.getNode(1883));
+                    if (!(previousPopOver.equals(popOver))) {
+                        popOver.show(poly1, -9);
+                        previousPopOver.hide();
+                        previousPopOver = popOver;
+                        //controller.updateNodeInformation(v);
+                    }
+                }
+            });
+    poly1.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET,
+            new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    poly1.setFill(Color.TRANSPARENT);
+                }
+            });
+    }
 }
