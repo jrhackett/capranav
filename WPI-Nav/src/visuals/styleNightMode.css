@@ -25,7 +25,7 @@
 }
 
 #directionsButton  {
-    -fx-background-color:#ffa500;
+    -fx-background-color:#ac2738;
     -fx-text-fill:#eee;
     -fx-padding: 0;
 }
@@ -184,12 +184,18 @@
     -fx-font-family: HelveticaNeueLight;
     -fx-font-size: 14;
     -fx-padding: 5;
-    -fx-text-fill:#333;
+    -fx-text-fill: white;
 }
+
+.list-cell:even
+{
+    -fx-text-fill:white;
+    -fx-background-color:black;}
 
 .list-cell:odd
 {
-    -fx-background-color:#eee;
+    -fx-text-fill: white;
+    -fx-background-color:black;
 }
 
 .list-cell:filled:selected:focused, .list-cell:filled:selected, .list-cell:filled:hover {
@@ -423,7 +429,7 @@
 #time-label
 {
     -fx-font-size: 10;
-    -fx-text-fill:#333;
+    -fx-text-fill:white;
 }
 
 #picture-button{
@@ -470,11 +476,12 @@
     -fx-border-color:yellow;}
 
 #normallyWhiteBG{
-    -fx-background-color: white;}
+    -fx-background-color: black;
+    -fx-text-fill:white;}
 
 #normallyEEEEEEBG{
     -fx-text-fill:white;
-    -fx-background-color: #EEEEEE;}
+    -fx-background-color: black;}
 
 #normally333Text{
-    -fx-text-fill:black;}
+    -fx-text-fill:white;}

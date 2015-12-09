@@ -349,6 +349,7 @@ public class Controller extends Application {
 
 
             if (startNode != null) {
+                System.out.println("The START NODE: " + startNode.toString());
                 //TODO if current map contains it, play, if it doesn't - switch and play
                 //Hopefully in find paths this is taken care of - will confirm later
                 if (startNode.getMap_id() == currentMap.getID()) {
@@ -360,6 +361,7 @@ public class Controller extends Application {
 
             if (endNode != null) {
                // System.out.println("END NODE HIGHLIGHTED!");
+                System.out.println("THE END NODE: " + endNode.toString());
                 //TODO if current map contains it, play, if it doesn't - dont play, just set and color
                 if (endNode.getMap_id() == currentMap.getID()) {
                     myDisplay.mapDisplay.setEndNode(endNode, true);

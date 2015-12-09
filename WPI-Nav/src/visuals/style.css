@@ -423,6 +423,7 @@
 #time-label
 {
     -fx-font-size: 10;
+    -fx-text-fill:#333;
 }
 
 #picture-button{
@@ -467,5 +468,12 @@
 .transition-node {
     -fx-fill:yellow;
     -fx-border-color:yellow;}
-.direction-label{
-    -fx-background-color: #ac2738}
+
+#normallyWhiteBG{
+    -fx-background-color: white;}
+
+#normallyEEEEEEBG{
+    -fx-background-color: #EEEEEE;}
+
+#normally333Text{
+    -fx-text-fill:#333;}

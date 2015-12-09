@@ -735,7 +735,7 @@ public class MapDisplay extends Pane {
         setPathColor(Color.BLUE, Color.LIGHTBLUE, Color.web("#00CCFF", 0.7));
         setStartColor(Color.GREEN, Color.LIGHTGREEN);
         setEndColor(Color.DARKVIOLET, Color.LIGHTPINK);
-        setTransitionColor(Color.DARKGOLDENROD);
+        setTransitionColor(Color.ORANGE);
         updateAll();
     }
 

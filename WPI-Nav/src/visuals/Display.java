@@ -110,9 +110,12 @@ public class Display {
     ZoomAndPan zoomAndPan;
 
     String directionStyle = "-fx-background-color: #ac2738";
-
+    String whiteBGStyle = "-fx-background-color: #FFFFFF";
     SlidingAnchorPane    slidingDirections;
     Button slidingDirectionsButton;
+    HBox directionsTitleBox;
+    VBox directionsControlBox;
+    HBox emailBox;
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -310,7 +313,8 @@ public class Display {
             Rectangle bar = new Rectangle(CONTROL_WIDTH - 8, 3);
             bar.setArcHeight(3);
             bar.setArcWidth(3);
-            bar.setFill(Color.web("#eeeeee"));
+            //bar.setFill(Color.web("#eeeeee"));
+            bar.setId("normallyEEEEEEBG");
             bars.getChildren().add(bar);
         }
         bars.setTranslateX(1);
@@ -388,7 +392,7 @@ public class Display {
 
         //settings a sliding pane!
 
-        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth + EDGE * 2 + 7 * 3, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2
+        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth + EDGE * 2 + 7 * 6, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2
         slidingSettings.setStyle("-fx-background-color: #333333");
 
         javafx.scene.control.Button slidingButton = slidingSettings.getButton();
@@ -463,6 +467,10 @@ public class Display {
                     if(colorgroup.getSelectedToggle().getUserData().toString().equals("Default")){
                         mapDisplay.setNodePathDefault();
                         controller.setStyleSheet("../visuals/style.css");
+                        directionStyle = "-fx-background-color: #ac2738";
+                        directionsTitleBox.setStyle("-fx-background-color: #ac2738");
+                        directionsControlBox.setStyle("-fx-background-color: #ac2738");
+
                         //mapDisplay.changeBackOldPathNodes();
                         //controller.updateNodeInformation(controller.getNode(mapDisplay.getStartID()));
                     }
@@ -470,13 +478,18 @@ public class Display {
                     if(colorgroup.getSelectedToggle().getUserData().toString().equals("Colorblind")){
                         mapDisplay.setNodePathColorBlind();
                         controller.setStyleSheet("../visuals/styleColorBlind.css");
-                     //   mapDisplay.changeBackOldPathNodes();
+                        directionStyle = "-fx-background-color: #ffa500";
+                        directionsTitleBox.setStyle("-fx-background-color: #ffa500");
+                        directionsControlBox.setStyle("-fx-background-color: #ffa500");
+
+                        //   mapDisplay.changeBackOldPathNodes();
                         //controller.updateNodeInformation(controller.getNode(mapDisplay.getStartID()));
                     }
 
                     if(colorgroup.getSelectedToggle().getUserData().toString().equals("Night Mode")){
                         mapDisplay.setNodePathDefault();
                         controller.setStyleSheet("../visuals/styleNightMode.css");
+
                        // mapDisplay.changeBackOldPathNodes();
                     }
 
@@ -547,22 +560,25 @@ public class Display {
         emailTextField.setOnAction(e -> handleEmailInput(emailTextField, true));
 
         settingsWalkingBox.setTranslateX(EDGE - 7);
-        walkingSpeedBox.setTranslateX(EDGE - 42 + 7);
+        walkingSpeedBox.setTranslateX(EDGE/* - 42*/ + 7);
         setEmailLabel.setTranslateX(EDGE - 7);
-        emailTextField.setTranslateX(EDGE - 42 + 7);
+        emailTextField.setTranslateX(EDGE/* - 42*/ + 7);
         /**---------------------------------------*/
         settingsColorLabel.setTranslateX(EDGE - 7);
-        settingsColorBox.setTranslateX(EDGE - 42);
-        settingsColorBoxLine2.setTranslateX(EDGE - 42);
+        settingsColorBox.setTranslateX(EDGE/* - 42*/);
+        settingsColorBoxLine2.setTranslateX(EDGE/* - 42*/);
         /**---------------------------------------*/
         //buttons for handicap / weather
         settingsWeightLabel.setTranslateX(EDGE - 7);
-        settingsWeightBox.setTranslateX(EDGE - 42);
+        settingsWeightBox.setTranslateX(EDGE/* - 42*/);
 
 
         VBox settingsVbox = new VBox();
         settingsVbox.visibleProperty().bind(DASHBOARD_VISIBLE);
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
+        /** has weight settings */
+        //settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
+        /** doesn't have weight settings */
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
@@ -600,17 +616,17 @@ public class Display {
          **/
 
         /** Title Box **/
-        HBox directionsTitleBox = new HBox();
+        directionsTitleBox = new HBox();
         //directionsTitleBox.getStyleClass().add("directionLabel");
-        directionsTitleBox.setStyle("-fx-background-color: #ac2738");
+        directionsTitleBox.setStyle(directionStyle);
         directionsTitleBox.setMinHeight(EDGE);
         directionsTitleBox.setMaxHeight(EDGE);
         directionsTitleBox.setPrefHeight(EDGE);
         directionsTitleBox.setAlignment(Pos.CENTER_LEFT);
         directionsTitleBox.setSpacing(GAP * 3);
 
-        VBox directionsControlBox = new VBox();
-        directionsControlBox.setStyle("-fx-background-color: #ac2738");
+        directionsControlBox = new VBox();
+        directionsControlBox.setStyle(directionStyle);
 
         Image directionsArrow = FileFetch.getImageFromFile("forward.png", 27, 27, true, true);
 
@@ -713,8 +729,8 @@ public class Display {
 
         /** Email Box **/
 
-        HBox emailBox = new HBox();
-        emailBox.setStyle("-fx-background-color: #ffffff");
+        emailBox = new HBox();
+        emailBox.setId("normallyWhiteBG");
         emailBox.setMinHeight(EDGE);
         emailBox.setMaxHeight(EDGE);
         emailBox.setPrefHeight(EDGE);
@@ -738,8 +754,10 @@ public class Display {
         /** Label **/
         Label emailLabel = new Label("Email Me");
         emailLabel.setTextFill(Color.web("#333333"));
-        emailLabel.setStyle("-fx-background-color:white;");
-        emailBox.setStyle("-fx-background-color:white;");
+        emailLabel.setId("normallyWhiteBG");
+
+        //emailLabel.setStyle("-fx-background-color:white;");
+        //emailBox.setStyle("-fx-background-color:white;");
 
         //emailBox.getChildren().addAll(emailIconBox, emailLabel);
 
@@ -748,11 +766,11 @@ public class Display {
 
         /** Sliding Anchor Pane **/
         SlidingAnchorPane slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
-        slidingEmail.setStyle("-fx-background-color:white;");
+        slidingEmail.setId("normallyWhiteBG");
 
         Button slidingEmailButton = slidingEmail.getButton();
         slidingEmailButton.setId("dashboardButton");
-        slidingEmailButton.setStyle("-fx-background-color:white;");
+        slidingEmailButton.setId("normallyWhiteBG");
         slidingEmailButton.setMaxWidth(EDGE - 5);
         slidingEmailButton.setMinWidth(EDGE - 5);
         slidingEmailButton.setPrefWidth(EDGE - 5);
@@ -825,7 +843,7 @@ public class Display {
         slidingEmail.visibleProperty().bind(DIRECTIONS_VISIBLE);
 
         slidingDirections.getChildren().addAll(directionsTitleBox, instructionArrows, instructions, slidingEmail);
-        slidingDirections.setStyle("-fx-background-color: #ffffff");
+        slidingDirections.setId("normallyWhiteBG");
         slidingDirections.setPrefWidth(expandedWidth + EDGE);
         slidingDirections.setMinWidth(0);
         slidingDirections.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + EDGE);
@@ -904,7 +922,7 @@ public class Display {
         map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE + EDGE); // + EDGE for NODE INFO
 
         map.getChildren().addAll(mapTitle, zoomPane, information);
-        map.setStyle("-fx-background-color:#eeeeee ;");
+        map.setId("normallyEEEEEEBG");
 
     }
 
@@ -919,7 +937,7 @@ public class Display {
         mapPane.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
         mapPane.setMinWidth(MAP_WIDTH);
 
-        mapPane.setStyle("-fx-background-color: #eeeeee");
+        mapPane.setId("normallyEEEEEEBG");
         this.mapDisplay = new MapDisplay(this.controller); //(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER),
         mapPane.getChildren().add(mapDisplay);
         //mapPane.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
@@ -978,8 +996,8 @@ public class Display {
         this.left.setGraphic(minusView);
         this.right.setGraphic(plusView);
 
-        this.left.setStyle("-fx-background-color:#eee;");
-        this.right.setStyle("-fx-background-color:#eee;");
+        this.left.setId("normallyEEEEEEBG");
+        this.right.setId("normallyEEEEEEBG");
         left.setId("arrow-buttons");
         right.setId("arrow-buttons");
         buildingName = new Label();
@@ -1237,6 +1255,7 @@ public class Display {
 
     private void createInstructionListView() {
         this.instructions = new ListView<Instructions>();
+        this.instructions.setId("normallyEEEEEEBG");
         this.instructions.setPrefWidth(expandedWidth-10);
 
         instructions.setCellFactory((ListView<Instructions> lv) ->
