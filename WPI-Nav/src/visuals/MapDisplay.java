@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 import logic.Building;
 import logic.FileFetch;
@@ -28,7 +29,9 @@ import logic.IMap;
 import logic.INode;
 import org.controlsfx.control.PopOver;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -86,6 +89,7 @@ public class MapDisplay extends Pane {
     //////////////////////// ICON CODE ///////////////////////////
     private HashMap<Integer, ImageView> id_ICON;
 
+    private Integer i;
 
     /**
      * Constructor
@@ -165,8 +169,10 @@ public class MapDisplay extends Pane {
         this.mapView.setFitWidth(IMAGE_WIDTH);
 
         this.getChildren().add(mapView);
+        if(map.getID() == 0){
+            makePolygons();
+        }
         drawNodes(controller.getNodesOfMap(map.getID()));
-
 
         mapView.setOnMouseClicked(e -> {
             if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() >= 2) createTempLandmark(e);
@@ -767,5 +773,221 @@ public class MapDisplay extends Pane {
     /****************************************************************************************************************
      NOT UPDATED CODE BELOW
      ****************************************************************************************************************/
+
+
+    /**
+     * Below is the Polygon Code - Josh
+     */
+    private void createPoly() {
+
+    }
+
+    private void makePolygons() {
+        //Create Atwater Kent ID 1883
+        Polygon atwaterKent = new Polygon();
+        atwaterKent.getPoints().addAll(new Double[]{
+                435.369,118.974,
+                416.409,151.917,
+                427.074,158.079,
+                423.756,164.004,
+                459.069,184.386,
+                462.861,178.224,
+                473.526,184.386,
+                492.486,152.391,
+                476.133,142.2,
+                467.601,156.183,
+                443.427,142.437,
+                452.433,127.98
+
+
+
+        });
+        atwaterKent.setFill(Color.TRANSPARENT);
+        addPolygonEvents(atwaterKent, 1883);
+
+        //Create campus center
+        Polygon campusCenter = new Polygon();
+        campusCenter.getPoints().addAll(new Double[]{
+                299.331,202.872,
+                295.6575,225.624,
+                324.69,230.0085,
+                326.349,220.5285,
+                328.77825,221.121,
+                327.534,222.8985,
+                328.3635,228.05325,
+                332.6295,231.1935,
+                337.962,230.30475,
+                341.043,226.098,
+                340.2135,220.82475,
+                335.355,217.6845,
+                335.7105,216.2625,
+                346.07925,217.74375,
+                353.9595,168.3885,
+                332.09625,164.89275,
+                331.62225,167.796,
+                330.378,167.49975,
+                323.8605,176.9205,
+                329.48925,180.65325,
+                324.927,186.69675,
+                322.49775,185.03775,
+                317.99475,185.86725,
+                315.21,189.6,
+                315.98025,194.2215,
+                318.1725,195.762,
+                313.49175,202.10175,
+                319.29825,205.953,
+                315.98025,205.479,
+                313.077,209.745,
+                304.95975,203.7015,
+
+        });
+        campusCenter.setFill(Color.TRANSPARENT);
+        addPolygonEvents(campusCenter, 1876);
+
+        //Stratton Hall
+        Polygon stratton = new Polygon();
+        stratton.getPoints().addAll(new Double[]{
+                391.05,295.6575,
+                384.414,333.696,
+                402.189,336.777,
+                408.588,298.146,
+
+        });
+        stratton.setFill(Color.TRANSPARENT);
+        addPolygonEvents(stratton, 1899);
+
+        Polygon project = new Polygon();
+        project.getPoints().addAll(new Double[]{
+                397.5675,257.5005,
+                392.709,287.1255,
+                410.484,290.088,
+                415.3425,260.463,
+
+        });
+        project.setFill(Color.TRANSPARENT);
+        addPolygonEvents(project, 2029);
+
+        Polygon fuller = new Polygon();
+        fuller.getPoints().addAll(new Double[]{
+                499.359,153.9315,
+                505.758,166.611,
+                485.0205,177.1575,
+                489.0495,185.4525,
+                478.74,190.9035,
+                490.827,215.196,
+                526.2585,197.421,
+                517.9635,180.594,
+                518.556,180.2385,
+                518.556,179.646,
+                528.3915,174.7875,
+                515.1195,148.2435,
+                512.394,147.2955,
+        });
+        fuller.setFill(Color.TRANSPARENT);
+        addPolygonEvents(fuller, 1886);
+
+        Polygon boynton = new Polygon();
+        boynton.getPoints().addAll(new Double[]{
+                404.796,351.8265,
+                401.3595,371.43825,
+                414.513,373.512,
+                415.1055,370.3125,
+                440.109,374.46,
+                439.81275,377.00775,
+                444.2565,377.71875,
+                444.849,375.2895,
+                446.68575,375.5265,
+                448.93725,361.899,
+                417.41625,356.62575,
+                417.77175,353.90025,
+        });
+        boynton.setFill(Color.TRANSPARENT);
+        addPolygonEvents(boynton, 1895);
+
+        Polygon higgins = new Polygon();
+        higgins.getPoints().addAll(new Double[]{
+                273.6165,116.2485,
+                269.05425,122.82525,
+                283.03725,132.6015,
+                277.58625,140.6595,
+                289.0215,148.42125,
+                299.568,133.431,
+                301.701,134.79375,
+                304.308,131.12025,
+                302.2935,129.69825,
+                306.915,122.94375,
+                312.30675,126.73575,
+                317.9355,118.67775,
+                311.2995,114.1155,
+                305.55225,122.23275,
+                295.24275,115.182,
+                293.58375,117.4335,
+                292.75425,116.13,
+                290.14725,116.07075,
+                288.84375,118.3815,
+                290.088,120.57375,
+                291.3915,120.5145,
+                290.26575,122.1735,
+                287.5995,120.45525,
+                284.9925,123.951,
+
+        });
+        higgins.setFill(Color.TRANSPARENT);
+        addPolygonEvents(higgins, 1881);
+
+        Polygon library = new Polygon();
+        library.getPoints().addAll(new Double[]{
+                500.1885,248.0205,
+                497.5815,253.9455,
+                494.9745,261.5295,
+                492.96,267.573,
+                491.6565,272.9055,
+                490.827,277.29,
+                489.9975,282.267,
+                489.405,288.192,
+                488.931,294.591,
+                488.5755,302.649,
+                516.66,308.4555,
+                518.319,300.99,
+                517.4895,300.753,
+                518.9115,297.0795,
+                520.689,292.221,
+                521.9925,287.718,
+                522.822,284.4,
+                523.6515,278.5935,
+                524.3625,273.8535,
+                524.8365,268.521,
+                525.192,263.781,
+                525.3105,260.937,
+                526.0215,260.937,
+                527.6805,253.59,
+        });
+        library.setFill(Color.TRANSPARENT);
+        addPolygonEvents(library, 2148);
+
+    }
+    private void addPolygonEvents(Polygon p, Integer key){
+        this.getChildren().add(p);
+        p.addEventFilter(MouseEvent.MOUSE_ENTERED_TARGET,
+                new EventHandler<MouseEvent>() {
+                    public void handle(MouseEvent event) {
+                        p.setFill(Color.web("red", 0.5));
+                        PopOver popOver = createPopOverForNode(controller.getNode(key));
+                        if (!(previousPopOver.equals(popOver))) {
+                            popOver.show(p, -9);
+                            previousPopOver.hide();
+                            previousPopOver = popOver;
+                            //controller.updateNodeInformation(v);
+                        }
+                    }
+                });
+        p.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        p.setFill(Color.TRANSPARENT);
+                    }
+                });
+    }
 
 }
