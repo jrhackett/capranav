@@ -835,6 +835,44 @@ public class MapDisplay extends Pane {
         project.setFill(Color.TRANSPARENT);
         addPolygonEvents(project, 2029);
 
+        Polygon fuller = new Polygon();
+        fuller.getPoints().addAll(new Double[]{
+                499.359,153.9315,
+                505.758,166.611,
+                485.0205,177.1575,
+                489.0495,185.4525,
+                478.74,190.9035,
+                490.827,215.196,
+                526.2585,197.421,
+                517.9635,180.594,
+                518.556,180.2385,
+                518.556,179.646,
+                528.3915,174.7875,
+                515.1195,148.2435,
+                512.394,147.2955,
+        });
+        fuller.setFill(Color.TRANSPARENT);
+        addPolygonEvents(fuller, 1886);
+
+        Polygon boynton = new Polygon();
+        boynton.getPoints().addAll(new Double[]{
+                404.796,351.8265,
+                401.3595,371.43825,
+                414.513,373.512,
+                415.1055,370.3125,
+                440.109,374.46,
+                439.81275,377.00775,
+                444.2565,377.71875,
+                444.849,375.2895,
+                446.68575,375.5265,
+                448.93725,361.899,
+                417.41625,356.62575,
+                417.77175,353.90025,
+        });
+        boynton.setFill(Color.TRANSPARENT);
+        addPolygonEvents(boynton, 1895);
+
+
     }
     private void addPolygonEvents(Polygon p, Integer key){
         this.getChildren().add(p);
