@@ -34,7 +34,15 @@ public class FileFetch {
         return new Image(img, w, h, ratio, smooth);
     }
 
-    //Helper
+    //Assumes we're within visuals
+    public static String getCSSString(String filename) {
+        return CSSHelper(filename);
+    }
+
+    /*************************************************************************************************************
+                                            PRIVATE HELPERS
+     ************************************************************************************************************/
+
     private static InputStream makeStream(String path) {
         String fp = new File("").getAbsolutePath() + "/WPI-Nav/src/images/" + path;
         InputStream img;
@@ -57,7 +65,7 @@ public class FileFetch {
         try { img = new FileInputStream(fp); }
         catch (FileNotFoundException e) {
             try {
-                fp = new File("").getAbsolutePath() + "/src/images/" + path;
+                fp = new File("").getAbsolutePath() + "/src/images/pictures" + path;
                 img = new FileInputStream(fp);
             } catch (FileNotFoundException f) {
                 f.printStackTrace();
@@ -67,12 +75,16 @@ public class FileFetch {
         return img;
     }
 
+    private static String CSSHelper(String path) {
+        String fp = new File("").getAbsolutePath() + "/WPI-Nav/src/visuals/" + path;
+        System.out.println("First: " + fp);
 
-    private static InputStream makeStream(String root, String path) {
-        String fp = new File("").getAbsolutePath() + root + path;
-        InputStream img;
-        try { img = new FileInputStream(fp); }
-        catch (FileNotFoundException e) { e.printStackTrace(); return null; } //BAD
-        return img;
+        if (!(new File(fp).exists())) {
+            fp = new File("").getAbsolutePath() + "/src/visuals/" + path;
+            System.out.println("Second" + fp);
+        }
+
+        return fp;
+
     }
 }
