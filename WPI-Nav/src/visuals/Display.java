@@ -1386,7 +1386,9 @@ public class Display {
         System.out.println("handleSearchInput called.");
 
         if (v.getValue() != null && !v.getValue().toString().isEmpty()){
-            controller.handleSearchInput(v.getNode(v.getValue().toString()), START);
+            if(v.containsNode(v.getValue().toString())) {
+                controller.handleSearchInput(v.getNode(v.getValue().toString()), START);
+            }
         }
     }
 

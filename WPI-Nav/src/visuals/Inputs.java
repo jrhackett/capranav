@@ -157,4 +157,8 @@ public class Inputs<T> extends ComboBox<T> {
 			return 0;
 		}
 	}
+
+	public boolean containsNode(String str){
+		return stringToInt.containsKey(str);
+	}
 }
