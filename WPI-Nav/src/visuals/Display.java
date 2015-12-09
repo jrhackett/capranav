@@ -394,9 +394,9 @@ public class Display {
         settingsLabelBox.setMaxWidth(expandedWidth);
 
 
-        //settings a sliding pane!
+        //settings a sliding pane!div
 
-        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth + EDGE * 2 + 7 * 6, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2
+        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth , EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
         slidingSettings.setStyle("-fx-background-color: #333333");
 
         javafx.scene.control.Button slidingButton = slidingSettings.getButton();
@@ -606,7 +606,7 @@ public class Display {
         /** has weight settings */
         //settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
         /** doesn't have weight settings */
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, /*settingsColorLabel, settingsColorBox, settingsColorBoxLine2,*/ setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
@@ -618,7 +618,7 @@ public class Display {
 
         /*****************************************************************/
         /** Building of Sliding Dashboard Anchorpane  **/
-        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, divider_2, dashBoardTitleBox, locationLabelBox, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3, // resourcesLabelBox, infoView,
+        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, dashBoardTitleBox, locationLabelBox, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3, // resourcesLabelBox, infoView,
         slidingDashboard.setStyle("-fx-background-color: #333333");
 
         /** STYLE BUTTON HERE **/
