@@ -5,8 +5,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
-import logic.Floor;
-import logic.IMap;
+import logic.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +16,8 @@ import java.util.HashMap;
  */
 public class Inputs<T> extends ComboBox<T> {
 	private String initial;
-	ObservableList<InputItem> data;
+	ObservableList<String> data;
+	HashMap<String, Integer> stringToInt = new HashMap<>();
 	Application controller;
 	ObservableList<Walking> walking;
 
@@ -81,7 +81,7 @@ public class Inputs<T> extends ComboBox<T> {
 
 	// This returns all the Obvservable List objects for use in the main
 	// application
-	public ObservableList<InputItem> createInputItems(HashMap<Integer, logic.INode> nodes,
+	public ObservableList<String> createInputItems(HashMap<Integer, logic.INode> nodes,
 													  HashMap<Integer, logic.IMap> maps) {
 		this.data = FXCollections.observableArrayList();
 		nodes.forEach((k, v) -> { // For each node
@@ -98,47 +98,47 @@ public class Inputs<T> extends ComboBox<T> {
 	}
 
 
-	public InputItem addNode(logic.INode v, IMap map) {
+	public String addNode(logic.INode v, IMap map) {
 		//System.out.println("INode: " + v);
-		InputItem item = null;
+		String item = new String();
 		if (v.isInteresting()) {
 			for (String s : v.getNames()) {// For each of its names
 				if (map.inside()) {// FOOD should probably also not have map
 									// extensions
 					for (String m : getNames(((Floor) map).getBuildingID())) {
-						item = new InputItem(v.getID(), m + " " + s);
-						if (!data.contains(item))
+						item =  m + " " + s;
+						if (!data.contains(item)){
 							data.add(item);
+							stringToInt.put(item, v.getID());
+						}
 					}
 				} else {
-					item = new InputItem(v.getID(), s);
+					item = s;
 					data.add(item);
+					stringToInt.put(item, v.getID());
 				}
 			}
-		} else if (v.isTransition()) {
-			//System.out.println("Map: " + map);
-			if (map.inside()) {// FOOD should probably also not have map
-								// extensions
-				for (String m : getNames(((Floor) map).getBuildingID())) {
-					item = new InputItem(v.getID(), m + " " + v.toString());
-					if (!data.contains(item))
-						data.add(item); // TODO this work around will probably
-										// not work
-				}
-			} else {
-				item = new InputItem(v.getID(), v.toString());
-				data.add(item);
-			}
+		} else if (v instanceof Transition && !(v instanceof TStairs || v instanceof Elevator)) {
+			if(((Transition) v).getNames() != null) {
+				for (String s : v.getNames()) {// For each of its names
 
+					item = s;
+					if (!data.contains(item)) {
+						data.add(item);
+						stringToInt.put(item, v.getID());
+					}
+
+				}
+			}
 		}
 
 		return item;
 	}
 
 	public void removeNode(int id) {
-		InputItem iii = null;
-		for (InputItem ii : data) {
-			if (ii.getId() == id) {
+		String iii = null;
+		for (String ii : data) {
+			if (stringToInt.get(ii) == id) {
 				iii = ii;
 			}
 		}
@@ -148,5 +148,13 @@ public class Inputs<T> extends ComboBox<T> {
 	public ArrayList<String> getNames(int building_id) {
 		Controller temp = (Controller) controller;
 		return temp.getBuildingNames(building_id);
+	}
+
+	public int getNode(String str){
+		if(stringToInt.containsKey(str)){
+			return stringToInt.get(str);
+		} else {
+			return 0;
+		}
 	}
 }

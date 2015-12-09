@@ -101,8 +101,8 @@ public class Display {
 
     private StackPane mapPane;
     public MapDisplay mapDisplay;
-    public Inputs<InputItem> start;
-    public Inputs<InputItem> end;
+    public Inputs<String> start;
+    public Inputs<String> end;
 
     public TextField yourEmail;
 
@@ -1118,7 +1118,7 @@ public class Display {
     private VBox createInput() {
 
 		/* start */
-        this.start = new Inputs<InputItem>("Search WPI Maps", INPUT_WIDTH, controller);
+        this.start = new Inputs<String>("Search WPI Maps", INPUT_WIDTH, controller);
         start.setOnAction(e -> handleSearchInput(start, true));
 //        start.setOnKeyPressed(new EventHandler<KeyEvent>() {
 //            @Override
@@ -1135,7 +1135,7 @@ public class Display {
 
 
 		/* end */
-        this.end = new Inputs<InputItem>("For Destination", INPUT_WIDTH, controller);
+        this.end = new Inputs<String>("For Destination", INPUT_WIDTH, controller);
         end.setOnAction(e -> handleSearchInput(end, false));
 //        end.setOnKeyPressed(new EventHandler<KeyEvent>() {
 //            @Override
@@ -1383,17 +1383,11 @@ public class Display {
     }
 
     private void handleSearchInput(Inputs v, boolean START) {
-        //System.out.println("handleSearchInput called.");
+        System.out.println("handleSearchInput called.");
 
-        if (v.getValue() != null && !v.getValue().toString().isEmpty())
-            try {
-               // v.getSelectionModel().getSelectedItem();
-               // v.getValue();
-                controller.handleSearchInput(((InputItem)v.getValue()).getId(), START);
-                logger.info("FOUND A NODE! {}", v.getSelectionModel().getSelectedItem().toString());
-            } catch (ClassCastException cce) {
-                logger.error("INPUT VALUE IS NOT YET A FULL INPUT, IT IS JUST A STRING: {}", v.getValue());
-            }
+        if (v.getValue() != null && !v.getValue().toString().isEmpty()){
+            controller.handleSearchInput(v.getNode(v.getValue().toString()), START);
+        }
     }
 
     private void handleWalkingInput(Inputs v, boolean START) {
