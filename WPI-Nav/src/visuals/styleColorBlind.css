@@ -14,36 +14,68 @@
     -fx-padding: 8 8;
 }
 
+/*#dashboardButton:hover
+{
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.6) , 5, 0.0 , 0 , 1 );
+}*/
+
 #dashboardButton:pressed
 {
     -fx-effect:null;
 }
 
 #directionsButton  {
-    -fx-background-color:#ac2738;
+    -fx-background-color:#ffa500;
     -fx-text-fill:#eee;
     -fx-padding: 0;
 }
+
+/*#dashboardButton:hover
+{
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.6) , 5, 0.0 , 0 , 1 );
+}*/
 
 #directionsButton:pressed
 {
     -fx-effect:null;
 }
 
+
+
+
 #pinView {
     -fx-fill: #eeeeee;
 }
 
+/*#pinView:hover {
+    -fx-fill: #ac2738;
+}
+
+#pinView:pressed {
+    -fx-fill: #274abe;
+    -fx-scale-x: 6%;
+    -fx-scale-y: 6%;
+}*/
+
 #emailView {
     -fx-fill: #ac2738;
 }
+
+/*#emailView:hover {
+    -fx-fill: #eeeeee;
+}
+
+#emailView:pressed {
+    -fx-fill: #274abe;
+    -fx-scale-x: 6%;
+    -fx-scale-y: 6%;
+}*/
 
 .combo-box{
     -fx-font-family: HelveticaNeueLight;
     -fx-font-size: 12;
     -fx-padding: 0;
 }
-
 .combo-box .text-input
 {
     -fx-background: #333;
@@ -67,11 +99,81 @@
     -fx-background-color: #888;
 }
 
+/*.combo-box .arrow, .combo-box .arrow-button{
+    -fx-background-color: transparent;
+}*/
+
 .combo-box-base > .arrow-button
 {
     -fx-background-color: #333;
     -fx-border-radius: 0;
 }
+
+​
+/*.combo-box .list-cell
+{
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-text-color: #eee;
+    -fx-padding: 3 0 2 7;
+    -fx-cell-size: 1.66667em;
+}
+​
+.combo-box-popup .list-view
+{
+    -fx-background-color: white, white;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
+}
+​
+.combo-box-popup .list-view .list-cell
+{
+    -fx-padding: 4 0 4 5;
+    -fx-background-color: white;
+}*/
+​
+/*.combo-box-popup .list-view .list-cell:filled:selected, .combo-box-popup .list-view .list-cell:filled:selected:hover
+{
+    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;
+    -fx-text-fill: -fx-selection-bar-text;
+}*/
+​
+/*.combo-box-popup .list-view .list-cell:filled:hover
+{
+    -fx-background-color: white;
+    -fx-text-fill: -fx-text-inner-color;
+}*/
+​
+    /*.combo-box-base
+    {
+        -fx-skin: "com.sun.javafx.scene.control.skin.ComboBoxBaseSkin";
+        -fx-background-color: white, white, white, white;
+        -fx-background-radius: 5, 5, 4, 3;
+        -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+        -fx-padding: 0;
+    }*/
+​
+/*.combo-box-base:hover
+{
+    -fx-color: -fx-hover-base;
+}
+​
+.combo-box-base:showing
+{
+    -fx-color: -fx-pressed-base;
+    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
+    -fx-text-fill: white;
+}
+​
+.combo-box-base:focused {
+    -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-radius: 6.4, 4, 5, 3;
+    -fx-background-insets: -1.4, 0, 1, 2;
+}*/
+​
+
 
 .combo-box-base:disabled {
     -fx-opacity: .4;
@@ -275,14 +377,21 @@
 
 #popover-buttons:hover
 {
-    -fx-border-color:#ccc;
+    -fx-border-color:#aaaaaa;
+}
+
+.popover
+{
+    -fx-max-width: 95 !important;
+    -fx-background-color: white;
+    -fx-padding:0;
 }
 
 #popover-id
 {
-    -fx-min-height:80 !important;
-    -fx-max-height:80 !important;
-    -fx-max-width: 100 !important;
+    -fx-min-height:95 !important;
+    -fx-max-height:95 !important;
+    -fx-max-width: 95 !important;
     -fx-background-color: white;
     -fx-padding:3 3 3 3;
 }
@@ -360,35 +469,12 @@
     -fx-fill:yellow;
     -fx-border-color:yellow;}
 
-
-    #popover-buttons-highlighted
-    {
-        -fx-background-color: white;
-        -fx-max-width: 28 !important;
-        -fx-min-width: 28 !important;
-        -fx-max-height: 15 !important;
-        -fx-font-size:10;
-        -fx-border-width:1;
-        -fx-border-color:#00CCFF;
-        -fx-border-radius:5;
-    }
-
-    #popover-buttons-highlighted:pressed, #popover-buttons-highlighted:focused
-    {
-        -fx-border-color:#888888;
-    }
-
-    #popover-buttons-highlighted:hover
-    {
-        -fx-border-color:#78E4FF;
-    }
-
 #normallyWhiteBG{
     -fx-background-color: white;}
 
 #normallyEEEEEEBG{
+    -fx-text-fill:white;
     -fx-background-color: #EEEEEE;}
 
 #normally333Text{
-    -fx-text-fill:#333;}
-
+    -fx-text-fill:black;}
