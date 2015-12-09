@@ -541,7 +541,7 @@ public class Display {
         walkingArrayList.add(new Walking("Fast   (Late to Class)", 4.0));
         walkingArrayList.add(new Walking("Ultra  (Late to Interview)", 6.0));
         Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller);
-        walkingSpeedBox.setTranslateX(8);  //TODO fix width of this?
+        walkingSpeedBox.setTranslateX(3);  //TODO fix width of this?
         walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
         walkingSpeedBox.setValue(walkingArrayList.get(1));
         User.setSpeed(3.0);
@@ -552,7 +552,7 @@ public class Display {
         emailTextField.setPromptText("Enter your email");
         emailTextField.setMaxWidth(INPUT_WIDTH);
         emailTextField.setMaxHeight(walkingSpeedBox.getMaxHeight());
-        emailTextField.setTranslateX(8);
+        emailTextField.setTranslateX(3);
         emailTextField.setTranslateY(5);
         emailTextField.setId("text-field");
 
@@ -564,9 +564,9 @@ public class Display {
         emailTextField.setOnAction(e -> handleEmailInput(emailTextField, true));
 
         settingsWalkingBox.setTranslateX(EDGE - 7);
-        walkingSpeedBox.setTranslateX(EDGE/* - 42*/ + 7);
+        walkingSpeedBox.setTranslateX(EDGE/* - 42*/ );
         setEmailLabel.setTranslateX(EDGE - 7);
-        emailTextField.setTranslateX(EDGE/* - 42*/ + 7);
+        emailTextField.setTranslateX(EDGE/* - 42*/ );
         /**---------------------------------------*/
         settingsColorLabel.setTranslateX(EDGE - 7);
         settingsColorBox.setTranslateX(EDGE/* - 42*/);
