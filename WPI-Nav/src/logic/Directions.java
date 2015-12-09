@@ -199,8 +199,10 @@ public class Directions {
 						zz++;
 					}
 					if ((maps.get(aStarPath.get(i + 3).getMap_id()).getFloor() > (maps.get(next.getMap_id()).getFloor()))) { //going up
-						distPhrase = "to the stairs, and climb up " + flights + " floor(s)";
-					} else distPhrase = "to the stairs, and climb down " + flights + " floor(s)";
+						if (flights !=1) distPhrase = "to the stairs, and climb up " + flights + " floors";
+						else distPhrase = "to the stairs, and climb up 1 floor";
+					} else if(flights !=1) distPhrase = "to the stairs, and climb down " + flights + " floors";
+					else distPhrase = "to the stairs, and climb down 1 floor";
 				}
 				zz = 0;
 				boolean eee = false;

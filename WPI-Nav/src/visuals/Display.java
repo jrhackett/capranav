@@ -394,9 +394,9 @@ public class Display {
         settingsLabelBox.setMaxWidth(expandedWidth);
 
 
-        //settings a sliding pane!
+        //settings a sliding pane!div
 
-        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth + EDGE * 2 + 7 * 6, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2
+        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth , EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
         slidingSettings.setStyle("-fx-background-color: #333333");
 
         javafx.scene.control.Button slidingButton = slidingSettings.getButton();
@@ -539,7 +539,7 @@ public class Display {
         walkingArrayList.add(new Walking("Fast   (Late to Class)", 4.0));
         walkingArrayList.add(new Walking("Ultra  (Late to Interview)", 6.0));
         Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller);
-        walkingSpeedBox.setTranslateX(8);  //TODO fix width of this?
+        walkingSpeedBox.setTranslateX(3);  //TODO fix width of this?
         walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
         walkingSpeedBox.setValue(walkingArrayList.get(1));
         User.setSpeed(3.0);
@@ -550,7 +550,7 @@ public class Display {
         emailTextField.setPromptText("Enter your email");
         emailTextField.setMaxWidth(INPUT_WIDTH);
         emailTextField.setMaxHeight(walkingSpeedBox.getMaxHeight());
-        emailTextField.setTranslateX(8);
+        emailTextField.setTranslateX(3);
         emailTextField.setTranslateY(5);
         emailTextField.setId("text-field");
 
@@ -562,9 +562,9 @@ public class Display {
         emailTextField.setOnAction(e -> handleEmailInput(emailTextField, true));
 
         settingsWalkingBox.setTranslateX(EDGE - 7);
-        walkingSpeedBox.setTranslateX(EDGE/* - 42*/ + 7);
+        walkingSpeedBox.setTranslateX(EDGE/* - 42*/ );
         setEmailLabel.setTranslateX(EDGE - 7);
-        emailTextField.setTranslateX(EDGE/* - 42*/ + 7);
+        emailTextField.setTranslateX(EDGE/* - 42*/ );
         /**---------------------------------------*/
         settingsColorLabel.setTranslateX(EDGE - 7);
         settingsColorBox.setTranslateX(EDGE/* - 42*/);
@@ -604,7 +604,7 @@ public class Display {
         /** has weight settings */
         //settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
         /** doesn't have weight settings */
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, /*settingsColorLabel, settingsColorBox, settingsColorBoxLine2,*/ setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
@@ -616,7 +616,7 @@ public class Display {
 
         /*****************************************************************/
         /** Building of Sliding Dashboard Anchorpane  **/
-        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, divider_2, dashBoardTitleBox, locationLabelBox, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3, // resourcesLabelBox, infoView,
+        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, dashBoardTitleBox, locationLabelBox, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3, // resourcesLabelBox, infoView,
         slidingDashboard.setStyle("-fx-background-color: #333333");
 
         /** STYLE BUTTON HERE **/
