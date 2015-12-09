@@ -182,7 +182,9 @@ public class Parser<Struct> {
 
 		for (int i = 0; i < mTypes.length; i++) {
 			try { parser = new JsonStreamParser(new FileReader(getMName(i))); }
-			catch (FileNotFoundException e) { return null; } //This is bad - don't let this happen
+			catch (FileNotFoundException e) {
+				e.printStackTrace();
+				return null; } //This is bad - don't let this happen
 
 			while(parser.hasNext()) {
 				temp = (IMap)gson.fromJson(parser.next(), mTypes[i]);
@@ -285,6 +287,7 @@ public class Parser<Struct> {
 		s.append(root);
 		s.append("/json/");
 		String fullPath = s.toString();
+		/*
 		if (!(new File(fullPath).exists())) { //Fixes file path for Charlie :P
 			s = new StringBuilder();
 			s.append(root);
@@ -292,7 +295,7 @@ public class Parser<Struct> {
 
 			fullPath = s.toString();
 		}
-
+*/
 		//System.out.println(fullPath);
 
 		return fullPath;

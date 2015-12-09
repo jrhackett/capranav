@@ -3,6 +3,7 @@ package visuals;
 import controller.Controller;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -398,6 +399,76 @@ public class Display {
         //AnchorPane.setLeftAnchor(slidingButton, 0.0);
         settingsLabelBox.getChildren().addAll(slidingButton, settingsLabel);
 
+
+        /**------------------------------------------------------------------------------------------------*/
+        /**COLOR CHANGE SETTINGS---------------------------------------------------------------------------*/
+        /**------------------------------------------------------------------------------------------------*/
+
+        HBox settingsColorBox = new HBox();
+        HBox settingsColorBoxLine2 = new HBox();
+        Label settingsColorLabel = new Label("Color Style:");
+        settingsColorLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        settingsColorLabel.setTextFill(Color.web("#eeeeee"));
+
+        //TODO: Force all nodes/etc. to update on interaction with checkbox
+        final ToggleGroup colorgroup = new ToggleGroup();
+
+        RadioButton rb1 = new RadioButton("Colorblind");
+        rb1.setToggleGroup(colorgroup);
+        rb1.setUserData("Colorblind");
+        rb1.setText("Colorblind");
+        rb1.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        rb1.setTextFill(Color.web("#eeeeee"));
+
+        RadioButton rb2 = new RadioButton("Default");
+        rb2.setToggleGroup(colorgroup);
+        rb2.setUserData("Default");
+        rb2.setText("Default");
+        rb2.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        rb2.setTextFill(Color.web("#eeeeee"));
+        rb2.setSelected(true);
+
+        RadioButton rb3 = new RadioButton("Night Mode");
+        rb3.setToggleGroup(colorgroup);
+        rb3.setUserData("Night Mode");
+        rb3.setText("Night Mode");
+        rb3.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        rb3.setTextFill(Color.web("#eeeeee"));
+
+        colorgroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            public void changed(ObservableValue<? extends Toggle> ov,
+                                Toggle old_toggle, Toggle new_toggle) {
+                if (colorgroup.getSelectedToggle() != null) {
+                    if(colorgroup.getSelectedToggle().getUserData().toString().equals("Default")){
+                        mapDisplay.setNodePathDefault();
+                        controller.setStyleSheet("../visuals/style.css");
+                        //mapDisplay.changeBackOldPathNodes();
+                        //controller.updateNodeInformation(controller.getNode(mapDisplay.getStartID()));
+                    }
+
+                    if(colorgroup.getSelectedToggle().getUserData().toString().equals("Colorblind")){
+                        mapDisplay.setNodePathColorBlind();
+                        controller.setStyleSheet("../visuals/style.css");
+                     //   mapDisplay.changeBackOldPathNodes();
+                        //controller.updateNodeInformation(controller.getNode(mapDisplay.getStartID()));
+                    }
+
+                    if(colorgroup.getSelectedToggle().getUserData().toString().equals("Night Mode")){
+                        mapDisplay.setNodePathDefault();
+                        controller.setStyleSheet("../visuals/styleNightMode.css");
+                       // mapDisplay.changeBackOldPathNodes();
+                    }
+
+                }
+            }
+        });
+
+        settingsColorBox.getChildren().add(settingsColorLabel);
+        settingsColorBox.getChildren().add(rb2);
+        settingsColorBox.getChildren().add(rb1);
+        //settingsColorBoxLine2.getChildren().add(rb3);
+
+        /**-------------------------------------------------------------------------------------------*/
         HBox settingsWalkingBox = new HBox();
         Label settingsWalkingLabel = new Label("Set walking speed:");
         settingsWalkingLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
@@ -437,7 +508,11 @@ public class Display {
         walkingSpeedBox.setTranslateX(EDGE);
         setEmailLabel.setTranslateX(EDGE - 7);
         emailTextField.setTranslateX(EDGE);
-
+        /**---------------------------------------*/
+        settingsColorLabel.setTranslateX(EDGE - 7);
+        settingsColorBox.setTranslateX(EDGE);
+        settingsColorBoxLine2.setTranslateX(EDGE);
+        /**---------------------------------------*/
         //buttons for handicap / weather
 
         RadioButton handicapRadioButton = new RadioButton();
@@ -453,7 +528,7 @@ public class Display {
 
         VBox settingsVbox = new VBox();
         settingsVbox.visibleProperty().bind(DASHBOARD_VISIBLE);
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, handicapRadioButton, weatherRadioButton,  settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, handicapRadioButton, weatherRadioButton,  settingsWalkingBox, walkingSpeedBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);

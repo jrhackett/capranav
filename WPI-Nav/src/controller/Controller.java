@@ -148,6 +148,16 @@ public class Controller extends Application {
                                     FUNCTIONS THAT ARE CALLED FROM UI AND CONTACT UI
      ****************************************************************************************************************/
 
+
+    /**
+     * Changes the Style Sheet
+     * @param style the directory of the .css
+     */
+    public void setStyleSheet(String style){
+        display.getStylesheets().clear();
+        display.getStylesheets().add(getClass().getResource(style).toExternalForm());
+    }
+
     /**
      * Brings up the picture of the node on to the screen and greys out the screen
      * TODO:
