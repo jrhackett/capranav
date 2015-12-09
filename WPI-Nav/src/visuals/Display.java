@@ -1173,8 +1173,8 @@ public class Display {
             }
         }));
 
-        //AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
-        //AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
+        AutoCompleteComboBoxListener searchStart = new AutoCompleteComboBoxListener(start);
+        AutoCompleteComboBoxListener searchEnd = new AutoCompleteComboBoxListener(end);
 
         return inputs;
     }
@@ -1327,6 +1327,8 @@ public class Display {
     }
 
     private void handleSearchInput(Inputs v, boolean START) {
+        //System.out.println("handleSearchInput called.");
+
         if (v.getValue() != null && !v.getValue().toString().isEmpty())
             try {
                // v.getSelectionModel().getSelectedItem();
