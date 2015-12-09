@@ -99,7 +99,6 @@ public class Controller extends Application {
                     Building building = this.getBuilding(((logic.Transition)v).getBuildingID());
                     path = building.getName();
                     path += ".png";
-                    System.out.println("path: " + path);
                     v.setPicturePath(path);
                     //FileFetch.getImageForPictures(path); //TODO make this image scale with resizing
                 } catch(NullPointerException e) {          //TODO bad bad bad -- need rest of pictures
@@ -149,7 +148,6 @@ public class Controller extends Application {
     public void setStyleSheet(String style){
         display.getStylesheets().clear();
         display.getStylesheets().add(getClass().getResource(style).toExternalForm());
-        System.out.println("Stylesheet set to " + display.getStylesheets().get(0).toString());
     }
 
     /**
@@ -271,10 +269,6 @@ public class Controller extends Application {
      * @param START
      */
     public void handleSearchInput(int id, boolean START) {
-      //  this.myDisplay.mapDisplay.revertPathNodes();
-
-        System.out.println("handle search input 1");
-
 
         FIRST = START; //Set START so when / if map clicked properly sets start/end node
 
@@ -326,9 +320,7 @@ public class Controller extends Application {
         }
 
         if (endNode != null && startNode == null) {
-            // System.out.println("END NODE HIGHLIGHTED!");
-            System.out.println("THE END NODE: " + endNode.toString());
-            //TODO if current map contains it, play, if it doesn't - dont play, just set and color
+
             if (endNode.getMap_id() == currentMap.getID()) {
                 myDisplay.mapDisplay.setEndNode(endNode, true);
             } else {
@@ -361,7 +353,6 @@ public class Controller extends Application {
         if (maps.get(mapId).getID() == 0){
             hideBuildingPane();
             if (currentMap.getID() == 0) {
-                System.out.println("HERE 4");
                 firstTime = true;
             }
             defaultMap();
@@ -371,10 +362,6 @@ public class Controller extends Application {
             this.currentMap = maps.get(mapId);
             this.currentBuilding = currentMap.getBuildingID();
             this.currentFloor = currentMap.getFloor();
-            System.out.println("SWITCH MAP SETTING");
-            System.out.println("currentMap: " + maps.get(mapId));
-            System.out.println("currentBuilding: " + currentMap.getBuildingID());
-            System.out.println("currentFloor: " + currentMap.getFloor());
 
             showBuildingPane();//changes the pane to visible
             switchToBuildingView(currentBuilding, currentFloor);
@@ -387,9 +374,6 @@ public class Controller extends Application {
         this.currentMap      = maps.get(buildings.get(buildingID).getFloorID(startingFLOOR));
         this.currentFloor    = startingFLOOR;
 
-        System.out.println("SWITCH TO BUILDING VIEW");
-        System.out.println("buildingId: " + buildingID);
-        System.out.println("startingfloor: " + startingFLOOR);
         myDisplay.setBuildingName(buildings.get(buildingID).getName());
         showBuildingPane();
         setFloor(startingFLOOR);
@@ -430,7 +414,6 @@ public class Controller extends Application {
                 //set id for normal
                 this.myDisplay.setRightButtonID("arrow-buttons");
             } else {
-                System.out.println("Current Building: " + currentBuilding);
                 //set id for grey
                 this.myDisplay.setRightButtonID("arrow-buttons-grayed");
             }
@@ -440,7 +423,6 @@ public class Controller extends Application {
                 //set id for normal
                 this.myDisplay.setLeftButtonID("arrow-buttons");
             } else {
-                System.out.println("Current Building: " + currentBuilding);
                 //set id for grey
                 this.myDisplay.setLeftButtonID("arrow-buttons-grayed");
             }
@@ -475,15 +457,12 @@ public class Controller extends Application {
 
         if(!firstTime){
             if(full) {
-                System.out.println("HERE 1");
                 stage.setFullScreen(!full);
                 stage.setFullScreen(full);
             }
             else {
-                System.out.println("HERE 2");
                 stage.setWidth(stage.getWidth() + flipFlop);
             }
-            System.out.println("HERE 3");
 
         }
         firstTime = false;
@@ -517,12 +496,6 @@ public class Controller extends Application {
         String item;
 
         if (!FIRST){
-//            if (startNode != null)
-//            {
-//                this.myDisplay.mapDisplay.hideLast(startNode);
-//            }
-
-            System.out.println("HERE 22");
 
             item = myDisplay.start.nodeToString(n, currentMap);
             System.out.println(item);
@@ -530,11 +503,6 @@ public class Controller extends Application {
 
 
         } else {
-
-//            if (endNode != null) {
-//                this.myDisplay.mapDisplay.hideLast(endNode);
-//            }
-            System.out.println("HERE 33");
 
             item = myDisplay.end.nodeToString(n, currentMap);
             System.out.println(item);
@@ -595,7 +563,6 @@ public class Controller extends Application {
                 }
         }
 
-        System.out.println("HERE!");
         this.myDisplay.start.addNode(n, maps.get(n.getMap_id()), true); //maps(n.getMap_id())
         this.myDisplay.end.addNode(n, maps.get(n.getMap_id()), true); //maps(n.getMap_id())
 
@@ -722,9 +689,6 @@ public class Controller extends Application {
      * Sets the current map to the campus map
      */
     public void defaultMap(){
-       // if (currentMap.getID() == buildings.get(currentBuilding).getFloorID(i)) {
-        System.out.println("HERE 4");
-
         setCurrentMap(campus.getID());
     }
 
@@ -892,8 +856,7 @@ public class Controller extends Application {
         if (startNode != null && endNode != null) {
             findPaths();
         }
-        System.out.println("weather:  " + weather);
-        System.out.println("handicap: " + handicap);
+
     }
 
     /****************************************************************************************************************

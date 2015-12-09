@@ -55,7 +55,6 @@ public class myPreloader extends javafx.application.Preloader {
     public void handleStateChangeNotification(StateChangeNotification stateChangeNotification) {
         if (stateChangeNotification.getType() == Type.BEFORE_START) {
 
-            System.out.print("ASDASD");
             preloaderStage.hide();
         }
     }
