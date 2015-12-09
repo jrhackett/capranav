@@ -14,6 +14,7 @@ import org.controlsfx.control.PopOver;
 import visuals.Display;
 import visuals.Instructions;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -116,7 +117,6 @@ public class Controller extends Application {
 
         this.myDisplay = new Display(this);    //creates scene
         display = myDisplay.Init(); //initializes scene
-        display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
 
     }
 
@@ -135,7 +135,9 @@ public class Controller extends Application {
 
 
         s.setScene(display);                   //sets scene to display
-        display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
+        display.getStylesheets().add(myDisplay.getClass().getResource("style.css").toExternalForm());
+
+
         s.show();   //shows scene
         defaultMap();
 
