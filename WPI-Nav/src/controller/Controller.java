@@ -129,17 +129,10 @@ public class Controller extends Application {
         s.setResizable(true);
 
         /* setup */
-        //this.myDisplay = new Display(this);    //creates scene
-        //display = myDisplay.Init();      //initializes scene
-
-
         s.setScene(display);                   //sets scene to display
         display.getStylesheets().add(getClass().getResource("../visuals/style.css").toExternalForm());
         s.show();   //shows scene
         defaultMap();
-
-        /* sets the campus map as the loaded map */
-       // defaultMap();
     }
 
 
@@ -195,25 +188,6 @@ public class Controller extends Application {
         imageStack.getChildren().add(iv);
 
         this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
-    }
-
-    /**
-     * Switch this to just the INode
-     * @param n
-     */
-    public void updateNodeInformation(INode n){
-        this.myDisplay.updateNodeIcon(n.getIcon(), n);
-        this.myDisplay.updateNodeTitle(n.toString());
-        this.myDisplay.ICON_VISIBLE.setValue(true);
-
-        if (n.getPicturePath() != null){
-            this.myDisplay.updatePictureIcon(true);
-            this.selectedInformationNode = n;
-        } else {
-            this.myDisplay.updatePictureIcon(false);
-            this.selectedInformationNode = null;
-        }
-
     }
 
     /**
@@ -336,7 +310,7 @@ public class Controller extends Application {
             } else if (startNode != null) switchMapSetting(startNode.getMap_id());
 
 
-            if (startNode != null) {
+            if (startNode != null && endNode == null) {
                 //TODO if current map contains it, play, if it doesn't - switch and play
                 //Hopefully in find paths this is taken care of - will confirm later
                 if (startNode.getMap_id() == currentMap.getID()) {
@@ -346,7 +320,7 @@ public class Controller extends Application {
                 }
             }
 
-            if (endNode != null) {
+            if (endNode != null && startNode == null) {
                // System.out.println("END NODE HIGHLIGHTED!");
                 //TODO if current map contains it, play, if it doesn't - dont play, just set and color
                 if (endNode.getMap_id() == currentMap.getID()) {
@@ -435,8 +409,12 @@ public class Controller extends Application {
 //                System.out.println("HERE 4");
 //                firstTime = true;
 //            }
+
+            /** switches to the map **/
             setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
 
+
+            /** CSS SWITCH LOGIC **/
             if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)) {
                 //set id for normal
                 this.myDisplay.setRightButtonID("arrow-buttons");
@@ -852,7 +830,16 @@ public class Controller extends Application {
         }
     }
 
-
+    public void handleWeightOptions(boolean weather, boolean handicap){
+        Weighted.resetEdges(nodes);
+        if (weather)  Weighted.makeEdgesWeather(nodes);
+        if (handicap) Weighted.makeEdgesHandicapped(nodes);
+        if (startNode != null && endNode != null) {
+            findPaths();
+        }
+        System.out.println("weather:  " + weather);
+        System.out.println("handicap: " + handicap);
+    }
 
     /****************************************************************************************************************
                                                   PARSING FUNCTIONS
@@ -900,3 +887,23 @@ public class Controller extends Application {
         }
 }
 
+
+
+
+//    /** RELIC
+//     * Switch this to just the INode
+//     * @param n
+//     */
+//    public void updateNodeInformation(INode n){
+//        this.myDisplay.updateNodeIcon(n.getIcon(), n);
+//        this.myDisplay.updateNodeTitle(n.toString());
+//        this.myDisplay.ICON_VISIBLE.setValue(true);
+//
+//        if (n.getPicturePath() != null){
+//            this.myDisplay.updatePictureIcon(true);
+//            this.selectedInformationNode = n;
+//        } else {
+//            this.myDisplay.updatePictureIcon(false);
+//            this.selectedInformationNode = null;
+//        }
+//    }
