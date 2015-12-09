@@ -165,18 +165,24 @@ public class MapDisplay extends Pane {
     }
 
     public void softSelectAnimation(int idOld, int idNew) {
-        System.out.println("idOld: " + idOld);
-        System.out.println("idNew: " + idNew);
+        Circle c;
 
+        if(idOld > -1) {
+            c = id_circle.get(idOld);
+            if (controller.endNode.getID() == idOld) {
+                c.setFill(Color.FIREBRICK);
+            } else if (controller.startNode.getID() == idOld) {
+                c.setFill(Color.GREEN);
+            } else {
+                c.setFill(Color.BLUE);
+            }
 
-        if (idOld > -1) {
-            Circle c = id_circle.get(idOld); //TODO confirm we dont need to ensure its on the same map
-            c.setFill(this.lastSoft);
         }
 
-        Circle c = id_circle.get(idNew); //TODO confirm we dont need to ensure its on the same map
-        this.lastSoft = c.getFill();
+        c = id_circle.get(idNew);
+
         c.setFill(Color.HOTPINK);
+
 
         ScaleTransition st = new ScaleTransition(Duration.millis(75), c);
         //st.setByX(1.1f);
@@ -232,9 +238,7 @@ public class MapDisplay extends Pane {
             });
         } else {
             circle.setOnMouseClicked(e -> {
-                if (e.getButton().equals(MouseButton.SECONDARY) && e.getClickCount() == 1) {
-                    controller.showNodeImage();
-                } else if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
+                if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
                     controller.handleMapClick(v);
                 }
             });
@@ -425,6 +429,7 @@ public class MapDisplay extends Pane {
            this.getChildren().removeAll(v);
         });
 
+        //this seems to be not fully working - TODO FIX
         id_circle.forEach((k,v) -> {
             normal(id_circle.get(k), controller.getNode(k));
         });
@@ -503,6 +508,7 @@ public class MapDisplay extends Pane {
      * @param mapIdNew
      */
     public void showLines(int mapIdOld, int mapIdNew) {
+
         if (mapIdOld != -1) {
             try {
                 System.out.println("Removing old map lines: " + mapIdOld);
@@ -511,6 +517,8 @@ public class MapDisplay extends Pane {
                 System.out.println("MAP HAS NO LINES YET");
             }
         }
+
+
 
         //if map has lines to show, show them
         System.out.println("Switching from map: " + mapIdOld + " to map: " + mapIdNew);
@@ -535,6 +543,7 @@ public class MapDisplay extends Pane {
                 c = createCircle(controller.getNode(iNode.getID()));
             } else {
                 c = id_circle.get(iNode.getID());
+
             }
 
             //this.getChildren().remove(c);

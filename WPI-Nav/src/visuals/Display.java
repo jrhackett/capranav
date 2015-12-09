@@ -112,6 +112,8 @@ public class Display {
 
     SlidingAnchorPane    slidingDirections;
     Button slidingDirectionsButton;
+    RadioButton handicapRadioButton;
+    RadioButton weatherRadioButton;
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -439,21 +441,29 @@ public class Display {
         emailTextField.setTranslateX(EDGE);
 
         //buttons for handicap / weather
+        /*
 
-        RadioButton handicapRadioButton = new RadioButton();
+        handicapRadioButton = new RadioButton();
         handicapRadioButton.setText("Handicap");
         handicapRadioButton.setTextFill(Color.web("eee"));
-        RadioButton weatherRadioButton  = new RadioButton("Weather");
+        weatherRadioButton  = new RadioButton("Weather");
         weatherRadioButton.setText("Weather");
         weatherRadioButton.setTextFill(Color.web("eee"));
         handicapRadioButton.setTranslateX(EDGE);
         handicapRadioButton.setTranslateY(8);
         weatherRadioButton.setTranslateX(EDGE);
-        weatherRadioButton.setTranslateY(11);
+        weatherRadioButton.setTranslateY(11); //TODO play with this
+
+        handicapRadioButton.setOnAction(e -> handleRadioButtons());
+        weatherRadioButton.setOnAction(e -> handleRadioButtons());
+
+         */
+        //handicapRadioButton, weatherRadioButton
+
 
         VBox settingsVbox = new VBox();
         settingsVbox.visibleProperty().bind(DASHBOARD_VISIBLE);
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, handicapRadioButton, weatherRadioButton,  settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox,  settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
@@ -1171,6 +1181,7 @@ public class Display {
             FLIP = true;
         });
 
+
         instructions.setPlaceholder(new Label(" "));
         instructions.setMinWidth(0);
         instructions.setMaxWidth(expandedWidth + EDGE * 2);
@@ -1213,8 +1224,8 @@ public class Display {
                                                 Llambda Event Handlers
      ****************************************************************************************************************/
 
-    private void handleFullScreenPicture() {
-        this.controller.showNodeImage();
+    private void handleRadioButtons(){
+        controller.handleWeightOptions(weatherRadioButton.selectedProperty().getValue(), handicapRadioButton.selectedProperty().getValue());
     }
 
     private void handleSearchInput(Inputs v, boolean START) {
