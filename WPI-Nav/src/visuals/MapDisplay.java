@@ -907,6 +907,8 @@ public class MapDisplay extends Pane {
         library.getPoints().addAll(new Double[]{
 
         });
+        library.setFill(Color.TRANSPARENT);
+        addPolygonEvents(library, 2148); //
 
     }
     private void addPolygonEvents(Polygon p, Integer key){
