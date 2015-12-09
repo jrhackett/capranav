@@ -85,7 +85,7 @@ public class Inputs<T> extends ComboBox<T> {
 													  HashMap<Integer, logic.IMap> maps) {
 		this.data = FXCollections.observableArrayList();
 		nodes.forEach((k, v) -> { // For each node
-			addNode(v, maps.get(v.getMap_id()));
+			addNode(v, maps.get(v.getMap_id()), false);
 		});
 
 		return data.sorted();
@@ -98,7 +98,7 @@ public class Inputs<T> extends ComboBox<T> {
 	}
 
 
-	public String addNode(logic.INode v, IMap map) {
+	public String addNode(logic.INode v, IMap map, boolean ALL) {
 		//System.out.println("INode: " + v);
 		String item = new String();
 		if (v.isInteresting()) {
@@ -130,10 +130,50 @@ public class Inputs<T> extends ComboBox<T> {
 
 				}
 			}
+		} else {
+			if (ALL) {
+				if (!data.contains(item)) {
+					data.remove(item);
+				}
+				item = v.toString();
+				data.add(item);
+				stringToInt.put(item, v.getID());
+			}
 		}
 
 		return item;
 	}
+
+	public String nodeToString(logic.INode v, IMap map) {
+		//System.out.println("INode: " + v);
+		String item = new String();
+		if (v.isInteresting()) {
+			String s = v.toString();
+
+			if (map.inside()){
+				String m = map.toString();
+				s = m + " " + s;
+				return s;
+			}
+
+			return s;
+
+
+		} else if (v instanceof Transition && !(v instanceof TStairs || v instanceof Elevator)) {
+			String s = ((Transition) v).getName();
+			item = s;
+			if (!data.contains(item)) {
+				return item;
+			}
+		} else {
+			return v.toString();
+		}
+		System.out.println("ERRRROR");
+		return item;
+	}
+
+
+
 
 	public void removeNode(int id) {
 		String iii = null;

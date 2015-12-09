@@ -13,7 +13,6 @@ import logic.*;
 import visuals.Display;
 import visuals.Instructions;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -272,85 +271,77 @@ public class Controller extends Application {
      * @param START
      */
     public void handleSearchInput(int id, boolean START) {
-        this.myDisplay.mapDisplay.revertPathNodes();
+      //  this.myDisplay.mapDisplay.revertPathNodes();
+
+        System.out.println("handle search input 1");
+
 
         FIRST = START; //Set START so when / if map clicked properly sets start/end node
 
-        //clears old path lines from display
-        //myDisplay.mapDisplay.revertPathNodes();
+        if (START) {
 
-
-        if (nodes.containsKey(id)) {
-
-            if (START) {//setting start
-                //System.out.println("START TRUE!");
-
-                //if start is A and end is B and user tries to make start B, then end will be A
-                if (endNode != null && id == endNode.getID() ){ //&& startNode != null
-                    endNode = startNode;
-                    this.myDisplay.start.setValue(this.myDisplay.end.getValue());
-                }
-
-                if (!FLAG) {//if not from a click on the map hide the last
-                    //System.out.println("FLAG FALSE!");
-                    if (startNode != null) {
-                        //this visually hides the last start node -> sets it to normal
-                        this.myDisplay.mapDisplay.hideLast(startNode);
-                        //this.myDisplay.mapDisplay.revertPathNodes();
-                    }
-                }
-
-                //set the startNode id
-                this.startNode = nodes.get(id);
-            //Else we are changing the EndNode
-            } else {
-
-                //flip startNode and endNode if need be
-                if (startNode != null && id == startNode.getID() ){ //&& startNode != null
-                    startNode = endNode;
-                    this.myDisplay.end.setValue(null);//this.myDisplay.start.getValue()
-                    // this.myDisplay.mapDisplay.setStartNode(endNode);
-                }
-
-
-                if (!FLAG) {//if not from a click on the map hide the last
-                   // System.out.println("FLAG FALSE!");
-                    if (endNode != null) {
-                      //  System.out.println("HIDING END!");
-                        this.myDisplay.mapDisplay.hideLast(endNode);
-                       // this.myDisplay.mapDisplay.revertPathNodes();
-                    }
-                }
-
-                this.endNode = nodes.get(id);
+            if (endNode != null && id == endNode.getID() ){ //&& startNode != null
+                endNode = startNode;
+                this.myDisplay.start.setValue(this.myDisplay.end.getValue());
             }
 
-            if (startNode != null && endNode != null) {
-                findPaths();
-            } else if (startNode != null) switchMapSetting(startNode.getMap_id());
-
-            if (startNode != null && endNode == null) {
-                //TODO if current map contains it, play, if it doesn't - switch and play
-                //Hopefully in find paths this is taken care of - will confirm later
-                if (startNode.getMap_id() == currentMap.getID()) {
-                    //gotta switch maps
-                    //switchMapSetting(startNode.getMap_id());
-                    myDisplay.mapDisplay.setStartNode(startNode);
-                }
+            if (startNode != null) {
+                //this visually hides the last start node -> sets it to normal
+                this.myDisplay.mapDisplay.hideLast(startNode);
+                //this.myDisplay.mapDisplay.revertPathNodes();
             }
 
-            if (endNode != null && startNode == null) {
-               // System.out.println("END NODE HIGHLIGHTED!");
-                System.out.println("THE END NODE: " + endNode.toString());
-                //TODO if current map contains it, play, if it doesn't - dont play, just set and color
-                if (endNode.getMap_id() == currentMap.getID()) {
-                    myDisplay.mapDisplay.setEndNode(endNode, true);
-                } else {
-                    myDisplay.mapDisplay.setEndNode(endNode, false);
-                }
+            this.startNode = nodes.get(id);
+
+        } else {
+
+            if (startNode != null && id == startNode.getID() ){ //&& startNode != null
+                startNode = endNode;
+                this.myDisplay.end.setValue(null);//this.myDisplay.start.getValue()
+                // this.myDisplay.mapDisplay.setStartNode(endNode);
             }
+
+            if (startNode != null) {
+                //this visually hides the last start node -> sets it to normal
+                this.myDisplay.mapDisplay.hideLast(startNode);
+                //this.myDisplay.mapDisplay.revertPathNodes();
+            }
+
+            this.endNode = nodes.get(id);
 
         }
+
+
+        if (startNode != null && endNode != null) {
+            findPaths();
+        } else if (startNode != null) switchMapSetting(startNode.getMap_id());
+
+        if (startNode != null && endNode == null) {
+            //Hopefully in find paths this is taken care of - will confirm later
+            if (startNode.getMap_id() == currentMap.getID()) {
+                //gotta switch maps
+                //switchMapSetting(startNode.getMap_id());
+                myDisplay.mapDisplay.setStartNode(startNode);
+            }
+        }
+
+        if (endNode != null && startNode == null) {
+            // System.out.println("END NODE HIGHLIGHTED!");
+            System.out.println("THE END NODE: " + endNode.toString());
+            //TODO if current map contains it, play, if it doesn't - dont play, just set and color
+            if (endNode.getMap_id() == currentMap.getID()) {
+                myDisplay.mapDisplay.setEndNode(endNode, true);
+            } else {
+                myDisplay.mapDisplay.setEndNode(endNode, false);
+            }
+        }
+
+
+        if (startNode != null && endNode != null) {
+            findPaths();
+        } else
+                if (startNode != null) switchMapSetting(startNode.getMap_id());
+
     }
 
     /**
@@ -523,26 +514,31 @@ public class Controller extends Application {
          * switched.
          */
 
+        String item;
 
         if (!FIRST){
-            if (startNode != null)
-            {
-                this.myDisplay.mapDisplay.hideLast(startNode);
-            }
+//            if (startNode != null)
+//            {
+//                this.myDisplay.mapDisplay.hideLast(startNode);
+//            }
 
-            myDisplay.start.setValue(myDisplay.start.addNode(n, currentMap));
+            System.out.println("HERE 22");
+
+            //item = myDisplay.start.addNode(n, currentMap);
+            //System.out.println(item);
+            myDisplay.start.setValue(myDisplay.start.nodeToString(n, currentMap));
 
 
         } else {
 
-            if (endNode != null) {
-                this.myDisplay.mapDisplay.hideLast(endNode);
-            }
+//            if (endNode != null) {
+//                this.myDisplay.mapDisplay.hideLast(endNode);
+//            }
+            System.out.println("HERE 33");
 
-            myDisplay.end.setValue(myDisplay.end.addNode(n, currentMap));
-
+            //item = myDisplay.end.addNode(n, currentMap);
+            myDisplay.end.setValue(myDisplay.start.nodeToString(n, currentMap));
         }
-
     }
 
     public INode createTempLandmark(double x, double y){
@@ -597,6 +593,10 @@ public class Controller extends Application {
                     distance =Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y));
                 }
         }
+
+        System.out.println("HERE!");
+        this.myDisplay.start.addNode(n, maps.get(n.getMap_id()), true); //maps(n.getMap_id())
+        this.myDisplay.end.addNode(n, maps.get(n.getMap_id()), true); //maps(n.getMap_id())
 
         return n;
     }
@@ -1006,4 +1006,93 @@ public class Controller extends Application {
 //        }
 //
 //        this.FLAG = false;//this should prevent some double triggering of events
+//    }
+
+
+
+//    /**
+//     * This handles the values from the SEARCH BARS
+//     * @param id
+//     * @param START
+//     */
+//    public void handleSearchInput(int id, boolean START) {
+//        this.myDisplay.mapDisplay.revertPathNodes();
+//
+//        FIRST = START; //Set START so when / if map clicked properly sets start/end node
+//
+//        //clears old path lines from display
+//        //myDisplay.mapDisplay.revertPathNodes();
+//
+//
+//        if (nodes.containsKey(id)) {
+//
+//            if (START) {//setting start
+//                //System.out.println("START TRUE!");
+//
+//                //if start is A and end is B and user tries to make start B, then end will be A
+//                if (endNode != null && id == endNode.getID() ){ //&& startNode != null
+//                    endNode = startNode;
+//                    this.myDisplay.start.setValue(this.myDisplay.end.getValue());
+//                }
+//
+//                if (!FLAG) {//if not from a click on the map hide the last
+//                    //System.out.println("FLAG FALSE!");
+//                    if (startNode != null) {
+//                        //this visually hides the last start node -> sets it to normal
+//                        this.myDisplay.mapDisplay.hideLast(startNode);
+//                        //this.myDisplay.mapDisplay.revertPathNodes();
+//                    }
+//                }
+//
+//                //set the startNode id
+//                this.startNode = nodes.get(id);
+//                //Else we are changing the EndNode
+//            } else {
+//
+//                //flip startNode and endNode if need be
+//                if (startNode != null && id == startNode.getID() ){ //&& startNode != null
+//                    startNode = endNode;
+//                    this.myDisplay.end.setValue(null);//this.myDisplay.start.getValue()
+//                    // this.myDisplay.mapDisplay.setStartNode(endNode);
+//                }
+//
+//
+//                if (!FLAG) {//if not from a click on the map hide the last
+//                    // System.out.println("FLAG FALSE!");
+//                    if (endNode != null) {
+//                        //  System.out.println("HIDING END!");
+//                        this.myDisplay.mapDisplay.hideLast(endNode);
+//                        // this.myDisplay.mapDisplay.revertPathNodes();
+//                    }
+//                }
+//
+//                this.endNode = nodes.get(id);
+//            }
+//
+//            if (startNode != null && endNode != null) {
+//                findPaths();
+//            } else if (startNode != null) switchMapSetting(startNode.getMap_id());
+//
+//            if (startNode != null && endNode == null) {
+//                //TODO if current map contains it, play, if it doesn't - switch and play
+//                //Hopefully in find paths this is taken care of - will confirm later
+//                if (startNode.getMap_id() == currentMap.getID()) {
+//                    //gotta switch maps
+//                    //switchMapSetting(startNode.getMap_id());
+//                    myDisplay.mapDisplay.setStartNode(startNode);
+//                }
+//            }
+//
+//            if (endNode != null && startNode == null) {
+//                // System.out.println("END NODE HIGHLIGHTED!");
+//                System.out.println("THE END NODE: " + endNode.toString());
+//                //TODO if current map contains it, play, if it doesn't - dont play, just set and color
+//                if (endNode.getMap_id() == currentMap.getID()) {
+//                    myDisplay.mapDisplay.setEndNode(endNode, true);
+//                } else {
+//                    myDisplay.mapDisplay.setEndNode(endNode, false);
+//                }
+//            }
+//
+//        }
 //    }

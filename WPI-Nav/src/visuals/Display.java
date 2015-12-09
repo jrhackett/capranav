@@ -1416,8 +1416,13 @@ public class Display {
         if (v.getValue() != null && !v.getValue().toString().isEmpty()){
             if(v.containsNode(v.getValue().toString())) {
                 controller.handleSearchInput(v.getNode(v.getValue().toString()), START);
+            } else {
+                System.out.println("BAD 1");
             }
+        } else {
+            System.out.println("BAD 2");
         }
+
     }
 
     private void handleWalkingInput(Inputs v, boolean START) {
