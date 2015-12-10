@@ -339,7 +339,16 @@ public class Display {
         Label locationLabel = new Label("Locations");
         locationLabel.setTextFill(Color.web("#eeeeee"));
 
-        locationLabelBox.getChildren().addAll(locationLabel);
+        Button locationClearButton = new Button();
+        Label clearLabel = new Label("Clear");
+        clearLabel.setTextFill(Color.web("#eeeeee"));
+        clearLabel.setStyle("-fx-font-size:11");
+        locationClearButton.setGraphic(clearLabel);
+        locationClearButton.setTranslateX(17);
+        locationClearButton.setTranslateY(1);
+        locationClearButton.setId("clear-button");
+
+        locationLabelBox.getChildren().addAll(locationLabel, locationClearButton);
         locationLabelBox.setMinWidth(0);
         locationLabelBox.setPrefWidth(expandedWidth);
         locationLabelBox.setMaxWidth(expandedWidth);
@@ -374,6 +383,30 @@ public class Display {
         //TODO REMOVE THIS TEMP BUTTOn
         javafx.scene.control.Button goButton = new Button("GO");
         //goButton.setOnAction();
+
+
+        /*****************************************************************/
+        /** Get Connected NewsFeed **/
+
+        HBox newsLabelBox = new HBox();
+        newsLabelBox.setMinHeight(EDGE);
+        newsLabelBox.setMaxHeight(expandedWidth);
+        newsLabelBox.setPrefHeight(EDGE);
+        newsLabelBox.setAlignment(Pos.CENTER);
+
+        Label newsLabel = new Label("Get Involved");
+        newsLabel.setTextFill(Color.web("#eeeeee"));
+
+        newsLabelBox.getChildren().addAll(newsLabel);
+        AnchorPane.setTopAnchor(newsLabelBox, 3 * EDGE + GAP * .5 + 20);
+        AnchorPane.setLeftAnchor(newsLabelBox, EDGE);
+
+        Image newsIcon = FileFetch.getImageFromFile("news37.png", 20, 20, true, true);
+        ImageView newsIconView = new ImageView(newsIcon);
+
+        newsIconView.visibleProperty().bind(DASHBOARD_VISIBLE);
+        AnchorPane.setTopAnchor(newsIconView, 3 * EDGE + GAP * .5 + 30);
+        AnchorPane.setLeftAnchor(newsIconView, 2 * GAP);
 
 
         /*****************************************************************/
@@ -616,7 +649,7 @@ public class Display {
 
         /*****************************************************************/
         /** Building of Sliding Dashboard Anchorpane  **/
-        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, dashBoardTitleBox, locationLabelBox, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3, // resourcesLabelBox, infoView,
+        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, dashBoardTitleBox, locationLabelBox, pinView, inputs, newsIconView, newsLabelBox, slidingSettings); //gearsView, settingsLabelBox, divider_3, // resourcesLabelBox, infoView,
         slidingDashboard.setStyle("-fx-background-color: #333333");
 
         /** STYLE BUTTON HERE **/
