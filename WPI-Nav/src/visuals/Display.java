@@ -349,11 +349,8 @@ public class Display {
         locationClearButton.setId("clear-button");
 
         locationClearButton.setOnMouseClicked(e -> {
-            //TODO change these 0s to the current map_id
-            this.mapDisplay.getChildren().removeAll(mapDisplay.getLines().get(mapDisplay.getMapIdNewInt()));
-//            this.mapDisplay.getChildren().removeAll(mapDisplay.getId_circle().get(0));
-            //TODO make nodes and directions disappear too and slide directions panel in
-            //TODO clear out startnode and end node selections
+            //TODO clear path, directions, and comboboxes -- this currently just removes circles and path from map
+            this.mapDisplay.revertPathNodes();
         });
 
         locationLabelBox.getChildren().addAll(locationLabel, locationClearButton);
@@ -977,6 +974,8 @@ public class Display {
         zoomPane.setOnMouseEntered(e -> {
             zoomPane.requestFocus();
         });
+        zoomPane.setStyle("-fx-background-color:#eee;");
+        //zoomAndPan.setStyle("-fx-background-color:#eee;");
 
         AnchorPane.setTopAnchor(zoomPane, EDGE);//
         AnchorPane.setLeftAnchor(zoomPane, MAP_BORDER);//00
