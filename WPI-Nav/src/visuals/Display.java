@@ -970,6 +970,7 @@ public class Display {
         AnchorPane.setRightAnchor(information, 0.0);
 
         this.mapPane = createMapPane();
+        mapPane.setStyle("-fx-background-color:#eee;");
         mapPane.setAlignment(Pos.CENTER);
 
         Group group = new Group(mapPane);
@@ -981,7 +982,6 @@ public class Display {
             zoomPane.requestFocus();
         });
         zoomPane.setStyle("-fx-background-color:#eee;");
-        //zoomAndPan.setStyle("-fx-background-color:#eee;");
 
         AnchorPane.setTopAnchor(zoomPane, EDGE);//
         AnchorPane.setLeftAnchor(zoomPane, MAP_BORDER);//00
@@ -998,8 +998,8 @@ public class Display {
         map.setMinHeight(MAP_HEIGHT + EDGE);
         map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE + EDGE); // + EDGE for NODE INFO
 
-        map.getChildren().addAll(mapTitle, zoomPane, information);
         map.setId("normallyEEEEEEBG");
+        map.getChildren().addAll(mapTitle, zoomPane, information);
     }
 
     /****************************************************************************************************************
@@ -1097,6 +1097,8 @@ public class Display {
         hbox.setMinHeight(EDGE);
         hbox.setAlignment(Pos.CENTER);
         hbox.setSpacing(GAP);//TODO MAKE SURE THIS LOOKS GOOD
+        hbox.setStyle("-fx-background-color:#eee;");
+        box.setStyle("-fx-background-color:#eee;");
 
         return hbox;
     }
