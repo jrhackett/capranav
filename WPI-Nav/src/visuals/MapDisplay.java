@@ -79,6 +79,8 @@ public class MapDisplay extends Pane {
     private ArrayList<ArrayList<Instructions>> pathList;
 
     private int mapIdOldInt;
+
+
     private int mapIdNewInt;
 
     private boolean HIGLIGHTED = false;
@@ -323,10 +325,10 @@ public class MapDisplay extends Pane {
             popOver.hide();
         });
 
-        HBox hbox = new HBox();
+        /*HBox hbox = new HBox();
         hbox.getChildren().addAll(buildingName, pictureButton);
         hbox.setAlignment(Pos.CENTER);
-        hbox.setSpacing(2);
+        hbox.setSpacing(2);*/
 
         Label selectFloor = new Label("Select Floor:");
         selectFloor.setTextFill(Color.web("#333333"));
@@ -334,7 +336,6 @@ public class MapDisplay extends Pane {
 
         FlowPane flowPane = new FlowPane();
         flowPane.setId("popover-id");
-
 
         /* displays only the buttons that the building has in rows of up to 3 */
         for(int i = floorPlan.size() - 1; i >= 0; i--) {
@@ -374,40 +375,14 @@ public class MapDisplay extends Pane {
             flowPane.getChildren().add(button);
         }
 
-        /*Button fourth = new Button();       //4
-        fourth.setText("4");
-        fourth.setId("popover-buttons");
-
-        Button third = new Button();        //3
-        third.setText("3");
-        third.setId("popover-buttons");
-
-        Button second = new Button();       //2
-        second.setText("2");
-        second.setId("popover-buttons");
-
-        Button first = new Button();        //1
-        first.setText("1");
-        first.setId("popover-buttons");
-
-        Button basement = new Button();     //0
-        basement.setText("B");
-        basement.setId("popover-buttons");
-
-        Button subBasement = new Button();  //-1
-        subBasement.setText("SB");
-        subBasement.setId("popover-buttons");
-        subBasement.setStyle("-fx-padding:4 3 4 3;");
-
-        flowPane.getChildren().addAll(fourth, third, second, first, basement, subBasement);*/
         flowPane.setHgap(2);
         flowPane.setVgap(2);
         flowPane.setTranslateY(-2);
 
-        vbox.setAlignment(Pos.TOP_CENTER);
+        vbox.setAlignment(Pos.CENTER);
         vbox.setId("popover-id");
         vbox.setSpacing(2);
-        vbox.getChildren().addAll(hbox, flowPane); //select floor? topbuttons, bottombuttons
+        vbox.getChildren().addAll(pictureButton, flowPane);
 
         popOver.setContentNode(vbox);
         popOver.setArrowLocation(PopOver.ArrowLocation.RIGHT_TOP);
@@ -569,6 +544,10 @@ public class MapDisplay extends Pane {
 
     public HashMap<Integer, Circle> getId_circle() {
         return id_circle;
+    }
+
+    public int getMapIdNewInt() {
+        return mapIdNewInt;
     }
 
     /**
@@ -997,6 +976,7 @@ public class MapDisplay extends Pane {
                         controller.getMyDisplay().zoomAndPan.zoomToNode(controller.getNode(key));
                         PopOver popOver = createPopOverForNode(controller.getNode(key));
                         if (!(previousPopOver.equals(popOver))) {
+                            //TODO make sure animation has ended before showing the popover
                             popOver.show(p, 4);
                             popOver.setArrowSize(0);
                             previousPopOver.hide();

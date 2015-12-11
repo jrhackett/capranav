@@ -278,8 +278,8 @@
 #popover-id
 {
     -fx-min-height:80 !important;
-    -fx-max-height:80 !important;
-    -fx-max-width: 100 !important;
+    -fx-max-height:200 !important;
+    -fx-max-width: 40 !important;
     -fx-background-color: white;
     -fx-padding:3 3 3 3;
 }
@@ -358,27 +358,27 @@
     -fx-border-color:yellow;}
 
 
-    #popover-buttons-highlighted
-    {
-        -fx-background-color: white;
-        -fx-max-width: 28 !important;
-        -fx-min-width: 28 !important;
-        -fx-max-height: 15 !important;
-        -fx-font-size:10;
-        -fx-border-width:1;
-        -fx-border-color:#00CCFF;
-        -fx-border-radius:5;
-    }
+#popover-buttons-highlighted
+ {
+     -fx-background-color: white;
+     -fx-max-width: 28 !important;
+     -fx-min-width: 28 !important;
+     -fx-max-height: 15 !important;
+     -fx-font-size:10;
+     -fx-border-width:1;
+     -fx-border-color:#00CCFF;
+     -fx-border-radius:5;
+ }
 
-    #popover-buttons-highlighted:pressed, #popover-buttons-highlighted:focused
-    {
-        -fx-border-color:#888888;
-    }
+#popover-buttons-highlighted:pressed, #popover-buttons-highlighted:focused
+{
+    -fx-border-color:#888888;
+}
 
-    #popover-buttons-highlighted:hover
-    {
-        -fx-border-color:#78E4FF;
-    }
+#popover-buttons-highlighted:hover
+{
+    -fx-border-color:#78E4FF;
+}
 
 #normallyWhiteBG{
     -fx-background-color: white;}
@@ -404,8 +404,8 @@
     -fx-border-color: #888;
 }
 
-.popover
-{
-/* TODO fix this shit */
-    -fx-pref-height:70 !important;
-}
+/*.popover*/
+/*{*/
+/*!* TODO fix this shit *!*/
+    /*-fx-pref-height:70 !important;*/
+/*}*/

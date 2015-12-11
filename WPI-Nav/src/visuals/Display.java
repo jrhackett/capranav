@@ -344,18 +344,16 @@ public class Display {
         clearLabel.setTextFill(Color.web("#eeeeee"));
         clearLabel.setStyle("-fx-font-size:11");
         locationClearButton.setGraphic(clearLabel);
-        locationClearButton.setTranslateX(17);
+        locationClearButton.setTranslateX(26);
         locationClearButton.setTranslateY(1);
         locationClearButton.setId("clear-button");
 
         locationClearButton.setOnMouseClicked(e -> {
-            this.start = null;
-            this.end = null;
-            //TODO change this 0 to the current map_id
-            this.mapDisplay.getChildren().removeAll(mapDisplay.getLines().get(0));
-            this.mapDisplay.getChildren().removeAll(mapDisplay.getId_circle().get(0));
-
-            //clear path and nodes from map
+            //TODO change these 0s to the current map_id
+            this.mapDisplay.getChildren().removeAll(mapDisplay.getLines().get(mapDisplay.getMapIdNewInt()));
+//            this.mapDisplay.getChildren().removeAll(mapDisplay.getId_circle().get(0));
+            //TODO make nodes and directions disappear too and slide directions panel in
+            //TODO clear out startnode and end node selections
         });
 
         locationLabelBox.getChildren().addAll(locationLabel, locationClearButton);
@@ -852,7 +850,7 @@ public class Display {
         HBox divider_4 = createDivider();
         divider_4.visibleProperty().bind(new SimpleBooleanProperty(true));
         divider_4.setTranslateY(-21);
-        divider_4.setTranslateX(-152);   //TODO fix this janky translate garbage
+        divider_4.setTranslateX(-145);   //TODO fix this janky translate garbage
 
         emailBox.getChildren().addAll(slidingEmailButton, emailLabel, divider_4);
 
@@ -872,7 +870,7 @@ public class Display {
         yourEmail.setOnAction(e -> handleEmailInput2(yourEmail, true));
         Button go = new Button("Send Directions");
         go.setId("email-button");
-        go.setTranslateX(41);
+        go.setTranslateX(45);
         emailBoxContent.getChildren().addAll(yourEmail, go);
         go.setOnAction(e -> handleEmailInput2(yourEmail, true));
         emailBoxContent.setSpacing(GAP);
@@ -997,7 +995,6 @@ public class Display {
 
         map.getChildren().addAll(mapTitle, zoomPane, information);
         map.setId("normallyEEEEEEBG");
-
     }
 
     /****************************************************************************************************************
