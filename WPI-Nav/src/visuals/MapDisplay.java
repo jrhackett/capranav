@@ -559,6 +559,17 @@ public class MapDisplay extends Pane {
         }
     }
 
+    public HashMap<Integer, ArrayList<Line>> getLines() {
+        return lines;
+    }
+
+    public HashMap<Integer, INode> getNodeMap() {
+        return nodeMap;
+    }
+
+    public HashMap<Integer, Circle> getId_circle() {
+        return id_circle;
+    }
 
     /**
      * The color and effect for when a node is set as a destination

@@ -348,6 +348,16 @@ public class Display {
         locationClearButton.setTranslateY(1);
         locationClearButton.setId("clear-button");
 
+        locationClearButton.setOnMouseClicked(e -> {
+            this.start = null;
+            this.end = null;
+            //TODO change this 0 to the current map_id
+            this.mapDisplay.getChildren().removeAll(mapDisplay.getLines().get(0));
+            this.mapDisplay.getChildren().removeAll(mapDisplay.getId_circle().get(0));
+
+            //clear path and nodes from map
+        });
+
         locationLabelBox.getChildren().addAll(locationLabel, locationClearButton);
         locationLabelBox.setMinWidth(0);
         locationLabelBox.setPrefWidth(expandedWidth);
