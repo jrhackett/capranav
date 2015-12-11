@@ -286,6 +286,10 @@
     -fx-padding:3 3 3 3;
 }
 
+#question-button {
+    -fx-background-color:#444;
+}
+
 .radio-button .radio {
     -fx-border-width: 1px;
     -fx-border-color: TRANSPARENT;
