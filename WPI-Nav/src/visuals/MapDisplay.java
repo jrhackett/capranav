@@ -448,6 +448,10 @@ public class MapDisplay extends Pane {
         });
     }
 
+    public ArrayList<INode> getIDPath() {
+        return idPath;
+    }
+
     /**
      * Show path of nodes
      */

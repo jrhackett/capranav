@@ -349,8 +349,14 @@ public class Display {
         locationClearButton.setId("clear-button");
 
         locationClearButton.setOnMouseClicked(e -> {
-            //TODO clear path, directions, and comboboxes -- this currently just removes circles and path from map
+            this.start.getSelectionModel().clearSelection();
+            this.end.getSelectionModel().clearSelection();
             this.mapDisplay.revertPathNodes();
+            this.clearInstructions();
+            //TODO clear path data here
+            this.mapDisplay.getIDPath().clear();
+            updateTimeEstimation();
+
         });
 
         locationLabelBox.getChildren().addAll(locationLabel, locationClearButton);
