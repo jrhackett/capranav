@@ -160,7 +160,17 @@ public class Controller extends Application {
         this.endNode = null;
         this.pathNodes = null;
         this.fullPath = null;
-    }
+
+        flipFlop *= -1;
+        boolean full = stage.isFullScreen();
+
+        if (full) {
+            stage.setFullScreen(!full);
+            stage.setFullScreen(full);
+        } else {
+            stage.setWidth(stage.getWidth() + flipFlop);
+        }
+        }
 
     /**
      * Changes the Style Sheet
