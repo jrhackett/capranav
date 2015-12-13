@@ -153,6 +153,9 @@ public class Controller extends Application {
 
 
     public void clear(){
+
+        Directions.cleartotalDistance();
+
         this.startNode = null;
         this.endNode = null;
         this.pathNodes = null;

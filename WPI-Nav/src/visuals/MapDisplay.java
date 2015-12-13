@@ -14,7 +14,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -447,6 +446,12 @@ public class MapDisplay extends Pane {
             normal(id_circle.get(k), controller.getNode(k));
         });
     }
+
+    public void clearPath(){
+        this.lines = new HashMap<>();
+        this.path  = new ArrayList<>();
+    }
+
 
     public ArrayList<INode> getIDPath() {
         return idPath;

@@ -1476,9 +1476,13 @@ public class Display {
         this.start.getSelectionModel().clearSelection();
         this.end.getSelectionModel().clearSelection();
         this.mapDisplay.revertPathNodes();
+        this.mapDisplay.clearPath();
         this.clearInstructions();
-        this.mapDisplay.getIDPath().clear();
         this.updateTimeEstimation();
+        this.setIDLeftArrowButton("arrow-buttons-grayed");
+        this.setIDRightArrowButton("arrow-buttons-grayed");
+
+
     }
 
     private void handleRadioButtons(){
