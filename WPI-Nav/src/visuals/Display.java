@@ -1479,6 +1479,8 @@ public class Display {
         this.mapDisplay.clearPath();
         this.clearInstructions();
         this.updateTimeEstimation();
+        this.setIDLeftArrowButton("arrow-buttons-grayed");
+        this.setIDRightArrowButton("arrow-buttons-grayed");
 
 
     }
