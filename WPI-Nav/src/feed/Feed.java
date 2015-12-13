@@ -13,6 +13,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+//TODO IDEAS : Include Title, Date/Time, and location in bar, with two buttons: "Add waypoint" and "More Info"
+//TODO IDEAS : The first is obvious, the second creates a pop-up with the full info, including description and a link to orgsync
+
 /**
  * Created by ikeandmike on 12/11/15.
  *
@@ -77,7 +80,10 @@ public class Feed implements Iterable<Event> {
         String title = getField(doc, "title", i+1);
         String location = getField(doc, "event:location", i);
         String description = getField(doc, "description", i+1);
-        return new Event(title, location, description);
+        String sDate = getField(doc, "event:startdate", i);
+        String eDate = getField(doc, "event:enddate", i);
+        String link = getField(doc, "link", i+1);
+        return new Event(title, location, description, sDate, eDate, link);
     }
 
     //Get the value of a field in XML document
