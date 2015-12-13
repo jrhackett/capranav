@@ -23,6 +23,7 @@ public class Directions {
 		totalDistance = 0;
 		int mapstep = 0;
 		double distspec = 0;
+		int predictdir = 0;
 		String distPhrase = " ";
 		//boolean veryfirm = false;
 
@@ -199,10 +200,10 @@ public class Directions {
 						zz++;
 					}
 					if ((maps.get(aStarPath.get(i + 3).getMap_id()).getFloor() > (maps.get(next.getMap_id()).getFloor()))) { //going up
-						if (flights !=1) distPhrase = "to the stairs, and climb up " + flights + " floors";
-						else distPhrase = "to the stairs, and climb up 1 floor";
-					} else if(flights !=1) distPhrase = "to the stairs, and climb down " + flights + " floors";
-					else distPhrase = "to the stairs, and climb down 1 floor";
+						if (flights !=1) distPhrase = "to the stairs, and climb up " + flights + " floors.";
+						else distPhrase = "to the stairs, and climb up 1 floor.";
+					} else if(flights !=1) distPhrase = "to the stairs, and climb down " + flights + " floors.";
+					else distPhrase = "to the stairs, and climb down 1 floor.";
 				}
 				zz = 0;
 				boolean eee = false;
@@ -220,8 +221,8 @@ public class Directions {
 							}
 						}
 					}
-					if (flights == 0) elevatorend = "the basement";
-					if (flights == -1) elevatorend = "the sub-basement";
+					if (flights == 0) elevatorend = "the basement.";
+					if (flights == -1) elevatorend = "the sub-basement.";
 					if (flights < -1) elevatorend = "the depths of the earth"; //should never occur
 					if (flights > 0) elevatorend = "floor " + flights;
 					distPhrase = "into the elevator and go to " + elevatorend; //me inglish good
@@ -230,19 +231,32 @@ public class Directions {
 			}
 			//if outside node mapid different then go inside/outside message
 			if (turn.getMap_id() == 0 && next.getMap_id() != 0) { //going inside
-				distPhrase = "inside the building";
+				distPhrase = "inside the building.";
 			}
 			if (turn.getMap_id() != 0 && next.getMap_id() == 0) { //going outside
-				distPhrase = "out the door";
+				distPhrase = "out the door.";
 			}
 
 			//if (angle<=-10 || angle>=10 || (aStarPath.size()==i+j+2 && veryfirm == false)){
 
 			if (angle <= -15 || angle >= 15 && !(turn instanceof TStairs) && !(turn instanceof Elevator)) {
-
+				//This if and switch should append the too far directions to distPhrase when going into a map if it has one.
+				if (turn.getMap_id() == 0 && next.getMap_id() != 0){
+					switch (predictdir){
+						case 1: distPhrase = distPhrase + " If you reach the Project Center, you've gone too far.";
+							break;
+						case 2: distPhrase = distPhrase + " If you reach Stratton Hall, you've gone too far.";
+							break;
+						case 3: distPhrase = distPhrase + " If you reach Atwater Kent, you've gone too far.";
+							break;
+						case 4: distPhrase = distPhrase + " If you reach Fuller Labs, you've gone too far.";
+							break;
+						case 5: distPhrase = distPhrase + " If you reach Olin Hall or Salisbury Labs, you've gone too far.";
+							break;
+					}
+					predictdir = 0;
+				}
 				directions.get(mapstep).add(new Instructions("Make a " + anglePhrase + ", and walk " + distPhrase, turn));
-				//if(aStarPath.size()==i+j+2) {
-				//veryfirm = true;
 			}
 
 			if (turn.isTransition() && next.getMap_id() != turn.getMap_id()) {
@@ -250,6 +264,14 @@ public class Directions {
 				directions.add(new ArrayList<Instructions>());
 			}
 			distspec = 0;
+			//This will attempt to roughly determine your route for predictive instructions.
+			//TODO: Get coordinate and map IDs needed
+			if((turn.getID() == 1962 || turn.getID() == 2026) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 0 && aStarPath.get(aStarPath.size()-1).getMap_id() < 5)) predictdir = 1; //Stratton from the south (P center)
+			if(turn.getID() == 1964 && (aStarPath.get(aStarPath.size()-1).getMap_id() == 27 || aStarPath.get(aStarPath.size()-1).getMap_id() == 28)) predictdir = 2; //P. Center from the north (stratton)
+			if((turn.getID() == 2007 || turn.getID() == 2058) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 28 && aStarPath.get(aStarPath.size()-1).getMap_id() < 34)) predictdir = 3; //Fuller from the south (AK)
+			if(turn.getID() == 1979 && aStarPath.get(aStarPath.size()-1).getMap_id() > 4 && aStarPath.get(aStarPath.size()-1).getMap_id() < 9) predictdir = 4; //AK from the northwest (fuller)
+			if((turn.getID() == 1963 || turn.getID() == 2026) && (aStarPath.get(aStarPath.size()-1).getMap_id() == 27 || aStarPath.get(aStarPath.size()-1).getMap_id() == 28)) predictdir = 5; //P.Center from the south (fountain)
+
 		}
 
 		directions.get(directions.size() - 1).add(new Instructions("You have reached your destination.", aStarPath.get(aStarPath.size() - 1)));
