@@ -1,3 +1,40 @@
+#about-button {
+    -fx-background-color:white;
+    -fx-border-width:0;
+    -fx-font-size:12;
+    -fx-max-height:15;
+}
+
+#about-label {
+    -fx-font-size:20;
+}
+
+#about-panel {
+    -fx-background-color: white;
+    -fx-max-width: 800;
+    -fx-max-height:550;
+    -fx-min-width:300;
+    -fx-min-height: 300;
+    -fx-pref-width:800;
+    -fx-pref-height:550;
+    -fx-padding: 8 8 8 8;
+}
+
+#about-text {
+    -fx-font-size:14;
+}
+
+#about-title {
+    -fx-background-color: #ac2738;
+    -fx-max-width: 800;
+    -fx-max-height:30;
+    -fx-min-width:500;
+    -fx-min-height: 30;
+    -fx-pref-width:800;
+    -fx-pref-height:30;
+    -fx-padding: 8 8 8 8;
+}
+
 #arrow-buttons {
     -fx-pref-height:26 !important;
     -fx-min-height:26 !important;
@@ -284,6 +321,14 @@
     -fx-max-width: 40 !important;
     -fx-background-color: white;
     -fx-padding:3 3 3 3;
+}
+
+#question-button {
+    -fx-background-color:#444;
+    -fx-max-width:20;
+    -fx-max-height:20;
+    -fx-min-width:20;
+    -fx-min-height:20;
 }
 
 .radio-button .radio {

@@ -88,7 +88,9 @@ public class Inputs<T> extends ComboBox<T> {
 			addNode(v, maps.get(v.getMap_id()), false);
 		});
 
-		return data.sorted();
+		FXCollections.sort(data);
+
+		return data;
 	}
 
 	public ObservableList<Walking> createWalkingItems(ArrayList<Walking> walkingArrayList) {

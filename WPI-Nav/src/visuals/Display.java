@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -940,11 +941,35 @@ public class Display {
         mapTitleLabel.translateXProperty().bind((mapTitle.widthProperty().subtract(mapTitleLabel.widthProperty()).divide(2)));
         mapTitleLabel.translateYProperty().bind((mapTitle.heightProperty().subtract(mapTitleLabel.heightProperty()).divide(2)));
 
+        Image help = FileFetch.getImageFromFile("question58.png", 18, 18, true, true);
+        ImageView helpButtonView = new ImageView(help);
+        Button helpButton = new Button();
+        helpButton.setGraphic(helpButtonView);
+        helpButton.setId("question-button");
+        helpButton.setTranslateX(-90);  //TODO fix this janky shit
+        helpButton.setTranslateY(10);
+
+        helpButton.setOnMouseClicked(e -> {
+
+        });
+
+        Image info = FileFetch.getImageFromFile("info.png", 18, 18, true, true);
+        ImageView infoButtonView = new ImageView(info);
+        Button infoButton = new Button();
+        infoButton.setGraphic(infoButtonView);
+        infoButton.setId("question-button");
+        infoButton.setTranslateX(-85);  //TODO fix this janky shit
+        infoButton.setTranslateY(10);
+
+        infoButton.setOnMouseClicked(e -> {
+            this.controller.showAboutPanel();
+        });
+
         mapTitle.setMaxHeight(EDGE);
         mapTitle.setPrefHeight(EDGE);
         mapTitle.setMinHeight(EDGE);
         mapTitle.setStyle("-fx-background-color: #444444");
-        mapTitle.getChildren().add(mapTitleLabel);
+        mapTitle.getChildren().addAll(mapTitleLabel, helpButton, infoButton);
 
         AnchorPane.setTopAnchor(mapTitle, 0.0);
         AnchorPane.setLeftAnchor(mapTitle, 0.0);
