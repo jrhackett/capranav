@@ -266,11 +266,11 @@ public class Directions {
 			distspec = 0;
 			//This will attempt to roughly determine your route for predictive instructions.
 			//TODO: Get coordinate and map IDs needed
-			if(turn.getID() == 1962 && (aStarPath.get(aStarPath.size()-1).getMap_id() > 0 && aStarPath.get(aStarPath.size()-1).getMap_id() < 5)) predictdir = 1; //Stratton from the south (P center)
+			if((turn.getID() == 1962 || turn.getID() == 2026) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 0 && aStarPath.get(aStarPath.size()-1).getMap_id() < 5)) predictdir = 1; //Stratton from the south (P center)
 			if(turn.getID() == 1964 && (aStarPath.get(aStarPath.size()-1).getMap_id() == 27 || aStarPath.get(aStarPath.size()-1).getMap_id() == 28)) predictdir = 2; //P. Center from the north (stratton)
 			if((turn.getID() == 2007 || turn.getID() == 2058) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 28 && aStarPath.get(aStarPath.size()-1).getMap_id() < 34)) predictdir = 3; //Fuller from the south (AK)
 			if(turn.getID() == 1979 && aStarPath.get(aStarPath.size()-1).getMap_id() > 4 && aStarPath.get(aStarPath.size()-1).getMap_id() < 9) predictdir = 4; //AK from the northwest (fuller)
-			if(turn.getID() == 1963 && (aStarPath.get(aStarPath.size()-1).getMap_id() == 27 || aStarPath.get(aStarPath.size()-1).getMap_id() == 28)) predictdir = 5; //P.Center from the south (fountain)
+			if((turn.getID() == 1963 || turn.getID() == 2026) && (aStarPath.get(aStarPath.size()-1).getMap_id() == 27 || aStarPath.get(aStarPath.size()-1).getMap_id() == 28)) predictdir = 5; //P.Center from the south (fountain)
 
 		}
 
