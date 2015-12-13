@@ -247,6 +247,7 @@ public class Controller extends Application {
         attributions.setTranslateY(25);
 
         attributions.setOnMouseClicked(e -> {
+            this.myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
             this.showCredits();
         });
 
@@ -258,11 +259,11 @@ public class Controller extends Application {
 
     public void showCredits() {
         StackPane imageStack = new StackPane();
-//      StackPane shadowStack = new StackPane();
-//      shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+        StackPane shadowStack = new StackPane();
+        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
 
         imageStack.setOnMouseClicked(e -> {
-            myDisplay.root.getChildren().removeAll(imageStack/*, shadowStack*/);
+            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
         });
 
         VBox vbox = new VBox();
@@ -287,7 +288,7 @@ public class Controller extends Application {
         FlowPane teamFlowPane = new FlowPane();
         teamFlowPane.setPrefWrapLength(400);
         teamFlowPane.setAlignment(Pos.CENTER);
-        teamFlowPane.setHgap(8);
+        teamFlowPane.setHgap(12);
         teamFlowPane.setVgap(8);
 
         Label teamLabel = new Label("Team Members");
@@ -303,9 +304,9 @@ public class Controller extends Application {
             vbox1.setAlignment(Pos.CENTER);
             vbox1.setSpacing(8);
             Circle circle = new Circle();
-            circle.setRadius(75);
-            Image person = FileFetch.getImageFromFile("goat-logo.png");
-            //Image person = FileFetch.getImageFromFile(name + ".png");
+            circle.setRadius(70);
+            //Image person = FileFetch.getImageFromFile("goat-logo.png");
+            Image person = FileFetch.getImageFromFile(name + ".png");
             circle.setFill(new ImagePattern(person));
             Label label = new Label(name);
             label.setStyle("-fx-font-size:12;");
@@ -344,7 +345,7 @@ public class Controller extends Application {
 
         vbox.getChildren().addAll(hbox, teamLabel,teamFlowPane, iconLabel, flowPane);
         imageStack.getChildren().add(vbox);
-        this.myDisplay.root.getChildren().addAll(/*shadowStack, */imageStack);
+        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
     }
 
     public void showNodeImage(INode node) {
