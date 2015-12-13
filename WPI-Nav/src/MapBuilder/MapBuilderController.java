@@ -72,7 +72,7 @@ public class MapBuilderController extends Application {
 
 		Scene scene = new Scene(myDisplay, WINDOW_WIDTH, WINDOW_HEIGHT);
 		s.setScene(scene); // sets scene to display
-		scene.getStylesheets().add(getClass().getResource("buttonbar.css").toExternalForm());
+		//scene.getStylesheets().add(getClass().getResource("buttonbar.css").toExternalForm());
 
 		s.show(); // shows scene
 	}
