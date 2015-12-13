@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -152,6 +151,13 @@ public class Controller extends Application {
                                     FUNCTIONS THAT ARE CALLED FROM UI AND CONTACT UI
      ****************************************************************************************************************/
 
+
+    public void clear(){
+        this.startNode = null;
+        this.endNode = null;
+        this.pathNodes = null;
+        this.fullPath = null;
+    }
 
     /**
      * Changes the Style Sheet

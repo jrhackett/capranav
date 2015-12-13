@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -349,16 +348,7 @@ public class Display {
         locationClearButton.setTranslateY(1);
         locationClearButton.setId("clear-button");
 
-        locationClearButton.setOnMouseClicked(e -> {
-            this.start.getSelectionModel().clearSelection();
-            this.end.getSelectionModel().clearSelection();
-            this.mapDisplay.revertPathNodes();
-            this.clearInstructions();
-            //TODO clear path data here
-            this.mapDisplay.getIDPath().clear();
-            updateTimeEstimation();
-
-        });
+        locationClearButton.setOnMouseClicked(e -> handleClear());
 
         locationLabelBox.getChildren().addAll(locationLabel, locationClearButton);
         locationLabelBox.setMinWidth(0);
@@ -1158,7 +1148,6 @@ public class Display {
         String input;
         //input = "Time Estimation:\n";
         input = Directions.getTime(User.getSpeed());
-        System.out.println(input);
         totalTimeLabel.setText(input);
     }
 
@@ -1464,7 +1453,7 @@ public class Display {
 
         //this.SETTINGS_VISIBLE.setValue(!SETTINGS_VISIBLE.getValue());
 
-        clearInstructions();
+        this.clearInstructions();
 
         ObservableList<Instructions> data = FXCollections.observableArrayList();
         data.addAll(instructions);
@@ -1477,6 +1466,20 @@ public class Display {
     /****************************************************************************************************************
                                                 Llambda Event Handlers
      ****************************************************************************************************************/
+
+
+    private void handleClear(){
+        /** clear controller data **/
+        this.controller.clear();
+
+        /** clear visuals **/
+        this.start.getSelectionModel().clearSelection();
+        this.end.getSelectionModel().clearSelection();
+        this.mapDisplay.revertPathNodes();
+        this.clearInstructions();
+        this.mapDisplay.getIDPath().clear();
+        this.updateTimeEstimation();
+    }
 
     private void handleRadioButtons(){
         controller.handleWeightOptions(weatherRadioButton.selectedProperty().getValue(), handicapRadioButton.selectedProperty().getValue());
