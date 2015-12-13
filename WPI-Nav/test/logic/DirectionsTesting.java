@@ -180,9 +180,9 @@ public class DirectionsTesting {
         ArrayList<ArrayList<Instructions>> aI = d.stepByStep(As, mmap, build);
 
         Instructions i1 = new Instructions("Face North, and walk 100 feet.", As.get(0));
-        Instructions i2 = new Instructions("Turn hard right at A, and walk 200 feet.", As.get(1));
-        Instructions i2b = new Instructions("Turn hard right at B, and walk 200 feet.", As.get(1));
-        Instructions i2c = new Instructions("Turn right at E, and walk 283 feet.", As.get(1));
+        Instructions i2 = new Instructions("Make a right at A, and walk 100 feet.", As.get(1));
+        Instructions i2b = new Instructions("Make a right at B, and walk 100 feet.", As.get(1));
+        Instructions i2c = new Instructions("Make a slight right at E, and walk 140 feet.", As.get(1));
 
         Instructions i3 = new Instructions("You have reached your destination.", As.get(2));
 
