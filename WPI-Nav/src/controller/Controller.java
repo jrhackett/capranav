@@ -280,19 +280,15 @@ public class Controller extends Application {
 
         hbox.getChildren().add(aboutLabel);
 
-
-        FlowPane flowPane = new FlowPane();
-        flowPane.setPrefWrapLength(400);
-        flowPane.setAlignment(Pos.CENTER);
-
         FlowPane teamFlowPane = new FlowPane();
         teamFlowPane.setPrefWrapLength(400);
         teamFlowPane.setAlignment(Pos.CENTER);
-        teamFlowPane.setHgap(12);
+        teamFlowPane.setHgap(20);
         teamFlowPane.setVgap(8);
 
         Label teamLabel = new Label("Team Members");
         teamLabel.setId("about-text");
+        teamLabel.setStyle("-fx-font-weight: bold");
         ArrayList<String> teamMembers = new ArrayList<>();
 
         teamMembers.add("Kurt Bugbee");teamMembers.add("Josh Friscia");teamMembers.add("Mike Giancola");teamMembers.add("Jacob Hackett");
@@ -304,7 +300,7 @@ public class Controller extends Application {
             vbox1.setAlignment(Pos.CENTER);
             vbox1.setSpacing(8);
             Circle circle = new Circle();
-            circle.setRadius(70);
+            circle.setRadius(60);
             //Image person = FileFetch.getImageFromFile("goat-logo.png");
             Image person = FileFetch.getImageFromFile(name + ".png");
             circle.setFill(new ImagePattern(person));
@@ -316,18 +312,34 @@ public class Controller extends Application {
 
         Label iconLabel = new Label("Icon Authors");
         iconLabel.setId("about-text");
-
-        Text iconText = new Text();
-        iconText.setWrappingWidth(400);
-        iconText.setTextAlignment(TextAlignment.JUSTIFY);
-        iconText.setStyle("-fx-font-size:12;");
+        iconLabel.setStyle("-fx-font-weight: bold");
 
         //TODO add hyperlinks here for authors and flaticon
-        iconText.setText("All icons are from flaticon.com.\nQueston mark icon made by Daniel Bruce, " +
-        "picture icon made by FreePik, settings icon made by FreePik, email icon made by icon-works.com, " +
-        "location pin icon made by FreePik, paper airplane icon made by FreePik, stair icon made by FreePik, " +
-        "elevator icon made by FreePik, parking icon made by Google."
-        );
+        HBox iconBox = new HBox();
+        iconBox.setAlignment(Pos.TOP_CENTER);
+        iconBox.setSpacing(16);
+        VBox iconLeftBox =new VBox();
+        VBox iconRightBox = new VBox();
+
+        Text iconLeftText = new Text();
+        iconLeftText.setStyle("-fx-font-size:12;");
+        iconLeftText.setText("Question mark icon made by Daniel Bruce from FlatIcon\n" +
+                "Picture icon made by FreePik from FlatIcon\n" +
+                "Settings icon made by FreePik from FlatIcon\n" +
+                "Email icon made by icon-works.com from FlatIcon\n" +
+                "Location pin icon made by FreePik from FlatIcon");
+
+        Text iconRightText = new Text();
+        iconRightText.setStyle("-fx-font-size:12;");
+        iconRightText.setText("Paper airplane icon made by FreePik from FlatIcon\n" +
+                "Stair icon made by FreePik from FlatIcon\n" +
+                "Elevator icon made by FreePik from FlatIcon\n" +
+                "Parking icon made by Google from FlatIcon");
+
+        iconLeftBox.getChildren().add(iconLeftText);
+        iconRightBox.getChildren().add(iconRightText);
+
+        iconBox.getChildren().addAll(iconLeftBox, iconRightBox);
 
         /* Author links to add to this pane:
         http://www.danielbruce.se -- question mark
@@ -341,9 +353,7 @@ public class Controller extends Application {
         http://www.google.com -- parking
          */
 
-        flowPane.getChildren().add(iconText);
-
-        vbox.getChildren().addAll(hbox, teamLabel,teamFlowPane, iconLabel, flowPane);
+        vbox.getChildren().addAll(hbox, teamLabel,teamFlowPane, iconLabel, iconBox);
         imageStack.getChildren().add(vbox);
         this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
     }
