@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -339,7 +340,27 @@ public class Display {
         Label locationLabel = new Label("Locations");
         locationLabel.setTextFill(Color.web("#eeeeee"));
 
-        locationLabelBox.getChildren().addAll(locationLabel);
+        Button locationClearButton = new Button();
+        Label clearLabel = new Label("Clear");
+        clearLabel.setTextFill(Color.web("#eeeeee"));
+        clearLabel.setStyle("-fx-font-size:11");
+        locationClearButton.setGraphic(clearLabel);
+        locationClearButton.setTranslateX(26);
+        locationClearButton.setTranslateY(1);
+        locationClearButton.setId("clear-button");
+
+        locationClearButton.setOnMouseClicked(e -> {
+            this.start.getSelectionModel().clearSelection();
+            this.end.getSelectionModel().clearSelection();
+            this.mapDisplay.revertPathNodes();
+            this.clearInstructions();
+            //TODO clear path data here
+            this.mapDisplay.getIDPath().clear();
+            updateTimeEstimation();
+
+        });
+
+        locationLabelBox.getChildren().addAll(locationLabel, locationClearButton);
         locationLabelBox.setMinWidth(0);
         locationLabelBox.setPrefWidth(expandedWidth);
         locationLabelBox.setMaxWidth(expandedWidth);
@@ -374,6 +395,30 @@ public class Display {
         //TODO REMOVE THIS TEMP BUTTOn
         javafx.scene.control.Button goButton = new Button("GO");
         //goButton.setOnAction();
+
+
+        /*****************************************************************/
+        /** Get Connected NewsFeed **/
+
+        HBox newsLabelBox = new HBox();
+        newsLabelBox.setMinHeight(EDGE);
+        newsLabelBox.setMaxHeight(expandedWidth);
+        newsLabelBox.setPrefHeight(EDGE);
+        newsLabelBox.setAlignment(Pos.CENTER);
+
+        Label newsLabel = new Label("Get Involved");
+        newsLabel.setTextFill(Color.web("#eeeeee"));
+
+        newsLabelBox.getChildren().addAll(newsLabel);
+        AnchorPane.setTopAnchor(newsLabelBox, 3 * EDGE + GAP * .5 + 20);
+        AnchorPane.setLeftAnchor(newsLabelBox, EDGE);
+
+        Image newsIcon = FileFetch.getImageFromFile("news37.png", 20, 20, true, true);
+        ImageView newsIconView = new ImageView(newsIcon);
+
+        newsIconView.visibleProperty().bind(DASHBOARD_VISIBLE);
+        AnchorPane.setTopAnchor(newsIconView, 3 * EDGE + GAP * .5 + 30);
+        AnchorPane.setLeftAnchor(newsIconView, 2 * GAP);
 
 
         /*****************************************************************/
@@ -616,7 +661,7 @@ public class Display {
 
         /*****************************************************************/
         /** Building of Sliding Dashboard Anchorpane  **/
-        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, dashBoardTitleBox, locationLabelBox, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3, // resourcesLabelBox, infoView,
+        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, dashBoardTitleBox, locationLabelBox, pinView, inputs, newsIconView, newsLabelBox, slidingSettings); //gearsView, settingsLabelBox, divider_3, // resourcesLabelBox, infoView,
         slidingDashboard.setStyle("-fx-background-color: #333333");
 
         /** STYLE BUTTON HERE **/
@@ -809,7 +854,7 @@ public class Display {
         HBox divider_4 = createDivider();
         divider_4.visibleProperty().bind(new SimpleBooleanProperty(true));
         divider_4.setTranslateY(-21);
-        divider_4.setTranslateX(-152);   //TODO fix this janky translate garbage
+        divider_4.setTranslateX(-145);   //TODO fix this janky translate garbage
 
         emailBox.getChildren().addAll(slidingEmailButton, emailLabel, divider_4);
 
@@ -829,7 +874,7 @@ public class Display {
         yourEmail.setOnAction(e -> handleEmailInput2(yourEmail, true));
         Button go = new Button("Send Directions");
         go.setId("email-button");
-        go.setTranslateX(41);
+        go.setTranslateX(45);
         emailBoxContent.getChildren().addAll(yourEmail, go);
         go.setOnAction(e -> handleEmailInput2(yourEmail, true));
         emailBoxContent.setSpacing(GAP);
@@ -896,11 +941,35 @@ public class Display {
         mapTitleLabel.translateXProperty().bind((mapTitle.widthProperty().subtract(mapTitleLabel.widthProperty()).divide(2)));
         mapTitleLabel.translateYProperty().bind((mapTitle.heightProperty().subtract(mapTitleLabel.heightProperty()).divide(2)));
 
+        Image help = FileFetch.getImageFromFile("question58.png", 18, 18, true, true);
+        ImageView helpButtonView = new ImageView(help);
+        Button helpButton = new Button();
+        helpButton.setGraphic(helpButtonView);
+        helpButton.setId("question-button");
+        helpButton.setTranslateX(-90);  //TODO fix this janky shit
+        helpButton.setTranslateY(10);
+
+        helpButton.setOnMouseClicked(e -> {
+
+        });
+
+        Image info = FileFetch.getImageFromFile("info.png", 18, 18, true, true);
+        ImageView infoButtonView = new ImageView(info);
+        Button infoButton = new Button();
+        infoButton.setGraphic(infoButtonView);
+        infoButton.setId("question-button");
+        infoButton.setTranslateX(-85);  //TODO fix this janky shit
+        infoButton.setTranslateY(10);
+
+        infoButton.setOnMouseClicked(e -> {
+            this.controller.showAboutPanel();
+        });
+
         mapTitle.setMaxHeight(EDGE);
         mapTitle.setPrefHeight(EDGE);
         mapTitle.setMinHeight(EDGE);
         mapTitle.setStyle("-fx-background-color: #444444");
-        mapTitle.getChildren().add(mapTitleLabel);
+        mapTitle.getChildren().addAll(mapTitleLabel, helpButton, infoButton);
 
         AnchorPane.setTopAnchor(mapTitle, 0.0);
         AnchorPane.setLeftAnchor(mapTitle, 0.0);
@@ -926,6 +995,7 @@ public class Display {
         AnchorPane.setRightAnchor(information, 0.0);
 
         this.mapPane = createMapPane();
+        mapPane.setStyle("-fx-background-color:#eee;");
         mapPane.setAlignment(Pos.CENTER);
 
         Group group = new Group(mapPane);
@@ -936,6 +1006,7 @@ public class Display {
         zoomPane.setOnMouseEntered(e -> {
             zoomPane.requestFocus();
         });
+        zoomPane.setStyle("-fx-background-color:#eee;");
 
         AnchorPane.setTopAnchor(zoomPane, EDGE);//
         AnchorPane.setLeftAnchor(zoomPane, MAP_BORDER);//00
@@ -952,9 +1023,8 @@ public class Display {
         map.setMinHeight(MAP_HEIGHT + EDGE);
         map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE + EDGE); // + EDGE for NODE INFO
 
-        map.getChildren().addAll(mapTitle, zoomPane, information);
         map.setId("normallyEEEEEEBG");
-
+        map.getChildren().addAll(mapTitle, zoomPane, information);
     }
 
     /****************************************************************************************************************
@@ -1052,6 +1122,8 @@ public class Display {
         hbox.setMinHeight(EDGE);
         hbox.setAlignment(Pos.CENTER);
         hbox.setSpacing(GAP);//TODO MAKE SURE THIS LOOKS GOOD
+        hbox.setStyle("-fx-background-color:#eee;");
+        box.setStyle("-fx-background-color:#eee;");
 
         return hbox;
     }

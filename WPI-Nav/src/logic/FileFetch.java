@@ -65,7 +65,7 @@ public class FileFetch {
         try { img = new FileInputStream(fp); }
         catch (FileNotFoundException e) {
             try {
-                fp = new File("").getAbsolutePath() + "/src/images/pictures" + path;
+                fp = new File("").getAbsolutePath() + "/src/images/pictures/" + path;
                 img = new FileInputStream(fp);
             } catch (FileNotFoundException f) {
                 f.printStackTrace();

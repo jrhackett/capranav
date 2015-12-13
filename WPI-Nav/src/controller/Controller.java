@@ -3,10 +3,22 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import logic.*;
@@ -179,6 +191,171 @@ public class Controller extends Application {
             //for(Map.Entry<String, Integer> : nodes.entrySet())
 
         }
+    }
+
+    public void showAboutPanel() {
+        StackPane imageStack = new StackPane();
+        StackPane shadowStack = new StackPane();
+        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+
+        imageStack.setOnMouseClicked(e -> {
+            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+        });
+
+        //customize the stackpane here
+        VBox vbox = new VBox();
+        vbox.setId("about-panel");
+        vbox.setSpacing(8);
+        vbox.setAlignment(Pos.TOP_CENTER);
+
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setId("about-title");
+        Label aboutLabel = new Label("About CapraNav");
+        aboutLabel.setId("about-label");
+        aboutLabel.setTextFill(Color.web("#eeeeee"));
+
+        hbox.getChildren().add(aboutLabel);
+
+        Image goatLogo = FileFetch.getImageFromFile("goat-logo.png");
+        ImageView goatLogoView = new ImageView(goatLogo);
+
+        FlowPane flowPane = new FlowPane();
+        Text text = new Text();
+        text.setId("about-text");
+        text.setWrappingWidth(400);
+        text.setTextAlignment(TextAlignment.JUSTIFY);
+        text.setText(
+                "CapraNav was created for a software engineering class at Worcester Polytechnic Institute during B term of 2015. " +
+                "The team consisted of nine members ranging from sophomores to seniors with various backrounds.\n\nMembers included " +
+                "Kurt Bugbee, Josh Friscia, Mike Giancola, Jacob Hackett, Charlie Lovering, Tucker Martin, Anthony Ratte, Greg Tighe and Henry Wheeler-Mackta. " +
+                "The professor for the course was Wilson Wong and the coach for this team was Nilesh Patel."
+        );
+
+        flowPane.setPrefWrapLength(400);
+        flowPane.setAlignment(Pos.CENTER);
+        flowPane.getChildren().add(text);
+
+        Button attributions = new Button();
+        attributions.setId("about-button");
+        attributions.setText("Credits");
+        attributions.setTextFill(Color.BLUE);
+        attributions.setTextAlignment(TextAlignment.CENTER);
+
+        goatLogoView.setTranslateY(20);
+        flowPane.setTranslateY(20);
+        attributions.setTranslateY(25);
+
+        attributions.setOnMouseClicked(e -> {
+            this.myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            this.showCredits();
+        });
+
+        vbox.getChildren().addAll(hbox, goatLogoView, flowPane, attributions);
+        imageStack.getChildren().add(vbox);
+        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+
+    }
+
+    public void showCredits() {
+        StackPane imageStack = new StackPane();
+        StackPane shadowStack = new StackPane();
+        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+
+        imageStack.setOnMouseClicked(e -> {
+            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+        });
+
+        VBox vbox = new VBox();
+        vbox.setId("about-panel");
+        vbox.setSpacing(8);
+        vbox.setAlignment(Pos.TOP_CENTER);
+
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setId("about-title");
+        Label aboutLabel = new Label("Credits");
+        aboutLabel.setId("about-label");
+        aboutLabel.setTextFill(Color.web("#eeeeee"));
+
+        hbox.getChildren().add(aboutLabel);
+
+        FlowPane teamFlowPane = new FlowPane();
+        teamFlowPane.setPrefWrapLength(400);
+        teamFlowPane.setAlignment(Pos.CENTER);
+        teamFlowPane.setHgap(20);
+        teamFlowPane.setVgap(8);
+
+        Label teamLabel = new Label("Team Members");
+        teamLabel.setId("about-text");
+        teamLabel.setStyle("-fx-font-weight: bold");
+        ArrayList<String> teamMembers = new ArrayList<>();
+
+        teamMembers.add("Kurt Bugbee");teamMembers.add("Josh Friscia");teamMembers.add("Mike Giancola");teamMembers.add("Jacob Hackett");
+        teamMembers.add("Charlie Lovering");teamMembers.add("Tucker Martin");teamMembers.add("Anthony Ratte");teamMembers.add("Greg Tighe");teamMembers.add("Henry Wheeler-Mackta");
+
+
+        for(String name : teamMembers) {
+            VBox vbox1 = new VBox();
+            vbox1.setAlignment(Pos.CENTER);
+            vbox1.setSpacing(8);
+            Circle circle = new Circle();
+            circle.setRadius(60);
+            //Image person = FileFetch.getImageFromFile("goat-logo.png");
+            Image person = FileFetch.getImageFromFile(name + ".png");
+            circle.setFill(new ImagePattern(person));
+            Label label = new Label(name);
+            label.setStyle("-fx-font-size:12;");
+            vbox1.getChildren().addAll(circle, label);
+            teamFlowPane.getChildren().add(vbox1);
+        }
+
+        Label iconLabel = new Label("Icon Authors");
+        iconLabel.setId("about-text");
+        iconLabel.setStyle("-fx-font-weight: bold");
+
+        //TODO add hyperlinks here for authors and flaticon
+        HBox iconBox = new HBox();
+        iconBox.setAlignment(Pos.TOP_CENTER);
+        iconBox.setSpacing(16);
+        VBox iconLeftBox =new VBox();
+        VBox iconRightBox = new VBox();
+
+        Text iconLeftText = new Text();
+        iconLeftText.setStyle("-fx-font-size:12;");
+        iconLeftText.setText("Question mark icon made by Daniel Bruce from FlatIcon\n" +
+                "Picture icon made by FreePik from FlatIcon\n" +
+                "Settings icon made by FreePik from FlatIcon\n" +
+                "Email icon made by icon-works.com from FlatIcon\n" +
+                "Location pin icon made by FreePik from FlatIcon");
+
+        Text iconRightText = new Text();
+        iconRightText.setStyle("-fx-font-size:12;");
+        iconRightText.setText("Paper airplane icon made by FreePik from FlatIcon\n" +
+                "Stair icon made by FreePik from FlatIcon\n" +
+                "Elevator icon made by FreePik from FlatIcon\n" +
+                "Parking icon made by Google from FlatIcon");
+
+        iconLeftBox.getChildren().add(iconLeftText);
+        iconRightBox.getChildren().add(iconRightText);
+
+        iconBox.getChildren().addAll(iconLeftBox, iconRightBox);
+
+        /* Author links to add to this pane:
+        http://www.danielbruce.se -- question mark
+        http://www.freepik.com -- picture
+        http://www.freepik.com -- gears
+        http://icon-works.com -- email
+        http://www.freepik.com -- pin
+        http://www.freepik.com -- plane
+        http://www.freepik.com -- stairs
+        http://www.freepik.com -- elevator
+        http://www.google.com -- parking
+         */
+
+        vbox.getChildren().addAll(hbox, teamLabel,teamFlowPane, iconLabel, iconBox);
+        imageStack.getChildren().add(vbox);
+        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
     }
 
     public void showNodeImage(INode node) {
