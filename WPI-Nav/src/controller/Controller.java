@@ -914,7 +914,7 @@ public class Controller extends Application {
      * @return an ArrayList<String?
      */
     public void getInstructions(){
-        this.fullPath =  Directions.stepByStep(this.pathNodes, this.maps);
+        this.fullPath =  Directions.stepByStep(this.pathNodes, this.maps, this.buildings);
     }
 
 

@@ -19,7 +19,7 @@ public class Directions {
 	 * @param aStarPath
 	 * @return
 	 */
-	public static ArrayList<ArrayList<Instructions>> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps) {
+	public static ArrayList<ArrayList<Instructions>> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps, HashMap<Integer, Building> buildings) {
 		totalDistance = 0;
 		int mapstep = 0;
 		double distspec = 0;
@@ -231,7 +231,8 @@ public class Directions {
 			}
 			//if outside node mapid different then go inside/outside message
 			if (turn.getMap_id() == 0 && next.getMap_id() != 0) { //going inside
-				distPhrase = "inside the building.";
+				//TODO: this line
+				distPhrase = "inside " + (buildings.get(((Transition) turn).getBuildingID())).getName() + ".";
 			}
 			if (turn.getMap_id() != 0 && next.getMap_id() == 0) { //going outside
 				distPhrase = "out the door.";
