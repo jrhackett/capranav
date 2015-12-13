@@ -42,7 +42,7 @@ public class Directions {
 
 		if (maps.containsKey(aStarPath.get(0).getMap_id())) {
 			scalar = maps.get(aStarPath.get(0).getMap_id()).getPixelToFeetRatio();
-			//dist *= scalar;
+			if (aStarPath.get(0).getMap_id() != 0)dist *= scalar; //this line just changed
 		} else {
 			// throw exception
 		}
