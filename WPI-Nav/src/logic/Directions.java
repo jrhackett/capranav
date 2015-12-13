@@ -365,7 +365,9 @@ public class Directions {
 		}
 	}
 
-
+	public static void cleartotalDistance(){
+		totalDistance = 0;
+	}
 
 	/*public static String getRelativeCurrentFloorString(INode current, INode next, HashMap<Integer, IMap> maps){
 		if (maps.get(next.getMap_id()).getFloor() > (maps.get(current.getMap_id()).getFloor())){
