@@ -229,7 +229,7 @@ public class Controller extends Application {
                 "CapraNav was created for a software engineering class at Worcester Polytechnic Institute during B term of 2015. " +
                 "The team consisted of nine members ranging from sophomores to seniors with various backrounds.\n\nMembers included " +
                 "Kurt Bugbee, Josh Friscia, Mike Giancola, Jacob Hackett, Charlie Lovering, Tucker Martin, Anthony Ratte, Greg Tighe and Henry Wheeler-Mackta. " +
-                "The professor for the course was Wilson Wong and the coach for our team was Nilesh Patel."
+                "The professor for the course was Wilson Wong and the coach for this team was Nilesh Patel."
         );
 
         flowPane.setPrefWrapLength(400);
