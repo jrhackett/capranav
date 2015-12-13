@@ -355,10 +355,10 @@ public class MapDisplay extends Pane {
             }
             else
             {
-                value = Integer.toString(i);
+                value = floorPlan.keySet().toArray()[i].toString();
             }
             button.setText(value);
-            final int x = i;
+            final int x = (Integer)floorPlan.keySet().toArray()[i];
             button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
