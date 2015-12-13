@@ -134,7 +134,7 @@ public class DirectionsTesting {
         ArrayList<INode> As = AStarShortestPath.AStarSearch(nA, nB, nodes);
         Directions d = new Directions();
         d.stepByStep(As, nmap, build);
-        assertEquals("Total distance is not properly calculated", 100,  d.getTotalDistance(), 0.05);
+        assertEquals("Total distance is not properly calculated", 200,  d.getTotalDistance(), 0.05);
 
     }
     @Test
