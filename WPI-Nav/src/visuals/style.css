@@ -246,10 +246,30 @@
     -fx-text-fill: white;
 }
 
-.list-view:focused
-{
+.list-view:focused {
     -fx-effect:null;
     -fx-background-insets: 0 ;
+}
+
+#newsfeed-list-view {
+    -fx-font-family: HelveticaNeueLight;
+    -fx-font-size: 14;
+    -fx-padding: 5;
+    -fx-text-fill:#eee;
+}
+
+#newsfeed:odd {
+    -fx-background-color:#333;
+}
+
+#newsfeed-list-view:filled:selected:focused, #newsfeed-list-cell:filled:selected, #newsfeed-list-cell:filled:hover {
+    -fx-background-color: #333;
+    -fx-text-fill: #eee;
+}
+
+#newsfeed-list-view:focused {
+    -fx-effect:null;
+    -fx-background-insets: 0;
 }
 
 #normallyWhiteBG {
