@@ -7,6 +7,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -14,18 +15,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import logic.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -121,6 +123,11 @@ public class Display {
     HBox directionsTitleBox;
     VBox directionsControlBox;
     HBox emailBox;
+
+
+    private double xOffset = 0;
+    private double yOffset = 0;
+
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -189,10 +196,34 @@ public class Display {
         /** create scene **/
         root.setAlignment(Pos.TOP_LEFT);
 
+
+
         Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 5 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE * 4);//+MAP_BORDER*2+TITLE_HEIGHT
         //Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+EDGE*2+expandedWidth*2, MAP_WIDTH + 2 * EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
 
         return scene;
+
+    }
+
+
+    public void applyDragEffects(Stage primaryStage){
+
+        root.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            }
+        });
+        root.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                primaryStage.setX(event.getScreenX() - xOffset);
+                primaryStage.setY(event.getScreenY() - yOffset);
+            }
+        });
+
+
 
     }
 
@@ -858,7 +889,7 @@ public class Display {
 
         emailBox.getChildren().addAll(slidingEmailButton, emailLabel, divider_4);
 
-        /////////// INFO IN EMAIL SLIDE
+        /////////// INFO IN EMAIL SLIDE ///////////
 
         VBox emailBoxContent = new VBox();
         yourEmail = new TextField();

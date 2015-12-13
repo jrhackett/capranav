@@ -14,7 +14,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -363,7 +362,7 @@ public class MapDisplay extends Pane {
                 @Override
                 public void handle(ActionEvent event) {
                     controller.switchToBuildingView(building.getID(), x);
-                    popOver.hide();
+                    //popOver.hide();
                 }
             });
 

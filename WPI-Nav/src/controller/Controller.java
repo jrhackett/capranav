@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -127,6 +126,9 @@ public class Controller extends Application {
         this.myDisplay = new Display(this);    //creates scene
         display = myDisplay.Init(); //initializes scene
 
+
+
+
     }
 
     @Override
@@ -135,13 +137,14 @@ public class Controller extends Application {
         stage = s;
 
 		/* basic layout */
-        s.initStyle(StageStyle.DECORATED);  // <-- removes the top part of the app close/open
+        s.initStyle(StageStyle.UNDECORATED);  // <-- removes the top part of the app close/open
         s.setResizable(true);
 
         /* setup */
         s.setScene(display);                   //sets scene to display
         display.getStylesheets().add(myDisplay.getClass().getResource("style.css").toExternalForm());
 
+        myDisplay.applyDragEffects(s);
 
         s.show();   //shows scene
         defaultMap();
