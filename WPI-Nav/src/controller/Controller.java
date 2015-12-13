@@ -3,10 +3,16 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import logic.*;
@@ -179,6 +185,51 @@ public class Controller extends Application {
             //for(Map.Entry<String, Integer> : nodes.entrySet())
 
         }
+    }
+
+    public void showAboutPanel() {
+        StackPane imageStack = new StackPane();
+        StackPane shadowStack = new StackPane();
+        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+
+        imageStack.setOnMouseClicked(e -> {
+            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+        });
+
+        //customize the stackpane here
+        VBox vbox = new VBox();
+        vbox.setId("about-panel");
+        vbox.setSpacing(8);
+        vbox.setAlignment(Pos.TOP_CENTER);
+
+        Label aboutLabel = new Label("About CapraNav");
+        aboutLabel.setId("about-label");
+
+        Image goatLogo = FileFetch.getImageFromFile("goat-logo.png");
+        ImageView goatLogoView = new ImageView(goatLogo);
+
+        FlowPane flowPane = new FlowPane();
+        Text text = new Text();
+        text.setId("about-text");
+        text.setWrappingWidth(400);
+        text.setTextAlignment(TextAlignment.JUSTIFY);
+        text.setText(
+                "CapraNav was created for a software engineering class at Worcester Polytechnic Institute during B term of 2015. " +
+                "The team consisted of nine members ranging from sophomores to seniors with various backrounds. Members include " +
+                "Kurt Bugbee, Josh Friscia, Mike Giancola, Jacob Hackett, Charlie Lovering, Tucker Martin, Anthony Ratte, Greg Tighe and Henry Wheeler-Mackta. " +
+                "The professor for the course was Wilson Wong and the coach for our team was Nilesh Patel."
+        );
+
+
+
+        flowPane.setPrefWrapLength(400);
+        flowPane.setAlignment(Pos.CENTER);
+        flowPane.getChildren().add(text);
+
+        vbox.getChildren().addAll(aboutLabel, goatLogoView, flowPane);
+        imageStack.getChildren().add(vbox);
+        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+
     }
 
     public void showNodeImage(INode node) {

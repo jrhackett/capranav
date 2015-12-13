@@ -1,3 +1,23 @@
+#about-label {
+    -fx-font-size:20;
+    -fx-font-fill: #eee;
+}
+
+#about-panel {
+    -fx-background-color: white;
+    -fx-max-width: 800;
+    -fx-max-height:800;
+    -fx-min-width:500;
+    -fx-max-height: 500;
+    -fx-pref-width:800;
+    -fx-pref-height:800;
+    -fx-padding: 8 8 8 8;
+}
+
+#about-text {
+    -fx-font-size:14;
+}
+
 #arrow-buttons {
     -fx-pref-height:26 !important;
     -fx-min-height:26 !important;
@@ -288,6 +308,10 @@
 
 #question-button {
     -fx-background-color:#444;
+    -fx-max-width:20;
+    -fx-max-height:20;
+    -fx-min-width:20;
+    -fx-min-height:20;
 }
 
 .radio-button .radio {

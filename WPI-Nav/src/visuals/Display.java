@@ -941,19 +941,29 @@ public class Display {
         mapTitleLabel.translateXProperty().bind((mapTitle.widthProperty().subtract(mapTitleLabel.widthProperty()).divide(2)));
         mapTitleLabel.translateYProperty().bind((mapTitle.heightProperty().subtract(mapTitleLabel.heightProperty()).divide(2)));
 
-        Image help = FileFetch.getImageFromFile("question58.png", 20, 20, true, true);
+        Image help = FileFetch.getImageFromFile("question58.png", 18, 18, true, true);
         ImageView helpButtonView = new ImageView(help);
         Button helpButton = new Button();
         helpButton.setGraphic(helpButtonView);
         helpButton.setId("question-button");
-        helpButton.setTranslateX(680);  //TODO fix this janky shit
+        helpButton.setTranslateX(-90);  //TODO fix this janky shit
+        helpButton.setTranslateY(10);
 
-        Image info = FileFetch.getImageFromFile("info.png", 20, 20, true, true);
+        helpButton.setOnMouseClicked(e -> {
+
+        });
+
+        Image info = FileFetch.getImageFromFile("info.png", 18, 18, true, true);
         ImageView infoButtonView = new ImageView(info);
         Button infoButton = new Button();
         infoButton.setGraphic(infoButtonView);
         infoButton.setId("question-button");
-        infoButton.setTranslateX(670);  //TODO fix this janky shit
+        infoButton.setTranslateX(-85);  //TODO fix this janky shit
+        infoButton.setTranslateY(10);
+
+        infoButton.setOnMouseClicked(e -> {
+            this.controller.showAboutPanel();
+        });
 
         mapTitle.setMaxHeight(EDGE);
         mapTitle.setPrefHeight(EDGE);
