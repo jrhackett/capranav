@@ -39,7 +39,6 @@ public class Directions {
 
 
 		double scalar = 1;
-
 		scalar = maps.get(0).getPixelToFeetRatio();
 		dist *= scalar;
 //		if (maps.containsKey(aStarPath.get(0).getMap_id())) {

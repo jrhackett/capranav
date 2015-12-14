@@ -32,9 +32,9 @@ public class DirectionsTesting {
         nmap = new HashMap<Integer, IMap>();
         build = new HashMap<Integer, Building>();
 
-        mmap.put(camp.getID(), camp);
+        mmap.put(0, camp);
 
-        nmap.put(camp.getID(), floo);
+        nmap.put(0, floo);
 
         // Nodes are set up like this:
         // A - B . C

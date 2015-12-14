@@ -345,7 +345,7 @@ public class Controller extends Application {
         ArrayList<String> positions = new ArrayList<>();
 
         teamMembers.add("Kurt Bugbee");teamMembers.add("Josh Friscia");teamMembers.add("Mike Giancola");teamMembers.add("Jacob Hackett");
-        teamMembers.add("Charlie Lovering");teamMembers.add("Tucker Martin");teamMembers.add("Anthony Ratte");teamMembers.add("Greg Tighe");teamMembers.add("Henry Wheeler-Mackta");
+        teamMembers.add("Charlie Lovering");teamMembers.add("Tucker Martin");teamMembers.add("Anthony Ratte");teamMembers.add("Greg Tighe");teamMembers.add("Henry 'Whackta' Wheeler-Mackta");
         positions.add("Product Owner 2");positions.add("Project Manager 2");positions.add("Product Owner 1");positions.add("Lead Software Engineer 1");
         positions.add("\t  Lead UI/UX 1\nLead Software Engineer 2");positions.add("Lead UI/UX 2");positions.add("Test Engineer 2");positions.add("Project Manager 1");positions.add("Test Engineer 1");
 
