@@ -1098,10 +1098,10 @@ public class Display {
         this.left.setGraphic(minusView);
         this.right.setGraphic(plusView);
 
-        this.left.setId("normallyEEEEEEBG");
-        this.right.setId("normallyEEEEEEBG");
         left.setId("arrow-buttons");
+        left.setStyle("-fx-background-color:#eee");
         right.setId("arrow-buttons");
+        right.setStyle("-fx-background-color:#eee");
         buildingName = new Label();
         buildingNumber = new Label();
 
@@ -1201,9 +1201,15 @@ public class Display {
     public void setRightButtonID(String id) {
         right.setId(id);
     }
+    public void setRightButtonStyle(String style) {
+        right.setStyle(style);
+    }
 
     public void setLeftButtonID(String id) {
         left.setId(id);
+    }
+    public void setLeftButtonStyle(String style) {
+        left.setStyle(style);
     }
 
     public void setBuildingName(String s) {

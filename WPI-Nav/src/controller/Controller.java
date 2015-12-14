@@ -620,6 +620,7 @@ public class Controller extends Application {
             } else {
                 //set id for grey
                 this.myDisplay.setRightButtonID("arrow-buttons-grayed");
+                this.myDisplay.setRightButtonStyle("-fx-background-color:#eee;");
             }
 
 
@@ -629,6 +630,8 @@ public class Controller extends Application {
             } else {
                 //set id for grey
                 this.myDisplay.setLeftButtonID("arrow-buttons-grayed");
+                this.myDisplay.setLeftButtonStyle("-fx-background-color:#eee;");
+
             }
         }
     }
