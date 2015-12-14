@@ -5,7 +5,7 @@ package feed;
  *
  * This class stores the information about a single event
  */
-public class Event {
+public class Event implements Comparable<Event> {
     private String title;
     private String location;
     private String description;
@@ -58,5 +58,9 @@ public class Event {
 
     public String getLink() {
         return link;
+    }
+
+    public int compareTo (Event other) {
+        return sDate.compareTo(other.sDate);
     }
 }
