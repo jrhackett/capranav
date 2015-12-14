@@ -120,7 +120,14 @@ public class Controller extends Application {
         });
 
 
-		/* basic layout */
+        this.buildings.forEach((k,v) -> {
+            v.translateBuilding(getNodesOfBuilding(k), nodes).forEach((key,value) ->{
+                nodes.put(key, value);
+            });
+        });
+
+
+        /* basic layout */
         //s.initStyle(StageStyle.TRANSPARENT);  // <-- removes the top part of the app close/open [switch to UNDECORATED]
 
         this.myDisplay = new Display(this);    //creates scene
@@ -147,9 +154,35 @@ public class Controller extends Application {
     }
 
 
+    /**
+     * return the HashMap of Nodes [to display][of the current map]
+     *
+     * @param id
+     * @return
+     */
+    public HashMap<Integer, INode> getNodesOfBuilding(int id) {
+
+        HashMap<Integer, INode> value = new HashMap<>();
+
+        nodes.forEach((k, v) -> {
+            if (maps.get(v.getMap_id()).getBuildingID() == id) {
+                value.put(k, v);
+            }
+        });
+        return value;
+    }
+
     /****************************************************************************************************************
                                     FUNCTIONS THAT ARE CALLED FROM UI AND CONTACT UI
      ****************************************************************************************************************/
+
+
+
+    public void help(){
+        //boolean firstUse = User.getFirst();
+        this.myDisplay.showToolTips();
+
+    }
 
 
     public void clear(){
