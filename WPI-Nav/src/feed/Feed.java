@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-//TODO IDEAS : Include Title, Date/Time, and location in bar, with two buttons: "Add waypoint" and "More Info"
-//TODO IDEAS : The first is obvious, the second creates a pop-up with the full info, including description and a link to orgsync
+//TODO Racism and Inclusion "0:30 pm"
+
+//TODO IMPORTANT : If feed.isEmpty() is true, it means that an internet connection couldn't be made so don't display feed stuff
 
 /**
  * Created by ikeandmike on 12/11/15.
@@ -24,6 +25,7 @@ import java.util.Iterator;
  * Usage is really simple:
  *
  * Feed f = new Feed(int numEvents)
+ * IMPORTANT: BEFORE USE, CHECK f.isEmpty() should return false
  * Feeds are iterable, so just use an enhanced for loop ie. for (Event e : f) to grab all the Events
  * Most of the methods in this class are only for generating the Feed, and are therefore private
  */
@@ -32,24 +34,31 @@ public class Feed implements Iterable<Event> {
 
     public Feed(int numEvents) {
         events = new ArrayList<>();
-        ArrayList<Event> temp = new ArrayList<>();
-        generateEvents(temp, numEvents);
-        cleanList(temp);
+        if (numEvents <= 100) generateEvents(numEvents, 1);
+        else {
+            int i = 1;
+            while (numEvents > 0) {
+                generateEvents(100, i);
+                numEvents -= 100; i++;
+            }
+        }
+        Collections.sort(events);
     }
 
-    private void generateEvents(ArrayList<Event> arr, int numEvents) {
-        String raw = "";
+    private void generateEvents(int numEvents, int pageNum) {
+        String raw;
         Document doc = null;
         String link = "https://api.orgsync.com/api/v3/communities/412/events.rss?key=rEXxNgt53SYC0O0mepnBQWgk" +
-                      "IjaoXcoOGyDjxiHUv6o&per_page=" + numEvents + "&upcoming=true";
+                      "IjaoXcoOGyDjxiHUv6o&per_page=" + numEvents + "&upcoming=true&page=" + pageNum;
         try {
             raw = getXML(link);           //Fetch raw XML data from OrgSync's website
+            if (raw == null) { return; }  //Empty ArrayList indicated couldn't connect
             doc = loadXMLFromString(raw); //Convert raw data into a nice document thingy
         }
         catch (Exception e) { e.printStackTrace(); } //Who knows
 
         for (int i = 0; i < numEvents; i++) {
-            arr.add(makeEvent(doc, i)); //Get the events from doc, store in list
+            events.add(makeEvent(doc, i)); //Get the events from doc, store in list
         }
     }
 
@@ -57,15 +66,21 @@ public class Feed implements Iterable<Event> {
     private static String getXML(String urlToRead) throws Exception {
         StringBuilder result = new StringBuilder();
         URL url = new URL(urlToRead);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        HttpURLConnection conn;
+        BufferedReader rd;
         String line;
-        while ((line = rd.readLine()) != null) {
-            result.append(line);
+
+        try {
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+            rd.close();
+            return result.toString();
         }
-        rd.close();
-        return result.toString();
+        catch (Exception e) { return null; } //In case no internet connection
     }
 
     //Convert raw data into a nice document thingy
@@ -94,25 +109,16 @@ public class Feed implements Iterable<Event> {
         return doc.getElementsByTagName(tag).item(i).getTextContent();
     }
 
-    //Removes all events with the same name
-    //then sorts them by start time
-    //Result stored in events
-    private void cleanList(ArrayList<Event> temp) {
-        for(int i = 0; i < temp.size(); i++) {
-            Event e = temp.get(i);
-            while (i<temp.size()-1 && temp.get(i+1).getTitle().equals(e.getTitle())) i++;
-            events.add(e);
-        }
-        Collections.sort(events);
-    }
-
     public Iterator<Event> iterator() {
         return events.iterator();
     }
 
+    public boolean isEmpty() { return events.isEmpty(); }
+
     //Sample code prints the most recent 5 events to stdout
     public static void main(String args[]) {
         Feed f = new Feed(5);
+        System.out.println(f.isEmpty());
         for (Event e : f) {
             System.out.println(e);
         }
