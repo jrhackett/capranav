@@ -124,9 +124,9 @@ public class Display {
     VBox directionsControlBox;
     HBox emailBox;
 
+    javafx.scene.control.Button menuButton;
 
-
-    ArrayList<PopOver> tooltips = new ArrayList<>();
+    ArrayList<InfoTip> infoTips = new ArrayList<>();
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -194,7 +194,7 @@ public class Display {
         /*****************************************************************/
         /** create scene **/
         root.setAlignment(Pos.TOP_LEFT);
-        createToolTips();
+        createInfoTips();
 
         Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 5 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE * 4);//+MAP_BORDER*2+TITLE_HEIGHT
         //Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+EDGE*2+expandedWidth*2, MAP_WIDTH + 2 * EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
@@ -671,15 +671,15 @@ public class Display {
         slidingDashboard.setStyle("-fx-background-color: #333333");
 
         /** STYLE BUTTON HERE **/
-        javafx.scene.control.Button button = slidingDashboard.getButton();
-        button.setId("dashboardButton");
-        button.setMaxWidth(EDGE);
-        button.setMinWidth(EDGE);
-        button.setPrefWidth(EDGE);
-        AnchorPane.setTopAnchor(button, 0.0);
-        AnchorPane.setLeftAnchor(button, 0.0);
+        menuButton = slidingDashboard.getButton();
+        menuButton.setId("dashboardButton");
+        menuButton.setMaxWidth(EDGE);
+        menuButton.setMinWidth(EDGE);
+        menuButton.setPrefWidth(EDGE);
+        AnchorPane.setTopAnchor(menuButton, 0.0);
+        AnchorPane.setLeftAnchor(menuButton, 0.0);
         //slidingDashboard.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + 2 * EDGE);
-        slidingDashboard.getChildren().addAll(button);
+        slidingDashboard.getChildren().addAll(menuButton);
     }
 
     private ListView<String> createEventListView() {
@@ -1538,29 +1538,28 @@ public class Display {
 
     /** called from the controller and shows all the help tooltips **/
     public void showToolTips(){
-        for (PopOver t : tooltips){
-         //   t.show();
+        for (InfoTip infoTip : infoTips){
+            infoTip.show();
         }
+    }
 
+    /** create tool tips **/
+    public void createInfoTips() {
+        this.infoTips = new ArrayList<InfoTip>();
+
+        /** menu bar info tip **/
+        InfoTip a = new InfoTip("This is our dashboard. Click to hide.", menuButton, PopOver.ArrowLocation.LEFT_CENTER);
+
+
+
+
+        infoTips.add(a);
     }
 
     /** called from the controller and plays the sequence **/
     public void playToolTips(){
 
     }
-
-    /** create tool tips **/
-    public void createToolTips(){
-        this.tooltips = new ArrayList<PopOver>();
-
-        /** menu bar tool tip **/
-        PopOver a = new PopOver();
-       // Tooltip.install(dashBoardTitleBox, a);
-//"This is our dashboard. Click this icon to hide it."
-
-       // tooltips.add();
-    }
-
 
     private void handleClear(){
         /** clear controller data **/
