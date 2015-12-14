@@ -1003,7 +1003,6 @@ public class MapDisplay extends Pane {
                                     }
                                 });
 
-//TODO
                         controller.getMyDisplay().zoomAndPan.zoomToNode(controller.getNode(key));
                         PopOver popOver = createPopOverForNode(controller.getNode(key));
                         //if (!(previousPopOver.equals(popOver))) {
