@@ -115,6 +115,11 @@ public class Display {
     String directionStyle = "-fx-background-color: #ac2738";
     String whiteBGStyle = "-fx-background-color: #FFFFFF";
     SlidingAnchorPane    slidingDirections;
+
+    SlidingAnchorPane slidingEmail;
+    SlidingAnchorPane slidingSettings;
+
+
     Button slidingDirectionsButton;
 
     RadioButton handicapRadioButton;
@@ -124,9 +129,10 @@ public class Display {
     VBox directionsControlBox;
     HBox emailBox;
 
+    javafx.scene.control.Button menuButton;
+    Button infoButton;
+    ArrayList<InfoTip> infoTips = new ArrayList<>();
 
-
-    ArrayList<PopOver> tooltips = new ArrayList<>();
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -194,7 +200,7 @@ public class Display {
         /*****************************************************************/
         /** create scene **/
         root.setAlignment(Pos.TOP_LEFT);
-        createToolTips();
+        createInfoTips();
 
         Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 5 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE * 4);//+MAP_BORDER*2+TITLE_HEIGHT
         //Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+EDGE*2+expandedWidth*2, MAP_WIDTH + 2 * EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
@@ -446,7 +452,7 @@ public class Display {
 
         //settings a sliding pane!div
 
-        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
+        slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
         slidingSettings.setStyle("-fx-background-color: #333333");
 
         javafx.scene.control.Button slidingButton = slidingSettings.getButton();
@@ -671,15 +677,15 @@ public class Display {
         slidingDashboard.setStyle("-fx-background-color: #333333");
 
         /** STYLE BUTTON HERE **/
-        javafx.scene.control.Button button = slidingDashboard.getButton();
-        button.setId("dashboardButton");
-        button.setMaxWidth(EDGE);
-        button.setMinWidth(EDGE);
-        button.setPrefWidth(EDGE);
-        AnchorPane.setTopAnchor(button, 0.0);
-        AnchorPane.setLeftAnchor(button, 0.0);
+        menuButton = slidingDashboard.getButton();
+        menuButton.setId("dashboardButton");
+        menuButton.setMaxWidth(EDGE);
+        menuButton.setMinWidth(EDGE);
+        menuButton.setPrefWidth(EDGE);
+        AnchorPane.setTopAnchor(menuButton, 0.0);
+        AnchorPane.setLeftAnchor(menuButton, 0.0);
         //slidingDashboard.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + 2 * EDGE);
-        slidingDashboard.getChildren().addAll(button);
+        slidingDashboard.getChildren().addAll(menuButton);
     }
 
     private ListView<String> createEventListView() {
@@ -887,7 +893,7 @@ public class Display {
         emailView.setOnMouseClicked(e -> handleEmail(emailBox));*/
 
         /** Sliding Anchor Pane **/
-        SlidingAnchorPane slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
+        slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
         slidingEmail.setId("normallyWhiteBG");
 
         Button slidingEmailButton = slidingEmail.getButton();
@@ -1000,7 +1006,7 @@ public class Display {
 
         Image info = FileFetch.getImageFromFile("info.png", 18, 18, true, true);
         ImageView infoButtonView = new ImageView(info);
-        Button infoButton = new Button();
+        infoButton = new Button();
         infoButton.setGraphic(infoButtonView);
         infoButton.setId("question-button");
         infoButton.setTranslateX(-65);  //TODO fix this janky shit
@@ -1538,29 +1544,47 @@ public class Display {
 
     /** called from the controller and shows all the help tooltips **/
     public void showToolTips(){
-        for (PopOver t : tooltips){
-         //   t.show();
-        }
 
+        if (!DASHBOARD_VISIBLE.getValue())  slidingDashboard.playShowPane(DASHBOARD_VISIBLE);
+        if (!DIRECTIONS_VISIBLE.getValue()) slidingDirections.playShowPane(DIRECTIONS_VISIBLE);
+
+
+
+        slidingEmail.playShowPane(EMAIL_VISIBLE);
+        slidingSettings.playShowPane(SETTINGS_VISIBLE);
+
+
+
+        for (InfoTip infoTip : infoTips){
+            infoTip.show();
+        }
+    }
+
+    /** create tool tips **/
+    public void createInfoTips() {
+        this.infoTips = new ArrayList<InfoTip>();
+
+        /** menu bar info tip **/
+        InfoTip a = new InfoTip("This is our dashboard. Click to hide.", menuButton, PopOver.ArrowLocation.LEFT_CENTER);
+
+        /** start search bar **/
+        InfoTip b = new InfoTip("Search for a location, a room, the nearest bathroom or for food.", start, PopOver.ArrowLocation.LEFT_TOP);
+
+        /** get involved **/
+        InfoTip c = new InfoTip("Discover events around campus!", infoButton, PopOver.ArrowLocation.BOTTOM_LEFT);
+
+
+
+
+        infoTips.add(a);
+        infoTips.add(b);
+        infoTips.add(c);
     }
 
     /** called from the controller and plays the sequence **/
     public void playToolTips(){
 
     }
-
-    /** create tool tips **/
-    public void createToolTips(){
-        this.tooltips = new ArrayList<PopOver>();
-
-        /** menu bar tool tip **/
-        PopOver a = new PopOver();
-       // Tooltip.install(dashBoardTitleBox, a);
-//"This is our dashboard. Click this icon to hide it."
-
-       // tooltips.add();
-    }
-
 
     private void handleClear(){
         /** clear controller data **/
