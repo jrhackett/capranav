@@ -13,8 +13,8 @@ public class Date implements Comparable<Date> {
     private boolean isAM;
 
     //0th index is wasted to correspond with month numbers
-    private static String[] months = { "", "January", "February", "March", "April", "May", "June", "July", "August",
-                                       "September", "October", "November", "December" };
+    private static String[] months = { "", "Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.",
+                                       "Sep.", "Oct.", "Nov.", "Dec." };
 
     //String in form 2015-12-01T11:28:12
     public Date(String date) {

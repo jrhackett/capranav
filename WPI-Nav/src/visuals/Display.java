@@ -23,7 +23,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import logic.*;
+
+import org.controlsfx.control.PopOver;
 import feed.Feed;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,6 +126,10 @@ public class Display {
     HBox directionsTitleBox;
     VBox directionsControlBox;
     HBox emailBox;
+
+
+
+    ArrayList<PopOver> tooltips = new ArrayList<>();
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -190,6 +197,7 @@ public class Display {
         /*****************************************************************/
         /** create scene **/
         root.setAlignment(Pos.TOP_LEFT);
+        createToolTips();
 
         Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 5 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE * 4);//+MAP_BORDER*2+TITLE_HEIGHT
         //Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+EDGE*2+expandedWidth*2, MAP_WIDTH + 2 * EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
@@ -442,7 +450,7 @@ public class Display {
 
         //settings a sliding pane!div
 
-        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth , EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
+        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
         slidingSettings.setStyle("-fx-background-color: #333333");
 
         javafx.scene.control.Button slidingButton = slidingSettings.getButton();
@@ -640,6 +648,7 @@ public class Display {
 
         VBox settingsVbox = new VBox();
         settingsVbox.visibleProperty().bind(DASHBOARD_VISIBLE);
+        settingsVbox.setPrefWidth(300); //TODO make this less dirty
         //settingsVbox.getChildren().addAll(divider_3, settingsLabelBox,  settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
 
         settingsWeightLabel.setTranslateX(EDGE - 7);
@@ -680,13 +689,39 @@ public class Display {
     private ListView<String> createEventListView() {
         ListView<String> listView = new ListView<>();
         listView.setId("newsfeed-list-view");
+        listView.setMaxWidth(expandedWidth *2);
         Feed f = new Feed(50);
-        //FXCollections list = FXCollections.observableArrayList();
+
         ObservableList<String> items = FXCollections.observableArrayList ();
         for(Event e : f) {
-            String x = e.getTitle() + "\n" + e.getLocation() + "\n" + e.getDateInfo();
+            String x = "\n" + e.getTitle() + "\n" + e.getDateInfo() + "\n";
             items.add(x);
         }
+
+        listView.setCellFactory((ListView<String> lv) ->
+                new ListCell<String>() {
+                    @Override
+                    public void updateItem(String in, boolean empty) {
+                        super.updateItem(in, empty);
+                        if (empty) {
+                            setText(null);
+                        } else {
+                            // use whatever data you need from the album
+                            // object to get the correct displayed value:
+                            Text text = new Text(in);
+                            text.setFill(Color.web("#eee"));
+                            text.setWrappingWidth(expandedWidth-10);
+                            //setText(in.toString());
+                            setGraphic(text);
+                            setStyle("-fx-font-fill:#eee; -fx-background-color:#333;" +
+                                    "-fx-border-width:1; -fx-border-color:white;-fx-border-radius:5;");
+                            setTranslateX(GAP);
+
+                        }
+                    }
+                }
+        );
+
         listView.setItems(items);
         return listView;
     }
@@ -965,9 +1000,7 @@ public class Display {
         helpButton.setTranslateY(10);
         helpButtonView.setFitHeight(18);
 
-        helpButton.setOnMouseClicked(e -> {
-
-        });
+        helpButton.setOnMouseClicked(e -> handleHelp());
 
         Image info = FileFetch.getImageFromFile("info.png", 18, 18, true, true);
         ImageView infoButtonView = new ImageView(info);
@@ -1501,6 +1534,36 @@ public class Display {
     /****************************************************************************************************************
                                                 Llambda Event Handlers
      ****************************************************************************************************************/
+
+    /** calls the controller to do the correct help **/
+    private void handleHelp(){
+       this.controller.help();
+    }
+
+    /** called from the controller and shows all the help tooltips **/
+    public void showToolTips(){
+        for (PopOver t : tooltips){
+          //  t.show();
+        }
+
+    }
+
+    /** called from the controller and plays the sequence **/
+    public void playToolTips(){
+
+    }
+
+    /** create tool tips **/
+    public void createToolTips(){
+        this.tooltips = new ArrayList<PopOver>();
+
+        /** menu bar tool tip **/
+        PopOver a = new PopOver();
+       // Tooltip.install(dashBoardTitleBox, a);
+//"This is our dashboard. Click this icon to hide it."
+
+       // tooltips.add();
+    }
 
 
     private void handleClear(){
