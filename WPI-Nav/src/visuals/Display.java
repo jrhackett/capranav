@@ -581,13 +581,27 @@ public class Display {
         Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller);
         walkingSpeedBox.setTranslateX(3);  //TODO fix width of this?
         walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
-        walkingSpeedBox.setValue(walkingArrayList.get(1));
-        User.setSpeed(3.0);
+        if (User.isUserNew()) {
+            walkingSpeedBox.setValue(walkingArrayList.get(1));
+            User.setSpeed(3.0);
+        }
+        else {
+            int speed = (int)User.getSpeed();
+            int index = 1;
+            switch (speed) {
+                case 2 : index = 0; break;
+                case 3 : index = 1; break;
+                case 4 : index = 2; break;
+                case 6 : index = 3; break;
+            }
+            walkingSpeedBox.setValue(walkingArrayList.get(index));
+        }
 
         walkingSpeedBox.setOnAction(e -> handleWalkingInput(walkingSpeedBox, true));    //TODO finish handleWalkingInput
 
         TextField emailTextField = new TextField();
-        emailTextField.setPromptText("Enter your email");
+        if (User.getEmail() == null) emailTextField.setPromptText("Enter your email");
+        else                         emailTextField.setText(User.getEmail());
         emailTextField.setMaxWidth(INPUT_WIDTH);
         emailTextField.setMaxHeight(walkingSpeedBox.getMaxHeight());
         emailTextField.setTranslateX(3);
