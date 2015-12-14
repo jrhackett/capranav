@@ -19,7 +19,7 @@ public class Directions {
 	 * @param aStarPath
 	 * @return
 	 */
-	public static ArrayList<ArrayList<Instructions>> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps) {
+	public static ArrayList<ArrayList<Instructions>> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps, HashMap<Integer, Building> buildings) {
 		totalDistance = 0;
 		int mapstep = 0;
 		double distspec = 0;
@@ -42,6 +42,13 @@ public class Directions {
 
 		scalar = maps.get(0).getPixelToFeetRatio();
 		dist *= scalar;
+//		if (maps.containsKey(aStarPath.get(0).getMap_id())) {
+//			scalar = maps.get(aStarPath.get(0).getMap_id()).getPixelToFeetRatio();
+//			if (aStarPath.get(0).getMap_id() != 0)dist *= scalar; //this line just changed
+//		} else {
+//			// throw exception
+//		}
+
 
 		totalDistance += dist;
 
@@ -225,7 +232,8 @@ public class Directions {
 			}
 			//if outside node mapid different then go inside/outside message
 			if (turn.getMap_id() == 0 && next.getMap_id() != 0) { //going inside
-				distPhrase = "inside the building.";
+				//TODO: this line
+				distPhrase = "inside " + (buildings.get(((Transition) turn).getBuildingID())).getName() + ".";
 			}
 			if (turn.getMap_id() != 0 && next.getMap_id() == 0) { //going outside
 				distPhrase = "out the door.";
@@ -247,6 +255,11 @@ public class Directions {
 							break;
 						case 5: distPhrase = distPhrase + " If you reach Olin Hall or Salisbury Labs, you've gone too far.";
 							break;
+						case 6: distPhrase = distPhrase + " If you reach Boynton Hall or go under the bridge, you've gone too far.";
+							break;
+						case 7: distPhrase = distPhrase + " If you reach Fuller Labs, you've gone too far.";
+							break;
+						case 8: distPhrase = distPhrase + " If you reach Boynton Hall, you've gone too far.";
 					}
 					predictdir = 0;
 				}
@@ -265,7 +278,9 @@ public class Directions {
 			if((turn.getID() == 2007 || turn.getID() == 2058) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 28 && aStarPath.get(aStarPath.size()-1).getMap_id() < 34)) predictdir = 3; //Fuller from the south (AK)
 			if(turn.getID() == 1979 && aStarPath.get(aStarPath.size()-1).getMap_id() > 4 && aStarPath.get(aStarPath.size()-1).getMap_id() < 9) predictdir = 4; //AK from the northwest (fuller)
 			if((turn.getID() == 1963 || turn.getID() == 2026) && (aStarPath.get(aStarPath.size()-1).getMap_id() == 27 || aStarPath.get(aStarPath.size()-1).getMap_id() == 28)) predictdir = 5; //P.Center from the south (fountain)
-
+			if((turn.getID() == 1963 || turn.getID() == 2027) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 0 && aStarPath.get(aStarPath.size()-1).getMap_id() < 5)) predictdir = 6; //Stratton from the north (bridge or boynton)
+			if(turn.getID() == 2016 && (aStarPath.get(aStarPath.size()-1).getMap_id() > 15 || aStarPath.get(aStarPath.size()-1).getMap_id() < 21)) predictdir = 7; //Gordon from the south (fuller)
+			if((turn.getID() == 2007 || turn.getID() == 2058) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 15 || aStarPath.get(aStarPath.size()-1).getMap_id() < 21)) predictdir = 8; //Gordon from the north (boynton)
 		}
 
 		directions.get(directions.size() - 1).add(new Instructions("You have reached your destination.", aStarPath.get(aStarPath.size() - 1)));

@@ -275,8 +275,8 @@ public class Controller extends Application {
         FlowPane flowPane = new FlowPane();
         Text text = new Text();
         text.setId("about-text");
-        text.setWrappingWidth(400);
-        text.setTextAlignment(TextAlignment.JUSTIFY);
+        text.setWrappingWidth(500);
+        //text.setTextAlignment(TextAlignment.JUSTIFY);
         text.setText(
                 "CapraNav was created for a software engineering class at Worcester Polytechnic Institute during B term of 2015. " +
                 "The team consisted of nine members ranging from sophomores to seniors with various backrounds.\n\nMembers included " +
@@ -284,7 +284,7 @@ public class Controller extends Application {
                 "The professor for the course was Wilson Wong and the coach for this team was Nilesh Patel."
         );
 
-        flowPane.setPrefWrapLength(400);
+        flowPane.setPrefWrapLength(500);
         flowPane.setAlignment(Pos.CENTER);
         flowPane.getChildren().add(text);
 
@@ -295,7 +295,7 @@ public class Controller extends Application {
         attributions.setTextAlignment(TextAlignment.CENTER);
 
         goatLogoView.setTranslateY(20);
-        flowPane.setTranslateY(20);
+        flowPane.setTranslateY(25);
         attributions.setTranslateY(25);
 
         attributions.setOnMouseClicked(e -> {
@@ -342,11 +342,14 @@ public class Controller extends Application {
         teamLabel.setId("about-text");
         teamLabel.setStyle("-fx-font-weight: bold");
         ArrayList<String> teamMembers = new ArrayList<>();
+        ArrayList<String> positions = new ArrayList<>();
 
         teamMembers.add("Kurt Bugbee");teamMembers.add("Josh Friscia");teamMembers.add("Mike Giancola");teamMembers.add("Jacob Hackett");
         teamMembers.add("Charlie Lovering");teamMembers.add("Tucker Martin");teamMembers.add("Anthony Ratte");teamMembers.add("Greg Tighe");teamMembers.add("Henry Wheeler-Mackta");
+        positions.add("Product Owner 2");positions.add("Project Manager 2");positions.add("Product Owner 1");positions.add("Lead Software Engineer 1");
+        positions.add("\t  Lead UI/UX 1\nLead Software Engineer 2");positions.add("Lead UI/UX 2");positions.add("Test Engineer 2");positions.add("Project Manager 1");positions.add("Test Engineer 1");
 
-
+        int i = 0;
         for(String name : teamMembers) {
             VBox vbox1 = new VBox();
             vbox1.setAlignment(Pos.CENTER);
@@ -358,8 +361,13 @@ public class Controller extends Application {
             circle.setFill(new ImagePattern(person));
             Label label = new Label(name);
             label.setStyle("-fx-font-size:12;");
-            vbox1.getChildren().addAll(circle, label);
+            Label positionLabel = new Label(positions.get(i));
+            positionLabel.setStyle("-fx-font-size:10;");
+            positionLabel.setTranslateY(-7);
+            positionLabel.setAlignment(Pos.CENTER);
+            vbox1.getChildren().addAll(circle, label, positionLabel);
             teamFlowPane.getChildren().add(vbox1);
+            i++;
         }
 
         Label iconLabel = new Label("Icon Authors");
@@ -645,6 +653,7 @@ public class Controller extends Application {
             } else {
                 //set id for grey
                 this.myDisplay.setRightButtonID("arrow-buttons-grayed");
+                this.myDisplay.setRightButtonStyle("-fx-background-color:#eee;");
             }
 
 
@@ -654,6 +663,8 @@ public class Controller extends Application {
             } else {
                 //set id for grey
                 this.myDisplay.setLeftButtonID("arrow-buttons-grayed");
+                this.myDisplay.setLeftButtonStyle("-fx-background-color:#eee;");
+
             }
         }
     }
@@ -957,7 +968,7 @@ public class Controller extends Application {
      * @return an ArrayList<String?
      */
     public void getInstructions(){
-        this.fullPath =  Directions.stepByStep(this.pathNodes, this.maps);
+        this.fullPath =  Directions.stepByStep(this.pathNodes, this.maps, this.buildings);
     }
 
 
