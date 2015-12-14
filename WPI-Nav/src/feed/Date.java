@@ -51,14 +51,17 @@ public class Date implements Comparable<Date> {
     }
 
     public int compareTo(Date other) {
+        int hour241 = isAM ? hour : hour+12;
+        int hour242 = other.isAM ? other.hour : other.hour+12;
+
         if      (year.compareTo(other.year) < 0) return -1;
         else if (year.compareTo(other.year) > 0) return 1;
         else if (month < other.month) return -1;
         else if (month > other.month) return 1;
         else if (day.compareTo(other.day) < 0) return -1;
         else if (day.compareTo(other.day) > 0) return 1;
-        else if (hour < other.hour) return -1;
-        else if (hour > other.hour) return 1;
+        else if (hour241 < hour242) return -1;
+        else if (hour241 > hour242) return 1;
         else if (min.compareTo(other.min) < 0) return -1;
         else if (min.compareTo(other.min) > 0) return 1;
         else return 0;
