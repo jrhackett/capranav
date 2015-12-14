@@ -115,6 +115,11 @@ public class Display {
     String directionStyle = "-fx-background-color: #ac2738";
     String whiteBGStyle = "-fx-background-color: #FFFFFF";
     SlidingAnchorPane    slidingDirections;
+
+    SlidingAnchorPane slidingEmail;
+    SlidingAnchorPane slidingSettings;
+
+
     Button slidingDirectionsButton;
 
     RadioButton handicapRadioButton;
@@ -125,8 +130,9 @@ public class Display {
     HBox emailBox;
 
     javafx.scene.control.Button menuButton;
-
+    Button infoButton;
     ArrayList<InfoTip> infoTips = new ArrayList<>();
+
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -446,7 +452,7 @@ public class Display {
 
         //settings a sliding pane!div
 
-        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
+        slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
         slidingSettings.setStyle("-fx-background-color: #333333");
 
         javafx.scene.control.Button slidingButton = slidingSettings.getButton();
@@ -887,7 +893,7 @@ public class Display {
         emailView.setOnMouseClicked(e -> handleEmail(emailBox));*/
 
         /** Sliding Anchor Pane **/
-        SlidingAnchorPane slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
+        slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
         slidingEmail.setId("normallyWhiteBG");
 
         Button slidingEmailButton = slidingEmail.getButton();
@@ -1000,7 +1006,7 @@ public class Display {
 
         Image info = FileFetch.getImageFromFile("info.png", 18, 18, true, true);
         ImageView infoButtonView = new ImageView(info);
-        Button infoButton = new Button();
+        infoButton = new Button();
         infoButton.setGraphic(infoButtonView);
         infoButton.setId("question-button");
         infoButton.setTranslateX(-65);  //TODO fix this janky shit
@@ -1538,6 +1544,17 @@ public class Display {
 
     /** called from the controller and shows all the help tooltips **/
     public void showToolTips(){
+
+        if (!DASHBOARD_VISIBLE.getValue())  slidingDashboard.playShowPane(DASHBOARD_VISIBLE);
+        if (!DIRECTIONS_VISIBLE.getValue()) slidingDirections.playShowPane(DIRECTIONS_VISIBLE);
+
+
+
+        slidingEmail.playShowPane(EMAIL_VISIBLE);
+        slidingSettings.playShowPane(SETTINGS_VISIBLE);
+
+
+
         for (InfoTip infoTip : infoTips){
             infoTip.show();
         }
@@ -1550,10 +1567,18 @@ public class Display {
         /** menu bar info tip **/
         InfoTip a = new InfoTip("This is our dashboard. Click to hide.", menuButton, PopOver.ArrowLocation.LEFT_CENTER);
 
+        /** start search bar **/
+        InfoTip b = new InfoTip("Search for a location, a room, the nearest bathroom or for food.", start, PopOver.ArrowLocation.LEFT_TOP);
+
+        /** get involved **/
+        InfoTip c = new InfoTip("Discover events around campus!", infoButton, PopOver.ArrowLocation.BOTTOM_LEFT);
+
 
 
 
         infoTips.add(a);
+        infoTips.add(b);
+        infoTips.add(c);
     }
 
     /** called from the controller and plays the sequence **/

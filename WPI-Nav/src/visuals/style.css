@@ -232,6 +232,13 @@
     src: url("../resources/fonts/HelveticaNeue-Light.otf");
 }
 
+#infoTip {
+    -fx-max-height:15 !important;
+    -fx-background-color: white;
+    -fx-padding:0;
+    -fx-font-size: 12;
+}
+
 .list-cell {
     -fx-font-family: HelveticaNeueLight;
     -fx-font-size: 14;
