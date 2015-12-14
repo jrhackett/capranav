@@ -113,7 +113,7 @@ public class Parser<Struct> {
 		 * System.out.println(maps.toString());
 		 * System.out.println(nodes.toString());
 		 */
-		
+
 	}
 
 	/**
@@ -245,20 +245,19 @@ public class Parser<Struct> {
 		close(); //Close the writer
 	}
 
-	//HashMap is Name->User
-	public HashMap<String, User> fromFileUser() {
+	public void fromFileUser() {
 		Gson gson = new Gson();
-		HashMap<String,User> users = new HashMap<>();
 		User temp;
 
 		try { parser = new JsonStreamParser(new FileReader(path + "user.json")); }
-		catch (FileNotFoundException e) { return null; }
+		catch (FileNotFoundException e) { return; }
 
-		while(parser.hasNext()) {
-			temp = gson.fromJson(parser.next(), User.class);
-			users.put(temp.getName(), temp);
-		}
-		return users;
+		if (parser.hasNext()) { temp = gson.fromJson(parser.next(), User.class); }
+		else return;
+
+		if (temp.pGetEmail() != null) User.pSetEmail(temp.pGetEmail());
+		User.pSetSpeed(temp.pGetSpeed());
+		User.userIsNotNew(); //Won't run if file didn't exist
 	}
 
     /**
