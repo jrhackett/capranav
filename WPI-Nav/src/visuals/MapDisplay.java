@@ -1164,11 +1164,17 @@ public class MapDisplay extends Pane {
         map.getTransforms().add(rotation);
 
         double dur = Math.abs((angle/360)*800);
+        double scale = 1.5;
+        double x = 40;
+        double y = 30;
 
         timeline = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(rotation.angleProperty(), 0)),
                 new KeyFrame(Duration.millis(dur), new KeyValue(rotation.angleProperty(), angle)),
-                new KeyFrame(Duration.millis(dur+1), new KeyValue(rotation.angleProperty(), 0)));
+//                    new KeyFrame(Duration.millis(dur), new KeyValue(controller.getMyDisplay().zoomAndPan.panAndZoomPane.translateXProperty(), getTranslateX() - x)),
+//                    new KeyFrame(Duration.millis(dur), new KeyValue(controller.getMyDisplay().zoomAndPan.panAndZoomPane.translateYProperty(), getTranslateY() - y)),
+//                    new KeyFrame(Duration.millis(dur), new KeyValue(controller.getMyDisplay().zoomAndPan.panAndZoomPane.myScale, scale)),
+                new KeyFrame(Duration.millis(dur + 1), new KeyValue(rotation.angleProperty(), 0)));
 
         timeline.play();
     }
