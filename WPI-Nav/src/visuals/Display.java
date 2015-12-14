@@ -1539,7 +1539,7 @@ public class Display {
     /** called from the controller and shows all the help tooltips **/
     public void showToolTips(){
         for (PopOver t : tooltips){
-          //  t.show();
+         //   t.show();
         }
 
     }
@@ -1576,7 +1576,7 @@ public class Display {
         this.setIDLeftArrowButton("arrow-buttons-grayed");
         this.setIDRightArrowButton("arrow-buttons-grayed");
         if (DIRECTIONS_VISIBLE.getValue() == true) this.slidingDirections.playHidePane(DIRECTIONS_VISIBLE);
-
+        TIME_VISIBLE.setValue(false);
     }
 
     private void handleRadioButtons(){
