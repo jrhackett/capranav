@@ -100,8 +100,7 @@ public class Feed implements Iterable<Event> {
     private void cleanList(ArrayList<Event> temp) {
         for(int i = 0; i < temp.size(); i++) {
             Event e = temp.get(i);
-            Event f;
-            while ((f = temp.get(i+1)).getTitle().equals(e.getTitle())) i++;
+            while (i<temp.size()-1 && temp.get(i+1).getTitle().equals(e.getTitle())) i++;
             events.add(e);
         }
         Collections.sort(events);
