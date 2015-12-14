@@ -949,6 +949,7 @@ public class Display {
         helpButton.setId("question-button");
         helpButton.setTranslateX(-80);  //TODO fix this janky shit
         helpButton.setTranslateY(10);
+        helpButtonView.setFitHeight(18);
 
         helpButton.setOnMouseClicked(e -> {
 
@@ -961,6 +962,7 @@ public class Display {
         infoButton.setId("question-button");
         infoButton.setTranslateX(-65);  //TODO fix this janky shit
         infoButton.setTranslateY(10);
+        infoButtonView.setFitHeight(18);
 
         infoButton.setOnMouseClicked(e -> {
             this.controller.showAboutPanel();
@@ -1024,7 +1026,7 @@ public class Display {
         map.setMinHeight(MAP_HEIGHT + EDGE);
         map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE + EDGE); // + EDGE for NODE INFO
 
-        map.setId("normallyEEEEEEBG");
+        map.setId("mapBorder");
         map.getChildren().addAll(mapTitle, zoomPane, information);
     }
 
@@ -1039,7 +1041,8 @@ public class Display {
         mapPane.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
         mapPane.setMinWidth(MAP_WIDTH);
 
-        mapPane.setId("normallyEEEEEEBG");
+        //mapPane.setId("normallyEEEEEEBG");
+        mapPane.setStyle("-fx-background-color:#333;");
         this.mapDisplay = new MapDisplay(this.controller); //(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER),
         mapPane.getChildren().add(mapDisplay);
         //mapPane.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
