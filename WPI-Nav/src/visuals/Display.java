@@ -666,11 +666,12 @@ public class Display {
     private ListView<String> createEventListView() {
         ListView<String> listView = new ListView<>();
         listView.setId("newsfeed-list-view");
+        listView.setMaxWidth(expandedWidth *2);
         Feed f = new Feed(50);
 
         ObservableList<String> items = FXCollections.observableArrayList ();
         for(Event e : f) {
-            String x = e.getTitle() + "\n" + e.getLocation() + "\n" + e.getDateInfo() + "\n";
+            String x = "\n" + e.getTitle() + "\n" + e.getDateInfo() + "\n";
             items.add(x);
         }
 
@@ -685,9 +686,14 @@ public class Display {
                             // use whatever data you need from the album
                             // object to get the correct displayed value:
                             Text text = new Text(in);
+                            text.setFill(Color.web("#eee"));
                             text.setWrappingWidth(expandedWidth-10);
                             //setText(in.toString());
                             setGraphic(text);
+                            setStyle("-fx-font-fill:#eee; -fx-background-color:#333;" +
+                                    "-fx-border-width:1; -fx-border-color:white;-fx-border-radius:5;");
+                            //setTranslateX(20);
+
                         }
                     }
                 }
