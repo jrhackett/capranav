@@ -966,6 +966,20 @@ public class MapDisplay extends Pane {
         library.setFill(Color.TRANSPARENT);
         addPolygonEvents(library, 2148);
 
+        Polygon salisbury = new Polygon();
+        salisbury.getPoints().addAll(new Double[]{
+                441.6495,201.3315,
+                439.5165,214.011,
+                425.889,211.7595,
+                421.0305,241.503,
+                445.323,245.769,
+                443.7825,255.96,
+                463.4535,259.278,
+                472.104,206.427,
+        });
+        salisbury.setFill(Color.TRANSPARENT);
+        addPolygonEvents(salisbury, 1909);//TODO double check this value
+
     }
     private void addPolygonEvents(Polygon p, Integer key){
         this.getChildren().add(p);
@@ -989,7 +1003,7 @@ public class MapDisplay extends Pane {
                                     }
                                 });
 
-//TODO fhnsjkdhfjklsghfjkdlghdglhfjsdghfjlgdhlgfds
+//TODO
                         controller.getMyDisplay().zoomAndPan.zoomToNode(controller.getNode(key));
                         PopOver popOver = createPopOverForNode(controller.getNode(key));
                         //if (!(previousPopOver.equals(popOver))) {
@@ -1128,14 +1142,14 @@ public class MapDisplay extends Pane {
                 angle = 0;
                 break;
             case 9: //Project Center
-                pivotX = 0;
-                pivotY = 0;
-                angle = 0;
+                pivotX = 403.;
+                pivotY = 247;
+                angle = -102;
                 break;
             case 10: //Fuller Labs
                 pivotX = 505;
                 pivotY = 188;
-                angle = -65;
+                angle = -67;
                 break;
             case 11: //Salisbury
                 pivotX = 0;
