@@ -3,6 +3,9 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -51,6 +54,7 @@ public class Controller extends Application {
 
     /* information of the maps */
     private int currentBuilding = 0;
+    public int prevBuilding = 0;
     private int currentFloor;
     private Campus campus;
     private logic.IMap currentMap;                  /* current map being used */
@@ -522,6 +526,7 @@ public class Controller extends Application {
                 firstTime = true;
             }
             defaultMap();
+            prevBuilding = 0;
 
             this.currentMap = campus;
         } else {
@@ -572,8 +577,15 @@ public class Controller extends Application {
 //            }
 
             /** switches to the map **/
-            setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
-
+            //Play rotation animation if previous building is the campus map
+            if (prevBuilding == 0) {
+                int buildNum = buildings.get(currentBuilding).getID();
+                this.getMyDisplay().mapDisplay.rotationAnimation(buildNum);
+                this.getMyDisplay().mapDisplay.timeline.setOnFinished(e ->
+                        setCurrentMap(buildings.get(currentBuilding).getFloorID(i)));
+            }
+            //otherwise just set the current map
+            else setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
 
             /** CSS SWITCH LOGIC **/
             if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)) {
@@ -593,6 +605,7 @@ public class Controller extends Application {
                 this.myDisplay.setLeftButtonID("arrow-buttons-grayed");
             }
         }
+        prevBuilding = currentBuilding;
     }
 
     /**
@@ -1069,6 +1082,37 @@ public class Controller extends Application {
         public static void main(String[] args) {
             LauncherImpl.launchApplication(Controller.class, myPreloader.class, args);
         }
+    public Point2D getStageOffset(){
+        double xOff = this.stage.getX();
+        double yOff = this.stage.getY();
+
+        double appWidth = this.stage.getWidth();
+        double appHeight = this.stage.getHeight();
+        double expandedWidth = this.getMyDisplay().expandedWidth;
+        double gapWidth = this.getMyDisplay().GAP;
+        boolean dashboardEx = this.getMyDisplay().DASHBOARD_VISIBLE.getValue();
+        boolean directionsEx = this.getMyDisplay().DIRECTIONS_VISIBLE.getValue();
+
+        double offsetX = 0;
+        if (dashboardEx){
+            offsetX += expandedWidth;
+        }
+        else {
+            offsetX += gapWidth;
+        }
+        if(directionsEx){
+            offsetX += expandedWidth;
+        }
+        else {
+            offsetX += gapWidth;
+        }
+
+        offsetX /=2;
+
+        Point2D offset = new Point2D(offsetX+xOff+appWidth/2,yOff+appHeight/2.5);
+
+        return offset;
+    }
 }
 
 

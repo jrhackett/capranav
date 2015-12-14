@@ -42,9 +42,9 @@ public class Display {
     //Constants
     private static final double INPUT_WIDTH = 160;
     private static final double CONTROL_WIDTH = 30;
-    private static final double GAP = 5;
+    public static final double GAP = 5;
     private final double EDGE;
-    private static final double expandedWidth = 170;//150
+    public static final double expandedWidth = 170;//150
     private static final double MAP_WIDTH = 585; //originally 580+80
     private static final double MAP_HEIGHT = 460;//originally 455+40
     private static final double MAP_BORDER = 15;
@@ -53,7 +53,7 @@ public class Display {
     public Controller controller;
 
 
-    private BooleanProperty DASHBOARD_VISIBLE;
+    public BooleanProperty DASHBOARD_VISIBLE;
     private BooleanProperty SETTINGS_VISIBLE;
     private BooleanProperty EMAIL_VISIBLE;
     public BooleanProperty BUILDING_VISIBLE;
@@ -1078,6 +1078,7 @@ public class Display {
         backToCampus.setOnMouseClicked(e -> {
             if(controller.getCurrentMap().getID() != 0) {
                 controller.setCurrentMap(0);
+                controller.prevBuilding = 0;
                 controller.hideBuildingPane();
             }
 

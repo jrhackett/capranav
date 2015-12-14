@@ -1,11 +1,12 @@
 package visuals;
 
 import controller.Controller;
-import javafx.animation.ScaleTransition;
-import javafx.animation.Transition;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -22,6 +23,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import logic.Building;
 import logic.FileFetch;
@@ -36,6 +38,7 @@ import java.util.HashMap;
 
 
 public class MapDisplay extends Pane {
+    public Timeline timeline;
     /* constants */
     private double IMAGE_WIDTH = 700;//660
     private double IMAGE_HEIGHT = 525;//495
@@ -977,17 +980,43 @@ public class MapDisplay extends Pane {
         p.addEventFilter(MouseEvent.MOUSE_CLICKED,
                 new EventHandler<MouseEvent>() {
                     public void handle(MouseEvent event) {
+                        previousPopOver.hide();
+                        p.addEventFilter(MouseEvent.MOUSE_CLICKED,
+                                new EventHandler<MouseEvent>() {
+                                    public void handle(MouseEvent event) {
+                                        //controller.getMyDisplay().zoomAndPan.zoomToNode(controller.getNode(key))
+                                        //rotateAnimation();
+                                    }
+                                });
+
+//TODO fhnsjkdhfjklsghfjkdlghdglhfjsdghfjlgdhlgfds
                         controller.getMyDisplay().zoomAndPan.zoomToNode(controller.getNode(key));
                         PopOver popOver = createPopOverForNode(controller.getNode(key));
-                        if (!(previousPopOver.equals(popOver))) {
+                        //if (!(previousPopOver.equals(popOver))) {
                             //TODO make sure animation has ended before showing the popover
-                            popOver.show(p, 4);
+                        double zX = controller.getMyDisplay().zoomAndPan.zoomOffsetX;
+                        double zY = controller.getMyDisplay().zoomAndPan.zoomOffsetY;
+                        System.out.println(zX + " " +zY);
+
+                        if(zX == 0 && zY == 0){
+                            popOver.show(p, 50);
                             popOver.setArrowSize(0);
+                        }
+                            //popOver.setAnchorX(5000);
+                            //popOver.setAnchorY(5000);
+                            //popOver.centerOnScreen();
+                            //popOver.show(controller.getMyDisplay().mapDisplay);
+                        else{
+                            popOver.show(p,controller.getStageOffset().getX()+50, controller.getStageOffset().getY());
+                            popOver.setArrowSize(0);
+                        }
                             previousPopOver.hide();
                             previousPopOver = popOver;
                         }
-                    }
+
+                   // }
                 });
+
         p.addEventFilter(MouseEvent.MOUSE_EXITED_TARGET,
                 new EventHandler<MouseEvent>() {
                     @Override
@@ -999,5 +1028,137 @@ public class MapDisplay extends Pane {
                 });
 
     }
+
+    public void rotateAnimation(){
+//        double rotateVal = 180;
+//        double returnVal = -rotateVal;
+//        double j = 0;
+//        while (j < rotateVal){
+//            j++;
+//            Rotate rot = new Rotate(90, 600, 500);
+//            Point3D rotationCenter = new Point3D(0,0,-1);
+//            //controller.getMyDisplay().zoomAndPan.panAndZoomPane.setRotationAxis(rotationCenter);
+//            RotateTransition rt = new RotateTransition(Duration.millis(2000),controller.getMyDisplay().zoomAndPan.panAndZoomPane);
+//            //RotateTransition rt = new RotateTransition(Duration.millis(2000),controller.getNode(2148));
+//            //controller.getMyDisplay().zoomAndPan.panAndZoomPane.tr(400,300);
+//            rt.setByAngle(180);
+//            //rt.set
+//            controller.getMyDisplay().zoomAndPan.panAndZoomPane.getTransforms().add(rot);
+//            Timeline timeline = new Timeline(
+//                    new KeyFrame(Duration.ZERO, new KeyValue(rot.angleProperty(), 0)),
+//                    new KeyFrame(Duration.millis(1000), new KeyValue(rot.angleProperty(), 0)));
+//            timeline.setCycleCount(1);
+//            rt.setCycleCount(1);
+//            rt.setAxis(rotationCenter);
+//            rt.setAutoReverse(true);
+//            rt.play();
+            //timeline.play();
+            //controller.getMyDisplay().zoomAndPan.panAndZoomPane.setRotationAxis(rotationCenter);
+            //controller.getMyDisplay().zoomAndPan.panAndZoomPane.setRotate(j);
+            //System.out.println(j);
+//            try{
+//                Thread.sleep(10);
+//            } catch (Exception e){
+//
+//            }
+
+        Node map = controller.getMyDisplay().zoomAndPan.panAndZoomPane;
+
+        Rotate rotation = new Rotate();
+        rotation.setPivotX(459);
+        rotation.setPivotY(173);
+        map.getTransforms().add(rotation);
+
+        double angleSet = 45;
+        timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(rotation.angleProperty(), 0)),
+                new KeyFrame(Duration.seconds(1), new KeyValue(rotation.angleProperty(), angleSet)),
+                new KeyFrame(Duration.millis(1001), new KeyValue(rotation.angleProperty(), 0)));
+
+        timeline.play();
+
+        //rotation.setAngle(-angleSet);
+        }
+    public void rotationAnimation(int building){
+        double pivotX = 0, pivotY = 0,angle = 0;
+        switch (building) {
+            case 0: //Campus Map
+                pivotX = 0;
+                pivotY = 0;
+                angle = 0;
+                break;
+            case 1: //Stratton Hall
+                pivotX = 396.5;
+                pivotY = 315.92;
+                angle = -100;
+                break;
+            case 2: //Atwater Kent
+                pivotX = 449.7;
+                pivotY = 160.3;
+                angle = 152;
+                break;
+            case 3: //Boynton
+                pivotX = 424.7;
+                pivotY = 365.2;
+                angle = 0;
+                break;
+            case 4: //Campus Center
+                pivotX = 329;
+                pivotY = 203.82;
+                angle = 84;
+                break;
+            case 5: //Library
+                pivotX = 506.2;
+                pivotY = 278.47;
+                angle = -105;
+                break;
+            case 6: //Higgins House
+                pivotX = 0;
+                pivotY = 0;
+                angle = 0;
+                break;
+            case 7: //HH apartment
+                pivotX = 0;
+                pivotY = 0;
+                angle = 0;
+                break;
+            case 8: //HH garage
+                pivotX = 0;
+                pivotY = 0;
+                angle = 0;
+                break;
+            case 9: //Project Center
+                pivotX = 0;
+                pivotY = 0;
+                angle = 0;
+                break;
+            case 10: //Fuller Labs
+                pivotX = 505;
+                pivotY = 188;
+                angle = -65;
+                break;
+            case 11: //Salisbury
+                pivotX = 0;
+                pivotY = 0;
+                angle = 0;
+                break;
+
+        }
+        Node map = controller.getMyDisplay().zoomAndPan.panAndZoomPane;
+        Rotate rotation = new Rotate();
+        rotation.setPivotX(pivotX);
+        rotation.setPivotY(pivotY);
+        map.getTransforms().add(rotation);
+
+        double dur = Math.abs((angle/360)*800);
+
+        timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(rotation.angleProperty(), 0)),
+                new KeyFrame(Duration.millis(dur), new KeyValue(rotation.angleProperty(), angle)),
+                new KeyFrame(Duration.millis(dur+1), new KeyValue(rotation.angleProperty(), 0)));
+
+        timeline.play();
+    }
+
 
 }

@@ -27,6 +27,14 @@ public class ZoomAndPan {
     private final DoubleProperty zoomProperty = new SimpleDoubleProperty(1.0d);
     private final DoubleProperty deltaY = new SimpleDoubleProperty(0.0d);
     public PanAndZoomPane panAndZoomPane = new PanAndZoomPane();
+
+
+    /*********************************************************************
+     *
+     **************************************************************/
+
+    public double zoomOffsetX;
+    public double zoomOffsetY;
     //private final Group group = new Group();
 
     //@Override
@@ -92,7 +100,11 @@ public class ZoomAndPan {
           double scaleVal = 3.5;
           //System.out.println("out Scale" + scale);
           //if (bounds.getHeight()>530 || bounds.getWidth()>730 ||){
+          zoomOffsetX = (transX+(x*scaleVal));
+          zoomOffsetY = (transY+(y*scaleVal));
           panAndZoomPane.setPivot((transX+(x*scaleVal)),(transY+(y*scaleVal)),scaleVal);
+
+          System.out.println("X " + zoomOffsetX + ", y " + zoomOffsetY);
     }
 
 //    public double clampTranslateXWidth(double value, double scale, double vpW){

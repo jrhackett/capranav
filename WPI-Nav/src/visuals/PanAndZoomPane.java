@@ -42,9 +42,9 @@ public class PanAndZoomPane extends Pane {
         // timeline that scales and moves the node
         timeline.getKeyFrames().clear();
         timeline.getKeyFrames().addAll(
-                new KeyFrame(Duration.millis(200), new KeyValue(translateXProperty(), getTranslateX() - x)),
-                new KeyFrame(Duration.millis(200), new KeyValue(translateYProperty(), getTranslateY() - y)),
-                new KeyFrame(Duration.millis(200), new KeyValue(myScale, scale))
+                new KeyFrame(Duration.millis(250), new KeyValue(translateXProperty(), getTranslateX() - x)),
+                new KeyFrame(Duration.millis(250), new KeyValue(translateYProperty(), getTranslateY() - y)),
+                new KeyFrame(Duration.millis(250), new KeyValue(myScale, scale))
         );
         timeline.play();
 
