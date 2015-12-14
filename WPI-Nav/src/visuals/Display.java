@@ -442,7 +442,7 @@ public class Display {
 
         //settings a sliding pane!div
 
-        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth , EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
+        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
         slidingSettings.setStyle("-fx-background-color: #333333");
 
         javafx.scene.control.Button slidingButton = slidingSettings.getButton();
@@ -626,6 +626,7 @@ public class Display {
 
         VBox settingsVbox = new VBox();
         settingsVbox.visibleProperty().bind(DASHBOARD_VISIBLE);
+        settingsVbox.setPrefWidth(300); //TODO make this less dirty
         //settingsVbox.getChildren().addAll(divider_3, settingsLabelBox,  settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
 
         settingsWeightLabel.setTranslateX(EDGE - 7);
