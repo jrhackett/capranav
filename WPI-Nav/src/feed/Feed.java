@@ -11,6 +11,7 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 //TODO IDEAS : Include Title, Date/Time, and location in bar, with two buttons: "Add waypoint" and "More Info"
@@ -31,10 +32,12 @@ public class Feed implements Iterable<Event> {
 
     public Feed(int numEvents) {
         events = new ArrayList<>();
-        generateEvents(numEvents);
+        ArrayList<Event> temp = new ArrayList<>();
+        generateEvents(temp, numEvents);
+        cleanList(temp);
     }
 
-    private void generateEvents(int numEvents) {
+    private void generateEvents(ArrayList<Event> arr, int numEvents) {
         String raw = "";
         Document doc = null;
         String link = "https://api.orgsync.com/api/v3/communities/412/events.rss?key=rEXxNgt53SYC0O0mepnBQWgk" +
@@ -46,7 +49,7 @@ public class Feed implements Iterable<Event> {
         catch (Exception e) { e.printStackTrace(); } //Who knows
 
         for (int i = 0; i < numEvents; i++) {
-            events.add(makeEvent(doc, i)); //Get the events from doc, store in list
+            arr.add(makeEvent(doc, i)); //Get the events from doc, store in list
         }
     }
 
@@ -89,6 +92,19 @@ public class Feed implements Iterable<Event> {
     //Get the value of a field in XML document
     private static String getField(Document doc, String tag, int i) {
         return doc.getElementsByTagName(tag).item(i).getTextContent();
+    }
+
+    //Removes all events with the same name
+    //then sorts them by start time
+    //Result stored in events
+    private void cleanList(ArrayList<Event> temp) {
+        for(int i = 0; i < temp.size(); i++) {
+            Event e = temp.get(i);
+            Event f;
+            while ((f = temp.get(i+1)).getTitle().equals(e.getTitle())) i++;
+            events.add(e);
+        }
+        Collections.sort(events);
     }
 
     public Iterator<Event> iterator() {

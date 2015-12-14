@@ -1,11 +1,14 @@
 package visuals;
 
 import controller.Controller;
+import feed.Event;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -20,13 +23,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import logic.*;
+import feed.Feed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 
 public class Display {
@@ -410,6 +413,14 @@ public class Display {
         AnchorPane.setTopAnchor(newsIconView, 3 * EDGE + GAP * .5 + 30);
         AnchorPane.setLeftAnchor(newsIconView, 2 * GAP);
 
+        ListView<String> eventListView = createEventListView();
+        eventListView.setId("newsfeed-list-view");
+
+
+        AnchorPane.setTopAnchor(eventListView, 3 * EDGE + GAP * .5 + 60);
+        AnchorPane.setBottomAnchor(eventListView, 2*EDGE - 20);
+        eventListView.visibleProperty().bind(DASHBOARD_VISIBLE);
+
 
         /*****************************************************************/
         /** Change Settings Zone **/
@@ -637,7 +648,7 @@ public class Display {
 
         /*****************************************************************/
         /** Building of Sliding Dashboard Anchorpane  **/
-        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, dashBoardTitleBox, locationLabelBox, pinView, inputs, newsIconView, newsLabelBox, slidingSettings); //gearsView, settingsLabelBox, divider_3, // resourcesLabelBox, infoView,
+        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, dashBoardTitleBox, locationLabelBox, pinView, inputs, newsIconView, newsLabelBox, eventListView, slidingSettings); //gearsView, settingsLabelBox, divider_3, // resourcesLabelBox, infoView,
         slidingDashboard.setStyle("-fx-background-color: #333333");
 
         /** STYLE BUTTON HERE **/
@@ -650,6 +661,20 @@ public class Display {
         AnchorPane.setLeftAnchor(button, 0.0);
         //slidingDashboard.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + 2 * EDGE);
         slidingDashboard.getChildren().addAll(button);
+    }
+
+    private ListView<String> createEventListView() {
+        ListView<String> listView = new ListView<>();
+        listView.setId("newsfeed-list-view");
+        Feed f = new Feed(50);
+        //FXCollections list = FXCollections.observableArrayList();
+        ObservableList<String> items = FXCollections.observableArrayList ();
+        for(Event e : f) {
+            String x = e.getTitle() + "\n" + e.getLocation() + "\n" + e.getDateInfo();
+            items.add(x);
+        }
+        listView.setItems(items);
+        return listView;
     }
 
     private void initDirections() {
@@ -1076,10 +1101,10 @@ public class Display {
         this.left.setGraphic(minusView);
         this.right.setGraphic(plusView);
 
-        this.left.setId("normallyEEEEEEBG");
-        this.right.setId("normallyEEEEEEBG");
         left.setId("arrow-buttons");
+        left.setStyle("-fx-background-color:#eee");
         right.setId("arrow-buttons");
+        right.setStyle("-fx-background-color:#eee");
         buildingName = new Label();
         buildingNumber = new Label();
 
@@ -1179,9 +1204,15 @@ public class Display {
     public void setRightButtonID(String id) {
         right.setId(id);
     }
+    public void setRightButtonStyle(String style) {
+        right.setStyle(style);
+    }
 
     public void setLeftButtonID(String id) {
         left.setId(id);
+    }
+    public void setLeftButtonStyle(String style) {
+        left.setStyle(style);
     }
 
     public void setBuildingName(String s) {
@@ -1335,7 +1366,8 @@ public class Display {
 
     private void createInstructionListView() {
         this.instructions = new ListView<Instructions>();
-        this.instructions.setId("normallyEEEEEEBG");
+        //this.instructions.setId("normallyEEEEEEBG");
+        this.instructions.setStyle("-fx-background-color:white;");
         this.instructions.setPrefWidth(expandedWidth-10);
 
         instructions.setCellFactory((ListView<Instructions> lv) ->
