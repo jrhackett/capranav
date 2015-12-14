@@ -40,12 +40,15 @@ public class Directions {
 
 		double scalar = 1;
 
-		if (maps.containsKey(aStarPath.get(0).getMap_id())) {
-			scalar = maps.get(aStarPath.get(0).getMap_id()).getPixelToFeetRatio();
-			if (aStarPath.get(0).getMap_id() != 0)dist *= scalar; //this line just changed
-		} else {
-			// throw exception
-		}
+		scalar = maps.get(0).getPixelToFeetRatio();
+		dist *= scalar;
+//		if (maps.containsKey(aStarPath.get(0).getMap_id())) {
+//			scalar = maps.get(aStarPath.get(0).getMap_id()).getPixelToFeetRatio();
+//			if (aStarPath.get(0).getMap_id() != 0)dist *= scalar; //this line just changed
+//		} else {
+//			// throw exception
+//		}
+
 
 		totalDistance += dist;
 
@@ -133,14 +136,16 @@ public class Directions {
 			//add CURRENT dist to distspec, which is used for adding culled distances
 			//Future steps' distance will be added to this variable later.
 
-			if (maps.containsKey(turn.getMap_id())) {
-				scalar = maps.get(turn.getMap_id()).getPixelToFeetRatio();
-				if (turn.getMap_id() != 0) {
-					dist *= scalar;
-				}
-			} else {
-				// throw exception
-			}
+			scalar = maps.get(0).getPixelToFeetRatio();
+			dist *= scalar;
+//			if (maps.containsKey(turn.getMap_id())) {
+//				scalar = maps.get(0).getPixelToFeetRatio();
+//				if (turn.getMap_id() != 0) {
+//					dist *= scalar;
+//				}
+//			} else {
+//				// throw exception
+//			}
 			distspec = dist;
 			totalDistance += dist;
 			angle = getAngle(prev, turn, next);
@@ -157,14 +162,10 @@ public class Directions {
 			while (aStarPath.size() > i + j + 2 && getAngle(aStarPath.get(i + j), aStarPath.get(i + j + 1), aStarPath.get(i + j + 2)) > 2.87979327 && getAngle(aStarPath.get(i + j), aStarPath.get(i + j + 1), aStarPath.get(i + j + 2)) < 3.40339204) {
 				//While loop checks if future turns are straight and we have not reached the end
 				futuredist = (Math.sqrt(Math.pow((aStarPath.get(i + j + 1).getX_univ() - aStarPath.get(i + j + 2).getX_univ()), 2) + Math.pow((aStarPath.get(i + j + 1).getY_univ() - aStarPath.get(i + j + 2).getY_univ()), 2)));
-				if (maps.containsKey(turn.getMap_id())) {
-					scalar = maps.get(turn.getMap_id()).getPixelToFeetRatio();
-					if (turn.getMap_id() != 0) {
-						futuredist *= scalar;
-					}
-				} else {
-					// throw exception
-				}
+
+				scalar = maps.get(0).getPixelToFeetRatio();
+				futuredist *= scalar;
+
 				distspec += futuredist;
 				//Add the distance of a step in the future
 				j++;

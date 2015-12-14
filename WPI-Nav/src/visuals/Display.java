@@ -23,7 +23,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import logic.*;
+
+import org.controlsfx.control.PopOver;
 import feed.Feed;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,6 +126,10 @@ public class Display {
     HBox directionsTitleBox;
     VBox directionsControlBox;
     HBox emailBox;
+
+
+
+    ArrayList<PopOver> tooltips = new ArrayList<>();
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -190,6 +197,7 @@ public class Display {
         /*****************************************************************/
         /** create scene **/
         root.setAlignment(Pos.TOP_LEFT);
+        createToolTips();
 
         Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 5 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE * 4);//+MAP_BORDER*2+TITLE_HEIGHT
         //Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+EDGE*2+expandedWidth*2, MAP_WIDTH + 2 * EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
@@ -952,9 +960,7 @@ public class Display {
         helpButton.setTranslateY(10);
         helpButtonView.setFitHeight(18);
 
-        helpButton.setOnMouseClicked(e -> {
-
-        });
+        helpButton.setOnMouseClicked(e -> handleHelp());
 
         Image info = FileFetch.getImageFromFile("info.png", 18, 18, true, true);
         ImageView infoButtonView = new ImageView(info);
@@ -1488,6 +1494,36 @@ public class Display {
     /****************************************************************************************************************
                                                 Llambda Event Handlers
      ****************************************************************************************************************/
+
+    /** calls the controller to do the correct help **/
+    private void handleHelp(){
+       this.controller.help();
+    }
+
+    /** called from the controller and shows all the help tooltips **/
+    public void showToolTips(){
+        for (PopOver t : tooltips){
+          //  t.show();
+        }
+
+    }
+
+    /** called from the controller and plays the sequence **/
+    public void playToolTips(){
+
+    }
+
+    /** create tool tips **/
+    public void createToolTips(){
+        this.tooltips = new ArrayList<PopOver>();
+
+        /** menu bar tool tip **/
+        PopOver a = new PopOver();
+       // Tooltip.install(dashBoardTitleBox, a);
+//"This is our dashboard. Click this icon to hide it."
+
+       // tooltips.add();
+    }
 
 
     private void handleClear(){
