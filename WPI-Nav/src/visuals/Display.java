@@ -421,9 +421,8 @@ public class Display {
         ListView<String> eventListView = createEventListView();
         eventListView.setId("newsfeed-list-view");
 
-
         AnchorPane.setTopAnchor(eventListView, 3 * EDGE + GAP * .5 + 60);
-        AnchorPane.setBottomAnchor(eventListView, 2*EDGE - 20);
+        AnchorPane.setBottomAnchor(eventListView, EDGE-3);
         eventListView.visibleProperty().bind(DASHBOARD_VISIBLE);
 
 
