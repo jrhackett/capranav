@@ -289,7 +289,7 @@ public class Display {
         //AnchorPane.setTopAnchor(infoView, 3 * EDGE + GAP + 5); //<--- TODO notice this, these lines break a lot of stuff, no idea why
         //AnchorPane.setLeftAnchor(infoView, GAP);
 
-        //AnchorPane.setBottomAnchor(gearsView, GAP * 2);//TODO these will change with svg
+        //AnchorPane.setBottomAnchor(gearsView, GAP * 2);//TODO these will change wit.setStyle("-fx-background-color: #333333");h svg
         //AnchorPane.setLeftAnchor(gearsView, GAP * 2);
 
         /*****************************************************************/
@@ -492,13 +492,6 @@ public class Display {
         rb2.setTextFill(Color.web("#eeeeee"));
         rb2.setSelected(true);
 
-        RadioButton rb3 = new RadioButton("Night Mode");
-        rb3.setToggleGroup(colorgroup);
-        rb3.setUserData("Night Mode");
-        rb3.setText("Night Mode");
-        rb3.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
-        rb3.setTextFill(Color.web("#eeeeee"));
-
         colorgroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             public void changed(ObservableValue<? extends Toggle> ov,
                                 Toggle old_toggle, Toggle new_toggle) {
@@ -523,13 +516,6 @@ public class Display {
 
                         //   mapDisplay.changeBackOldPathNodes();
                         //controller.updateNodeInformation(controller.getNode(mapDisplay.getStartID()));
-                    }
-
-                    if(colorgroup.getSelectedToggle().getUserData().toString().equals("Night Mode")){
-                        mapDisplay.setNodePathDefault();
-                        controller.setStyleSheet("../visuals/styleNightMode.css");
-
-                       // mapDisplay.changeBackOldPathNodes();
                     }
 
                 }
@@ -922,7 +908,7 @@ public class Display {
 
     private void initMap() {
         this.map = new AnchorPane();
-
+        //this.map.setStyle("-fx-background-color: #f4f4f4");
         /** Title **/
         HBox mapTitle = new HBox();
         Label mapTitleLabel = new Label("CapraNav");
@@ -936,7 +922,7 @@ public class Display {
         Button helpButton = new Button();
         helpButton.setGraphic(helpButtonView);
         helpButton.setId("question-button");
-        helpButton.setTranslateX(-90);  //TODO fix this janky shit
+        helpButton.setTranslateX(-80);  //TODO fix this janky shit
         helpButton.setTranslateY(10);
 
         helpButton.setOnMouseClicked(e -> {
@@ -948,7 +934,7 @@ public class Display {
         Button infoButton = new Button();
         infoButton.setGraphic(infoButtonView);
         infoButton.setId("question-button");
-        infoButton.setTranslateX(-85);  //TODO fix this janky shit
+        infoButton.setTranslateX(-65);  //TODO fix this janky shit
         infoButton.setTranslateY(10);
 
         infoButton.setOnMouseClicked(e -> {
