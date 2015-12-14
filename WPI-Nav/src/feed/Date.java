@@ -3,7 +3,7 @@ package feed;
 /**
  * Created by ikeandmike on 12/13/15.
  */
-public class Date {
+public class Date implements Comparable<Date> {
     private int month; // 1 = Jan, 2 = Feb...
     private String day;
     private String year;
@@ -48,5 +48,19 @@ public class Date {
 
     public boolean emptyTime() {
         return this.hour == 0 && this.min.equals("00");
+    }
+
+    public int compareTo(Date other) {
+        if      (year.compareTo(other.year) < 0) return -1;
+        else if (year.compareTo(other.year) > 0) return 1;
+        else if (month < other.month) return -1;
+        else if (month > other.month) return 1;
+        else if (day.compareTo(other.day) < 0) return -1;
+        else if (day.compareTo(other.day) > 0) return 1;
+        else if (hour < other.hour) return -1;
+        else if (hour > other.hour) return 1;
+        else if (min.compareTo(other.min) < 0) return -1;
+        else if (min.compareTo(other.min) > 0) return 1;
+        else return 0;
     }
 }
