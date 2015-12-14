@@ -700,7 +700,7 @@ public class Display {
                             //setText(in.toString());
                             setGraphic(text);
                             setStyle("-fx-font-fill:#eee; -fx-background-color:#333;" +
-                                    "-fx-border-width:1; -fx-border-color:white;-fx-border-radius:5;");
+                                    "-fx-border-width:1; -fx-border-color:#888;-fx-border-radius:5;");
                             setTranslateX(GAP);
 
                         }
