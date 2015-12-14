@@ -667,12 +667,32 @@ public class Display {
         ListView<String> listView = new ListView<>();
         listView.setId("newsfeed-list-view");
         Feed f = new Feed(50);
-        //FXCollections list = FXCollections.observableArrayList();
+
         ObservableList<String> items = FXCollections.observableArrayList ();
         for(Event e : f) {
-            String x = e.getTitle() + "\n" + e.getLocation() + "\n" + e.getDateInfo();
+            String x = e.getTitle() + "\n" + e.getLocation() + "\n" + e.getDateInfo() + "\n";
             items.add(x);
         }
+
+        listView.setCellFactory((ListView<String> lv) ->
+                new ListCell<String>() {
+                    @Override
+                    public void updateItem(String in, boolean empty) {
+                        super.updateItem(in, empty);
+                        if (empty) {
+                            setText(null);
+                        } else {
+                            // use whatever data you need from the album
+                            // object to get the correct displayed value:
+                            Text text = new Text(in);
+                            text.setWrappingWidth(expandedWidth-10);
+                            //setText(in.toString());
+                            setGraphic(text);
+                        }
+                    }
+                }
+        );
+
         listView.setItems(items);
         return listView;
     }
