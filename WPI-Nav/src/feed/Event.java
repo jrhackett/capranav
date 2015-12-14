@@ -36,4 +36,27 @@ public class Event {
         else { return "From " + sDate.getDate() + " to " + eDate.getDate(); } //Different dates, just give date range
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Date getsDate() {
+        return sDate;
+    }
+
+    public Date geteDate() {
+        return eDate;
+    }
+
+    public String getLink() {
+        return link;
+    }
 }

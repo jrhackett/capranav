@@ -1,6 +1,8 @@
 #about-button {
     -fx-background-color:white;
-    -fx-border-width:0;
+    -fx-border-width:1;
+    -fx-border-color:#888;
+    -fx-border-radius:5;
     -fx-font-size:12;
     -fx-max-height:15;
 }
@@ -253,9 +255,23 @@
 
 #newsfeed-list-view {
     -fx-font-family: HelveticaNeueLight;
-    -fx-font-size: 14;
+    -fx-font-size: 12;
     -fx-padding: 5;
-    -fx-text-fill:#eee;
+    -fx-font-fill:#eee;
+    -fx-background-color:#333;
+}
+
+#newsfeed-list-view:hover {
+    -fx-background-color:#333;
+    -fx-font-fill:#eee;
+}
+
+#newsfeed-list-view > .list-cell {
+    -fx-font-family: HelveticaNeueLight;
+    -fx-font-size: 12;
+    -fx-padding: 5;
+    -fx-text-fill:#eee !important;
+    -fx-background-color:#333 !important;
 }
 
 #newsfeed:odd {
