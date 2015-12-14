@@ -2,13 +2,12 @@ package visuals;
 
 import controller.Controller;
 import feed.Event;
-import javafx.beans.InvalidationListener;
+import feed.Feed;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -23,16 +22,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import logic.*;
-
 import org.controlsfx.control.PopOver;
-import feed.Feed;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Display {
@@ -1578,7 +1575,7 @@ public class Display {
         this.updateTimeEstimation();
         this.setIDLeftArrowButton("arrow-buttons-grayed");
         this.setIDRightArrowButton("arrow-buttons-grayed");
-
+        if (DIRECTIONS_VISIBLE.getValue() == true) this.slidingDirections.playHidePane(DIRECTIONS_VISIBLE);
 
     }
 
