@@ -748,7 +748,6 @@ public class Display {
     public PopOver createPopOverForEvent(Event in) {
         PopOver popOver = new PopOver();
         VBox vbox = new VBox();
-        vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(10);
         vbox.setStyle("-fx-padding:8 8 8 8;");
 
@@ -766,31 +765,40 @@ public class Display {
 
         Text date = new Text(in.getDateInfo());
         date.setWrappingWidth(275);
-        
+
         Text description = new Text(in.getDescription());
         description.setWrappingWidth(275);
 
         flowPane.getChildren().add(description);
 
         HBox bottomHBox = new HBox();
-        Button goTo = new Button();
-        goTo.setGraphic(new Text("Go to location"));
-        goTo.setId("popover-buttons");
-        goTo.setStyle("-fx-max-width:200 !important");
+        Button goToButton = new Button();
+        goToButton.setGraphic(new Text("Go to location"));
+        goToButton.setId("popover-buttons");
+        goToButton.setStyle("-fx-max-width:200 !important");
 
-        Button addTo = new Button();
-        addTo.setGraphic(new Text("Add location as destination"));
-        addTo.setId("popover-buttons");
-        addTo.setStyle("-fx-max-width:200 !important");
+        Button moreInfoButton = new Button();
+        moreInfoButton.setGraphic(new Text("More info"));
+        moreInfoButton.setId("popover-buttons");
+        moreInfoButton.setStyle("-fx-max-width:200 !important");
 
-        bottomHBox.getChildren().addAll(goTo, addTo);
+        moreInfoButton.setOnMouseClicked(e -> {
+            showMoreEventInfo(in);
+        });
+
+        bottomHBox.getChildren().addAll(goToButton, moreInfoButton);
         bottomHBox.setAlignment(Pos.CENTER);
         bottomHBox.setSpacing(10);
 
         vbox.getChildren().addAll(title, location, date, flowPane, bottomHBox);
+        vbox.setAlignment(Pos.CENTER);
         popOver.setContentNode(vbox);
 
         return popOver;
+    }
+
+    public void showMoreEventInfo(Event in) {
+
     }
 
     private void initDirections() {
