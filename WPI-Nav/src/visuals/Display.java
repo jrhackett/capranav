@@ -774,11 +774,32 @@ public class Display {
 
         flowPane.getChildren().add(description);
 
+        vbox.getChildren().addAll(title, location, date, flowPane);
+        vbox.setAlignment(Pos.CENTER);
+        popOver.setContentNode(vbox);
+
         HBox bottomHBox = new HBox();
-        Button goToButton = new Button();
-        goToButton.setGraphic(new Text("Go to location"));
-        goToButton.setId("popover-buttons");
-        goToButton.setStyle("-fx-max-width:200 !important");
+        bottomHBox.setAlignment(Pos.CENTER);
+        bottomHBox.setSpacing(10);
+
+        vbox.getChildren().addAll(bottomHBox);
+
+        if(start.containsNode(in.getLocation())){
+
+            Button goToButton = new Button();
+            goToButton.setGraphic(new Text("Go to location"));
+            goToButton.setId("popover-buttons");
+            goToButton.setStyle("-fx-max-width:200 !important");
+
+            goToButton.setOnMouseClicked(e -> {
+
+                eventPopOver.hide();
+            });
+
+            bottomHBox.getChildren().addAll(goToButton);
+
+
+        }
 
         Button moreInfoButton = new Button();
         moreInfoButton.setGraphic(new Text("More info"));
@@ -790,13 +811,9 @@ public class Display {
             eventPopOver.hide();
         });
 
-        bottomHBox.getChildren().addAll(goToButton, moreInfoButton);
-        bottomHBox.setAlignment(Pos.CENTER);
-        bottomHBox.setSpacing(10);
+        bottomHBox.getChildren().addAll(moreInfoButton);
 
-        vbox.getChildren().addAll(title, location, date, flowPane, bottomHBox);
-        vbox.setAlignment(Pos.CENTER);
-        popOver.setContentNode(vbox);
+
 
         return popOver;
     }
