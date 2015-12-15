@@ -134,6 +134,9 @@ public class Display {
     javafx.scene.control.Button menuButton;
     Button infoButton;
     Button helpButton;
+    Button locationClearButton;
+    Button slidingButton;
+    Label newsLabel;
     ArrayList<InfoTip> infoTips = new ArrayList<>();
 
     /****************************************************************************************************************
@@ -356,7 +359,7 @@ public class Display {
         Label locationLabel = new Label("Locations");
         locationLabel.setTextFill(Color.web("#eeeeee"));
 
-        Button locationClearButton = new Button();
+        locationClearButton = new Button();
         Label clearLabel = new Label("Clear");
         clearLabel.setTextFill(Color.web("#eeeeee"));
         clearLabel.setStyle("-fx-font-size:11");
@@ -413,7 +416,7 @@ public class Display {
         newsLabelBox.setPrefHeight(EDGE);
         newsLabelBox.setAlignment(Pos.CENTER);
 
-        Label newsLabel = new Label("Get Involved");
+        newsLabel = new Label("Get Involved");
         newsLabel.setTextFill(Color.web("#eeeeee"));
 
         newsLabelBox.getChildren().addAll(newsLabel);
@@ -458,7 +461,7 @@ public class Display {
         slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
         slidingSettings.setStyle("-fx-background-color: #333333");
 
-        javafx.scene.control.Button slidingButton = slidingSettings.getButton();
+        slidingButton = slidingSettings.getButton();
         slidingButton.setId("dashboardButton");
         slidingButton.setMaxWidth(EDGE - 5);
         slidingButton.setMinWidth(EDGE - 5);
@@ -1597,11 +1600,26 @@ public class Display {
         /** help button **/
         InfoTip d = new InfoTip("Click to view all tooltips.", helpButton, PopOver.ArrowLocation.TOP_LEFT);
 
+        /** clear button **/
+        InfoTip e = new InfoTip("Clear your path and locations.", locationClearButton , PopOver.ArrowLocation.TOP_RIGHT);
+
+        /** git involved **/
+        InfoTip f = new InfoTip("View events around campus!", newsLabel, PopOver.ArrowLocation.BOTTOM_LEFT );
+
+        /** sliding settings **/
+        InfoTip g = new InfoTip("Click to show setting", slidingButton, PopOver.ArrowLocation.TOP_CENTER);
+
+
 
         infoTips.add(a);
         infoTips.add(b);
         infoTips.add(c);
         infoTips.add(d);
+        infoTips.add(e);
+        infoTips.add(f);
+        infoTips.add(g);
+
+
     }
 
     /** called from the controller and plays the sequence **/
