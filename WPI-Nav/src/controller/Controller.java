@@ -1008,17 +1008,22 @@ public class Controller extends Application {
     }
 
 
-    public void handleSpecificSearch(String s, boolean START) {
-        if (s.equals("Bathroom") || s.equals("Nearest Bathroom")) {
-            setDestination(findNearestRoomType(Bathroom.bathRoomTypeToString(BathroomType.GENERAL)), START);
-        } else if (s.equals("Men's Bathroom") || s.equals("Nearest Men's Bathroom")) {
-            setDestination(findNearestRoomType(Bathroom.bathRoomTypeToString(BathroomType.MENS)), START);
-        } else if (s.equals("Women's Bathroom") || s.equals("Nearest Women's Bathroom")) {
-            setDestination(findNearestRoomType(Bathroom.bathRoomTypeToString(BathroomType.WOMAN)), START);
-        } else if (s.equals("Food") || s.equals("Nearest Food")) {
-            setDestination(findNearestFood(), START);
-        } else if (s.equals("Restaurant") || s.equals("Nearest Restaurant")) {
-            setDestination(findNearestFood(), START);
+    public void handleSpecificSearch(String s) {
+
+        String prefixes[] 	= {"Nearest ", "Close ", "Near by ", ""};
+        String locations[] 	= {"Bathroom", "Men's Room", "Woman's Bathroom" , "Food", "Restaurant",  };
+
+
+        if (s.equals(prefixes[0]+locations[0]) || s.equals(prefixes[1]+locations[0]) || s.equals(prefixes[2]+locations[0]) || s.equals(prefixes[3]+locations[0])) {
+            setDestination(findNearestRoomType(Bathroom.bathRoomTypeToString(BathroomType.GENERAL)), false);
+        } else if (s.equals(prefixes[0]+locations[1]) || s.equals(prefixes[1]+locations[1]) || s.equals(prefixes[2]+locations[1]) || s.equals(prefixes[3]+locations[1])) {
+            setDestination(findNearestRoomType(Bathroom.bathRoomTypeToString(BathroomType.MENS)), false);
+        } else if (s.equals(prefixes[0]+locations[2]) || s.equals(prefixes[1]+locations[2]) || s.equals(prefixes[2]+locations[2]) || s.equals(prefixes[3]+locations[2])) {
+            setDestination(findNearestRoomType(Bathroom.bathRoomTypeToString(BathroomType.WOMAN)), false);
+        } else if (s.equals(prefixes[0]+locations[3]) || s.equals(prefixes[1]+locations[3]) || s.equals(prefixes[2]+locations[3]) || s.equals(prefixes[3]+locations[3])) {
+            setDestination(findNearestFood(), false);
+        } else if (s.equals(prefixes[0]+locations[4]) || s.equals(prefixes[1]+locations[4]) || s.equals(prefixes[2]+locations[4]) || s.equals(prefixes[3]+locations[4])) {
+            setDestination(findNearestFood(), false);
         }
     }
 

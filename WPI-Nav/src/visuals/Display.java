@@ -3,6 +3,7 @@ package visuals;
 import controller.Controller;
 import feed.Event;
 import feed.Feed;
+import javafx.animation.Animation;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -122,6 +123,7 @@ public class Display {
 
     Button slidingDirectionsButton;
 
+
     RadioButton handicapRadioButton;
     RadioButton weatherRadioButton;
 
@@ -131,6 +133,11 @@ public class Display {
 
     javafx.scene.control.Button menuButton;
     Button infoButton;
+    Button helpButton;
+    Button locationClearButton;
+    Button slidingButton;
+    Button slidingEmailButton;
+    Label newsLabel;
     ArrayList<InfoTip> infoTips = new ArrayList<>();
 
     /****************************************************************************************************************
@@ -353,7 +360,7 @@ public class Display {
         Label locationLabel = new Label("Locations");
         locationLabel.setTextFill(Color.web("#eeeeee"));
 
-        Button locationClearButton = new Button();
+        locationClearButton = new Button();
         Label clearLabel = new Label("Clear");
         clearLabel.setTextFill(Color.web("#eeeeee"));
         clearLabel.setStyle("-fx-font-size:11");
@@ -410,7 +417,7 @@ public class Display {
         newsLabelBox.setPrefHeight(EDGE);
         newsLabelBox.setAlignment(Pos.CENTER);
 
-        Label newsLabel = new Label("Get Involved");
+        newsLabel = new Label("Get Involved");
         newsLabel.setTextFill(Color.web("#eeeeee"));
 
         newsLabelBox.getChildren().addAll(newsLabel);
@@ -455,7 +462,7 @@ public class Display {
         slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
         slidingSettings.setStyle("-fx-background-color: #333333");
 
-        javafx.scene.control.Button slidingButton = slidingSettings.getButton();
+        slidingButton = slidingSettings.getButton();
         slidingButton.setId("dashboardButton");
         slidingButton.setMaxWidth(EDGE - 5);
         slidingButton.setMinWidth(EDGE - 5);
@@ -896,7 +903,7 @@ public class Display {
         slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
         slidingEmail.setId("normallyWhiteBG");
 
-        Button slidingEmailButton = slidingEmail.getButton();
+        slidingEmailButton = slidingEmail.getButton();
         slidingEmailButton.setId("dashboardButton");
         slidingEmailButton.setId("normallyWhiteBG");
         slidingEmailButton.setMaxWidth(EDGE - 5);
@@ -995,7 +1002,7 @@ public class Display {
 
         Image help = FileFetch.getImageFromFile("question58.png", 18, 18, true, true);
         ImageView helpButtonView = new ImageView(help);
-        Button helpButton = new Button();
+        helpButton = new Button();
         helpButton.setGraphic(helpButtonView);
         helpButton.setId("question-button");
         helpButton.setTranslateX(-80);  //TODO fix this janky shit
@@ -1084,7 +1091,7 @@ public class Display {
      ****************************************************************************************************************/
 
     private StackPane createMapPane() {
-        StackPane mapPane = new StackPane();
+        mapPane = new StackPane();
         mapPane.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2);
         mapPane.setMinHeight(MAP_HEIGHT);
         mapPane.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
@@ -1545,18 +1552,36 @@ public class Display {
     /** called from the controller and shows all the help tooltips **/
     public void showToolTips(){
 
-        if (!DASHBOARD_VISIBLE.getValue())  slidingDashboard.playShowPane(DASHBOARD_VISIBLE);
-        if (!DIRECTIONS_VISIBLE.getValue()) slidingDirections.playShowPane(DIRECTIONS_VISIBLE);
+        Animation animation1 = null;
+        Animation animation2 = null;
 
 
 
-       // slidingEmail.playShowPane(EMAIL_VISIBLE);
-        //slidingSettings.playShowPane(SETTINGS_VISIBLE);
+        if (!DASHBOARD_VISIBLE.getValue())  animation1 = slidingDashboard.playShowPaneCustom(DASHBOARD_VISIBLE);
+        if (!DIRECTIONS_VISIBLE.getValue()) animation2 = slidingDirections.playShowPaneCustom(DIRECTIONS_VISIBLE);
 
 
+        if (animation1 != null) animation1.play();
+        if (animation2 != null) animation2.play();
 
-        for (InfoTip infoTip : infoTips){
-            infoTip.show();
+        if (animation1 != null) {
+            animation1.setOnFinished(e -> {
+                for (InfoTip infoTip : infoTips) {
+                    infoTip.show();
+                }
+                DASHBOARD_VISIBLE.setValue(true);
+            });
+        } else if(animation2 != null){
+            animation2.setOnFinished(e -> {
+                for (InfoTip infoTip : infoTips) {
+                    infoTip.show();
+                }
+                DIRECTIONS_VISIBLE.setValue(true);
+            });
+        } else {
+            for (InfoTip infoTip : infoTips) {
+                infoTip.show();
+            }
         }
     }
 
@@ -1571,12 +1596,40 @@ public class Display {
         InfoTip b = new InfoTip("Search for a location, a room, the nearest bathroom or for food.", start, PopOver.ArrowLocation.LEFT_TOP);
 
         /** get involved **/
-        InfoTip c = new InfoTip("Discover events around campus!", infoButton, PopOver.ArrowLocation.BOTTOM_LEFT);
+        InfoTip c = new InfoTip("Click to view our about screen!", infoButton, PopOver.ArrowLocation.LEFT_TOP);
+
+        /** help button **/
+        InfoTip d = new InfoTip("Click to view all tooltips.", helpButton, PopOver.ArrowLocation.TOP_LEFT);
+
+        /** clear button **/
+        InfoTip e = new InfoTip("Clear your path and locations.", locationClearButton , PopOver.ArrowLocation.TOP_RIGHT);
+
+        /** git involved **/
+        InfoTip f = new InfoTip("View events around campus!", newsLabel, PopOver.ArrowLocation.BOTTOM_LEFT );
+
+        /** sliding settings **/
+        InfoTip g = new InfoTip("Click to show setting", slidingButton, PopOver.ArrowLocation.BOTTOM_CENTER);
+
+        /** email button **/
+        InfoTip h = new InfoTip("Click to send directions to your email", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_CENTER);
+
+        /** map **/
+        InfoTip i = new InfoTip("Click on the map to add starting/ending locations", mapPane, PopOver.ArrowLocation.TOP_CENTER);
+
 
 
         infoTips.add(a);
         infoTips.add(b);
         infoTips.add(c);
+        infoTips.add(d);
+        infoTips.add(e);
+        infoTips.add(f);
+        infoTips.add(g);
+        infoTips.add(h);
+        infoTips.add(i);
+
+
+
     }
 
     /** called from the controller and plays the sequence **/
@@ -1611,7 +1664,7 @@ public class Display {
             if (v.containsNode(v.getValue().toString())) {
                 controller.handleSearchInput(v.getNode(v.getValue().toString()), START);
             } else {
-                controller.handleSpecificSearch(v.getValue().toString(), START);
+                controller.handleSpecificSearch(v.getValue().toString());
             }
         }
     }

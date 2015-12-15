@@ -120,7 +120,17 @@ public class SlidingAnchorPane extends AnchorPane {
                 }
             });
         }
+        return;
     }
+
+    public Animation playShowPaneCustom(BooleanProperty prop){
+        if (showSidebar.statusProperty().get() == Animation.Status.STOPPED && hideSidebar.statusProperty().get() == Animation.Status.STOPPED) {
+
+            return showSidebar;
+        }
+        return null;
+    }
+
 
     public SlidingAnchorPane(final double expanded, final double edge, Direction direction, BooleanProperty prop, Node buttonval, Node... nodes) {
         this.direction = direction;
