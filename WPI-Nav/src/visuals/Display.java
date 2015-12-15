@@ -715,16 +715,21 @@ public class Display {
                             text.setWrappingWidth(expandedWidth-10);
                             //setText(in.toString());
                             setGraphic(text);
-                            setStyle("-fx-font-fill:#eee; -fx-background-color:#333;" +
-                                    "-fx-border-width:1; -fx-border-color:#888;-fx-border-radius:5;");
+                            setId("event-list-cell");
+                            //setStyle("-fx-font-fill:#eee; -fx-background-color:#333;" +
+                                   // "-fx-border-color:#888;-fx-border-width:1 0 0 0;");
                             setTranslateX(GAP);
 
+                            setOnMouseClicked(e -> {
+                                
+                            });
                         }
                     }
                 }
         );
 
         listView.setItems(items);
+
         return listView;
     }
 
