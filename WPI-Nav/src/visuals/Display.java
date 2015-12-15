@@ -1718,7 +1718,7 @@ public class Display {
         InfoTip i = new InfoTip("Click on the map to add starting/ending locations!", mapPane, PopOver.ArrowLocation.TOP_CENTER);
 
         /** map **/
-        InfoTip j = new InfoTip("About CapraNav!", infoButton, PopOver.ArrowLocation.TOP_LEFT);
+        InfoTip j = new InfoTip("Step by step directions will be shown below!", directionsTitleBox, PopOver.ArrowLocation.TOP_LEFT);
 
         infoTips.add(a);
         infoTips.add(b);
