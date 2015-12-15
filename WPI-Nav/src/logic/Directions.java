@@ -29,6 +29,7 @@ public class Directions {
 		boolean veryfirm = false;
 		boolean addblank = false;
 		boolean addblankgaiden = false;
+		boolean addblankgaistairs = false;
 
 		//^^NEW LINE, init var distspec
 
@@ -102,7 +103,13 @@ public class Directions {
 		INode firstprev = aStarPath.get(0);
 		INode firstturn = aStarPath.get(1);
 		INode firstnext = aStarPath.get(2);
-		while (aStarPath.size() > p + 2 && getAngle(firstprev, firstturn, firstnext) > 2.87979327 && getAngle(firstprev, firstturn, firstnext) < 3.40339204) {
+		double radcut1 = 2.87979327;
+		double radcut2 = 3.40339204;
+		if(aStarPath.get(0).getMap_id()!=0){
+			radcut1 = 2.758;
+			radcut2 = 3.526;
+		}
+		while (aStarPath.size() > p + 2 && getAngle(firstprev, firstturn, firstnext) > radcut1 && getAngle(firstprev, firstturn, firstnext) < radcut2) {
 			firstprev = aStarPath.get(p);
 			firstturn = aStarPath.get(p + 1);
 			firstnext = aStarPath.get(p + 2);
@@ -165,7 +172,13 @@ public class Directions {
 
 			int j = 1;
 			double futuredist = 0;
-			while (aStarPath.size() > i + j + 2 && getAngle(aStarPath.get(i + j), aStarPath.get(i + j + 1), aStarPath.get(i + j + 2)) > 2.87979327 && getAngle(aStarPath.get(i + j), aStarPath.get(i + j + 1), aStarPath.get(i + j + 2)) < 3.40339204) {
+			radcut1 = 2.87979327;
+			radcut2 = 3.40339204;
+			if(turn.getMap_id()!=0){
+				radcut1 = 2.758;
+				radcut2 = 3.526;
+			}
+			while (aStarPath.size() > i + j + 2 && getAngle(aStarPath.get(i + j), aStarPath.get(i + j + 1), aStarPath.get(i + j + 2)) > radcut1 && getAngle(aStarPath.get(i + j), aStarPath.get(i + j + 1), aStarPath.get(i + j + 2)) < radcut2) {
 				//While loop checks if future turns are straight and we have not reached the end
 				futuredist = (Math.sqrt(Math.pow((aStarPath.get(i + j + 1).getX_univ() - aStarPath.get(i + j + 2).getX_univ()), 2) + Math.pow((aStarPath.get(i + j + 1).getY_univ() - aStarPath.get(i + j + 2).getY_univ()), 2)));
 
@@ -212,7 +225,10 @@ public class Directions {
 						else distPhrase = "to the stairs, and climb up 1 floor.";
 					} else if(flights !=1) distPhrase = "to the stairs, and climb down " + flights + " floors.";
 					else distPhrase = "to the stairs, and climb down 1 floor.";
-					if (turn.getMap_id() == next.getMap_id()) addblank = true; //I have no idea why this line works. Theoretically, it should be the other way around.
+					if (turn.getMap_id() == next.getMap_id()){
+						addblank = true;
+						addblankgaistairs = true;//I have no idea why this line works. Theoretically, it should be the other way around.
+					}
 				}
 				zz = 0;
 				boolean eee = false;
@@ -291,6 +307,11 @@ public class Directions {
 			if (addblankgaiden&&directions.get(mapstep).isEmpty()){
 				directions.get(mapstep).add(new Instructions("Exit the elevator.", next));
 				addblankgaiden = false;
+			}
+
+			if (addblankgaistairs&&directions.get(mapstep).isEmpty()){
+				directions.get(mapstep).add(new Instructions("Proceed from the stairs.", next));
+				addblankgaistairs = false;
 			}
 
 			distspec = 0;
