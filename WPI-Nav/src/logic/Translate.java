@@ -61,8 +61,9 @@ public class Translate {
 
     public HashMap<Integer, INode> setUniversalCoordinates(HashMap<Integer, INode> local_coord){
         //HashMap<Integer, INode> universal = local_coord;
-        local_coord.forEach((k, v) -> { // for each Node in ArrayList<Node>
-            // get the local x,y,z coordinates for Node v
+        for(HashMap.Entry<Integer, INode> set : local_coord.entrySet()){
+            INode v = set.getValue();
+
             x_local = v.getX();
             y_local = v.getY();
             z_local = v.getZ();
@@ -81,7 +82,30 @@ public class Translate {
             v.setY_univ(Math.round (y_val));
             v.setZ_univ(Math.round (z_val));
 
-        });
+            set.setValue(v);
+        }
+
+//        local_coord.forEach((k, v) -> { // for each Node in ArrayList<Node>
+//            // get the local x,y,z coordinates for Node v
+//            x_local = v.getX();
+//            y_local = v.getY();
+//            z_local = v.getZ();
+//
+//            resizeCoordinates(); //change the x_universal variable based on the resize coordinate value
+//            rotateCoordinates(); //change the y_universal variable based on the rotation angle value
+//            translateCoordinates(); //translate the x_universal and y_universal values based on translate coordinates;
+//            z_universal = z_local; //keep the z values the same for each coordinate
+//
+//            // set Node v's universal Coordinates to the calculated values
+//            double x_val = ((int) ((x_universal * 100.0) + ((x_universal < 0.0) ? -0.5 : 0.5))) / 100.0;
+//            double y_val = ((int) ((y_universal * 100.0) + ((y_universal < 0.0) ? -0.5 : 0.5))) / 100.0;
+//            double z_val = ((int) ((z_universal * 100.0) + ((z_universal < 0.0) ? -0.5 : 0.5))) / 100.0;
+//
+//            v.setX_univ(Math.round (x_val));
+//            v.setY_univ(Math.round (y_val));
+//            v.setZ_univ(Math.round (z_val));
+//
+//        });
         return local_coord;
     }
 

@@ -19,12 +19,16 @@ public class Directions {
 	 * @param aStarPath
 	 * @return
 	 */
-	public static ArrayList<ArrayList<Instructions>> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps) {
+	public static ArrayList<ArrayList<Instructions>> stepByStep(ArrayList<INode> aStarPath, HashMap<Integer, IMap> maps, HashMap<Integer, Building> buildings) {
 		totalDistance = 0;
 		int mapstep = 0;
 		double distspec = 0;
+		int predictdir = 0;
 		String distPhrase = " ";
-		//boolean veryfirm = false;
+		String lastdir = "";
+		boolean veryfirm = false;
+		boolean addblank = false;
+		boolean addblankgaiden = false;
 
 		//^^NEW LINE, init var distspec
 
@@ -38,13 +42,15 @@ public class Directions {
 
 
 		double scalar = 1;
+		scalar = maps.get(0).getPixelToFeetRatio();
+		dist *= scalar;
+//		if (maps.containsKey(aStarPath.get(0).getMap_id())) {
+//			scalar = maps.get(aStarPath.get(0).getMap_id()).getPixelToFeetRatio();
+//			if (aStarPath.get(0).getMap_id() != 0)dist *= scalar; //this line just changed
+//		} else {
+//			// throw exception
+//		}
 
-		if (maps.containsKey(aStarPath.get(0).getMap_id())) {
-			scalar = maps.get(aStarPath.get(0).getMap_id()).getPixelToFeetRatio();
-			//dist *= scalar;
-		} else {
-			// throw exception
-		}
 
 		totalDistance += dist;
 
@@ -110,7 +116,11 @@ public class Directions {
 		distPhrase = Math.round(distfirst) + " feet.";
 
 		if (aStarPath.get(0).isTransition() && aStarPath.get(1).getMap_id() != aStarPath.get(0).getMap_id()) { //Damage Control
-			directions.get(0).add(new Instructions("You're already on a map transition! Hit next map...", aStarPath.get(0)));
+			if (aStarPath.get(1).getMap_id() ==0) directions.get(0).add(new Instructions("Exit the building.",aStarPath.get(0)));
+			else if (aStarPath.get(0).getMap_id() ==0) directions.get(0).add(new Instructions("Enter " + (buildings.get(((Transition) aStarPath.get(0)).getBuildingID())).getName() + ".",aStarPath.get(0)));
+			else if(aStarPath.get(1).getZ_univ() > aStarPath.get(0).getZ_univ()) directions.get(0).add(new Instructions("Go up via the stairs or elevator.",aStarPath.get(0)));
+			else if(aStarPath.get(1).getZ_univ() < aStarPath.get(0).getZ_univ()) directions.get(0).add(new Instructions("Go down via the stairs or elevator.",aStarPath.get(0)));
+			else directions.get(0).add(new Instructions("You're already on a map transition! Hit next map...", aStarPath.get(0)));
 			mapstep++;
 			directions.add(new ArrayList<Instructions>());
 		}
@@ -132,14 +142,16 @@ public class Directions {
 			//add CURRENT dist to distspec, which is used for adding culled distances
 			//Future steps' distance will be added to this variable later.
 
-			if (maps.containsKey(turn.getMap_id())) {
-				scalar = maps.get(turn.getMap_id()).getPixelToFeetRatio();
-				if (turn.getMap_id() != 0) {
-					dist *= scalar;
-				}
-			} else {
-				// throw exception
-			}
+			scalar = maps.get(0).getPixelToFeetRatio();
+			dist *= scalar;
+//			if (maps.containsKey(turn.getMap_id())) {
+//				scalar = maps.get(0).getPixelToFeetRatio();
+//				if (turn.getMap_id() != 0) {
+//					dist *= scalar;
+//				}
+//			} else {
+//				// throw exception
+//			}
 			distspec = dist;
 			totalDistance += dist;
 			angle = getAngle(prev, turn, next);
@@ -156,14 +168,10 @@ public class Directions {
 			while (aStarPath.size() > i + j + 2 && getAngle(aStarPath.get(i + j), aStarPath.get(i + j + 1), aStarPath.get(i + j + 2)) > 2.87979327 && getAngle(aStarPath.get(i + j), aStarPath.get(i + j + 1), aStarPath.get(i + j + 2)) < 3.40339204) {
 				//While loop checks if future turns are straight and we have not reached the end
 				futuredist = (Math.sqrt(Math.pow((aStarPath.get(i + j + 1).getX_univ() - aStarPath.get(i + j + 2).getX_univ()), 2) + Math.pow((aStarPath.get(i + j + 1).getY_univ() - aStarPath.get(i + j + 2).getY_univ()), 2)));
-				if (maps.containsKey(turn.getMap_id())) {
-					scalar = maps.get(turn.getMap_id()).getPixelToFeetRatio();
-					if (turn.getMap_id() != 0) {
-						futuredist *= scalar;
-					}
-				} else {
-					// throw exception
-				}
+
+				scalar = maps.get(0).getPixelToFeetRatio();
+				futuredist *= scalar;
+
 				distspec += futuredist;
 				//Add the distance of a step in the future
 				j++;
@@ -171,7 +179,8 @@ public class Directions {
 
 			//new functionality: special directions for landmarks. Hopefully doesn't return silly grammar.
 			if (turn.isInteresting()) {
-				anglePhrase = AngletoString((int) Math.round(angle)) + " at " + turn.toString();
+				if(Character.isDigit(turn.toString().charAt(0))) anglePhrase = AngletoString((int) Math.round(angle)) + " at Room " + turn.toString();
+				else anglePhrase = AngletoString((int) Math.round(angle)) + " at " + turn.toString();
 			} else {
 				anglePhrase = AngletoString((int) Math.round(angle));
 			}
@@ -199,10 +208,11 @@ public class Directions {
 						zz++;
 					}
 					if ((maps.get(aStarPath.get(i + 3).getMap_id()).getFloor() > (maps.get(next.getMap_id()).getFloor()))) { //going up
-						if (flights !=1) distPhrase = "to the stairs, and climb up " + flights + " floors";
-						else distPhrase = "to the stairs, and climb up 1 floor";
-					} else if(flights !=1) distPhrase = "to the stairs, and climb down " + flights + " floors";
-					else distPhrase = "to the stairs, and climb down 1 floor";
+						if (flights !=1) distPhrase = "to the stairs, and climb up " + flights + " floors.";
+						else distPhrase = "to the stairs, and climb up 1 floor.";
+					} else if(flights !=1) distPhrase = "to the stairs, and climb down " + flights + " floors.";
+					else distPhrase = "to the stairs, and climb down 1 floor.";
+					if (turn.getMap_id() == next.getMap_id()) addblank = true; //I have no idea why this line works. Theoretically, it should be the other way around.
 				}
 				zz = 0;
 				boolean eee = false;
@@ -220,39 +230,89 @@ public class Directions {
 							}
 						}
 					}
-					if (flights == 0) elevatorend = "the basement";
-					if (flights == -1) elevatorend = "the sub-basement";
+					if (flights == 0) elevatorend = "the basement.";
+					if (flights == -1) elevatorend = "the sub-basement.";
 					if (flights < -1) elevatorend = "the depths of the earth"; //should never occur
-					if (flights > 0) elevatorend = "floor " + flights;
+					if (flights > 0) elevatorend = "floor " + flights + ".";
 					distPhrase = "into the elevator and go to " + elevatorend; //me inglish good
+					addblank = true;
+					addblankgaiden = true;
 				}
 				// specialdirs changed lines ^^
 			}
 			//if outside node mapid different then go inside/outside message
 			if (turn.getMap_id() == 0 && next.getMap_id() != 0) { //going inside
-				distPhrase = "inside the building";
+				if (((Transition) turn).getBuildingID() != 0) distPhrase = "inside " + (buildings.get(((Transition) turn).getBuildingID())).getName() + ".";
+				else distPhrase = "WARNING, I POINT TO THE CAMPUS MAP!";
 			}
 			if (turn.getMap_id() != 0 && next.getMap_id() == 0) { //going outside
-				distPhrase = "out the door";
+				distPhrase = "out the door.";
 			}
 
 			//if (angle<=-10 || angle>=10 || (aStarPath.size()==i+j+2 && veryfirm == false)){
-
-			if (angle <= -15 || angle >= 15 && !(turn instanceof TStairs) && !(turn instanceof Elevator)) {
-
+			int cutoff = 15;
+			if (turn.getMap_id() != 0) cutoff = 22;
+			if ((angle <= -cutoff || angle >= cutoff || turn.getMap_id() != next.getMap_id() || prev.getMap_id() != turn.getMap_id() || !veryfirm || next instanceof TStairs || next instanceof Elevator) && !(turn instanceof TStairs) && !(turn instanceof Elevator)) {
+				//This if and switch should append the too far directions to distPhrase when going into a map if it has one.
+				if (turn.getMap_id() == 0 && next.getMap_id() != 0){
+					switch (predictdir){
+						case 1: distPhrase = distPhrase + " If you reach the Project Center, you've gone too far.";
+							break;
+						case 2: distPhrase = distPhrase + " If you reach Stratton Hall, you've gone too far.";
+							break;
+						case 3: distPhrase = distPhrase + " If you reach Atwater Kent, you've gone too far.";
+							break;
+						case 4: distPhrase = distPhrase + " If you reach Fuller Labs, you've gone too far.";
+							break;
+						case 5: distPhrase = distPhrase + " If you reach Olin Hall or Salisbury Labs, you've gone too far.";
+							break;
+						case 6: distPhrase = distPhrase + " If you reach Boynton Hall or go under the bridge, you've gone too far.";
+							break;
+						case 7: distPhrase = distPhrase + " If you reach Fuller Labs, you've gone too far.";
+							break;
+						case 8: distPhrase = distPhrase + " If you reach Boynton Hall, you've gone too far.";
+							break;
+					}
+					predictdir = 0;
+				}
+				//TODO: change this line for map changes
 				directions.get(mapstep).add(new Instructions("Make a " + anglePhrase + ", and walk " + distPhrase, turn));
-				//if(aStarPath.size()==i+j+2) {
-				//veryfirm = true;
-			}
+				veryfirm = true;
+				if (addblank) {
+					directions.get(mapstep).add(new Instructions("", next));
+					addblank = false;
+				}}
 
 			if (turn.isTransition() && next.getMap_id() != turn.getMap_id()) {
 				mapstep++;
 				directions.add(new ArrayList<Instructions>());
+				veryfirm = false;
 			}
-			distspec = 0;
-		}
+			if (addblankgaiden&&directions.get(mapstep).isEmpty()){
+				directions.get(mapstep).add(new Instructions("Exit the elevator.", next));
+				addblankgaiden = false;
+			}
 
-		directions.get(directions.size() - 1).add(new Instructions("You have reached your destination.", aStarPath.get(aStarPath.size() - 1)));
+			distspec = 0;
+			//This will attempt to roughly determine your route for predictive instructions.
+			if((turn.getID() == 1962 || turn.getID() == 2026) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 0 && aStarPath.get(aStarPath.size()-1).getMap_id() < 5)) predictdir = 1; //Stratton from the south (P center)
+			if(turn.getID() == 1964 && (aStarPath.get(aStarPath.size()-1).getMap_id() == 27 || aStarPath.get(aStarPath.size()-1).getMap_id() == 28)) predictdir = 2; //P. Center from the north (stratton)
+			if((turn.getID() == 2007 || turn.getID() == 2058) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 28 && aStarPath.get(aStarPath.size()-1).getMap_id() < 34)) predictdir = 3; //Fuller from the south (AK)
+			if(turn.getID() == 1979 && aStarPath.get(aStarPath.size()-1).getMap_id() > 4 && aStarPath.get(aStarPath.size()-1).getMap_id() < 9) predictdir = 4; //AK from the northwest (fuller)
+			if((turn.getID() == 1963 || turn.getID() == 2026) && (aStarPath.get(aStarPath.size()-1).getMap_id() == 27 || aStarPath.get(aStarPath.size()-1).getMap_id() == 28)) predictdir = 5; //P.Center from the south (fountain)
+			if((turn.getID() == 1963 || turn.getID() == 2027) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 0 && aStarPath.get(aStarPath.size()-1).getMap_id() < 5)) predictdir = 6; //Stratton from the north (bridge or boynton)
+			if(turn.getID() == 2016 && (aStarPath.get(aStarPath.size()-1).getMap_id() > 15 && aStarPath.get(aStarPath.size()-1).getMap_id() < 21)) predictdir = 7; //Gordon from the south (fuller)
+			if((turn.getID() == 2007 || turn.getID() == 2058) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 15 && aStarPath.get(aStarPath.size()-1).getMap_id() < 21)) predictdir = 8; //Gordon from the north (boynton)
+		}
+		if (aStarPath.get(aStarPath.size()-1).isInteresting()) {
+			if(aStarPath.get(aStarPath.size()-1) instanceof Bathroom) lastdir = "You have reached the bathroom.";
+			else if(Character.isDigit(aStarPath.get(aStarPath.size()-1).toString().charAt(0))) lastdir = "You have reached Room " + aStarPath.get(aStarPath.size()-1).toString()+".";
+			else lastdir = "You have reached " + aStarPath.get(aStarPath.size()-1).toString() + ".";
+		} else {
+			lastdir = "You have reached your destination.";
+		}
+		directions.get(directions.size() - 1).add(new Instructions(lastdir, aStarPath.get(aStarPath.size() - 1)));
+
 		int tt;
 		for (tt = 0; tt<mapstep;tt++){ //this loop clears out maps you're just passing through
 			if (directions.get(tt).isEmpty()) directions.remove(tt);
@@ -292,7 +352,7 @@ public class Directions {
 	// This method converts a given angle into the proper string
 	public static String AngletoString(int angle) {
 		if (angle <= 15 && angle >= -15) //old thresholds were: 10 35 60 110
-			return "straight ahead";
+			return "straight path";
 		if (angle < -15 && angle >= -45)
 			return "slight left";
 		if (angle < -45 && angle >= -100)
@@ -365,7 +425,9 @@ public class Directions {
 		}
 	}
 
-
+	public static void cleartotalDistance(){
+		totalDistance = 0;
+	}
 
 	/*public static String getRelativeCurrentFloorString(INode current, INode next, HashMap<Integer, IMap> maps){
 		if (maps.get(next.getMap_id()).getFloor() > (maps.get(current.getMap_id()).getFloor())){
