@@ -1088,9 +1088,9 @@ public class MapDisplay extends Pane {
                 angle = -67;
                 break;
             case 11: //Salisbury
-                pivotX = 0;
-                pivotY = 0;
-                angle = 0;
+                pivotX = 448.6;
+                pivotY = 228;
+                angle = 83;
                 break;
 
         }
