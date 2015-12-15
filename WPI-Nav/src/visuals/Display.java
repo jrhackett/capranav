@@ -769,7 +769,7 @@ public class Display {
         Text date = new Text(in.getDateInfo());
         date.setWrappingWidth(275);
 
-        Text description = new Text(in.getDescription());
+        Text description = new Text(in.getTweet());
         description.setWrappingWidth(275);
 
         flowPane.getChildren().add(description);
