@@ -24,6 +24,7 @@ import javafx.stage.StageStyle;
 import logic.*;
 import visuals.Display;
 import visuals.Instructions;
+import visuals.MapDisplay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +52,7 @@ public class Controller extends Application {
 
     /* information of the maps */
     private int currentBuilding = 0;
+    public int prevBuilding = 0;
     private int currentFloor;
     private Campus campus;
     private logic.IMap currentMap;                  /* current map being used */
@@ -78,7 +80,8 @@ public class Controller extends Application {
 
     private Stage stage;
 
-    double flipFlop = 1;
+    private double flipFlop = 1;
+    public boolean rightButtonFlag = false;
     boolean firstTime = true;
 
     public int lastSoft = -1;
@@ -594,6 +597,7 @@ public class Controller extends Application {
                 firstTime = true;
             }
             defaultMap();
+            prevBuilding = 0;
 
             this.currentMap = campus;
         } else {
@@ -644,7 +648,15 @@ public class Controller extends Application {
 //            }
 
             /** switches to the map **/
-            setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
+            //Play rotation animation if previous building is the campus map
+            if (prevBuilding == 0 && !rightButtonFlag) {
+                int buildNum = buildings.get(currentBuilding).getID();
+                this.getMyDisplay().mapDisplay.rotationAnimation(buildNum);
+                this.getMyDisplay().mapDisplay.timeline.setOnFinished(e ->
+                        setCurrentMap(buildings.get(currentBuilding).getFloorID(i)));
+            }
+            //otherwise just set the current map
+            else setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
 
 
             /** CSS SWITCH LOGIC **/
@@ -695,6 +707,8 @@ public class Controller extends Application {
             }
 
         }
+        prevBuilding = currentBuilding;
+        rightButtonFlag = false;
     }
 
     /**
@@ -1160,6 +1174,8 @@ public class Controller extends Application {
         } else {
             this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
         }
+        rightButtonFlag = true;
+
     }
 
     public void handleDecrementPathMap(){

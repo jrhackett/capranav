@@ -1149,6 +1149,7 @@ public class Display {
         backToCampus.setId("campus-button");
         backToCampus.setOnMouseClicked(e -> {
             if(controller.getCurrentMap().getID() != 0) {
+                controller.prevBuilding = 0;
                 controller.setCurrentMap(0);
                 controller.hideBuildingPane();
             }
