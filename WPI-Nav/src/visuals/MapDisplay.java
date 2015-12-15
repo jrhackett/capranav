@@ -511,7 +511,12 @@ public class MapDisplay extends Pane {
                 lineArrayList.add(line);
             }
             //System.out.println("lines put into hashmap");
-            lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
+            if (lines.containsKey(list.get(0).getNode().getMap_id())){
+                lineArrayList.addAll(lines.get(list.get(0).getNode().getMap_id()));
+                lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
+            } else {
+                lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
+            }
         }
 
         setStartNode(idPath.get(0));
