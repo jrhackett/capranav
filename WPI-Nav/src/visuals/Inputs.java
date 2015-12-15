@@ -148,9 +148,9 @@ public class Inputs<T> extends ComboBox<T> {
 			}
 		} else {
 			if (ALL) {
-				if (!data.contains(item)) {
-					data.remove(item);
-				}
+//				if (data.contains(item)) {
+//					data.remove(item);
+//				}
 				item = v.toString() + " near " + ((Controller)controller).nearestNamedNodeName(v.getX(), v.getY(), 0);
 				data.add(item);
 				stringToInt.put(item, v.getID());

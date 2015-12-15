@@ -221,8 +221,8 @@ public class Controller extends Application {
             stage.setWidth(stage.getWidth() + flipFlop);
         }
 
-        this.myDisplay.start.getEditor().clear();
-        this.myDisplay.end.getEditor().clear();
+            this.myDisplay.start.getEditor().clear();
+            this.myDisplay.end.getEditor().clear();
         }
 
     /**
@@ -946,7 +946,7 @@ public class Controller extends Application {
 
             item = myDisplay.end.nodeToString(n, currentMap);
             System.out.println(item);
-            myDisplay.end.setValue(myDisplay.start.nodeToString(n, currentMap));
+            myDisplay.end.setValue(item);
         }
     }
 
@@ -997,7 +997,7 @@ public class Controller extends Application {
 
             if(v.getMap_id() == currentMap.getID() && Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y)) < distance){
                     n = v;
-                    distance =Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y));
+                    distance = Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y));
                 }
         }
 

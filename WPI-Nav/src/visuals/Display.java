@@ -164,7 +164,7 @@ public class Display {
         this.BUILDING_VISIBLE = new SimpleBooleanProperty(false);
         this.EMAIL_VISIBLE = new SimpleBooleanProperty(true);
         this.TIME_VISIBLE = new SimpleBooleanProperty(false);
-        this.DIRECTIONS_VISIBLE = new SimpleBooleanProperty(false); // <<<<<
+        this.DIRECTIONS_VISIBLE = new SimpleBooleanProperty(true); // <<<<<
 
         this.PHOTO_ICON_VISIBLE = new SimpleBooleanProperty(false);
         this.ICON_VISIBLE = new SimpleBooleanProperty(false);
@@ -1808,8 +1808,12 @@ public class Display {
         this.updateTimeEstimation();
         this.setIDLeftArrowButton("arrow-buttons-grayed");
         this.setIDRightArrowButton("arrow-buttons-grayed");
+
+
         if (DIRECTIONS_VISIBLE.getValue() == true) this.slidingDirections.playHidePane(DIRECTIONS_VISIBLE);
         TIME_VISIBLE.setValue(false);
+
+
     }
 
     private void handleRadioButtons(){
