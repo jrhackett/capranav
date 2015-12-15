@@ -1720,6 +1720,13 @@ public class Display {
         /** map **/
         InfoTip j = new InfoTip("Step by step directions will be shown below!", directionsTitleBox, PopOver.ArrowLocation.TOP_LEFT);
 
+        /** left arrow **/
+        InfoTip k = new InfoTip("Go to previous direction!", leftArrowButton, PopOver.ArrowLocation.TOP_CENTER);
+
+        /** right arrow **/
+        InfoTip l = new InfoTip("Go to next direction!", rightArrowButton, PopOver.ArrowLocation.TOP_CENTER);
+
+
         infoTips.add(a);
         infoTips.add(b);
         infoTips.add(c);
@@ -1730,6 +1737,8 @@ public class Display {
         infoTips.add(h);
         infoTips.add(i);
         infoTips.add(j);
+        infoTips.add(k);
+        infoTips.add(l);
     }
 
     /** called from the controller and plays the sequence **/
