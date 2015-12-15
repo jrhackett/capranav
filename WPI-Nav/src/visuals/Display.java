@@ -109,6 +109,8 @@ public class Display {
 
     public TextField yourEmail;
 
+    private PopOver eventPopOver;
+
 
     boolean FLIP = true;
     ZoomAndPan zoomAndPan;
@@ -731,9 +733,9 @@ public class Display {
 
                             setOnMouseClicked(e -> {
                                 //Popover?
-                                PopOver popOver = createPopOverForEvent(in);
-                                popOver.setId("event-popover");
-                                popOver.show(this, 10);
+                                eventPopOver = createPopOverForEvent(in);
+                                eventPopOver.setId("event-popover");
+                                eventPopOver.show(this, 10);
                             });
                         }
                     }
@@ -748,7 +750,6 @@ public class Display {
     public PopOver createPopOverForEvent(Event in) {
         PopOver popOver = new PopOver();
         VBox vbox = new VBox();
-        vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(10);
         vbox.setStyle("-fx-padding:8 8 8 8;");
 
@@ -766,31 +767,77 @@ public class Display {
 
         Text date = new Text(in.getDateInfo());
         date.setWrappingWidth(275);
-        
+
         Text description = new Text(in.getDescription());
         description.setWrappingWidth(275);
 
         flowPane.getChildren().add(description);
 
         HBox bottomHBox = new HBox();
-        Button goTo = new Button();
-        goTo.setGraphic(new Text("Go to location"));
-        goTo.setId("popover-buttons");
-        goTo.setStyle("-fx-max-width:200 !important");
+        Button goToButton = new Button();
+        goToButton.setGraphic(new Text("Go to location"));
+        goToButton.setId("popover-buttons");
+        goToButton.setStyle("-fx-max-width:200 !important");
 
-        Button addTo = new Button();
-        addTo.setGraphic(new Text("Add location as destination"));
-        addTo.setId("popover-buttons");
-        addTo.setStyle("-fx-max-width:200 !important");
+        Button moreInfoButton = new Button();
+        moreInfoButton.setGraphic(new Text("More info"));
+        moreInfoButton.setId("popover-buttons");
+        moreInfoButton.setStyle("-fx-max-width:200 !important");
 
-        bottomHBox.getChildren().addAll(goTo, addTo);
+        moreInfoButton.setOnMouseClicked(e -> {
+            showMoreEventInfo(in);
+            eventPopOver.hide();
+        });
+
+        bottomHBox.getChildren().addAll(goToButton, moreInfoButton);
         bottomHBox.setAlignment(Pos.CENTER);
         bottomHBox.setSpacing(10);
 
         vbox.getChildren().addAll(title, location, date, flowPane, bottomHBox);
+        vbox.setAlignment(Pos.CENTER);
         popOver.setContentNode(vbox);
 
         return popOver;
+    }
+
+    public void showMoreEventInfo(Event in) {
+        StackPane imageStack = new StackPane();
+        StackPane shadowStack = new StackPane();
+        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+
+        imageStack.setOnMouseClicked(e -> {
+            this.root.getChildren().removeAll(imageStack, shadowStack);
+        });
+
+        VBox vbox = new VBox();
+        vbox.setId("about-panel");
+        vbox.setSpacing(8);
+        vbox.setAlignment(Pos.TOP_CENTER);
+
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setId("about-title");
+        Label aboutLabel = new Label(in.getTitle());
+        aboutLabel.setId("about-label");
+        aboutLabel.setTextFill(Color.web("#eeeeee"));
+
+        hbox.getChildren().add(aboutLabel);
+
+        FlowPane flowPane = new FlowPane();
+        Text text = new Text();
+        text.setId("about-text");
+        text.setWrappingWidth(500);
+        //text.setTextAlignment(TextAlignment.JUSTIFY);
+        text.setText(in.getDescription());
+
+        flowPane.setPrefWrapLength(500);
+        flowPane.setAlignment(Pos.CENTER);
+        flowPane.getChildren().add(text);
+
+        vbox.getChildren().addAll(hbox, flowPane);
+        imageStack.getChildren().add(vbox);
+
+        this.root.getChildren().addAll(shadowStack, imageStack);
     }
 
     private void initDirections() {
