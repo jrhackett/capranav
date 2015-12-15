@@ -1693,45 +1693,63 @@ public class Display {
         this.infoTips = new ArrayList<InfoTip>();
 
         /** menu bar info tip **/
-        InfoTip a = new InfoTip("This is our dashboard. Click to hide.", menuButton, PopOver.ArrowLocation.LEFT_CENTER);
+        InfoTip a = new InfoTip("This is our dashboard. Click to hide", menuButton, PopOver.ArrowLocation.LEFT_CENTER);
 
         /** start search bar **/
-        InfoTip b = new InfoTip("Search for a location, a room, the nearest bathroom or for food.", start, PopOver.ArrowLocation.LEFT_TOP);
+        InfoTip b = new InfoTip("Search for a starting location, a room, the nearest bathroom or for food", start, PopOver.ArrowLocation.LEFT_TOP);
+
+        /** start search bar **/
+        InfoTip r = new InfoTip("Search for an ending location", end, PopOver.ArrowLocation.LEFT_TOP);
 
         /** get involved **/
-        InfoTip c = new InfoTip("Click to view our about screen!", infoButton, PopOver.ArrowLocation.LEFT_TOP);
+        InfoTip c = new InfoTip("Click to view our about screen", infoButton, PopOver.ArrowLocation.LEFT_TOP);
 
         /** help button **/
-        InfoTip d = new InfoTip("Click to view all tooltips!", helpButton, PopOver.ArrowLocation.TOP_LEFT);
+        InfoTip d = new InfoTip("Click to view all tooltips", helpButton, PopOver.ArrowLocation.TOP_LEFT);
 
         /** clear button **/
-        InfoTip e = new InfoTip("Clear your path and locations!", locationClearButton , PopOver.ArrowLocation.TOP_RIGHT);
+        InfoTip e = new InfoTip("Clear your path and locations", locationClearButton , PopOver.ArrowLocation.TOP_RIGHT);
 
         /** git involved **/
-        InfoTip f = new InfoTip("View events around campus!", newsLabel, PopOver.ArrowLocation.BOTTOM_LEFT );
+        InfoTip f = new InfoTip("View events around campus", newsLabel, PopOver.ArrowLocation.BOTTOM_LEFT );
 
         /** sliding settings **/
-        InfoTip g = new InfoTip("Click to show settings!", slidingButton, PopOver.ArrowLocation.BOTTOM_LEFT);
+        InfoTip g = new InfoTip("Click to show settings", slidingButton, PopOver.ArrowLocation.BOTTOM_LEFT);
 
         /** email button **/
-        InfoTip h = new InfoTip("Click to send directions to your email!", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_LEFT);
+        InfoTip h = new InfoTip("Click to send directions to your email", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_LEFT);
 
         /** map **/
-        InfoTip i = new InfoTip("Click on the map to add starting/ending locations!", mapPane, PopOver.ArrowLocation.TOP_CENTER);
+        InfoTip i = new InfoTip("Click on the map to add starting/ending locations", mapPane, PopOver.ArrowLocation.TOP_CENTER);
 
         /** map **/
-        InfoTip j = new InfoTip("Step by step directions will be shown below!", directionsTitleBox, PopOver.ArrowLocation.TOP_LEFT);
+        InfoTip j = new InfoTip("Step by step directions will be shown below", directionsTitleBox, PopOver.ArrowLocation.TOP_LEFT);
+
+        /** left arrow **/
+        InfoTip k = new InfoTip("Go to previous direction", leftArrowButton, PopOver.ArrowLocation.TOP_CENTER);
+
+        /** right arrow **/
+        InfoTip l = new InfoTip("Go to next direction!", rightArrowButton, PopOver.ArrowLocation.TOP_CENTER);
+
+        /** right arrow **/
+        InfoTip m = new InfoTip("Awesome! You're ready to start using CapraNav!", mapPane, PopOver.ArrowLocation.TOP_LEFT);
+
 
         infoTips.add(a);
         infoTips.add(b);
+        infoTips.add(r);
         infoTips.add(c);
         infoTips.add(d);
+        infoTips.add(j);
+        infoTips.add(l);
+        infoTips.add(k);
         infoTips.add(e);
         infoTips.add(f);
         infoTips.add(g);
         infoTips.add(h);
         infoTips.add(i);
-        infoTips.add(j);
+        infoTips.add(m);
+
     }
 
     /** called from the controller and plays the sequence **/
