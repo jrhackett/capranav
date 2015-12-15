@@ -3,12 +3,11 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
-import javafx.scene.*;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
@@ -263,7 +262,7 @@ public class Controller extends Application {
         }
     }
 
-    private StackPane freeze(Node background, DoubleProperty y) {
+    private StackPane freeze(Node background) {
         Image frostImage = background.snapshot(
                 new SnapshotParameters(),
                 null
@@ -293,14 +292,11 @@ public class Controller extends Application {
     private void showTutorial(){
         if (User.isUserNew()){//User.isUserNew()
             StackPane imageStack = new StackPane();
-            StackPane shadowStack = new StackPane();
-            shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
 
-            DoubleProperty y = new SimpleDoubleProperty(H);
-            javafx.scene.Node frost      = freeze(this.myDisplay.root, y);
+            javafx.scene.Node frost      = freeze(this.myDisplay.root);
 
             imageStack.setOnMouseClicked(e -> {
-                myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+                myDisplay.root.getChildren().removeAll(imageStack, frost);
             });
 
             Label hello     = new Label ("Hello!\nIt looks like you are new to CapraNav!\nWould you like a tutorial?");
@@ -343,12 +339,12 @@ public class Controller extends Application {
 
     public void showAboutPanel() {
         StackPane imageStack = new StackPane();
-        StackPane shadowStack = new StackPane();
-        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+        javafx.scene.Node frost      = freeze(this.myDisplay.root);
 
         imageStack.setOnMouseClicked(e -> {
-            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            myDisplay.root.getChildren().removeAll(imageStack, frost);
         });
+
 
         //customize the stackpane here
         VBox vbox = new VBox();
@@ -395,23 +391,22 @@ public class Controller extends Application {
         attributions.setTranslateY(40);
 
         attributions.setOnMouseClicked(e -> {
-            this.myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            this.myDisplay.root.getChildren().removeAll(imageStack, frost);
             this.showCredits();
         });
 
         vbox.getChildren().addAll(hbox, goatLogoView, flowPane, attributions);
         imageStack.getChildren().add(vbox);
-        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+        this.myDisplay.root.getChildren().addAll(frost, imageStack);
 
     }
 
     public void showCredits() {
         StackPane imageStack = new StackPane();
-        StackPane shadowStack = new StackPane();
-        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+        javafx.scene.Node frost      = freeze(this.myDisplay.root);
 
         imageStack.setOnMouseClicked(e -> {
-            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            myDisplay.root.getChildren().removeAll(imageStack, frost);
         });
 
         VBox vbox = new VBox();
@@ -511,16 +506,19 @@ public class Controller extends Application {
 
         vbox.getChildren().addAll(hbox, teamLabel,teamFlowPane, iconLabel, iconBox);
         imageStack.getChildren().add(vbox);
-        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+        this.myDisplay.root.getChildren().addAll(frost, imageStack);
     }
 
     public void showNodeImage(INode node) {
         StackPane imageStack = new StackPane();
-        StackPane shadowStack = new StackPane();
-        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+        javafx.scene.Node frost      = freeze(this.myDisplay.root);
 
         imageStack.setOnMouseClicked(e -> {
-            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            myDisplay.root.getChildren().removeAll(imageStack, frost);
+        });
+
+        imageStack.setOnMouseClicked(e -> {
+            myDisplay.root.getChildren().removeAll(imageStack, frost);
         });
 
         //add image to stack pane -> if no image return void
@@ -530,7 +528,7 @@ public class Controller extends Application {
 
         imageStack.getChildren().add(iv);
 
-        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+        this.myDisplay.root.getChildren().addAll(frost, imageStack);
     }
 
     /**
