@@ -680,6 +680,35 @@ public class Controller extends Application {
 
             }
 
+<<<<<<< HEAD
+=======
+            /** update arrows **/
+
+            if (fullPath != null) {
+                //find currentIndex
+                currentIndex = -1;
+
+                for (int z = 0; z < fullPath.size(); z++) {
+                    if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
+                        currentIndex = z;
+                        break;
+                    }
+                }
+
+                if (currentIndex != -1) {
+                    myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
+                } else {
+                    this.myDisplay.clearInstructions();
+                }
+
+                if (fullPath != null && fullPath.size() > 0 && this.currentIndex + 1 < fullPath.size()) {
+                    this.myDisplay.setIDRightArrowButton("arrow-buttons");
+                } else {
+                    this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
+                }
+            }
+
+>>>>>>> dev
         }
         prevBuilding = currentBuilding;
         rightButtonFlag = false;
@@ -784,19 +813,17 @@ public class Controller extends Application {
 
         if(!FIRST) {
             if (startNode != null){//have to delete old before creating new one (with same ID)
-                //System.out.println("Hiding old start node");
+
                 this.myDisplay.mapDisplay.hideLast(startNode); //hide the last start
             }
-            //eradicate(tempStart, true); //completely get rid of the last start
-            //System.out.println("-1");
+
             temp =  new Landmark(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
         } else {
             if (endNode != null){
-                //System.out.println("Hiding old end node");
+
                 this.myDisplay.mapDisplay.hideLast(endNode); //hide the last end
             }
-            //eradicate(tempEnd, false); //completely get rid of the last temp
-            //System.out.println("-2");
+
             temp = new Landmark(-2, x, y, z, x2, y2, z2, currentMap.getID(), "By " + nearestNamedNodeName(x2, y2, z2));
         }
 
@@ -1018,7 +1045,6 @@ public class Controller extends Application {
             }
         });
 
-
         return value;
     }
 
@@ -1087,8 +1113,7 @@ public class Controller extends Application {
     }
 
 
-
-            public INode getNode(int id){
+    public INode getNode(int id){
         return nodes.get(id);
     }
 
@@ -1151,10 +1176,13 @@ public class Controller extends Application {
             this.myDisplay.setIDRightArrowButton("arrow-buttons");
         } else {
             this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
-
         }
+<<<<<<< HEAD
         rightButtonFlag = true;
+=======
+>>>>>>> dev
     }
+
     public void handleDecrementPathMap(){
         //if there is another list of instructions to go
         if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1){

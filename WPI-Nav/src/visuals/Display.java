@@ -702,9 +702,16 @@ public class Display {
         Feed f = new Feed(50);
 
         ObservableList<String> items = FXCollections.observableArrayList ();
-        for(Event e : f) {
-            String x = "\n" + e.getTitle() + "\n" + e.getDateInfo() + "\n";
-            items.add(x);
+
+        if (f.isEmpty()) {
+            items.add("Couldn't fetch OrgSync data. Please check your internet connection.");
+            items.add("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        }
+        else {
+            for(Event e : f) {
+                String x = "\n" + e.getTitle() + "\n" + e.getDateInfo() + "\n";
+                items.add(x);
+            }
         }
 
         listView.setCellFactory((ListView<String> lv) ->
@@ -722,16 +729,21 @@ public class Display {
                             text.setWrappingWidth(expandedWidth-10);
                             //setText(in.toString());
                             setGraphic(text);
-                            setStyle("-fx-font-fill:#eee; -fx-background-color:#333;" +
-                                    "-fx-border-width:1; -fx-border-color:#888;-fx-border-radius:5;");
+                            setId("event-list-cell");
+                            //setStyle("-fx-font-fill:#eee; -fx-background-color:#333;" +
+                                   // "-fx-border-color:#888;-fx-border-width:1 0 0 0;");
                             setTranslateX(GAP);
 
+                            setOnMouseClicked(e -> {
+
+                            });
                         }
                     }
                 }
         );
 
         listView.setItems(items);
+
         return listView;
     }
 
@@ -1609,10 +1621,10 @@ public class Display {
         InfoTip f = new InfoTip("View events around campus!", newsLabel, PopOver.ArrowLocation.BOTTOM_LEFT );
 
         /** sliding settings **/
-        InfoTip g = new InfoTip("Click to show setting", slidingButton, PopOver.ArrowLocation.BOTTOM_CENTER);
+        InfoTip g = new InfoTip("Click to show settings", slidingButton, PopOver.ArrowLocation.BOTTOM_LEFT);
 
         /** email button **/
-        InfoTip h = new InfoTip("Click to send directions to your email", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_CENTER);
+        InfoTip h = new InfoTip("Click to send directions to your email", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_LEFT);
 
         /** map **/
         InfoTip i = new InfoTip("Click on the map to add starting/ending locations", mapPane, PopOver.ArrowLocation.TOP_CENTER);
@@ -1628,9 +1640,6 @@ public class Display {
         infoTips.add(g);
         infoTips.add(h);
         infoTips.add(i);
-
-
-
     }
 
     /** called from the controller and plays the sequence **/

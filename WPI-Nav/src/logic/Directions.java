@@ -243,7 +243,7 @@ public class Directions {
 
 			//if (angle<=-10 || angle>=10 || (aStarPath.size()==i+j+2 && veryfirm == false)){
 
-			if (angle <= -15 || angle >= 15 && !(turn instanceof TStairs) && !(turn instanceof Elevator)) {
+			if ((angle <= -15 || angle >= 15 || turn.getMap_id() != next.getMap_id() || prev.getMap_id() != turn.getMap_id()) && !(turn instanceof TStairs) && !(turn instanceof Elevator)) {
 				//This if and switch should append the too far directions to distPhrase when going into a map if it has one.
 				if (turn.getMap_id() == 0 && next.getMap_id() != 0){
 					switch (predictdir){
@@ -262,6 +262,7 @@ public class Directions {
 						case 7: distPhrase = distPhrase + " If you reach Fuller Labs, you've gone too far.";
 							break;
 						case 8: distPhrase = distPhrase + " If you reach Boynton Hall, you've gone too far.";
+							break;
 					}
 					predictdir = 0;
 				}
@@ -281,8 +282,8 @@ public class Directions {
 			if(turn.getID() == 1979 && aStarPath.get(aStarPath.size()-1).getMap_id() > 4 && aStarPath.get(aStarPath.size()-1).getMap_id() < 9) predictdir = 4; //AK from the northwest (fuller)
 			if((turn.getID() == 1963 || turn.getID() == 2026) && (aStarPath.get(aStarPath.size()-1).getMap_id() == 27 || aStarPath.get(aStarPath.size()-1).getMap_id() == 28)) predictdir = 5; //P.Center from the south (fountain)
 			if((turn.getID() == 1963 || turn.getID() == 2027) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 0 && aStarPath.get(aStarPath.size()-1).getMap_id() < 5)) predictdir = 6; //Stratton from the north (bridge or boynton)
-			if(turn.getID() == 2016 && (aStarPath.get(aStarPath.size()-1).getMap_id() > 15 || aStarPath.get(aStarPath.size()-1).getMap_id() < 21)) predictdir = 7; //Gordon from the south (fuller)
-			if((turn.getID() == 2007 || turn.getID() == 2058) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 15 || aStarPath.get(aStarPath.size()-1).getMap_id() < 21)) predictdir = 8; //Gordon from the north (boynton)
+			if(turn.getID() == 2016 && (aStarPath.get(aStarPath.size()-1).getMap_id() > 15 && aStarPath.get(aStarPath.size()-1).getMap_id() < 21)) predictdir = 7; //Gordon from the south (fuller)
+			if((turn.getID() == 2007 || turn.getID() == 2058) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 15 && aStarPath.get(aStarPath.size()-1).getMap_id() < 21)) predictdir = 8; //Gordon from the north (boynton)
 		}
 		if (aStarPath.get(aStarPath.size()-1).isInteresting()) {
 			if(Character.isDigit(aStarPath.get(aStarPath.size()-1).toString().charAt(0))) lastdir = "You have reached Room " + aStarPath.get(aStarPath.size()-1).toString()+".";
@@ -331,7 +332,7 @@ public class Directions {
 	// This method converts a given angle into the proper string
 	public static String AngletoString(int angle) {
 		if (angle <= 15 && angle >= -15) //old thresholds were: 10 35 60 110
-			return "straight ahead";
+			return "straight path";
 		if (angle < -15 && angle >= -45)
 			return "slight left";
 		if (angle < -45 && angle >= -100)
