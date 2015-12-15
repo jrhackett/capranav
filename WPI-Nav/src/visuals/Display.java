@@ -1632,9 +1632,6 @@ public class Display {
         infoTips.add(g);
         infoTips.add(h);
         infoTips.add(i);
-
-
-
     }
 
     /** called from the controller and plays the sequence **/
