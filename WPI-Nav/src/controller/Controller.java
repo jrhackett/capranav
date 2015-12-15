@@ -675,8 +675,9 @@ public class Controller extends Application {
                 this.myDisplay.setLeftButtonStyle("-fx-background-color:#eee;");
 
             }
-            prevBuilding = currentBuilding;
+
         }
+        prevBuilding = currentBuilding;
     }
 
     /**
