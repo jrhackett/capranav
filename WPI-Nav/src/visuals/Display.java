@@ -136,6 +136,7 @@ public class Display {
     Button helpButton;
     Button locationClearButton;
     Button slidingButton;
+    Button slidingEmailButton;
     Label newsLabel;
     ArrayList<InfoTip> infoTips = new ArrayList<>();
 
@@ -721,16 +722,21 @@ public class Display {
                             text.setWrappingWidth(expandedWidth-10);
                             //setText(in.toString());
                             setGraphic(text);
-                            setStyle("-fx-font-fill:#eee; -fx-background-color:#333;" +
-                                    "-fx-border-width:1; -fx-border-color:#888;-fx-border-radius:5;");
+                            setId("event-list-cell");
+                            //setStyle("-fx-font-fill:#eee; -fx-background-color:#333;" +
+                                   // "-fx-border-color:#888;-fx-border-width:1 0 0 0;");
                             setTranslateX(GAP);
 
+                            setOnMouseClicked(e -> {
+                                
+                            });
                         }
                     }
                 }
         );
 
         listView.setItems(items);
+
         return listView;
     }
 
@@ -902,7 +908,7 @@ public class Display {
         slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
         slidingEmail.setId("normallyWhiteBG");
 
-        Button slidingEmailButton = slidingEmail.getButton();
+        slidingEmailButton = slidingEmail.getButton();
         slidingEmailButton.setId("dashboardButton");
         slidingEmailButton.setId("normallyWhiteBG");
         slidingEmailButton.setMaxWidth(EDGE - 5);
@@ -1090,7 +1096,7 @@ public class Display {
      ****************************************************************************************************************/
 
     private StackPane createMapPane() {
-        StackPane mapPane = new StackPane();
+        mapPane = new StackPane();
         mapPane.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2);
         mapPane.setMinHeight(MAP_HEIGHT);
         mapPane.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
@@ -1607,7 +1613,13 @@ public class Display {
         InfoTip f = new InfoTip("View events around campus!", newsLabel, PopOver.ArrowLocation.BOTTOM_LEFT );
 
         /** sliding settings **/
-        InfoTip g = new InfoTip("Click to show setting", slidingButton, PopOver.ArrowLocation.TOP_CENTER);
+        InfoTip g = new InfoTip("Click to show setting", slidingButton, PopOver.ArrowLocation.BOTTOM_CENTER);
+
+        /** email button **/
+        InfoTip h = new InfoTip("Click to send directions to your email", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_CENTER);
+
+        /** map **/
+        InfoTip i = new InfoTip("Click on the map to add starting/ending locations", mapPane, PopOver.ArrowLocation.TOP_CENTER);
 
 
 
@@ -1618,6 +1630,11 @@ public class Display {
         infoTips.add(e);
         infoTips.add(f);
         infoTips.add(g);
+        infoTips.add(h);
+        infoTips.add(i);
+
+
+
     }
 
     /** called from the controller and plays the sequence **/
