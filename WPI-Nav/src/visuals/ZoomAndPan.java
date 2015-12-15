@@ -28,7 +28,8 @@ public class ZoomAndPan {
     private final DoubleProperty deltaY = new SimpleDoubleProperty(0.0d);
     public PanAndZoomPane panAndZoomPane = new PanAndZoomPane();
     //private final Group group = new Group();
-
+    public double zoomOffsetX;
+    public double zoomOffsetY;
     //@Override
     //public void start(Stage primaryStage) {
     public Parent createZoomPane(Group group) {
@@ -92,6 +93,8 @@ public class ZoomAndPan {
           double scaleVal = 3.5;
           //System.out.println("out Scale" + scale);
           //if (bounds.getHeight()>530 || bounds.getWidth()>730 ||){
+          zoomOffsetX = (transX+(x*scaleVal));
+          zoomOffsetY = (transY+(y*scaleVal));
           panAndZoomPane.setPivot((transX+(x*scaleVal)),(transY+(y*scaleVal)),scaleVal);
     }
 

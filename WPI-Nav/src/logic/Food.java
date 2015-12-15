@@ -20,7 +20,7 @@ public class Food extends Interest {
         super(iNode);
     }
 
-    public ImageView getIcon(){
+    public ImageView getIcon() {
         Image image = FileFetch.getImageFromFile("cutlery23.svg", 22, 22, true, true);
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(22);

@@ -27,12 +27,19 @@ public class Bathroom extends Interest {
     }
 
     public String toString(){
+        return bathRoomTypeToString(bathroomType);
+    }
+
+    public static String bathRoomTypeToString(BathroomType bathroomType){
         switch (bathroomType){
+            case MENS:
+                return "Men's Bathroom";
+            case WOMAN:
+                return "Women's Bathroom";
             case GENERAL:
                 return "Bathroom";
-            default:
-                return this.bathroomType.toString().toUpperCase().substring(0,1) + this.bathroomType.toString().toLowerCase().substring(1) + " Bathroom";
-        }
+       }
+        return "Bathroom";
     }
 
     public ImageView getIcon(){

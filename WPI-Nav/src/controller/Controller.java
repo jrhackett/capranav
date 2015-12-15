@@ -3,6 +3,7 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -1006,7 +1007,68 @@ public class Controller extends Application {
         return value;
     }
 
-    public INode getNode(int id){
+
+    public void handleSpecificSearch(String s, boolean START) {
+        if (s.equals("Bathroom") || s.equals("Nearest Bathroom")) {
+            setDestination(findNearestRoomType(Bathroom.bathRoomTypeToString(BathroomType.GENERAL)), START);
+        } else if (s.equals("Men's Bathroom") || s.equals("Nearest Men's Bathroom")) {
+            setDestination(findNearestRoomType(Bathroom.bathRoomTypeToString(BathroomType.MENS)), START);
+        } else if (s.equals("Women's Bathroom") || s.equals("Nearest Women's Bathroom")) {
+            setDestination(findNearestRoomType(Bathroom.bathRoomTypeToString(BathroomType.WOMAN)), START);
+        } else if (s.equals("Food") || s.equals("Nearest Food")) {
+            setDestination(findNearestFood(), START);
+        } else if (s.equals("Restaurant") || s.equals("Nearest Restaurant")) {
+            setDestination(findNearestFood(), START);
+        }
+    }
+
+    private void setDestination(INode destination, boolean START){
+        handleSearchInput(destination.getID(), START);
+    }
+
+    private INode findNearestFood(){
+        double distance = Double.MAX_VALUE;
+        INode n = null;
+
+
+        for(HashMap.Entry<Integer, INode> cursor : nodes.entrySet()){
+            INode v = cursor.getValue();
+            if( v instanceof Food){ //we dont want the name Near Near Stratton Hall
+                double tempDistance = Math.sqrt((v.getX() - startNode.getX())*(v.getX() - startNode.getY()) + (v.getY() - v.getY())*(v.getY() - v.getY()));
+                if(tempDistance < distance ){
+                    n = v;
+                    distance = tempDistance;
+                }
+            }
+        }
+
+        return  n;
+    }
+
+
+    private INode findNearestRoomType(String type){
+
+        double distance = Double.MAX_VALUE;
+        INode n = null;
+
+
+        for(HashMap.Entry<Integer, INode> cursor : nodes.entrySet()){
+            INode v = cursor.getValue();
+            if( v.toString().equals(type)){ //we dont want the name Near Near Stratton Hall
+                double tempDistance = Math.sqrt((v.getX() - startNode.getX())*(v.getX() - startNode.getY()) + (v.getY() - v.getY())*(v.getY() - v.getY()));
+                if(tempDistance < distance ){
+                    n = v;
+                    distance = tempDistance;
+                }
+            }
+        }
+
+        return  n;
+    }
+
+
+
+            public INode getNode(int id){
         return nodes.get(id);
     }
 
@@ -1137,6 +1199,38 @@ public class Controller extends Application {
 
     public Display getMyDisplay() {
         return this.myDisplay;
+    }
+
+    public Point2D getStageOffset(){
+        double xOff = this.stage.getX();
+        double yOff = this.stage.getY();
+
+        double appWidth = this.stage.getWidth();
+        double appHeight = this.stage.getHeight();
+        double expandedWidth = this.getMyDisplay().expandedWidth;
+        double gapWidth = this.getMyDisplay().GAP;
+        boolean dashboardEx = this.getMyDisplay().DASHBOARD_VISIBLE.getValue();
+        boolean directionsEx = this.getMyDisplay().DIRECTIONS_VISIBLE.getValue();
+
+        double offsetX = 0;
+        if (dashboardEx){
+            offsetX += expandedWidth;
+        }
+        else {
+            offsetX += gapWidth;
+        }
+        if(directionsEx){
+            offsetX += expandedWidth;
+        }
+        else {
+            offsetX += gapWidth;
+        }
+
+        offsetX /=2;
+
+        Point2D offset = new Point2D(offsetX+xOff+appWidth/2,yOff+appHeight/2.5);
+
+        return offset;
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

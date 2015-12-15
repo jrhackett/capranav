@@ -57,6 +57,18 @@ public class Inputs<T> extends ComboBox<T> {
 		 */
 	}
 
+
+	private void addSpecialLocations(){
+		String prefixes[] 	= {"Nearest ", "Close ", "Near by ", ""};
+		String locations[] 	= {"Bathroom", "Food", "Restaurant", "Men's Room", "Woman's Bathroom" };
+
+		for (int i = 0; i < prefixes.length; i++){
+			for (int j = 0; j < locations.length; j++){
+				data.add(prefixes[i] + locations[j]);
+			}
+		}
+	}
+
 	/**
 	 * Converts a HashMap of maps to an ObserableList
 	 * 
@@ -87,6 +99,8 @@ public class Inputs<T> extends ComboBox<T> {
 		nodes.forEach((k, v) -> { // For each node
 			addNode(v, maps.get(v.getMap_id()), false);
 		});
+
+		addSpecialLocations();
 
 		FXCollections.sort(data);
 
