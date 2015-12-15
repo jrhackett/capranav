@@ -618,7 +618,7 @@ public class Controller extends Application {
      * @param START
      */
     public void handleSearchInput(int id, boolean START) {
-
+        rightButtonFlag = true;
         FIRST = START; //Set START so when / if map clicked properly sets start/end node
 
         if (START) {
@@ -682,6 +682,7 @@ public class Controller extends Application {
            //     if (startNode != null) switchMapSetting(startNode.getMap_id());
         flipFlop *= -1;
         stage.setWidth(stage.getWidth() + flipFlop);
+        rightButtonFlag = false;
 
     }
 

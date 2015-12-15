@@ -519,3 +519,16 @@
 #tutorial-button:hover {
     -fx-border-color:#333;
 }
+
+#tutorial-panel-button {
+    -fx-background-color:white;
+    -fx-font-fill:#333;
+    -fx-font-size:12;
+    -fx-border-width:1;
+    -fx-border-radius:5;
+    -fx-border-color:#888;
+}
+
+#tutorial-panel-button:hover {
+    -fx-border-color:#aaa;
+}

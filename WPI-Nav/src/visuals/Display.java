@@ -769,7 +769,7 @@ public class Display {
         Text date = new Text(in.getDateInfo());
         date.setWrappingWidth(275);
 
-        Text description = new Text(in.getDescription());
+        Text description = new Text(in.getTweet());
         description.setWrappingWidth(275);
 
         flowPane.getChildren().add(description);
@@ -1739,12 +1739,22 @@ public class Display {
         PopOver controlTutorial = new PopOver();
         controlTutorial.setTitle("Tutorial");
         Button back = new Button("Back");
+        back.setId("tutorial-panel-button");
         Button next = new Button("Next");
+        next.setId("tutorial-panel-button");
         Button showAll = new Button("Show All Tips");
+        showAll.setId("tutorial-panel-button");
         Button endTutorial = new Button("End Tutorial");
+        endTutorial.setId("tutorial-panel-button");
         HBox buttons = new HBox(back, next);
+        buttons.setSpacing(8);
+        buttons.setAlignment(Pos.CENTER);
         HBox buttonstwo = new HBox(showAll, endTutorial);
+        buttonstwo.setSpacing(8);
         VBox tutorial = new VBox(buttons, buttonstwo);
+        tutorial.setStyle("-fx-padding:8 8 8 8");
+        tutorial.setAlignment(Pos.CENTER);
+        tutorial.setSpacing(8);
         controlTutorial.setContentNode(tutorial);
         controlTutorial.setDetached(true);
         controlTutorial.show(mapPane);

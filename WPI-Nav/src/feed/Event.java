@@ -9,6 +9,7 @@ public class Event implements Comparable<Event> {
     private String title;
     private String location;
     private String description;
+    private String tweet; //Shorter version of description
     private Date sDate;
     private Date eDate;
     private String link; //Link to OrgSync Event Page
@@ -21,7 +22,8 @@ public class Event implements Comparable<Event> {
         this.eDate = new Date(eDate);
         this.link = link;
 
-        if (description.length() > 150) reduceDescription(150);
+        if (description.length() > 150) this.tweet = reduceDescription(150);
+        else                            this.tweet = description;
     }
 
     public String toString() {
@@ -50,6 +52,8 @@ public class Event implements Comparable<Event> {
         return description;
     }
 
+    public String getTweet() { return tweet; }
+
     public Date getsDate() {
         return sDate;
     }
@@ -67,8 +71,7 @@ public class Event implements Comparable<Event> {
     }
 
     //Reduces the description to be at most chars characters, with "..." appearing at the end
-    private void reduceDescription(int chars) {
-        description = description.substring(0, description.indexOf(" ", chars+1));
-        description += "...";
+    private String reduceDescription(int chars) {
+        return description.substring(0, description.indexOf(" ", chars+1)) + "...";
     }
 }
