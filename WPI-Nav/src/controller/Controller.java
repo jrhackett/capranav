@@ -24,7 +24,6 @@ import javafx.stage.StageStyle;
 import logic.*;
 import visuals.Display;
 import visuals.Instructions;
-import visuals.MapDisplay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -155,6 +154,7 @@ public class Controller extends Application {
 
         s.show();   //shows scene
         defaultMap();
+        showTutorial();
     }
 
 
@@ -247,6 +247,55 @@ public class Controller extends Application {
             //for(Map.Entry<String, Integer> : nodes.entrySet())
 
         }
+    }
+
+
+    private void showTutorial(){
+        if (User.isUserNew()){//User.isUserNew()
+            StackPane imageStack = new StackPane();
+            StackPane shadowStack = new StackPane();
+            shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+
+            imageStack.setOnMouseClicked(e -> {
+                myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            });
+
+            Label hello     = new Label ("Hello!\nIt looks like you are new to CapraNav!\nWould you like a tutorial?");
+            Button no       = new Button("Continue");
+            Button yes      = new Button("Play Tutorial");
+
+            VBox greetings  = new VBox();
+            greetings.setSpacing(25);
+
+            HBox buttons    = new HBox();
+            buttons.getChildren().addAll(no, yes);
+
+            no.setOnAction(e -> {
+                myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            });
+
+            yes.setOnAction(e -> {
+                myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+                this.playTutorial();
+            });
+
+            hello.setId("introLabel");
+            no.setId("introLabel");
+            yes.setId("introLabel");
+
+            greetings.getChildren().addAll(hello, buttons);
+            imageStack.getChildren().addAll(greetings);
+            buttons.setAlignment(Pos.CENTER);
+            buttons.setTranslateX(-47);
+            buttons.setSpacing(5);
+            greetings.setAlignment(Pos.CENTER);
+            this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+        }
+
+    }
+
+    private void playTutorial(){
+
     }
 
     public void showAboutPanel() {

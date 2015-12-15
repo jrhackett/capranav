@@ -252,6 +252,10 @@
     src: url("../resources/fonts/HelveticaNeue-Light.otf");
 }
 
+#introLabel {
+    -fx-text-fill: aliceblue;
+}
+
 #infoTip {
     -fx-font-size:12;
     -fx-max-height:16 !important;
