@@ -27,6 +27,8 @@ public class Directions {
 		String distPhrase = " ";
 		String lastdir = "";
 		boolean veryfirm = false;
+		boolean addblank = false;
+		boolean addblankgaiden = false;
 
 		//^^NEW LINE, init var distspec
 
@@ -114,7 +116,11 @@ public class Directions {
 		distPhrase = Math.round(distfirst) + " feet.";
 
 		if (aStarPath.get(0).isTransition() && aStarPath.get(1).getMap_id() != aStarPath.get(0).getMap_id()) { //Damage Control
-			directions.get(0).add(new Instructions("You're already on a map transition! Hit next map...", aStarPath.get(0)));
+			if (aStarPath.get(1).getMap_id() ==0) directions.get(0).add(new Instructions("Exit the building.",aStarPath.get(0)));
+			else if (aStarPath.get(0).getMap_id() ==0) directions.get(0).add(new Instructions("Enter " + (buildings.get(((Transition) aStarPath.get(0)).getBuildingID())).getName() + ".",aStarPath.get(0)));
+			else if(aStarPath.get(1).getZ_univ() > aStarPath.get(0).getZ_univ()) directions.get(0).add(new Instructions("Go up via the stairs or elevator.",aStarPath.get(0)));
+			else if(aStarPath.get(1).getZ_univ() < aStarPath.get(0).getZ_univ()) directions.get(0).add(new Instructions("Go down via the stairs or elevator.",aStarPath.get(0)));
+			else directions.get(0).add(new Instructions("You're already on a map transition! Hit next map...", aStarPath.get(0)));
 			mapstep++;
 			directions.add(new ArrayList<Instructions>());
 		}
@@ -206,6 +212,7 @@ public class Directions {
 						else distPhrase = "to the stairs, and climb up 1 floor.";
 					} else if(flights !=1) distPhrase = "to the stairs, and climb down " + flights + " floors.";
 					else distPhrase = "to the stairs, and climb down 1 floor.";
+					if (turn.getMap_id() == next.getMap_id()) addblank = true; //I have no idea why this line works. Theoretically, it should be the other way around.
 				}
 				zz = 0;
 				boolean eee = false;
@@ -226,14 +233,15 @@ public class Directions {
 					if (flights == 0) elevatorend = "the basement.";
 					if (flights == -1) elevatorend = "the sub-basement.";
 					if (flights < -1) elevatorend = "the depths of the earth"; //should never occur
-					if (flights > 0) elevatorend = "floor " + flights;
+					if (flights > 0) elevatorend = "floor " + flights + ".";
 					distPhrase = "into the elevator and go to " + elevatorend; //me inglish good
+					addblank = true;
+					addblankgaiden = true;
 				}
 				// specialdirs changed lines ^^
 			}
 			//if outside node mapid different then go inside/outside message
 			if (turn.getMap_id() == 0 && next.getMap_id() != 0) { //going inside
-				//TODO: this line
 				if (((Transition) turn).getBuildingID() != 0) distPhrase = "inside " + (buildings.get(((Transition) turn).getBuildingID())).getName() + ".";
 				else distPhrase = "WARNING, I POINT TO THE CAMPUS MAP!";
 			}
@@ -242,8 +250,9 @@ public class Directions {
 			}
 
 			//if (angle<=-10 || angle>=10 || (aStarPath.size()==i+j+2 && veryfirm == false)){
-
-			if ((angle <= -15 || angle >= 15 || turn.getMap_id() != next.getMap_id() || prev.getMap_id() != turn.getMap_id()) && !(turn instanceof TStairs) && !(turn instanceof Elevator) || !veryfirm) {
+			int cutoff = 15;
+			if (turn.getMap_id() != 0) cutoff = 22;
+			if ((angle <= -cutoff || angle >= cutoff || turn.getMap_id() != next.getMap_id() || prev.getMap_id() != turn.getMap_id() || !veryfirm || next instanceof TStairs || next instanceof Elevator) && !(turn instanceof TStairs) && !(turn instanceof Elevator)) {
 				//This if and switch should append the too far directions to distPhrase when going into a map if it has one.
 				if (turn.getMap_id() == 0 && next.getMap_id() != 0){
 					switch (predictdir){
@@ -266,17 +275,26 @@ public class Directions {
 					}
 					predictdir = 0;
 				}
+				//TODO: change this line for map changes
 				directions.get(mapstep).add(new Instructions("Make a " + anglePhrase + ", and walk " + distPhrase, turn));
-				veryfirm = true;}
+				veryfirm = true;
+				if (addblank) {
+					directions.get(mapstep).add(new Instructions("", next));
+					addblank = false;
+				}}
 
 			if (turn.isTransition() && next.getMap_id() != turn.getMap_id()) {
 				mapstep++;
 				directions.add(new ArrayList<Instructions>());
 				veryfirm = false;
 			}
+			if (addblankgaiden&&directions.get(mapstep).isEmpty()){
+				directions.get(mapstep).add(new Instructions("Exit the elevator.", next));
+				addblankgaiden = false;
+			}
+
 			distspec = 0;
 			//This will attempt to roughly determine your route for predictive instructions.
-			//TODO: Get coordinate and map IDs needed
 			if((turn.getID() == 1962 || turn.getID() == 2026) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 0 && aStarPath.get(aStarPath.size()-1).getMap_id() < 5)) predictdir = 1; //Stratton from the south (P center)
 			if(turn.getID() == 1964 && (aStarPath.get(aStarPath.size()-1).getMap_id() == 27 || aStarPath.get(aStarPath.size()-1).getMap_id() == 28)) predictdir = 2; //P. Center from the north (stratton)
 			if((turn.getID() == 2007 || turn.getID() == 2058) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 28 && aStarPath.get(aStarPath.size()-1).getMap_id() < 34)) predictdir = 3; //Fuller from the south (AK)
@@ -287,7 +305,8 @@ public class Directions {
 			if((turn.getID() == 2007 || turn.getID() == 2058) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 15 && aStarPath.get(aStarPath.size()-1).getMap_id() < 21)) predictdir = 8; //Gordon from the north (boynton)
 		}
 		if (aStarPath.get(aStarPath.size()-1).isInteresting()) {
-			if(Character.isDigit(aStarPath.get(aStarPath.size()-1).toString().charAt(0))) lastdir = "You have reached Room " + aStarPath.get(aStarPath.size()-1).toString()+".";
+			if(aStarPath.get(aStarPath.size()-1) instanceof Bathroom) lastdir = "You have reached the bathroom.";
+			else if(Character.isDigit(aStarPath.get(aStarPath.size()-1).toString().charAt(0))) lastdir = "You have reached Room " + aStarPath.get(aStarPath.size()-1).toString()+".";
 			else lastdir = "You have reached " + aStarPath.get(aStarPath.size()-1).toString() + ".";
 		} else {
 			lastdir = "You have reached your destination.";
