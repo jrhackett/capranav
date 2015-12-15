@@ -25,6 +25,7 @@ public class Directions {
 		double distspec = 0;
 		int predictdir = 0;
 		String distPhrase = " ";
+		String lastdir = "";
 		//boolean veryfirm = false;
 
 		//^^NEW LINE, init var distspec
@@ -283,8 +284,14 @@ public class Directions {
 			if(turn.getID() == 2016 && (aStarPath.get(aStarPath.size()-1).getMap_id() > 15 || aStarPath.get(aStarPath.size()-1).getMap_id() < 21)) predictdir = 7; //Gordon from the south (fuller)
 			if((turn.getID() == 2007 || turn.getID() == 2058) && (aStarPath.get(aStarPath.size()-1).getMap_id() > 15 || aStarPath.get(aStarPath.size()-1).getMap_id() < 21)) predictdir = 8; //Gordon from the north (boynton)
 		}
+		if (aStarPath.get(aStarPath.size()-1).isInteresting()) {
+			if(Character.isDigit(aStarPath.get(aStarPath.size()-1).toString().charAt(0))) lastdir = "You have reached Room " + aStarPath.get(aStarPath.size()-1).toString()+".";
+			else lastdir = "You have reached " + aStarPath.get(aStarPath.size()-1).toString() + ".";
+		} else {
+			lastdir = "You have reached your destination.";
+		}
+		directions.get(directions.size() - 1).add(new Instructions(lastdir, aStarPath.get(aStarPath.size() - 1)));
 
-		directions.get(directions.size() - 1).add(new Instructions("You have reached your destination.", aStarPath.get(aStarPath.size() - 1)));
 		int tt;
 		for (tt = 0; tt<mapstep;tt++){ //this loop clears out maps you're just passing through
 			if (directions.get(tt).isEmpty()) directions.remove(tt);

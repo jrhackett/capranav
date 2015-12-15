@@ -796,7 +796,7 @@ public class MapDisplay extends Pane {
                 459.069,184.386,
                 462.861,178.224,
                 473.526,184.386,
-                492.486,152.391,
+                492.723,151.321,
                 476.133,142.2,
                 467.601,156.183,
                 443.427,142.437,
@@ -1008,7 +1008,7 @@ public class MapDisplay extends Pane {
                             }
 
                             else {
-                                popOver.show(p, controller.getStageOffset().getX() + 50, controller.getStageOffset().getY());
+                                popOver.show(p, controller.getStageOffset().getX() + 40, controller.getStageOffset().getY());
                                 popOver.setArrowSize(0);
                             }
                             previousPopOver.hide();
