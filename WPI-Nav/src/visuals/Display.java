@@ -3,6 +3,7 @@ package visuals;
 import controller.Controller;
 import feed.Event;
 import feed.Feed;
+import javafx.animation.Animation;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -122,6 +123,7 @@ public class Display {
 
     Button slidingDirectionsButton;
 
+
     RadioButton handicapRadioButton;
     RadioButton weatherRadioButton;
 
@@ -131,6 +133,7 @@ public class Display {
 
     javafx.scene.control.Button menuButton;
     Button infoButton;
+    Button helpButton;
     ArrayList<InfoTip> infoTips = new ArrayList<>();
 
     /****************************************************************************************************************
@@ -995,7 +998,7 @@ public class Display {
 
         Image help = FileFetch.getImageFromFile("question58.png", 18, 18, true, true);
         ImageView helpButtonView = new ImageView(help);
-        Button helpButton = new Button();
+        helpButton = new Button();
         helpButton.setGraphic(helpButtonView);
         helpButton.setId("question-button");
         helpButton.setTranslateX(-80);  //TODO fix this janky shit
@@ -1545,18 +1548,36 @@ public class Display {
     /** called from the controller and shows all the help tooltips **/
     public void showToolTips(){
 
-        if (!DASHBOARD_VISIBLE.getValue())  slidingDashboard.playShowPane(DASHBOARD_VISIBLE);
-        if (!DIRECTIONS_VISIBLE.getValue()) slidingDirections.playShowPane(DIRECTIONS_VISIBLE);
+        Animation animation1 = null;
+        Animation animation2 = null;
 
 
 
-       // slidingEmail.playShowPane(EMAIL_VISIBLE);
-        //slidingSettings.playShowPane(SETTINGS_VISIBLE);
+        if (!DASHBOARD_VISIBLE.getValue())  animation1 = slidingDashboard.playShowPaneCustom(DASHBOARD_VISIBLE);
+        if (!DIRECTIONS_VISIBLE.getValue()) animation2 = slidingDirections.playShowPaneCustom(DIRECTIONS_VISIBLE);
 
 
+        if (animation1 != null) animation1.play();
+        if (animation2 != null) animation2.play();
 
-        for (InfoTip infoTip : infoTips){
-            infoTip.show();
+        if (animation1 != null) {
+            animation1.setOnFinished(e -> {
+                for (InfoTip infoTip : infoTips) {
+                    infoTip.show();
+                }
+                DASHBOARD_VISIBLE.setValue(true);
+            });
+        } else if(animation2 != null){
+            animation2.setOnFinished(e -> {
+                for (InfoTip infoTip : infoTips) {
+                    infoTip.show();
+                }
+                DIRECTIONS_VISIBLE.setValue(true);
+            });
+        } else {
+            for (InfoTip infoTip : infoTips) {
+                infoTip.show();
+            }
         }
     }
 
@@ -1571,12 +1592,16 @@ public class Display {
         InfoTip b = new InfoTip("Search for a location, a room, the nearest bathroom or for food.", start, PopOver.ArrowLocation.LEFT_TOP);
 
         /** get involved **/
-        InfoTip c = new InfoTip("Discover events around campus!", infoButton, PopOver.ArrowLocation.BOTTOM_LEFT);
+        InfoTip c = new InfoTip("Click to view our about screen!", infoButton, PopOver.ArrowLocation.LEFT_TOP);
+
+        /** help button **/
+        InfoTip d = new InfoTip("Click to view all tooltips.", helpButton, PopOver.ArrowLocation.TOP_LEFT);
 
 
         infoTips.add(a);
         infoTips.add(b);
         infoTips.add(c);
+        infoTips.add(d);
     }
 
     /** called from the controller and plays the sequence **/
