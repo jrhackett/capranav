@@ -431,7 +431,7 @@ public class Display {
         AnchorPane.setTopAnchor(newsIconView, 3 * EDGE + GAP * .5 + 30);
         AnchorPane.setLeftAnchor(newsIconView, 2 * GAP);
 
-        ListView<String> eventListView = createEventListView();
+        ListView<Event> eventListView = createEventListView();
         eventListView.setId("newsfeed-list-view");
 
         AnchorPane.setTopAnchor(eventListView, 3 * EDGE + GAP * .5 + 60);
@@ -695,36 +695,31 @@ public class Display {
         slidingDashboard.getChildren().addAll(menuButton);
     }
 
-    private ListView<String> createEventListView() {
-        ListView<String> listView = new ListView<>();
+    private ListView<Event> createEventListView() {
+        ListView<Event> listView = new ListView<>();
         listView.setId("newsfeed-list-view");
         listView.setMaxWidth(expandedWidth *2);
         Feed f = new Feed(50);
 
-        ObservableList<String> items = FXCollections.observableArrayList ();
+        ObservableList<Event> items = FXCollections.observableArrayList ();
 
-        if (f.isEmpty()) {
-            items.add("Couldn't fetch OrgSync data. Please check your internet connection.");
-            items.add("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-        }
-        else {
-            for(Event e : f) {
-                String x = "\n" + e.getTitle() + "\n" + e.getDateInfo() + "\n";
-                items.add(x);
-            }
+        //TODO check for internet access here
+        for(Event e : f) {
+            //String x = "\n" + e.getTitle() + "\n" + e.getDateInfo() + "\n";
+            items.add(e);
         }
 
-        listView.setCellFactory((ListView<String> lv) ->
-                new ListCell<String>() {
+        listView.setCellFactory((ListView<Event> lv) ->
+                new ListCell<Event>() {
                     @Override
-                    public void updateItem(String in, boolean empty) {
+                    public void updateItem(Event in, boolean empty) {
                         super.updateItem(in, empty);
                         if (empty) {
                             setText(null);
                         } else {
                             // use whatever data you need from the album
                             // object to get the correct displayed value:
-                            Text text = new Text(in);
+                            Text text = new Text(in.toString());
                             text.setFill(Color.web("#eee"));
                             text.setWrappingWidth(expandedWidth-10);
                             //setText(in.toString());
@@ -735,7 +730,10 @@ public class Display {
                             setTranslateX(GAP);
 
                             setOnMouseClicked(e -> {
-                                //travel there
+                                //Popover?
+                                PopOver popOver = createPopOverForEvent(in);
+                                popOver.setId("event-popover");
+                                popOver.show(this, 10);
                             });
                         }
                     }
@@ -745,6 +743,54 @@ public class Display {
         listView.setItems(items);
 
         return listView;
+    }
+
+    public PopOver createPopOverForEvent(Event in) {
+        PopOver popOver = new PopOver();
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setSpacing(10);
+        vbox.setStyle("-fx-padding:8 8 8 8;");
+
+        FlowPane flowPane = new FlowPane();
+        flowPane.setHgap(2);
+        flowPane.setVgap(2);
+        flowPane.setPrefWrapLength(275);
+
+        Text title = new Text(in.getTitle());
+        title.setWrappingWidth(275);
+        title.setStyle("-fx-font-weight:bold;");
+
+        Text location = new Text(in.getLocation());
+        location.setWrappingWidth(275);
+
+        Text date = new Text(in.getDateInfo());
+        date.setWrappingWidth(275);
+        
+        Text description = new Text(in.getDescription());
+        description.setWrappingWidth(275);
+
+        flowPane.getChildren().add(description);
+
+        HBox bottomHBox = new HBox();
+        Button goTo = new Button();
+        goTo.setGraphic(new Text("Go to location"));
+        goTo.setId("popover-buttons");
+        goTo.setStyle("-fx-max-width:200 !important");
+
+        Button addTo = new Button();
+        addTo.setGraphic(new Text("Add location as destination"));
+        addTo.setId("popover-buttons");
+        addTo.setStyle("-fx-max-width:200 !important");
+
+        bottomHBox.getChildren().addAll(goTo, addTo);
+        bottomHBox.setAlignment(Pos.CENTER);
+        bottomHBox.setSpacing(10);
+
+        vbox.getChildren().addAll(title, location, date, flowPane, bottomHBox);
+        popOver.setContentNode(vbox);
+
+        return popOver;
     }
 
     private void initDirections() {

@@ -41,7 +41,7 @@ public class Date implements Comparable<Date> {
         int flag = checkDate();
         if      (flag == 0) return "Today";
         else if (flag == 1) return "Tomorrow";
-        else                return month + "-" + day;
+        else                return month + "/" + day;
     }
 
     public String getTime() {
