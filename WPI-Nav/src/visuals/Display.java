@@ -1091,7 +1091,7 @@ public class Display {
      ****************************************************************************************************************/
 
     private StackPane createMapPane() {
-        StackPane mapPane = new StackPane();
+        mapPane = new StackPane();
         mapPane.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2);
         mapPane.setMinHeight(MAP_HEIGHT);
         mapPane.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
@@ -1613,6 +1613,9 @@ public class Display {
         /** email button **/
         InfoTip h = new InfoTip("Click to send directions to your email", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_CENTER);
 
+        /** map **/
+        InfoTip i = new InfoTip("Click on the map to add starting/ending locations", mapPane, PopOver.ArrowLocation.TOP_CENTER);
+
 
 
         infoTips.add(a);
@@ -1623,6 +1626,8 @@ public class Display {
         infoTips.add(f);
         infoTips.add(g);
         infoTips.add(h);
+        infoTips.add(i);
+
 
 
     }
