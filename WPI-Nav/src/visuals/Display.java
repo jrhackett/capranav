@@ -109,6 +109,8 @@ public class Display {
 
     public TextField yourEmail;
 
+    private PopOver eventPopOver;
+
 
     boolean FLIP = true;
     ZoomAndPan zoomAndPan;
@@ -731,9 +733,9 @@ public class Display {
 
                             setOnMouseClicked(e -> {
                                 //Popover?
-                                PopOver popOver = createPopOverForEvent(in);
-                                popOver.setId("event-popover");
-                                popOver.show(this, 10);
+                                eventPopOver = createPopOverForEvent(in);
+                                eventPopOver.setId("event-popover");
+                                eventPopOver.show(this, 10);
                             });
                         }
                     }
@@ -784,6 +786,7 @@ public class Display {
 
         moreInfoButton.setOnMouseClicked(e -> {
             showMoreEventInfo(in);
+            eventPopOver.hide();
         });
 
         bottomHBox.getChildren().addAll(goToButton, moreInfoButton);
@@ -798,7 +801,43 @@ public class Display {
     }
 
     public void showMoreEventInfo(Event in) {
+        StackPane imageStack = new StackPane();
+        StackPane shadowStack = new StackPane();
+        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
 
+        imageStack.setOnMouseClicked(e -> {
+            this.root.getChildren().removeAll(imageStack, shadowStack);
+        });
+
+        VBox vbox = new VBox();
+        vbox.setId("about-panel");
+        vbox.setSpacing(8);
+        vbox.setAlignment(Pos.TOP_CENTER);
+
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setId("about-title");
+        Label aboutLabel = new Label(in.getTitle());
+        aboutLabel.setId("about-label");
+        aboutLabel.setTextFill(Color.web("#eeeeee"));
+
+        hbox.getChildren().add(aboutLabel);
+
+        FlowPane flowPane = new FlowPane();
+        Text text = new Text();
+        text.setId("about-text");
+        text.setWrappingWidth(500);
+        //text.setTextAlignment(TextAlignment.JUSTIFY);
+        text.setText(in.getDescription());
+
+        flowPane.setPrefWrapLength(500);
+        flowPane.setAlignment(Pos.CENTER);
+        flowPane.getChildren().add(text);
+
+        vbox.getChildren().addAll(hbox, flowPane);
+        imageStack.getChildren().add(vbox);
+
+        this.root.getChildren().addAll(shadowStack, imageStack);
     }
 
     private void initDirections() {
