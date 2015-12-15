@@ -1705,22 +1705,22 @@ public class Display {
         InfoTip c = new InfoTip("Click to view our about screen!", infoButton, PopOver.ArrowLocation.LEFT_TOP);
 
         /** help button **/
-        InfoTip d = new InfoTip("Click to view all tooltips.", helpButton, PopOver.ArrowLocation.TOP_LEFT);
+        InfoTip d = new InfoTip("Click to view all tooltips!", helpButton, PopOver.ArrowLocation.TOP_LEFT);
 
         /** clear button **/
-        InfoTip e = new InfoTip("Clear your path and locations.", locationClearButton , PopOver.ArrowLocation.TOP_RIGHT);
+        InfoTip e = new InfoTip("Clear your path and locations!", locationClearButton , PopOver.ArrowLocation.TOP_RIGHT);
 
         /** git involved **/
         InfoTip f = new InfoTip("View events around campus!", newsLabel, PopOver.ArrowLocation.BOTTOM_LEFT );
 
         /** sliding settings **/
-        InfoTip g = new InfoTip("Click to show settings", slidingButton, PopOver.ArrowLocation.BOTTOM_LEFT);
+        InfoTip g = new InfoTip("Click to show settings!", slidingButton, PopOver.ArrowLocation.BOTTOM_LEFT);
 
         /** email button **/
-        InfoTip h = new InfoTip("Click to send directions to your email", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_LEFT);
+        InfoTip h = new InfoTip("Click to send directions to your email!", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_LEFT);
 
         /** map **/
-        InfoTip i = new InfoTip("Click on the map to add starting/ending locations", mapPane, PopOver.ArrowLocation.TOP_CENTER);
+        InfoTip i = new InfoTip("Click on the map to add starting/ending locations!", mapPane, PopOver.ArrowLocation.TOP_CENTER);
 
         infoTips.add(a);
         infoTips.add(b);
