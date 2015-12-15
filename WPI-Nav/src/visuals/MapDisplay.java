@@ -1008,7 +1008,7 @@ public class MapDisplay extends Pane {
                             }
 
                             else {
-                                popOver.show(p, controller.getStageOffset().getX() + 50, controller.getStageOffset().getY());
+                                popOver.show(p, controller.getStageOffset().getX() + 40, controller.getStageOffset().getY());
                                 popOver.setArrowSize(0);
                             }
                             previousPopOver.hide();

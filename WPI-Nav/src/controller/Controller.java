@@ -524,7 +524,6 @@ public class Controller extends Application {
             }
 
             this.startNode = nodes.get(id);
-
         } else {
 
             if (startNode != null && id == startNode.getID() ){ //&& startNode != null
@@ -558,7 +557,6 @@ public class Controller extends Application {
         }
 
         if (endNode != null && startNode == null) {
-
             if (endNode.getMap_id() == currentMap.getID()) {
                 myDisplay.mapDisplay.setEndNode(endNode, true);
             } else {
@@ -571,6 +569,8 @@ public class Controller extends Application {
             findPaths();
         } else
                 if (startNode != null) switchMapSetting(startNode.getMap_id());
+        flipFlop *= -1;
+        stage.setWidth(stage.getWidth() + flipFlop);
 
     }
 
