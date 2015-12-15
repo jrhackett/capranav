@@ -657,7 +657,6 @@ public class Controller extends Application {
             //otherwise just set the current map
             else setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
 
-
             /** CSS SWITCH LOGIC **/
             if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)) {
                 //set id for normal
@@ -718,8 +717,8 @@ public class Controller extends Application {
             }
 
         }
+        //rightButtonFlag = false;
         prevBuilding = currentBuilding;
-        rightButtonFlag = false;
     }
 
     /**
@@ -1208,6 +1207,7 @@ public class Controller extends Application {
 
     public void handleIncrementPathMap(){
         //if there is another list of instructions to go
+        rightButtonFlag = true;
         if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
             myDisplay.setInstructions(fullPath.get(++currentIndex)); //TODO UPDATE setInstructions
             switchMapSetting(fullPath.get(currentIndex).get(0).getNode().getMap_id());
@@ -1221,11 +1221,12 @@ public class Controller extends Application {
         } else {
             this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
         }
-        rightButtonFlag = true;
+        rightButtonFlag = false;
 
     }
 
     public void handleDecrementPathMap(){
+        rightButtonFlag = true;
         //if there is another list of instructions to go
         if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1){
             myDisplay.setInstructions(fullPath.get(--currentIndex)); //TODO UPDATE setInstructions
@@ -1239,6 +1240,7 @@ public class Controller extends Application {
         } else {
             this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
         }
+        rightButtonFlag = false;
     }
 
     public void handleWeightOptions(boolean weather, boolean handicap){

@@ -20,6 +20,8 @@ public class Event implements Comparable<Event> {
         this.sDate = new Date(sDate);
         this.eDate = new Date(eDate);
         this.link = link;
+
+        if (description.length() > 150) reduceDescription(150);
     }
 
     public String toString() {
@@ -62,5 +64,11 @@ public class Event implements Comparable<Event> {
 
     public int compareTo (Event other) {
         return sDate.compareTo(other.sDate);
+    }
+
+    //Reduces the description to be at most chars characters, with "..." appearing at the end
+    private void reduceDescription(int chars) {
+        description = description.substring(0, chars+1);
+        description += "...";
     }
 }
