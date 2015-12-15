@@ -136,6 +136,7 @@ public class Display {
     Button helpButton;
     Button locationClearButton;
     Button slidingButton;
+    Button slidingEmailButton;
     Label newsLabel;
     ArrayList<InfoTip> infoTips = new ArrayList<>();
 
@@ -902,7 +903,7 @@ public class Display {
         slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
         slidingEmail.setId("normallyWhiteBG");
 
-        Button slidingEmailButton = slidingEmail.getButton();
+        slidingEmailButton = slidingEmail.getButton();
         slidingEmailButton.setId("dashboardButton");
         slidingEmailButton.setId("normallyWhiteBG");
         slidingEmailButton.setMaxWidth(EDGE - 5);
@@ -1607,7 +1608,10 @@ public class Display {
         InfoTip f = new InfoTip("View events around campus!", newsLabel, PopOver.ArrowLocation.BOTTOM_LEFT );
 
         /** sliding settings **/
-        InfoTip g = new InfoTip("Click to show setting", slidingButton, PopOver.ArrowLocation.TOP_CENTER);
+        InfoTip g = new InfoTip("Click to show setting", slidingButton, PopOver.ArrowLocation.BOTTOM_CENTER);
+
+        /** email button **/
+        InfoTip h = new InfoTip("Click to send directions to your email", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_CENTER);
 
 
 
@@ -1618,6 +1622,7 @@ public class Display {
         infoTips.add(e);
         infoTips.add(f);
         infoTips.add(g);
+        infoTips.add(h);
 
 
     }
