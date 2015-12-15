@@ -1,5 +1,9 @@
 package feed;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 /**
  * Created by ikeandmike on 12/13/15.
  */
@@ -12,9 +16,7 @@ public class Date implements Comparable<Date> {
     private String min;
     private boolean isAM;
 
-    //0th index is wasted to correspond with month numbers
-    private static String[] months = { "", "Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.",
-                                       "Sep.", "Oct.", "Nov.", "Dec." };
+    private String date; //Contains date in format yyyy-mm-dd
 
     //String in form 2015-12-01T11:28:12
     public Date(String date) {
@@ -27,6 +29,8 @@ public class Date implements Comparable<Date> {
 
         if (hour == hour%12) isAM = true;
         else { isAM = false; hour = hour%12; }
+
+        this.date = date.substring(0, 10);
     }
 
     public String toString() {
@@ -34,7 +38,10 @@ public class Date implements Comparable<Date> {
     }
 
     public String getDate() {
-        return months[month] + " " + day + ", " + year;
+        int flag = checkDate();
+        if      (flag == 0) return "Today";
+        else if (flag == 1) return "Tomorrow";
+        else                return month + "-" + day;
     }
 
     public String getTime() {
@@ -65,5 +72,32 @@ public class Date implements Comparable<Date> {
         else if (min.compareTo(other.min) < 0) return -1;
         else if (min.compareTo(other.min) > 0) return 1;
         else return 0;
+    }
+
+    //Returns 0 for today, 1 for tomorrow, -1 for neither
+    public int checkDate() {
+        //Generate today's date today's date
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+
+        //Generate tomorrow's date
+        long milis = System.currentTimeMillis();
+        milis += (24 * 60 * 60 * 1000);
+        java.util.Date date = new java.util.Date(milis);
+
+        //Put dates into nice format
+        String today = dateFormat.format(cal.getTime());
+        String tomorrow = dateFormat.format(date);
+
+        System.out.println(today + "\n" + tomorrow);
+
+        //Comparisons
+        if (this.date.equals(today))    return 0;
+        if (this.date.equals(tomorrow)) return 1;
+        else                            return -1;
+    }
+
+    public static void main(String args[]) {
+        new Date("2015-12-14T00:00:00").checkDate();
     }
 }

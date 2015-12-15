@@ -31,6 +31,10 @@ public class InfoTip {
             display.setArrowSize(5.0);
             display.setDetachable(false);
             display.setId("infoTip");
+
+            text.setOnMouseEntered(event -> {
+                display.hide();
+            });
         }
         this.display.show(owner, 5);
     }
