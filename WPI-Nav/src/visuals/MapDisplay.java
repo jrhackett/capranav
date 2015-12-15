@@ -968,6 +968,20 @@ public class MapDisplay extends Pane {
         library.setFill(Color.TRANSPARENT);
         addPolygonEvents(library, 2148);
 
+        Polygon salisbury = new Polygon();
+        salisbury.getPoints().addAll(new Double[]{
+                441.6495,201.3315,
+                439.5165,214.011,
+                425.889,211.7595,
+                421.0305,241.503,
+                445.323,245.769,
+                443.7825,255.96,
+                463.4535,259.278,
+                472.104,206.427,
+        });
+        salisbury.setFill(Color.TRANSPARENT);
+        addPolygonEvents(salisbury, 1909);//TODO double check this value
+
     }
     private void addPolygonEvents(Polygon p, Integer key){
         this.getChildren().add(p);
@@ -985,9 +999,18 @@ public class MapDisplay extends Pane {
                         controller.getMyDisplay().zoomAndPan.zoomToNode(controller.getNode(key));
                         PopOver popOver = createPopOverForNode(controller.getNode(key));
                         if (!(previousPopOver.equals(popOver))) {
-                            //TODO make sure animation has ended before showing the popover
-                            popOver.show(p, 4);
-                            popOver.setArrowSize(0);
+                            double zX = controller.getMyDisplay().zoomAndPan.zoomOffsetX;
+                            double zY = controller.getMyDisplay().zoomAndPan.zoomOffsetY;
+
+                            if(zX == 0 && zY == 0){
+                                popOver.show(p, 50);
+                                popOver.setArrowSize(0);
+                            }
+
+                            else {
+                                popOver.show(p, controller.getStageOffset().getX() + 50, controller.getStageOffset().getY());
+                                popOver.setArrowSize(0);
+                            }
                             previousPopOver.hide();
                             previousPopOver = popOver;
                         }

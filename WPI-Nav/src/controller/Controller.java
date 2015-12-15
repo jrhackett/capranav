@@ -3,6 +3,7 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -1203,6 +1204,38 @@ public class Controller extends Application {
 
     public Display getMyDisplay() {
         return this.myDisplay;
+    }
+
+    public Point2D getStageOffset(){
+        double xOff = this.stage.getX();
+        double yOff = this.stage.getY();
+
+        double appWidth = this.stage.getWidth();
+        double appHeight = this.stage.getHeight();
+        double expandedWidth = this.getMyDisplay().expandedWidth;
+        double gapWidth = this.getMyDisplay().GAP;
+        boolean dashboardEx = this.getMyDisplay().DASHBOARD_VISIBLE.getValue();
+        boolean directionsEx = this.getMyDisplay().DIRECTIONS_VISIBLE.getValue();
+
+        double offsetX = 0;
+        if (dashboardEx){
+            offsetX += expandedWidth;
+        }
+        else {
+            offsetX += gapWidth;
+        }
+        if(directionsEx){
+            offsetX += expandedWidth;
+        }
+        else {
+            offsetX += gapWidth;
+        }
+
+        offsetX /=2;
+
+        Point2D offset = new Point2D(offsetX+xOff+appWidth/2,yOff+appHeight/2.5);
+
+        return offset;
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
