@@ -247,6 +247,11 @@
     -fx-effect: dropshadow( three-pass-box , rgba(238,238,238,0.7) , 5, 0.0 , 0 , 1 );
 }
 
+#event-popover {
+    -fx-padding:8 8 8 8;
+    -fx-max-height:300;
+}
+
 @font-face {
     font-family: HelveticaNeueLight;
     src: url("../resources/fonts/HelveticaNeue-Light.otf");

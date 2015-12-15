@@ -23,7 +23,7 @@ public class Event implements Comparable<Event> {
     }
 
     public String toString() {
-        return title + "\n" + description + "\n" + location + "\n" + getDateInfo() + "\n" + link;
+        return "\n" + this.getTitle() + "\n" + this.getDateInfo() + "\n";
     }
 
     //Determines appropriate date info
