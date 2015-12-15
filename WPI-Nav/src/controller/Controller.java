@@ -271,6 +271,8 @@ public class Controller extends Application {
         ImageView frost = new ImageView(frostImage);
 
         Rectangle filler = new Rectangle(0, 0, this.stage.getWidth(), this.stage.getHeight());
+        filler.widthProperty().bind(this.stage.widthProperty());
+        filler.heightProperty().bind(this.stage.heightProperty());
         filler.setFill(Color.AZURE);
 
         Pane frostPane = new Pane(frost);
@@ -282,7 +284,11 @@ public class Controller extends Application {
         );
 
         Rectangle clipShape = new Rectangle(0, 0, this.stage.getWidth(), this.stage.getHeight());
+        clipShape.heightProperty().bind(this.stage.heightProperty());
+        clipShape.widthProperty().bind(this.stage.widthProperty());
         frostView.setClip(clipShape);
+
+
 
         //clipShape.yProperty().bind(y);
 
