@@ -40,12 +40,16 @@ public class AutoCompleteComboBoxListener<T> {
             if (lastLength != (comboBox.getEditor().getLength() - comboBox.getEditor().getSelectedText().length()))
                 lastLength = comboBox.getEditor().getLength() - comboBox.getEditor().getSelectedText().length();
 
-            if (    event.isControlDown() || event.getCode() == KeyCode.BACK_SPACE ||
+            if (    event.isControlDown() || event.getCode() == KeyCode.HOME ||
                     event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT ||
-                    event.getCode() == KeyCode.DELETE || event.getCode() == KeyCode.HOME ||
                     event.getCode() == KeyCode.END  || event.getCode() == KeyCode.TAB
                     )//
                 return;
+
+            if(event.getCode() == KeyCode.BACK_SPACE || event.getCode() == KeyCode.DELETE){
+
+                //comboBox.setValue(null);
+            }
 
             if (event.getCode().equals(KeyCode.DOWN)) {
                 comboBox.show();
@@ -72,8 +76,11 @@ public class AutoCompleteComboBoxListener<T> {
                     startsAPhrase = true;
                     try {
                         comboBox.getEditor().setText(sb.toString() + items.get(i).toString().substring(sb.toString().length()));
-                        comboBox.setValue(items.get(i));
-                        comboBox.getSelectionModel().select(i);
+
+                        if(event.getCode() == KeyCode.ENTER) {
+                            comboBox.setValue(items.get(i));
+                            comboBox.getSelectionModel().select(i);
+                        }
                     } catch (Exception e) {
                         comboBox.getEditor().setText(sb.toString());
                     }
