@@ -24,6 +24,7 @@ import javafx.stage.StageStyle;
 import logic.*;
 import visuals.Display;
 import visuals.Instructions;
+import visuals.MapDisplay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,7 +80,8 @@ public class Controller extends Application {
 
     private Stage stage;
 
-    double flipFlop = 1;
+    private double flipFlop = 1;
+    public boolean rightButtonFlag = false;
     boolean firstTime = true;
 
     public int lastSoft = -1;
@@ -647,7 +649,7 @@ public class Controller extends Application {
 
             /** switches to the map **/
             //Play rotation animation if previous building is the campus map
-            if (prevBuilding == 0) {
+            if (prevBuilding == 0 && !rightButtonFlag) {
                 int buildNum = buildings.get(currentBuilding).getID();
                 this.getMyDisplay().mapDisplay.rotationAnimation(buildNum);
                 this.getMyDisplay().mapDisplay.timeline.setOnFinished(e ->
@@ -680,6 +682,7 @@ public class Controller extends Application {
 
         }
         prevBuilding = currentBuilding;
+        rightButtonFlag = false;
     }
 
     /**
@@ -1150,7 +1153,7 @@ public class Controller extends Application {
             this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
 
         }
-
+        rightButtonFlag = true;
     }
     public void handleDecrementPathMap(){
         //if there is another list of instructions to go

@@ -90,7 +90,7 @@ public class MapDisplay extends Pane {
     //////////////////////// ICON CODE ///////////////////////////
     private HashMap<Integer, ImageView> id_ICON;
 
-   public Timeline timeline;
+    public Timeline timeline;
 
     /**
      * Constructor
