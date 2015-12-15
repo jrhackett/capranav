@@ -1611,7 +1611,7 @@ public class Display {
             if (v.containsNode(v.getValue().toString())) {
                 controller.handleSearchInput(v.getNode(v.getValue().toString()), START);
             } else {
-                controller.handleSpecificSearch(v.getValue().toString(), START);
+                controller.handleSpecificSearch(v.getValue().toString());
             }
         }
     }
