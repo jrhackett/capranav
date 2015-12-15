@@ -39,4 +39,10 @@ public class InfoTip {
         this.display.show(owner, 5);
     }
 
+    public void hide(){
+        if(display != null){
+            this.display.hide();
+        }
+    }
+
 }

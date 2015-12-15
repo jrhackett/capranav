@@ -139,6 +139,7 @@ public class Display {
     Button slidingEmailButton;
     Label newsLabel;
     ArrayList<InfoTip> infoTips = new ArrayList<>();
+    int currentToolTip;
 
     /****************************************************************************************************************
                                                       Functions
@@ -1625,22 +1626,16 @@ public class Display {
 
         if (animation1 != null) {
             animation1.setOnFinished(e -> {
-                for (InfoTip infoTip : infoTips) {
-                    infoTip.show();
-                }
+                playToolTips();
                 DASHBOARD_VISIBLE.setValue(true);
             });
         } else if(animation2 != null){
             animation2.setOnFinished(e -> {
-                for (InfoTip infoTip : infoTips) {
-                    infoTip.show();
-                }
+                playToolTips();
                 DIRECTIONS_VISIBLE.setValue(true);
             });
         } else {
-            for (InfoTip infoTip : infoTips) {
-                infoTip.show();
-            }
+            playToolTips();
         }
     }
 
@@ -1688,6 +1683,52 @@ public class Display {
 
     /** called from the controller and plays the sequence **/
     public void playToolTips(){
+        PopOver controlTutorial = new PopOver();
+        controlTutorial.setTitle("Tutorial");
+        Button back = new Button("Back");
+        Button next = new Button("Next");
+        Button showAll = new Button("Show All Tips");
+        Button endTutorial = new Button("End Tutorial");
+        HBox buttons = new HBox(back, next);
+        HBox buttonstwo = new HBox(showAll, endTutorial);
+        VBox tutorial = new VBox(buttons, buttonstwo);
+        controlTutorial.setContentNode(tutorial);
+        controlTutorial.setDetached(true);
+        controlTutorial.show(mapPane);
+
+        next.setOnAction(e -> playNext());
+        back.setOnAction(e -> playBack());
+        endTutorial.setOnAction(e -> {
+            for(InfoTip infoTip : infoTips) infoTip.hide();
+            controlTutorial.hide();
+        });
+        showAll.setOnAction(e -> {
+            for(InfoTip infoTip : infoTips) infoTip.show();
+        });
+
+        currentToolTip = 0;
+    }
+
+    private void playNext(){
+        if (currentToolTip + 1 < infoTips.size()){
+            playToolTip(1);
+        }
+    }
+
+    private void playBack(){
+        if (currentToolTip - 1 < infoTips.size() && currentToolTip - 1 > -1){
+            playToolTip(-1);
+        }
+    }
+
+    private void playToolTip(int i){
+        hideToolTip(currentToolTip);
+        currentToolTip += i;
+        if (this.infoTips.size() > currentToolTip && currentToolTip > -1) this.infoTips.get(currentToolTip).show();
+    }
+
+    private void hideToolTip(int i){
+        if (this.infoTips.size() > i && i > -1) this.infoTips.get(i).hide();
 
     }
 

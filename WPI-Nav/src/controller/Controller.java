@@ -295,7 +295,7 @@ public class Controller extends Application {
     }
 
     private void playTutorial(){
-
+        this.myDisplay.showToolTips();
     }
 
     public void showAboutPanel() {
