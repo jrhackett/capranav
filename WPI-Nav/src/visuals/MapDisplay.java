@@ -985,9 +985,18 @@ public class MapDisplay extends Pane {
                         controller.getMyDisplay().zoomAndPan.zoomToNode(controller.getNode(key));
                         PopOver popOver = createPopOverForNode(controller.getNode(key));
                         if (!(previousPopOver.equals(popOver))) {
-                            //TODO make sure animation has ended before showing the popover
-                            popOver.show(p, 4);
-                            popOver.setArrowSize(0);
+                            double zX = controller.getMyDisplay().zoomAndPan.zoomOffsetX;
+                            double zY = controller.getMyDisplay().zoomAndPan.zoomOffsetY;
+
+                            if(zX == 0 && zY == 0){
+                                popOver.show(p, 50);
+                                popOver.setArrowSize(0);
+                            }
+
+                            else {
+                                popOver.show(p, controller.getStageOffset().getX() + 50, controller.getStageOffset().getY());
+                                popOver.setArrowSize(0);
+                            }
                             previousPopOver.hide();
                             previousPopOver = popOver;
                         }
