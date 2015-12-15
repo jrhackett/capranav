@@ -680,8 +680,6 @@ public class Controller extends Application {
 
             }
 
-<<<<<<< HEAD
-=======
             /** update arrows **/
 
             if (fullPath != null) {
@@ -708,7 +706,6 @@ public class Controller extends Application {
                 }
             }
 
->>>>>>> dev
         }
         prevBuilding = currentBuilding;
         rightButtonFlag = false;
@@ -1177,10 +1174,8 @@ public class Controller extends Application {
         } else {
             this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
         }
-<<<<<<< HEAD
         rightButtonFlag = true;
-=======
->>>>>>> dev
+
     }
 
     public void handleDecrementPathMap(){
