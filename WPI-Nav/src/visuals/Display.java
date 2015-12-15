@@ -1717,6 +1717,9 @@ public class Display {
         /** map **/
         InfoTip i = new InfoTip("Click on the map to add starting/ending locations!", mapPane, PopOver.ArrowLocation.TOP_CENTER);
 
+        /** map **/
+        InfoTip j = new InfoTip("Step by step directions will be shown below!", directionsTitleBox, PopOver.ArrowLocation.TOP_LEFT);
+
         infoTips.add(a);
         infoTips.add(b);
         infoTips.add(c);
@@ -1726,6 +1729,7 @@ public class Display {
         infoTips.add(g);
         infoTips.add(h);
         infoTips.add(i);
+        infoTips.add(j);
     }
 
     /** called from the controller and plays the sequence **/
