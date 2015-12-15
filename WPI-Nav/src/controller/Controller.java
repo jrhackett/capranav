@@ -297,7 +297,7 @@ public class Controller extends Application {
 
         goatLogoView.setTranslateY(20);
         flowPane.setTranslateY(25);
-        attributions.setTranslateY(25);
+        attributions.setTranslateY(40);
 
         attributions.setOnMouseClicked(e -> {
             this.myDisplay.root.getChildren().removeAll(imageStack, shadowStack);

@@ -728,7 +728,7 @@ public class Display {
                             setTranslateX(GAP);
 
                             setOnMouseClicked(e -> {
-                                
+                                //travel there
                             });
                         }
                     }
