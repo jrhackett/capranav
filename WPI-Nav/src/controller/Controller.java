@@ -617,10 +617,10 @@ public class Controller extends Application {
         }
 
 
-        if (startNode != null && endNode != null) {
-            findPaths();
-        } else
-                if (startNode != null) switchMapSetting(startNode.getMap_id());
+        //if (startNode != null && endNode != null) {
+         //   findPaths();
+       // }// else
+           //     if (startNode != null) switchMapSetting(startNode.getMap_id());
         flipFlop *= -1;
         stage.setWidth(stage.getWidth() + flipFlop);
 
