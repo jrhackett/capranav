@@ -1613,10 +1613,10 @@ public class Display {
         InfoTip f = new InfoTip("View events around campus!", newsLabel, PopOver.ArrowLocation.BOTTOM_LEFT );
 
         /** sliding settings **/
-        InfoTip g = new InfoTip("Click to show setting", slidingButton, PopOver.ArrowLocation.BOTTOM_CENTER);
+        InfoTip g = new InfoTip("Click to show settings", slidingButton, PopOver.ArrowLocation.BOTTOM_LEFT);
 
         /** email button **/
-        InfoTip h = new InfoTip("Click to send directions to your email", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_CENTER);
+        InfoTip h = new InfoTip("Click to send directions to your email", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_LEFT);
 
         /** map **/
         InfoTip i = new InfoTip("Click on the map to add starting/ending locations", mapPane, PopOver.ArrowLocation.TOP_CENTER);
