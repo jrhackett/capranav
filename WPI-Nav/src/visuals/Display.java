@@ -1749,5 +1749,5 @@ public class Display {
         public void setDirectionStyle (String s){
             this.directionStyle = s;
         }
-        }
+}
 

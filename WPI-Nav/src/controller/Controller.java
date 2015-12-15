@@ -678,7 +678,6 @@ public class Controller extends Application {
                 for (int z = 0; z < fullPath.size(); z++) {
                     if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
                         currentIndex = z;
-                        System.out.println("BREAK!");
                         break;
                     }
                 }
@@ -751,13 +750,11 @@ public class Controller extends Application {
         if (fullPath != null) {
 
 
-
             currentIndex = -1;
 
             for (int z = 0; z < fullPath.size(); z++) {
                 if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
                     currentIndex = z;
-                    System.out.println("BREAK!");
                     break;
                 }
             }
