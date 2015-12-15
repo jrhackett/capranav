@@ -32,7 +32,7 @@ public class InfoTip {
             display.setDetachable(false);
             display.setId("infoTip");
 
-            text.setOnMouseEntered(event -> {
+            text.setOnMouseClicked(event -> {
                 display.hide();
             });
         }

@@ -89,15 +89,9 @@ public class Date implements Comparable<Date> {
         String today = dateFormat.format(cal.getTime());
         String tomorrow = dateFormat.format(date);
 
-        System.out.println(today + "\n" + tomorrow);
-
         //Comparisons
         if (this.date.equals(today))    return 0;
         if (this.date.equals(tomorrow)) return 1;
         else                            return -1;
-    }
-
-    public static void main(String args[]) {
-        new Date("2015-12-14T00:00:00").checkDate();
     }
 }

@@ -24,6 +24,7 @@ import javafx.stage.StageStyle;
 import logic.*;
 import visuals.Display;
 import visuals.Instructions;
+import visuals.MapDisplay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +52,7 @@ public class Controller extends Application {
 
     /* information of the maps */
     private int currentBuilding = 0;
+    public int prevBuilding = 0;
     private int currentFloor;
     private Campus campus;
     private logic.IMap currentMap;                  /* current map being used */
@@ -78,7 +80,8 @@ public class Controller extends Application {
 
     private Stage stage;
 
-    double flipFlop = 1;
+    private double flipFlop = 1;
+    public boolean rightButtonFlag = false;
     boolean firstTime = true;
 
     public int lastSoft = -1;
@@ -594,6 +597,7 @@ public class Controller extends Application {
                 firstTime = true;
             }
             defaultMap();
+            prevBuilding = 0;
 
             this.currentMap = campus;
         } else {
@@ -644,7 +648,15 @@ public class Controller extends Application {
 //            }
 
             /** switches to the map **/
-            setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
+            //Play rotation animation if previous building is the campus map
+            if (prevBuilding == 0 && !rightButtonFlag) {
+                int buildNum = buildings.get(currentBuilding).getID();
+                this.getMyDisplay().mapDisplay.rotationAnimation(buildNum);
+                this.getMyDisplay().mapDisplay.timeline.setOnFinished(e ->
+                        setCurrentMap(buildings.get(currentBuilding).getFloorID(i)));
+            }
+            //otherwise just set the current map
+            else setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
 
 
             /** CSS SWITCH LOGIC **/
@@ -667,7 +679,36 @@ public class Controller extends Application {
                 this.myDisplay.setLeftButtonStyle("-fx-background-color:#eee;");
 
             }
+
+            /** update arrows **/
+
+            if (fullPath != null) {
+                //find currentIndex
+                currentIndex = -1;
+
+                for (int z = 0; z < fullPath.size(); z++) {
+                    if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
+                        currentIndex = z;
+                        break;
+                    }
+                }
+
+                if (currentIndex != -1) {
+                    myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
+                } else {
+                    this.myDisplay.clearInstructions();
+                }
+
+                if (fullPath != null && fullPath.size() > 0 && this.currentIndex + 1 < fullPath.size()) {
+                    this.myDisplay.setIDRightArrowButton("arrow-buttons");
+                } else {
+                    this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
+                }
+            }
+
         }
+        prevBuilding = currentBuilding;
+        rightButtonFlag = false;
     }
 
     /**
@@ -769,19 +810,17 @@ public class Controller extends Application {
 
         if(!FIRST) {
             if (startNode != null){//have to delete old before creating new one (with same ID)
-                //System.out.println("Hiding old start node");
+
                 this.myDisplay.mapDisplay.hideLast(startNode); //hide the last start
             }
-            //eradicate(tempStart, true); //completely get rid of the last start
-            //System.out.println("-1");
+
             temp =  new Landmark(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
         } else {
             if (endNode != null){
-                //System.out.println("Hiding old end node");
+
                 this.myDisplay.mapDisplay.hideLast(endNode); //hide the last end
             }
-            //eradicate(tempEnd, false); //completely get rid of the last temp
-            //System.out.println("-2");
+
             temp = new Landmark(-2, x, y, z, x2, y2, z2, currentMap.getID(), "By " + nearestNamedNodeName(x2, y2, z2));
         }
 
@@ -1003,7 +1042,6 @@ public class Controller extends Application {
             }
         });
 
-
         return value;
     }
 
@@ -1072,8 +1110,7 @@ public class Controller extends Application {
     }
 
 
-
-            public INode getNode(int id){
+    public INode getNode(int id){
         return nodes.get(id);
     }
 
@@ -1136,10 +1173,11 @@ public class Controller extends Application {
             this.myDisplay.setIDRightArrowButton("arrow-buttons");
         } else {
             this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
-
         }
+        rightButtonFlag = true;
 
     }
+
     public void handleDecrementPathMap(){
         //if there is another list of instructions to go
         if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1){

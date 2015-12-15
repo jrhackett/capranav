@@ -7,6 +7,14 @@
     -fx-max-height:15;
 }
 
+#about-button:hover {
+    -fx-border-color:#aaa;
+}
+
+#about-button:pressed {
+    -fx-border-color:#888;
+}
+
 #about-label {
     -fx-font-size:20;
 }
