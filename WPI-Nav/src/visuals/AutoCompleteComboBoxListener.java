@@ -1,6 +1,9 @@
 package visuals;
 
 import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
+import javafx.beans.InvalidationListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.IndexRange;
@@ -8,17 +11,24 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
 
 /* I found these methods online, there are definitely some things we can change to make this better */
 public class AutoCompleteComboBoxListener<T> {
 
     private ComboBox<T> comboBox;
+    private ObservableList<T> originalList;
     private StringBuilder sb;
     private int lastLength;
 
     public AutoCompleteComboBoxListener(ComboBox<T> comboBox) {
+        this.originalList = comboBox.getItems();
         this.comboBox = comboBox;
-        this.comboBox.setVisibleRowCount(3);//why is it so long?
+        this.comboBox.setVisibleRowCount(10);//why is it so long?
 
         sb = new StringBuilder();
         this.comboBox.setEditable(true);
@@ -45,14 +55,21 @@ public class AutoCompleteComboBoxListener<T> {
             IndexRange ir = comboBox.getEditor().getSelection();
             sb.delete(0, sb.length());
             sb.append(comboBox.getEditor().getText());
+
             // remove selected string index until end so only unselected text will be recorded
             try {
                 sb.delete(ir.getStart(), sb.length());
             } catch (Exception ignored) { }
 
-            ObservableList<T> items = comboBox.getItems();
+            //ObservableList<T> items = comboBox.getItems();
+
+            ObservableList<T> items = trimObservableList(sb.toString());
+
+            boolean startsAPhrase = false;
+
             for (int i=0; i<items.size(); i++) {
                 if (items.get(i).toString().toLowerCase().startsWith(comboBox.getEditor().getText().toLowerCase())) {
+                    startsAPhrase = true;
                     try {
                         comboBox.getEditor().setText(sb.toString() + items.get(i).toString().substring(sb.toString().length()));
                         comboBox.setValue(items.get(i));
@@ -64,6 +81,10 @@ public class AutoCompleteComboBoxListener<T> {
                     comboBox.getEditor().selectEnd();
                     break;
                 }
+            }
+
+            if(!startsAPhrase){
+
             }
         });
 
@@ -125,6 +146,26 @@ public class AutoCompleteComboBoxListener<T> {
             KeyEvent ke = new KeyEvent(KeyEvent.KEY_RELEASED, KeyCode.ENTER.toString(), KeyCode.ENTER.toString(), KeyCode.ENTER, false, false, false, false);
             comboBox.fireEvent(ke);
         }
+    }
+
+
+    // This trims the observable list for the dropdown to just contain
+    // items that have the given string as a substring
+    private ObservableList<T> trimObservableList(String newString){
+
+        comboBox.setItems(FXCollections.observableArrayList(originalList));
+
+        ObservableList<T> oldList = FXCollections.observableArrayList(comboBox.getItems());
+
+        for (T item : oldList){
+            if(!item.toString().toLowerCase().contains(newString.toLowerCase())){
+                comboBox.getItems().remove(item);
+            }
+        }
+
+        System.out.println("Old size: " + oldList.size() + ", New size: " + comboBox.getItems().size());
+
+        return comboBox.getItems();
     }
 
 }
