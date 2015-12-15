@@ -3,20 +3,23 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
+import javafx.scene.*;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -86,6 +89,17 @@ public class Controller extends Application {
     public int lastSoft = -1;
 
     private Scene display;
+
+
+    /** Frosty **/
+    private static final double W = 330;
+    private static final double H = 590;
+
+    private static final double BLUR_AMOUNT = 60;
+
+    private static final Effect frostEffect =
+            new BoxBlur(BLUR_AMOUNT, BLUR_AMOUNT, 3);
+
 
 
     @Override
@@ -249,12 +263,41 @@ public class Controller extends Application {
         }
     }
 
+    private StackPane freeze(Node background, DoubleProperty y) {
+        Image frostImage = background.snapshot(
+                new SnapshotParameters(),
+                null
+        );
+
+        ImageView frost = new ImageView(frostImage);
+
+        Rectangle filler = new Rectangle(0, 0, this.stage.getWidth(), this.stage.getHeight());
+        filler.setFill(Color.AZURE);
+
+        Pane frostPane = new Pane(frost);
+        frostPane.setEffect(frostEffect);
+
+        StackPane frostView = new StackPane(
+                filler,
+                frostPane
+        );
+
+        Rectangle clipShape = new Rectangle(0, 0, this.stage.getWidth(), this.stage.getHeight());
+        frostView.setClip(clipShape);
+
+        //clipShape.yProperty().bind(y);
+
+        return frostView;
+    }
 
     private void showTutorial(){
         if (User.isUserNew()){//User.isUserNew()
             StackPane imageStack = new StackPane();
             StackPane shadowStack = new StackPane();
             shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+
+            DoubleProperty y = new SimpleDoubleProperty(H);
+            javafx.scene.Node frost      = freeze(this.myDisplay.root, y);
 
             imageStack.setOnMouseClicked(e -> {
                 myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
@@ -271,17 +314,17 @@ public class Controller extends Application {
             buttons.getChildren().addAll(no, yes);
 
             no.setOnAction(e -> {
-                myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+                myDisplay.root.getChildren().removeAll(imageStack, frost);
             });
 
             yes.setOnAction(e -> {
-                myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+                myDisplay.root.getChildren().removeAll(imageStack, frost);
                 this.playTutorial();
             });
 
             hello.setId("introLabel");
-            no.setId("introLabel");
-            yes.setId("introLabel");
+            no.setId("popoverButtons");
+            yes.setId("popoverButtons");
 
             greetings.getChildren().addAll(hello, buttons);
             imageStack.getChildren().addAll(greetings);
@@ -289,7 +332,7 @@ public class Controller extends Application {
             buttons.setTranslateX(-47);
             buttons.setSpacing(5);
             greetings.setAlignment(Pos.CENTER);
-            this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+            this.myDisplay.root.getChildren().addAll(frost, imageStack);
         }
 
     }
