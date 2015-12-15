@@ -644,7 +644,13 @@ public class Controller extends Application {
 //            }
 
             /** switches to the map **/
-            setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
+            //Play rotation animation if previous building is the campus map
+            if (prevBuilding == 0) {
+                int buildNum = buildings.get(currentBuilding).getID();
+                this.getMyDisplay().mapDisplay.rotationAnimation(buildNum);
+                this.getMyDisplay().mapDisplay.timeline.setOnFinished(e ->
+                        setCurrentMap(buildings.get(currentBuilding).getFloorID(i)));
+            }
 
 
             /** CSS SWITCH LOGIC **/
