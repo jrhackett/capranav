@@ -595,7 +595,6 @@ public class Controller extends Application {
             }
             defaultMap();
 
-            this.currentMap = campus;
         } else {
             this.currentMap = maps.get(mapId);
             this.currentBuilding = currentMap.getBuildingID();
@@ -671,12 +670,15 @@ public class Controller extends Application {
             /** update arrows **/
 
             if (fullPath != null) {
-                //find currentIndex
+
+
+
                 currentIndex = -1;
 
                 for (int z = 0; z < fullPath.size(); z++) {
                     if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
                         currentIndex = z;
+                        System.out.println("BREAK!");
                         break;
                     }
                 }
@@ -687,11 +689,21 @@ public class Controller extends Application {
                     this.myDisplay.clearInstructions();
                 }
 
-                if (fullPath != null && fullPath.size() > 0 && this.currentIndex + 1 < fullPath.size()) {
+
+
+                if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
                     this.myDisplay.setIDRightArrowButton("arrow-buttons");
                 } else {
                     this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
                 }
+
+                if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {
+                    this.myDisplay.setIDLeftArrowButton("arrow-buttons");
+                } else {
+                    this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
+                }
+
+
             }
 
         }
@@ -734,6 +746,44 @@ public class Controller extends Application {
 
         }
         firstTime = false;
+
+
+        if (fullPath != null) {
+
+
+
+            currentIndex = -1;
+
+            for (int z = 0; z < fullPath.size(); z++) {
+                if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
+                    currentIndex = z;
+                    System.out.println("BREAK!");
+                    break;
+                }
+            }
+
+            if (currentIndex != -1) {
+                myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
+            } else {
+                this.myDisplay.clearInstructions();
+            }
+
+
+
+            if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
+                this.myDisplay.setIDRightArrowButton("arrow-buttons");
+            } else {
+                this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
+            }
+
+            if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {
+                this.myDisplay.setIDLeftArrowButton("arrow-buttons");
+            } else {
+                this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
+            }
+
+
+        }
     }
 
     /**

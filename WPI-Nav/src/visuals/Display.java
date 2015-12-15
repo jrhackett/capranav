@@ -1621,8 +1621,6 @@ public class Display {
         /** map **/
         InfoTip i = new InfoTip("Click on the map to add starting/ending locations", mapPane, PopOver.ArrowLocation.TOP_CENTER);
 
-
-
         infoTips.add(a);
         infoTips.add(b);
         infoTips.add(c);
