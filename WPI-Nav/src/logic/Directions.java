@@ -233,8 +233,8 @@ public class Directions {
 			//if outside node mapid different then go inside/outside message
 			if (turn.getMap_id() == 0 && next.getMap_id() != 0) { //going inside
 				//TODO: this line
-				if (turn instanceof Transition) distPhrase = "inside " + (buildings.get(((Transition) turn).getBuildingID())).getName() + ".";
-				else distPhrase = "inside the building";
+				if (((Transition) turn).getBuildingID() != 0) distPhrase = "inside " + (buildings.get(((Transition) turn).getBuildingID())).getName() + ".";
+				else distPhrase = "WARNING, I POINT TO THE CAMPUS MAP!";
 			}
 			if (turn.getMap_id() != 0 && next.getMap_id() == 0) { //going outside
 				distPhrase = "out the door.";

@@ -44,9 +44,9 @@ public class Display {
     //Constants
     private static final double INPUT_WIDTH = 160;
     private static final double CONTROL_WIDTH = 30;
-    private static final double GAP = 5;
+    public static final double GAP = 5;
     private final double EDGE;
-    private static final double expandedWidth = 170;//150
+    public static final double expandedWidth = 170;//150
     private static final double MAP_WIDTH = 585; //originally 580+80
     private static final double MAP_HEIGHT = 460;//originally 455+40
     private static final double MAP_BORDER = 15;
@@ -55,7 +55,7 @@ public class Display {
     public Controller controller;
 
 
-    private BooleanProperty DASHBOARD_VISIBLE;
+    public BooleanProperty DASHBOARD_VISIBLE;
     private BooleanProperty SETTINGS_VISIBLE;
     private BooleanProperty EMAIL_VISIBLE;
     public BooleanProperty BUILDING_VISIBLE;
@@ -1550,8 +1550,8 @@ public class Display {
 
 
 
-        slidingEmail.playShowPane(EMAIL_VISIBLE);
-        slidingSettings.playShowPane(SETTINGS_VISIBLE);
+       // slidingEmail.playShowPane(EMAIL_VISIBLE);
+        //slidingSettings.playShowPane(SETTINGS_VISIBLE);
 
 
 
@@ -1572,8 +1572,6 @@ public class Display {
 
         /** get involved **/
         InfoTip c = new InfoTip("Discover events around campus!", infoButton, PopOver.ArrowLocation.BOTTOM_LEFT);
-
-
 
 
         infoTips.add(a);
@@ -1612,17 +1610,13 @@ public class Display {
         if (v.getValue() != null && !v.getValue().toString().isEmpty()) {
             if (v.containsNode(v.getValue().toString())) {
                 controller.handleSearchInput(v.getNode(v.getValue().toString()), START);
-//            } else {
-//                System.out.println("BAD 1");
-//                System.out.println("DID NOT CONTAIN: " + v.getValue().toString());
-//            }
-//        } else {
-//            System.out.println("BAD 2");
-//        }
-
+            } else {
+                controller.handleSpecificSearch(v.getValue().toString(), START);
             }
         }
     }
+
+
 
         private void handleWalkingInput (Inputs v,boolean START){
             visuals.Walking value = (visuals.Walking) v.getValue();
