@@ -1101,6 +1101,9 @@ public class MapDisplay extends Pane {
         map.getTransforms().add(rotation);
 
         double dur = Math.abs((angle/360)*800);
+        if (dur < 250){
+            dur += 150;
+        }
 
         timeline = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(rotation.angleProperty(), 0)),
