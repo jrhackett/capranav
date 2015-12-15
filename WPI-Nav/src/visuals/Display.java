@@ -801,13 +801,15 @@ public class Display {
         return popOver;
     }
 
+
+
+
     public void showMoreEventInfo(Event in) {
-        StackPane imageStack = new StackPane();
-        StackPane shadowStack = new StackPane();
-        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+        StackPane imageStack    = new StackPane();
+        javafx.scene.Node frost = controller.freeze(root);
 
         imageStack.setOnMouseClicked(e -> {
-            this.root.getChildren().removeAll(imageStack, shadowStack);
+           root.getChildren().removeAll(imageStack, frost);
         });
 
         VBox vbox = new VBox();
@@ -838,7 +840,7 @@ public class Display {
         vbox.getChildren().addAll(hbox, flowPane);
         imageStack.getChildren().add(vbox);
 
-        this.root.getChildren().addAll(shadowStack, imageStack);
+        this.root.getChildren().addAll(frost, imageStack);
     }
 
     private void initDirections() {

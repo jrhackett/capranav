@@ -262,7 +262,7 @@ public class Controller extends Application {
         }
     }
 
-    private StackPane freeze(Node background) {
+    public StackPane freeze(Node background) {
         Image frostImage = background.snapshot(
                 new SnapshotParameters(),
                 null
@@ -1224,19 +1224,30 @@ public class Controller extends Application {
     }
 
     private INode findNearestFood(){
+        if (startNode == null) {
+            return  null;
+        };
+
         double distance = Double.MAX_VALUE;
         INode n = null;
 
+        ArrayList<INode> toSearch = new ArrayList<>();
 
-        for(HashMap.Entry<Integer, INode> cursor : nodes.entrySet()){
+
+        for (HashMap.Entry<Integer, INode> cursor : nodes.entrySet()) {
             INode v = cursor.getValue();
-            if( v instanceof Food){ //we dont want the name Near Near Stratton Hall
-                double tempDistance = Math.sqrt((v.getX() - startNode.getX())*(v.getX() - startNode.getY()) + (v.getY() - v.getY())*(v.getY() - v.getY()));
-                if(tempDistance < distance ){
-                    n = v;
-                    distance = tempDistance;
-                }
+            if (v instanceof Food) { //we dont want the name Near Near Stratton Hall
+                toSearch.add(v);
             }
+        }
+
+        for (INode node : toSearch){
+            Directions.stepByStep(AStarShortestPath.AStarSearch(startNode, node, nodes), maps, buildings);
+            if (Directions.getTotalDistance() < distance){
+                distance = Directions.getTotalDistance();
+                n = node;
+            }
+            Directions.cleartotalDistance();
         }
 
         return  n;
@@ -1245,19 +1256,41 @@ public class Controller extends Application {
 
     private INode findNearestRoomType(String type){
 
+        if (startNode == null) {
+            return  null;
+        };
+
         double distance = Double.MAX_VALUE;
         INode n = null;
 
+        ArrayList<INode> inBuilding = new ArrayList<>();
 
-        for(HashMap.Entry<Integer, INode> cursor : nodes.entrySet()){
-            INode v = cursor.getValue();
-            if( v.toString().equals(type)){ //we dont want the name Near Near Stratton Hall
-                double tempDistance = Math.sqrt((v.getX() - startNode.getX())*(v.getX() - startNode.getY()) + (v.getY() - v.getY())*(v.getY() - v.getY()));
-                if(tempDistance < distance ){
-                    n = v;
-                    distance = tempDistance;
+        if (startNode.getMap_id() == 0) {
+
+            for (HashMap.Entry<Integer, INode> cursor : nodes.entrySet()) {
+                INode v = cursor.getValue();
+                if (v.toString().equals(type) && v.getMap_id() == startNode.getMap_id()) { //we dont want the name Near Near Stratton Hall
+                    inBuilding.add(v);
                 }
             }
+
+        } else {
+
+            for (HashMap.Entry<Integer, INode> cursor : nodes.entrySet()) {
+                INode v = cursor.getValue();
+                if (v.toString().equals(type)) { //we dont want the name Near Near Stratton Hall
+                    inBuilding.add(v);
+                }
+            }
+        }
+
+        for (INode node : inBuilding){
+            Directions.stepByStep(AStarShortestPath.AStarSearch(startNode, node, nodes), maps, buildings);
+            if (Directions.getTotalDistance() < distance){
+                distance = Directions.getTotalDistance();
+                n = node;
+            }
+            Directions.cleartotalDistance();
         }
 
         return  n;
