@@ -3,12 +3,11 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
-import javafx.scene.*;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
@@ -263,7 +262,7 @@ public class Controller extends Application {
         }
     }
 
-    private StackPane freeze(Node background, DoubleProperty y) {
+    public StackPane freeze(Node background) {
         Image frostImage = background.snapshot(
                 new SnapshotParameters(),
                 null
@@ -272,6 +271,8 @@ public class Controller extends Application {
         ImageView frost = new ImageView(frostImage);
 
         Rectangle filler = new Rectangle(0, 0, this.stage.getWidth(), this.stage.getHeight());
+        filler.widthProperty().bind(this.stage.widthProperty());
+        filler.heightProperty().bind(this.stage.heightProperty());
         filler.setFill(Color.AZURE);
 
         Pane frostPane = new Pane(frost);
@@ -283,7 +284,11 @@ public class Controller extends Application {
         );
 
         Rectangle clipShape = new Rectangle(0, 0, this.stage.getWidth(), this.stage.getHeight());
+        clipShape.heightProperty().bind(this.stage.heightProperty());
+        clipShape.widthProperty().bind(this.stage.widthProperty());
         frostView.setClip(clipShape);
+
+
 
         //clipShape.yProperty().bind(y);
 
@@ -293,19 +298,23 @@ public class Controller extends Application {
     private void showTutorial(){
         if (User.isUserNew()){//User.isUserNew()
             StackPane imageStack = new StackPane();
-            StackPane shadowStack = new StackPane();
-            shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
 
-            DoubleProperty y = new SimpleDoubleProperty(H);
-            javafx.scene.Node frost      = freeze(this.myDisplay.root, y);
+            javafx.scene.Node frost      = freeze(this.myDisplay.root);
 
             imageStack.setOnMouseClicked(e -> {
-                myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+                myDisplay.root.getChildren().removeAll(imageStack, frost);
             });
 
-            Label hello     = new Label ("Hello!\nIt looks like you are new to CapraNav!\nWould you like a tutorial?");
-            Button no       = new Button("Continue");
-            Button yes      = new Button("Play Tutorial");
+            Label hello     = new Label ("Hello!");
+            Label tutorial = new Label("It looks like you are new to CapraNav!");
+            Label subTutorial = new Label("Would you like a tutorial?");
+            Button no       = new Button("No, thank you");
+            Button yes      = new Button("Yes, please");
+
+            no.setId("tutorial-button");
+            no.setTextFill(Color.web("#eee"));
+            yes.setId("tutorial-button");
+            yes.setTextFill(Color.web("#eee"));
 
             VBox greetings  = new VBox();
             greetings.setSpacing(25);
@@ -323,13 +332,18 @@ public class Controller extends Application {
             });
 
             hello.setId("introLabel");
-            no.setId("popoverButtons");
-            yes.setId("popoverButtons");
+            tutorial.setId("introSubLabel");
+            subTutorial.setId("introSubLabel");
+            tutorial.setTranslateY(-25);
+            subTutorial.setTranslateY(-50);
+            buttons.setTranslateY(-50);
+            //no.setId("popoverButtons");
+            //yes.setId("popoverButtons");
 
-            greetings.getChildren().addAll(hello, buttons);
+            greetings.getChildren().addAll(hello, tutorial, subTutorial, buttons);
             imageStack.getChildren().addAll(greetings);
             buttons.setAlignment(Pos.CENTER);
-            buttons.setTranslateX(-47);
+            //buttons.setTranslateX(-47);
             buttons.setSpacing(5);
             greetings.setAlignment(Pos.CENTER);
             this.myDisplay.root.getChildren().addAll(frost, imageStack);
@@ -343,12 +357,12 @@ public class Controller extends Application {
 
     public void showAboutPanel() {
         StackPane imageStack = new StackPane();
-        StackPane shadowStack = new StackPane();
-        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+        javafx.scene.Node frost      = freeze(this.myDisplay.root);
 
         imageStack.setOnMouseClicked(e -> {
-            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            myDisplay.root.getChildren().removeAll(imageStack, frost);
         });
+
 
         //customize the stackpane here
         VBox vbox = new VBox();
@@ -395,23 +409,22 @@ public class Controller extends Application {
         attributions.setTranslateY(40);
 
         attributions.setOnMouseClicked(e -> {
-            this.myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            this.myDisplay.root.getChildren().removeAll(imageStack, frost);
             this.showCredits();
         });
 
         vbox.getChildren().addAll(hbox, goatLogoView, flowPane, attributions);
         imageStack.getChildren().add(vbox);
-        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+        this.myDisplay.root.getChildren().addAll(frost, imageStack);
 
     }
 
     public void showCredits() {
         StackPane imageStack = new StackPane();
-        StackPane shadowStack = new StackPane();
-        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+        javafx.scene.Node frost      = freeze(this.myDisplay.root);
 
         imageStack.setOnMouseClicked(e -> {
-            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            myDisplay.root.getChildren().removeAll(imageStack, frost);
         });
 
         VBox vbox = new VBox();
@@ -511,16 +524,19 @@ public class Controller extends Application {
 
         vbox.getChildren().addAll(hbox, teamLabel,teamFlowPane, iconLabel, iconBox);
         imageStack.getChildren().add(vbox);
-        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+        this.myDisplay.root.getChildren().addAll(frost, imageStack);
     }
 
     public void showNodeImage(INode node) {
         StackPane imageStack = new StackPane();
-        StackPane shadowStack = new StackPane();
-        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+        javafx.scene.Node frost      = freeze(this.myDisplay.root);
 
         imageStack.setOnMouseClicked(e -> {
-            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            myDisplay.root.getChildren().removeAll(imageStack, frost);
+        });
+
+        imageStack.setOnMouseClicked(e -> {
+            myDisplay.root.getChildren().removeAll(imageStack, frost);
         });
 
         //add image to stack pane -> if no image return void
@@ -530,7 +546,7 @@ public class Controller extends Application {
 
         imageStack.getChildren().add(iv);
 
-        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+        this.myDisplay.root.getChildren().addAll(frost, imageStack);
     }
 
     /**
@@ -602,7 +618,7 @@ public class Controller extends Application {
      * @param START
      */
     public void handleSearchInput(int id, boolean START) {
-
+        rightButtonFlag = true;
         FIRST = START; //Set START so when / if map clicked properly sets start/end node
 
         if (START) {
@@ -666,6 +682,7 @@ public class Controller extends Application {
            //     if (startNode != null) switchMapSetting(startNode.getMap_id());
         flipFlop *= -1;
         stage.setWidth(stage.getWidth() + flipFlop);
+        rightButtonFlag = false;
 
     }
 
@@ -1208,19 +1225,30 @@ public class Controller extends Application {
     }
 
     private INode findNearestFood(){
+        if (startNode == null) {
+            return  null;
+        };
+
         double distance = Double.MAX_VALUE;
         INode n = null;
 
+        ArrayList<INode> toSearch = new ArrayList<>();
 
-        for(HashMap.Entry<Integer, INode> cursor : nodes.entrySet()){
+
+        for (HashMap.Entry<Integer, INode> cursor : nodes.entrySet()) {
             INode v = cursor.getValue();
-            if( v instanceof Food){ //we dont want the name Near Near Stratton Hall
-                double tempDistance = Math.sqrt((v.getX() - startNode.getX())*(v.getX() - startNode.getY()) + (v.getY() - v.getY())*(v.getY() - v.getY()));
-                if(tempDistance < distance ){
-                    n = v;
-                    distance = tempDistance;
-                }
+            if (v instanceof Food) { //we dont want the name Near Near Stratton Hall
+                toSearch.add(v);
             }
+        }
+
+        for (INode node : toSearch){
+            Directions.stepByStep(AStarShortestPath.AStarSearch(startNode, node, nodes), maps, buildings);
+            if (Directions.getTotalDistance() < distance){
+                distance = Directions.getTotalDistance();
+                n = node;
+            }
+            Directions.cleartotalDistance();
         }
 
         return  n;
@@ -1229,19 +1257,41 @@ public class Controller extends Application {
 
     private INode findNearestRoomType(String type){
 
+        if (startNode == null) {
+            return  null;
+        };
+
         double distance = Double.MAX_VALUE;
         INode n = null;
 
+        ArrayList<INode> inBuilding = new ArrayList<>();
 
-        for(HashMap.Entry<Integer, INode> cursor : nodes.entrySet()){
-            INode v = cursor.getValue();
-            if( v.toString().equals(type)){ //we dont want the name Near Near Stratton Hall
-                double tempDistance = Math.sqrt((v.getX() - startNode.getX())*(v.getX() - startNode.getY()) + (v.getY() - v.getY())*(v.getY() - v.getY()));
-                if(tempDistance < distance ){
-                    n = v;
-                    distance = tempDistance;
+        if (startNode.getMap_id() == 0) {
+
+            for (HashMap.Entry<Integer, INode> cursor : nodes.entrySet()) {
+                INode v = cursor.getValue();
+                if (v.toString().equals(type) && v.getMap_id() == startNode.getMap_id()) { //we dont want the name Near Near Stratton Hall
+                    inBuilding.add(v);
                 }
             }
+
+        } else {
+
+            for (HashMap.Entry<Integer, INode> cursor : nodes.entrySet()) {
+                INode v = cursor.getValue();
+                if (v.toString().equals(type)) { //we dont want the name Near Near Stratton Hall
+                    inBuilding.add(v);
+                }
+            }
+        }
+
+        for (INode node : inBuilding){
+            Directions.stepByStep(AStarShortestPath.AStarSearch(startNode, node, nodes), maps, buildings);
+            if (Directions.getTotalDistance() < distance){
+                distance = Directions.getTotalDistance();
+                n = node;
+            }
+            Directions.cleartotalDistance();
         }
 
         return  n;

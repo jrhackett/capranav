@@ -769,7 +769,7 @@ public class Display {
         Text date = new Text(in.getDateInfo());
         date.setWrappingWidth(275);
 
-        Text description = new Text(in.getDescription());
+        Text description = new Text(in.getTweet());
         description.setWrappingWidth(275);
 
         flowPane.getChildren().add(description);
@@ -801,13 +801,15 @@ public class Display {
         return popOver;
     }
 
+
+
+
     public void showMoreEventInfo(Event in) {
-        StackPane imageStack = new StackPane();
-        StackPane shadowStack = new StackPane();
-        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+        StackPane imageStack    = new StackPane();
+        javafx.scene.Node frost = controller.freeze(root);
 
         imageStack.setOnMouseClicked(e -> {
-            this.root.getChildren().removeAll(imageStack, shadowStack);
+           root.getChildren().removeAll(imageStack, frost);
         });
 
         VBox vbox = new VBox();
@@ -838,7 +840,7 @@ public class Display {
         vbox.getChildren().addAll(hbox, flowPane);
         imageStack.getChildren().add(vbox);
 
-        this.root.getChildren().addAll(shadowStack, imageStack);
+        this.root.getChildren().addAll(frost, imageStack);
     }
 
     private void initDirections() {
@@ -1751,12 +1753,22 @@ public class Display {
         PopOver controlTutorial = new PopOver();
         controlTutorial.setTitle("Tutorial");
         Button back = new Button("Back");
+        back.setId("tutorial-panel-button");
         Button next = new Button("Next");
+        next.setId("tutorial-panel-button");
         Button showAll = new Button("Show All Tips");
+        showAll.setId("tutorial-panel-button");
         Button endTutorial = new Button("End Tutorial");
+        endTutorial.setId("tutorial-panel-button");
         HBox buttons = new HBox(back, next);
+        buttons.setSpacing(8);
+        buttons.setAlignment(Pos.CENTER);
         HBox buttonstwo = new HBox(showAll, endTutorial);
+        buttonstwo.setSpacing(8);
         VBox tutorial = new VBox(buttons, buttonstwo);
+        tutorial.setStyle("-fx-padding:8 8 8 8");
+        tutorial.setAlignment(Pos.CENTER);
+        tutorial.setSpacing(8);
         controlTutorial.setContentNode(tutorial);
         controlTutorial.setDetached(true);
         controlTutorial.show(mapPane);

@@ -259,6 +259,12 @@
 
 #introLabel {
     -fx-text-fill: black;
+    -fx-font-size:36;
+}
+
+#introSubLabel {
+    -fx-text-fill: black;
+    -fx-font-size:24;
 }
 
 #infoTip {
@@ -499,4 +505,30 @@
 .transition-node {
     -fx-fill:yellow;
     -fx-border-color:yellow;
+}
+
+#tutorial-button {
+    -fx-background-color:#ac2738;
+    -fx-font-fill:#eee;
+    -fx-font-size: 14;
+    -fx-border-width:1;
+    -fx-border-color:#ac2738;
+    -fx-border-radius:5;
+}
+
+#tutorial-button:hover {
+    -fx-border-color:#333;
+}
+
+#tutorial-panel-button {
+    -fx-background-color:white;
+    -fx-font-fill:#333;
+    -fx-font-size:12;
+    -fx-border-width:1;
+    -fx-border-radius:5;
+    -fx-border-color:#888;
+}
+
+#tutorial-panel-button:hover {
+    -fx-border-color:#aaa;
 }

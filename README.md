@@ -1,18 +1,18 @@
-# WPI Navigation Application
+# CapraNav
 
-This project is a navigation system for the campus Worcester Polytechnic Institute.
-
-## Installation
-
-TODO: Describe the installation process
-
-## Usage
-
-TODO: Write usage instructions
+CapraNav is a navigation system for the campus Worcester Polytechnic Institute.
 
 ## History
 
-TODO: Write history
+CapraNav was created for CS 3733 Software Engineering at Worcester Polytechnic Institute during B term 2015. 
+
+## Installation
+
+Clone our repo, open the "FinalProduct" folder. Within that there is a folder for Windows/Mac/Linux, and inside each of those is an executable. capra.exe/.jar is CapraNav, devtool.exe/.jar is the MapBuilder tool.
+
+## Usage
+
+On opening CapraNav for the first time, you will be prompted to try the tutorial. After that, you can reopen the tool tips by clicking the question mark in the menu bar.
 
 ## Credits
 
@@ -26,15 +26,19 @@ Jake Hackett
 Charlie Lovering
 #####Test Engineer/Document Specialist: 
 Henry Wheeler-Mackta
+#####Coach/Adviser:
+Nilesh Patel
+#####Instructor:
+Wilson Wong
 
 #####Other members: 
-Anthony Ratte
-
 Kurt Bugbee
+
+Josh Friscia
 
 Tucker Martin
 
-Josh Friscia
+Anthony Ratte
 
 
 
