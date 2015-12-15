@@ -702,9 +702,16 @@ public class Display {
         Feed f = new Feed(50);
 
         ObservableList<String> items = FXCollections.observableArrayList ();
-        for(Event e : f) {
-            String x = "\n" + e.getTitle() + "\n" + e.getDateInfo() + "\n";
-            items.add(x);
+
+        if (f.isEmpty()) {
+            items.add("Couldn't fetch OrgSync data. Please check your internet connection.");
+            items.add("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        }
+        else {
+            for(Event e : f) {
+                String x = "\n" + e.getTitle() + "\n" + e.getDateInfo() + "\n";
+                items.add(x);
+            }
         }
 
         listView.setCellFactory((ListView<String> lv) ->
@@ -728,7 +735,7 @@ public class Display {
                             setTranslateX(GAP);
 
                             setOnMouseClicked(e -> {
-                                
+
                             });
                         }
                     }
