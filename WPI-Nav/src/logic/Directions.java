@@ -243,7 +243,7 @@ public class Directions {
 
 			//if (angle<=-10 || angle>=10 || (aStarPath.size()==i+j+2 && veryfirm == false)){
 
-			if ((angle <= -15 || angle >= 15 || turn.getMap_id() != next.getMap_id()) && !(turn instanceof TStairs) && !(turn instanceof Elevator)) {
+			if ((angle <= -15 || angle >= 15 || turn.getMap_id() != next.getMap_id() || prev.getMap_id() != turn.getMap_id()) && !(turn instanceof TStairs) && !(turn instanceof Elevator)) {
 				//This if and switch should append the too far directions to distPhrase when going into a map if it has one.
 				if (turn.getMap_id() == 0 && next.getMap_id() != 0){
 					switch (predictdir){
