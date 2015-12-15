@@ -24,6 +24,7 @@ import javafx.stage.StageStyle;
 import logic.*;
 import visuals.Display;
 import visuals.Instructions;
+import visuals.MapDisplay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +52,7 @@ public class Controller extends Application {
 
     /* information of the maps */
     private int currentBuilding = 0;
+    public int prevBuilding = 0;
     private int currentFloor;
     private Campus campus;
     private logic.IMap currentMap;                  /* current map being used */
@@ -78,7 +80,8 @@ public class Controller extends Application {
 
     private Stage stage;
 
-    double flipFlop = 1;
+    private double flipFlop = 1;
+    public boolean rightButtonFlag = false;
     boolean firstTime = true;
 
     public int lastSoft = -1;
@@ -297,7 +300,7 @@ public class Controller extends Application {
 
         goatLogoView.setTranslateY(20);
         flowPane.setTranslateY(25);
-        attributions.setTranslateY(25);
+        attributions.setTranslateY(40);
 
         attributions.setOnMouseClicked(e -> {
             this.myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
@@ -594,8 +597,8 @@ public class Controller extends Application {
                 firstTime = true;
             }
             defaultMap();
+            prevBuilding = 0;
 
-            this.currentMap = campus;
         } else {
             this.currentMap = maps.get(mapId);
             this.currentBuilding = currentMap.getBuildingID();
@@ -644,8 +647,15 @@ public class Controller extends Application {
 //            }
 
             /** switches to the map **/
-            setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
-
+            //Play rotation animation if previous building is the campus map
+            if (prevBuilding == 0 && !rightButtonFlag) {
+                int buildNum = buildings.get(currentBuilding).getID();
+                this.getMyDisplay().mapDisplay.rotationAnimation(buildNum);
+                this.getMyDisplay().mapDisplay.timeline.setOnFinished(e ->
+                        setCurrentMap(buildings.get(currentBuilding).getFloorID(i)));
+            }
+            //otherwise just set the current map
+            else setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
 
             /** CSS SWITCH LOGIC **/
             if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)) {
@@ -671,7 +681,9 @@ public class Controller extends Application {
             /** update arrows **/
 
             if (fullPath != null) {
-                //find currentIndex
+
+
+
                 currentIndex = -1;
 
                 for (int z = 0; z < fullPath.size(); z++) {
@@ -687,14 +699,26 @@ public class Controller extends Application {
                     this.myDisplay.clearInstructions();
                 }
 
-                if (fullPath != null && fullPath.size() > 0 && this.currentIndex + 1 < fullPath.size()) {
+
+
+                if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
                     this.myDisplay.setIDRightArrowButton("arrow-buttons");
                 } else {
                     this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
                 }
+
+                if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {
+                    this.myDisplay.setIDLeftArrowButton("arrow-buttons");
+                } else {
+                    this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
+                }
+
+
             }
 
         }
+        //rightButtonFlag = false;
+        prevBuilding = currentBuilding;
     }
 
     /**
@@ -734,6 +758,42 @@ public class Controller extends Application {
 
         }
         firstTime = false;
+
+
+        if (fullPath != null) {
+
+
+            currentIndex = -1;
+
+            for (int z = 0; z < fullPath.size(); z++) {
+                if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
+                    currentIndex = z;
+                    break;
+                }
+            }
+
+            if (currentIndex != -1) {
+                myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
+            } else {
+                this.myDisplay.clearInstructions();
+            }
+
+
+
+            if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
+                this.myDisplay.setIDRightArrowButton("arrow-buttons");
+            } else {
+                this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
+            }
+
+            if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {
+                this.myDisplay.setIDLeftArrowButton("arrow-buttons");
+            } else {
+                this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
+            }
+
+
+        }
     }
 
     /**
@@ -1147,6 +1207,7 @@ public class Controller extends Application {
 
     public void handleIncrementPathMap(){
         //if there is another list of instructions to go
+        rightButtonFlag = true;
         if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
             myDisplay.setInstructions(fullPath.get(++currentIndex)); //TODO UPDATE setInstructions
             switchMapSetting(fullPath.get(currentIndex).get(0).getNode().getMap_id());
@@ -1160,9 +1221,12 @@ public class Controller extends Application {
         } else {
             this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
         }
+        rightButtonFlag = false;
+
     }
 
     public void handleDecrementPathMap(){
+        rightButtonFlag = true;
         //if there is another list of instructions to go
         if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1){
             myDisplay.setInstructions(fullPath.get(--currentIndex)); //TODO UPDATE setInstructions
@@ -1176,6 +1240,7 @@ public class Controller extends Application {
         } else {
             this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
         }
+        rightButtonFlag = false;
     }
 
     public void handleWeightOptions(boolean weather, boolean handicap){
