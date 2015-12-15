@@ -172,7 +172,8 @@ public class Directions {
 
 			//new functionality: special directions for landmarks. Hopefully doesn't return silly grammar.
 			if (turn.isInteresting()) {
-				anglePhrase = AngletoString((int) Math.round(angle)) + " at " + turn.toString();
+				if(Character.isDigit(turn.toString().charAt(0))) anglePhrase = AngletoString((int) Math.round(angle)) + " at Room " + turn.toString();
+				else anglePhrase = AngletoString((int) Math.round(angle)) + " at " + turn.toString();
 			} else {
 				anglePhrase = AngletoString((int) Math.round(angle));
 			}
@@ -232,7 +233,8 @@ public class Directions {
 			//if outside node mapid different then go inside/outside message
 			if (turn.getMap_id() == 0 && next.getMap_id() != 0) { //going inside
 				//TODO: this line
-				distPhrase = "inside " + (buildings.get(((Transition) turn).getBuildingID())).getName() + ".";
+				if (((Transition) turn).getBuildingID() != 0) distPhrase = "inside " + (buildings.get(((Transition) turn).getBuildingID())).getName() + ".";
+				else distPhrase = "WARNING, I POINT TO THE CAMPUS MAP!";
 			}
 			if (turn.getMap_id() != 0 && next.getMap_id() == 0) { //going outside
 				distPhrase = "out the door.";

@@ -233,10 +233,11 @@
 }
 
 #infoTip {
-    -fx-max-height:15 !important;
-    -fx-background-color: white;
-    -fx-padding:0;
-    -fx-font-size: 12;
+    -fx-font-size:12;
+    -fx-max-height:16 !important;
+    -fx-pref-height:16 !important;
+    -fx-min-height:12 !important;
+    -fx-padding:2 2 2 2;
 }
 
 .list-cell {
