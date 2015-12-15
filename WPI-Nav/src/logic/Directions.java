@@ -26,7 +26,7 @@ public class Directions {
 		int predictdir = 0;
 		String distPhrase = " ";
 		String lastdir = "";
-		//boolean veryfirm = false;
+		boolean veryfirm = false;
 
 		//^^NEW LINE, init var distspec
 
@@ -243,7 +243,7 @@ public class Directions {
 
 			//if (angle<=-10 || angle>=10 || (aStarPath.size()==i+j+2 && veryfirm == false)){
 
-			if ((angle <= -15 || angle >= 15 || turn.getMap_id() != next.getMap_id()) && !(turn instanceof TStairs) && !(turn instanceof Elevator)) {
+			if ((angle <= -15 || angle >= 15 || turn.getMap_id() != next.getMap_id() || prev.getMap_id() != turn.getMap_id()) && !(turn instanceof TStairs) && !(turn instanceof Elevator) || !veryfirm) {
 				//This if and switch should append the too far directions to distPhrase when going into a map if it has one.
 				if (turn.getMap_id() == 0 && next.getMap_id() != 0){
 					switch (predictdir){
@@ -267,11 +267,12 @@ public class Directions {
 					predictdir = 0;
 				}
 				directions.get(mapstep).add(new Instructions("Make a " + anglePhrase + ", and walk " + distPhrase, turn));
-			}
+				veryfirm = true;}
 
 			if (turn.isTransition() && next.getMap_id() != turn.getMap_id()) {
 				mapstep++;
 				directions.add(new ArrayList<Instructions>());
+				veryfirm = false;
 			}
 			distspec = 0;
 			//This will attempt to roughly determine your route for predictive instructions.

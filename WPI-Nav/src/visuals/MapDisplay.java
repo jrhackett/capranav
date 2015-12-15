@@ -1,11 +1,11 @@
 package visuals;
 
 import controller.Controller;
-import javafx.animation.ScaleTransition;
-import javafx.animation.Transition;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -21,6 +21,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import logic.Building;
 import logic.FileFetch;
@@ -89,7 +90,7 @@ public class MapDisplay extends Pane {
     //////////////////////// ICON CODE ///////////////////////////
     private HashMap<Integer, ImageView> id_ICON;
 
-    private Integer i;
+    public Timeline timeline;
 
     /**
      * Constructor
@@ -1026,6 +1027,90 @@ public class MapDisplay extends Pane {
                     }
                 });
 
+    }
+
+    public void rotationAnimation(int building){
+        double pivotX = 0, pivotY = 0,angle = 0;
+        switch (building) {
+            case 0: //Campus Map
+                pivotX = 0;
+                pivotY = 0;
+                angle = 0;
+                break;
+            case 1: //Stratton Hall
+                pivotX = 396.5;
+                pivotY = 315.92;
+                angle = -104;
+                break;
+            case 2: //Atwater Kent
+                pivotX = 449.7;
+                pivotY = 160.3;
+                angle = 152;
+                break;
+            case 3: //Boynton
+                pivotX = 424.7;
+                pivotY = 365.2;
+                angle = -12;
+                break;
+            case 4: //Campus Center
+                pivotX = 329;
+                pivotY = 203.82;
+                angle = 83;
+                break;
+            case 5: //Library
+                pivotX = 506.2;
+                pivotY = 278.47;
+                angle = -105;
+                break;
+            case 6: //Higgins House
+                pivotX = 291.54;
+                pivotY = 131.53;
+                angle = -124.74;
+                break;
+            case 7: //HH apartment
+                pivotX = 0;
+                pivotY = 0;
+                angle = 0;
+                break;
+            case 8: //HH garage
+                pivotX = 0;
+                pivotY = 0;
+                angle = 0;
+                break;
+            case 9: //Project Center
+                pivotX = 403.;
+                pivotY = 247;
+                angle = -102;
+                break;
+            case 10: //Fuller Labs
+                pivotX = 505;
+                pivotY = 188;
+                angle = -66;
+                break;
+            case 11: //Salisbury
+                pivotX = 448.6;
+                pivotY = 228;
+                angle = 83;
+                break;
+
+        }
+        Node map = controller.getMyDisplay().zoomAndPan.panAndZoomPane;
+        Rotate rotation = new Rotate();
+        rotation.setPivotX(pivotX);
+        rotation.setPivotY(pivotY);
+        map.getTransforms().add(rotation);
+
+        double dur = Math.abs((angle/360)*800);
+        if (dur < 250){
+            dur += 150;
+        }
+
+        timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(rotation.angleProperty(), 0)),
+                new KeyFrame(Duration.millis(dur), new KeyValue(rotation.angleProperty(), angle)),
+                new KeyFrame(Duration.millis(dur + 1), new KeyValue(rotation.angleProperty(), 0)));
+
+        timeline.play();
     }
 
 }
