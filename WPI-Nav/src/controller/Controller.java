@@ -653,6 +653,8 @@ public class Controller extends Application {
                 this.getMyDisplay().mapDisplay.timeline.setOnFinished(e ->
                         setCurrentMap(buildings.get(currentBuilding).getFloorID(i)));
             }
+            //otherwise just set the current map
+            else setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
 
 
             /** CSS SWITCH LOGIC **/
