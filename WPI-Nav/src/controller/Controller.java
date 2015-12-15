@@ -51,6 +51,7 @@ public class Controller extends Application {
 
     /* information of the maps */
     private int currentBuilding = 0;
+    public int prevBuilding = 0;
     private int currentFloor;
     private Campus campus;
     private logic.IMap currentMap;                  /* current map being used */
@@ -594,6 +595,7 @@ public class Controller extends Application {
                 firstTime = true;
             }
             defaultMap();
+            prevBuilding = 0;
 
             this.currentMap = campus;
         } else {
@@ -673,6 +675,7 @@ public class Controller extends Application {
                 this.myDisplay.setLeftButtonStyle("-fx-background-color:#eee;");
 
             }
+            prevBuilding = currentBuilding;
         }
     }
 
