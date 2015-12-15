@@ -220,6 +220,9 @@ public class Controller extends Application {
         } else {
             stage.setWidth(stage.getWidth() + flipFlop);
         }
+
+        this.myDisplay.start.getEditor().clear();
+        this.myDisplay.end.getEditor().clear();
         }
 
     /**
