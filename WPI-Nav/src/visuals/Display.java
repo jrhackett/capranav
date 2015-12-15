@@ -1726,19 +1726,24 @@ public class Display {
         /** right arrow **/
         InfoTip l = new InfoTip("Go to next direction!", rightArrowButton, PopOver.ArrowLocation.TOP_CENTER);
 
+        /** right arrow **/
+        InfoTip m = new InfoTip("You're ready to start using CapraNav!", mapPane, PopOver.ArrowLocation.TOP_LEFT);
+
 
         infoTips.add(a);
         infoTips.add(b);
         infoTips.add(c);
         infoTips.add(d);
+        infoTips.add(k);
+        infoTips.add(j);
+        infoTips.add(l);
         infoTips.add(e);
         infoTips.add(f);
         infoTips.add(g);
         infoTips.add(h);
         infoTips.add(i);
-        infoTips.add(j);
-        infoTips.add(k);
-        infoTips.add(l);
+        infoTips.add(m);
+
     }
 
     /** called from the controller and plays the sequence **/
