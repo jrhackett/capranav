@@ -1040,7 +1040,7 @@ public class MapDisplay extends Pane {
             case 1: //Stratton Hall
                 pivotX = 396.5;
                 pivotY = 315.92;
-                angle = -100;
+                angle = -104;
                 break;
             case 2: //Atwater Kent
                 pivotX = 449.7;
@@ -1050,12 +1050,12 @@ public class MapDisplay extends Pane {
             case 3: //Boynton
                 pivotX = 424.7;
                 pivotY = 365.2;
-                angle = 0;
+                angle = -12;
                 break;
             case 4: //Campus Center
                 pivotX = 329;
                 pivotY = 203.82;
-                angle = 84;
+                angle = 83;
                 break;
             case 5: //Library
                 pivotX = 506.2;
