@@ -293,6 +293,7 @@ public class Controller extends Application {
     private void showTutorial(){
         if (User.isUserNew()){//User.isUserNew()
             StackPane imageStack = new StackPane();
+            imageStack.setAlignment(Pos.CENTER);
             StackPane shadowStack = new StackPane();
             shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
 
@@ -303,9 +304,16 @@ public class Controller extends Application {
                 myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
             });
 
-            Label hello     = new Label ("Hello!\nIt looks like you are new to CapraNav!\nWould you like a tutorial?");
-            Button no       = new Button("Continue");
-            Button yes      = new Button("Play Tutorial");
+            Label hello     = new Label ("Hello!");
+            Label tutorial = new Label("It looks like you are new to CapraNav!");
+            Label subTutorial = new Label("Would you like a tutorial?");
+            Button no       = new Button("No, thank you");
+            Button yes      = new Button("Yes, please");
+
+            no.setId("tutorial-button");
+            no.setTextFill(Color.web("#eee"));
+            yes.setId("tutorial-button");
+            yes.setTextFill(Color.web("#eee"));
 
             VBox greetings  = new VBox();
             greetings.setSpacing(25);
@@ -323,13 +331,18 @@ public class Controller extends Application {
             });
 
             hello.setId("introLabel");
-            no.setId("popoverButtons");
-            yes.setId("popoverButtons");
+            tutorial.setId("introSubLabel");
+            subTutorial.setId("introSubLabel");
+            tutorial.setTranslateY(-25);
+            subTutorial.setTranslateY(-50);
+            buttons.setTranslateY(-50);
+            //no.setId("popoverButtons");
+            //yes.setId("popoverButtons");
 
-            greetings.getChildren().addAll(hello, buttons);
+            greetings.getChildren().addAll(hello, tutorial, subTutorial, buttons);
             imageStack.getChildren().addAll(greetings);
             buttons.setAlignment(Pos.CENTER);
-            buttons.setTranslateX(-47);
+            //buttons.setTranslateX(-47);
             buttons.setSpacing(5);
             greetings.setAlignment(Pos.CENTER);
             this.myDisplay.root.getChildren().addAll(frost, imageStack);
