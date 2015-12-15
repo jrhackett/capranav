@@ -1063,9 +1063,9 @@ public class MapDisplay extends Pane {
                 angle = -105;
                 break;
             case 6: //Higgins House
-                pivotX = 0;
-                pivotY = 0;
-                angle = 0;
+                pivotX = 291.54;
+                pivotY = 131.53;
+                angle = -124.74;
                 break;
             case 7: //HH apartment
                 pivotX = 0;
@@ -1085,7 +1085,7 @@ public class MapDisplay extends Pane {
             case 10: //Fuller Labs
                 pivotX = 505;
                 pivotY = 188;
-                angle = -67;
+                angle = -66;
                 break;
             case 11: //Salisbury
                 pivotX = 448.6;
