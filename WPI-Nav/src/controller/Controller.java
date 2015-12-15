@@ -3,10 +3,24 @@ package controller;
 import SVGConverter.SvgImageLoaderFactory;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
+import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import logic.*;
@@ -39,6 +53,7 @@ public class Controller extends Application {
 
     /* information of the maps */
     private int currentBuilding = 0;
+    public int prevBuilding = 0;
     private int currentFloor;
     private Campus campus;
     private logic.IMap currentMap;                  /* current map being used */
@@ -66,12 +81,24 @@ public class Controller extends Application {
 
     private Stage stage;
 
-    double flipFlop = 1;
+    private double flipFlop = 1;
+    public boolean rightButtonFlag = false;
     boolean firstTime = true;
 
     public int lastSoft = -1;
 
     private Scene display;
+
+
+    /** Frosty **/
+    private static final double W = 330;
+    private static final double H = 590;
+
+    private static final double BLUR_AMOUNT = 60;
+
+    private static final Effect frostEffect =
+            new BoxBlur(BLUR_AMOUNT, BLUR_AMOUNT, 3);
+
 
 
     @Override
@@ -109,7 +136,14 @@ public class Controller extends Application {
         });
 
 
-		/* basic layout */
+        this.buildings.forEach((k,v) -> {
+            v.translateBuilding(getNodesOfBuilding(k), nodes).forEach((key,value) ->{
+                nodes.put(key, value);
+            });
+        });
+
+
+        /* basic layout */
         //s.initStyle(StageStyle.TRANSPARENT);  // <-- removes the top part of the app close/open [switch to UNDECORATED]
 
         this.myDisplay = new Display(this);    //creates scene
@@ -133,13 +167,63 @@ public class Controller extends Application {
 
         s.show();   //shows scene
         defaultMap();
+        showTutorial();
     }
 
+
+    /**
+     * return the HashMap of Nodes [to display][of the current map]
+     *
+     * @param id
+     * @return
+     */
+    public HashMap<Integer, INode> getNodesOfBuilding(int id) {
+
+        HashMap<Integer, INode> value = new HashMap<>();
+
+        nodes.forEach((k, v) -> {
+            if (maps.get(v.getMap_id()).getBuildingID() == id) {
+                value.put(k, v);
+            }
+        });
+        return value;
+    }
 
     /****************************************************************************************************************
                                     FUNCTIONS THAT ARE CALLED FROM UI AND CONTACT UI
      ****************************************************************************************************************/
 
+
+
+    public void help(){
+        //boolean firstUse = User.getFirst();
+        this.myDisplay.showToolTips();
+
+    }
+
+
+    public void clear(){
+
+        Directions.cleartotalDistance();
+
+        this.startNode = null;
+        this.endNode = null;
+        this.pathNodes = null;
+        this.fullPath = null;
+
+        flipFlop *= -1;
+        boolean full = stage.isFullScreen();
+
+        if (full) {
+            stage.setFullScreen(!full);
+            stage.setFullScreen(full);
+        } else {
+            stage.setWidth(stage.getWidth() + flipFlop);
+        }
+
+            this.myDisplay.start.getEditor().clear();
+            this.myDisplay.end.getEditor().clear();
+        }
 
     /**
      * Changes the Style Sheet
@@ -181,13 +265,281 @@ public class Controller extends Application {
         }
     }
 
-    public void showNodeImage(INode node) {
+    public StackPane freeze(Node background) {
+        Image frostImage = background.snapshot(
+                new SnapshotParameters(),
+                null
+        );
+
+        ImageView frost = new ImageView(frostImage);
+
+        Rectangle filler = new Rectangle(0, 0, this.stage.getWidth(), this.stage.getHeight());
+        filler.widthProperty().bind(this.stage.widthProperty());
+        filler.heightProperty().bind(this.stage.heightProperty());
+        filler.setFill(Color.AZURE);
+
+        Pane frostPane = new Pane(frost);
+        frostPane.setEffect(frostEffect);
+
+        StackPane frostView = new StackPane(
+                filler,
+                frostPane
+        );
+
+        Rectangle clipShape = new Rectangle(0, 0, this.stage.getWidth(), this.stage.getHeight());
+        clipShape.heightProperty().bind(this.stage.heightProperty());
+        clipShape.widthProperty().bind(this.stage.widthProperty());
+        frostView.setClip(clipShape);
+
+
+
+        //clipShape.yProperty().bind(y);
+
+        return frostView;
+    }
+
+    private void showTutorial(){
+        if (User.isUserNew()){//User.isUserNew()
+            StackPane imageStack = new StackPane();
+
+            javafx.scene.Node frost      = freeze(this.myDisplay.root);
+
+            imageStack.setOnMouseClicked(e -> {
+                myDisplay.root.getChildren().removeAll(imageStack, frost);
+            });
+
+            Label hello     = new Label ("Hello!");
+            Label tutorial = new Label("It looks like you are new to CapraNav!");
+            Label subTutorial = new Label("Would you like a tutorial?");
+            Button no       = new Button("No, thank you");
+            Button yes      = new Button("Yes, please");
+
+            no.setId("tutorial-button");
+            no.setTextFill(Color.web("#eee"));
+            yes.setId("tutorial-button");
+            yes.setTextFill(Color.web("#eee"));
+
+            VBox greetings  = new VBox();
+            greetings.setSpacing(25);
+
+            HBox buttons    = new HBox();
+            buttons.getChildren().addAll(no, yes);
+
+            no.setOnAction(e -> {
+                myDisplay.root.getChildren().removeAll(imageStack, frost);
+            });
+
+            yes.setOnAction(e -> {
+                myDisplay.root.getChildren().removeAll(imageStack, frost);
+                this.playTutorial();
+            });
+
+            hello.setId("introLabel");
+            tutorial.setId("introSubLabel");
+            subTutorial.setId("introSubLabel");
+            tutorial.setTranslateY(-25);
+            subTutorial.setTranslateY(-50);
+            buttons.setTranslateY(-50);
+            //no.setId("popoverButtons");
+            //yes.setId("popoverButtons");
+
+            greetings.getChildren().addAll(hello, tutorial, subTutorial, buttons);
+            imageStack.getChildren().addAll(greetings);
+            buttons.setAlignment(Pos.CENTER);
+            //buttons.setTranslateX(-47);
+            buttons.setSpacing(5);
+            greetings.setAlignment(Pos.CENTER);
+            this.myDisplay.root.getChildren().addAll(frost, imageStack);
+        }
+
+    }
+
+    private void playTutorial(){
+        this.myDisplay.showToolTips();
+    }
+
+    public void showAboutPanel() {
         StackPane imageStack = new StackPane();
-        StackPane shadowStack = new StackPane();
-        shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
+        javafx.scene.Node frost      = freeze(this.myDisplay.root);
 
         imageStack.setOnMouseClicked(e -> {
-            myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
+            myDisplay.root.getChildren().removeAll(imageStack, frost);
+        });
+
+
+        //customize the stackpane here
+        VBox vbox = new VBox();
+        vbox.setId("about-panel");
+        vbox.setSpacing(8);
+        vbox.setAlignment(Pos.TOP_CENTER);
+
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setId("about-title");
+        Label aboutLabel = new Label("About CapraNav");
+        aboutLabel.setId("about-label");
+        aboutLabel.setTextFill(Color.web("#eeeeee"));
+
+        hbox.getChildren().add(aboutLabel);
+
+        Image goatLogo = FileFetch.getImageFromFile("goat-logo.png");
+        ImageView goatLogoView = new ImageView(goatLogo);
+
+        FlowPane flowPane = new FlowPane();
+        Text text = new Text();
+        text.setId("about-text");
+        text.setWrappingWidth(500);
+        //text.setTextAlignment(TextAlignment.JUSTIFY);
+        text.setText(
+                "CapraNav was created for a software engineering class at Worcester Polytechnic Institute during B term of 2015. " +
+                "The team consisted of nine members ranging from sophomores to seniors with various backrounds.\n\nMembers included " +
+                "Kurt Bugbee, Josh Friscia, Mike Giancola, Jacob Hackett, Charlie Lovering, Tucker Martin, Anthony Ratte, Greg Tighe and Henry Wheeler-Mackta. " +
+                "The professor for the course was Wilson Wong and the coach for this team was Nilesh Patel."
+        );
+
+        flowPane.setPrefWrapLength(500);
+        flowPane.setAlignment(Pos.CENTER);
+        flowPane.getChildren().add(text);
+
+        Button attributions = new Button();
+        attributions.setId("about-button");
+        attributions.setText("Credits");
+        attributions.setTextFill(Color.BLUE);
+        attributions.setTextAlignment(TextAlignment.CENTER);
+
+        goatLogoView.setTranslateY(20);
+        flowPane.setTranslateY(25);
+        attributions.setTranslateY(40);
+
+        attributions.setOnMouseClicked(e -> {
+            this.myDisplay.root.getChildren().removeAll(imageStack, frost);
+            this.showCredits();
+        });
+
+        vbox.getChildren().addAll(hbox, goatLogoView, flowPane, attributions);
+        imageStack.getChildren().add(vbox);
+        this.myDisplay.root.getChildren().addAll(frost, imageStack);
+
+    }
+
+    public void showCredits() {
+        StackPane imageStack = new StackPane();
+        javafx.scene.Node frost      = freeze(this.myDisplay.root);
+
+        imageStack.setOnMouseClicked(e -> {
+            myDisplay.root.getChildren().removeAll(imageStack, frost);
+        });
+
+        VBox vbox = new VBox();
+        vbox.setId("about-panel");
+        vbox.setSpacing(8);
+        vbox.setAlignment(Pos.TOP_CENTER);
+
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setId("about-title");
+        Label aboutLabel = new Label("Credits");
+        aboutLabel.setId("about-label");
+        aboutLabel.setTextFill(Color.web("#eeeeee"));
+
+        hbox.getChildren().add(aboutLabel);
+
+        FlowPane teamFlowPane = new FlowPane();
+        teamFlowPane.setPrefWrapLength(400);
+        teamFlowPane.setAlignment(Pos.CENTER);
+        teamFlowPane.setHgap(20);
+        teamFlowPane.setVgap(8);
+
+        Label teamLabel = new Label("Team Members");
+        teamLabel.setId("about-text");
+        teamLabel.setStyle("-fx-font-weight: bold");
+        ArrayList<String> teamMembers = new ArrayList<>();
+        ArrayList<String> positions = new ArrayList<>();
+
+        teamMembers.add("Kurt Bugbee");teamMembers.add("Josh Friscia");teamMembers.add("Mike Giancola");teamMembers.add("Jacob Hackett");
+        teamMembers.add("Charlie Lovering");teamMembers.add("Tucker Martin");teamMembers.add("Anthony Ratte");teamMembers.add("Greg Tighe");teamMembers.add("Henry 'Whackta' Wheeler-Mackta");
+        positions.add("Product Owner 2");positions.add("Project Manager 2");positions.add("Product Owner 1");positions.add("Lead Software Engineer 1");
+        positions.add("\t  Lead UI/UX 1\nLead Software Engineer 2");positions.add("Lead UI/UX 2");positions.add("Test Engineer 2");positions.add("Project Manager 1");positions.add("Test Engineer 1");
+
+        int i = 0;
+        for(String name : teamMembers) {
+            VBox vbox1 = new VBox();
+            vbox1.setAlignment(Pos.CENTER);
+            vbox1.setSpacing(8);
+            Circle circle = new Circle();
+            circle.setRadius(60);
+            //Image person = FileFetch.getImageFromFile("goat-logo.png");
+            Image person = FileFetch.getImageFromFile(name + ".png");
+            circle.setFill(new ImagePattern(person));
+            Label label = new Label(name);
+            label.setStyle("-fx-font-size:12;");
+            Label positionLabel = new Label(positions.get(i));
+            positionLabel.setStyle("-fx-font-size:10;");
+            positionLabel.setTranslateY(-7);
+            positionLabel.setAlignment(Pos.CENTER);
+            vbox1.getChildren().addAll(circle, label, positionLabel);
+            teamFlowPane.getChildren().add(vbox1);
+            i++;
+        }
+
+        Label iconLabel = new Label("Icon Authors");
+        iconLabel.setId("about-text");
+        iconLabel.setStyle("-fx-font-weight: bold");
+
+        //TODO add hyperlinks here for authors and flaticon
+        HBox iconBox = new HBox();
+        iconBox.setAlignment(Pos.TOP_CENTER);
+        iconBox.setSpacing(16);
+        VBox iconLeftBox =new VBox();
+        VBox iconRightBox = new VBox();
+
+        Text iconLeftText = new Text();
+        iconLeftText.setStyle("-fx-font-size:12;");
+        iconLeftText.setText("Question mark icon made by Daniel Bruce from FlatIcon\n" +
+                "Picture icon made by FreePik from FlatIcon\n" +
+                "Settings icon made by FreePik from FlatIcon\n" +
+                "Email icon made by icon-works.com from FlatIcon\n" +
+                "Location pin icon made by FreePik from FlatIcon");
+
+        Text iconRightText = new Text();
+        iconRightText.setStyle("-fx-font-size:12;");
+        iconRightText.setText("Paper airplane icon made by FreePik from FlatIcon\n" +
+                "Stair icon made by FreePik from FlatIcon\n" +
+                "Elevator icon made by FreePik from FlatIcon\n" +
+                "Parking icon made by Google from FlatIcon");
+
+        iconLeftBox.getChildren().add(iconLeftText);
+        iconRightBox.getChildren().add(iconRightText);
+
+        iconBox.getChildren().addAll(iconLeftBox, iconRightBox);
+
+        /* Author links to add to this pane:
+        http://www.danielbruce.se -- question mark
+        http://www.freepik.com -- picture
+        http://www.freepik.com -- gears
+        http://icon-works.com -- email
+        http://www.freepik.com -- pin
+        http://www.freepik.com -- plane
+        http://www.freepik.com -- stairs
+        http://www.freepik.com -- elevator
+        http://www.google.com -- parking
+         */
+
+        vbox.getChildren().addAll(hbox, teamLabel,teamFlowPane, iconLabel, iconBox);
+        imageStack.getChildren().add(vbox);
+        this.myDisplay.root.getChildren().addAll(frost, imageStack);
+    }
+
+    public void showNodeImage(INode node) {
+        StackPane imageStack = new StackPane();
+        javafx.scene.Node frost      = freeze(this.myDisplay.root);
+
+        imageStack.setOnMouseClicked(e -> {
+            myDisplay.root.getChildren().removeAll(imageStack, frost);
+        });
+
+        imageStack.setOnMouseClicked(e -> {
+            myDisplay.root.getChildren().removeAll(imageStack, frost);
         });
 
         //add image to stack pane -> if no image return void
@@ -197,7 +549,7 @@ public class Controller extends Application {
 
         imageStack.getChildren().add(iv);
 
-        this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
+        this.myDisplay.root.getChildren().addAll(frost, imageStack);
     }
 
     /**
@@ -269,7 +621,7 @@ public class Controller extends Application {
      * @param START
      */
     public void handleSearchInput(int id, boolean START) {
-
+        rightButtonFlag = true;
         FIRST = START; //Set START so when / if map clicked properly sets start/end node
 
         if (START) {
@@ -286,7 +638,6 @@ public class Controller extends Application {
             }
 
             this.startNode = nodes.get(id);
-
         } else {
 
             if (startNode != null && id == startNode.getID() ){ //&& startNode != null
@@ -320,7 +671,6 @@ public class Controller extends Application {
         }
 
         if (endNode != null && startNode == null) {
-
             if (endNode.getMap_id() == currentMap.getID()) {
                 myDisplay.mapDisplay.setEndNode(endNode, true);
             } else {
@@ -329,10 +679,13 @@ public class Controller extends Application {
         }
 
 
-        if (startNode != null && endNode != null) {
-            findPaths();
-        } else
-                if (startNode != null) switchMapSetting(startNode.getMap_id());
+        //if (startNode != null && endNode != null) {
+         //   findPaths();
+       // }// else
+           //     if (startNode != null) switchMapSetting(startNode.getMap_id());
+        flipFlop *= -1;
+        stage.setWidth(stage.getWidth() + flipFlop);
+        rightButtonFlag = false;
 
     }
 
@@ -356,8 +709,8 @@ public class Controller extends Application {
                 firstTime = true;
             }
             defaultMap();
+            prevBuilding = 0;
 
-            this.currentMap = campus;
         } else {
             this.currentMap = maps.get(mapId);
             this.currentBuilding = currentMap.getBuildingID();
@@ -406,8 +759,15 @@ public class Controller extends Application {
 //            }
 
             /** switches to the map **/
-            setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
-
+            //Play rotation animation if previous building is the campus map
+            if (prevBuilding == 0 && !rightButtonFlag) {
+                int buildNum = buildings.get(currentBuilding).getID();
+                this.getMyDisplay().mapDisplay.rotationAnimation(buildNum);
+                this.getMyDisplay().mapDisplay.timeline.setOnFinished(e ->
+                        setCurrentMap(buildings.get(currentBuilding).getFloorID(i)));
+            }
+            //otherwise just set the current map
+            else setCurrentMap(buildings.get(currentBuilding).getFloorID(i));
 
             /** CSS SWITCH LOGIC **/
             if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)) {
@@ -416,6 +776,7 @@ public class Controller extends Application {
             } else {
                 //set id for grey
                 this.myDisplay.setRightButtonID("arrow-buttons-grayed");
+                this.myDisplay.setRightButtonStyle("-fx-background-color:#eee;");
             }
 
 
@@ -425,8 +786,51 @@ public class Controller extends Application {
             } else {
                 //set id for grey
                 this.myDisplay.setLeftButtonID("arrow-buttons-grayed");
+                this.myDisplay.setLeftButtonStyle("-fx-background-color:#eee;");
+
             }
+
+            /** update arrows **/
+
+            if (fullPath != null) {
+
+
+
+                currentIndex = -1;
+
+                for (int z = 0; z < fullPath.size(); z++) {
+                    if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
+                        currentIndex = z;
+                        break;
+                    }
+                }
+
+                if (currentIndex != -1) {
+                    myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
+                } else {
+                    this.myDisplay.clearInstructions();
+                }
+
+
+
+                if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
+                    this.myDisplay.setIDRightArrowButton("arrow-buttons");
+                } else {
+                    this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
+                }
+
+                if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {
+                    this.myDisplay.setIDLeftArrowButton("arrow-buttons");
+                } else {
+                    this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
+                }
+
+
+            }
+
         }
+        //rightButtonFlag = false;
+        prevBuilding = currentBuilding;
     }
 
     /**
@@ -466,6 +870,42 @@ public class Controller extends Application {
 
         }
         firstTime = false;
+
+
+        if (fullPath != null) {
+
+
+            currentIndex = -1;
+
+            for (int z = 0; z < fullPath.size(); z++) {
+                if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
+                    currentIndex = z;
+                    break;
+                }
+            }
+
+            if (currentIndex != -1) {
+                myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
+            } else {
+                this.myDisplay.clearInstructions();
+            }
+
+
+
+            if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
+                this.myDisplay.setIDRightArrowButton("arrow-buttons");
+            } else {
+                this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
+            }
+
+            if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {
+                this.myDisplay.setIDLeftArrowButton("arrow-buttons");
+            } else {
+                this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
+            }
+
+
+        }
     }
 
     /**
@@ -506,7 +946,7 @@ public class Controller extends Application {
 
             item = myDisplay.end.nodeToString(n, currentMap);
             System.out.println(item);
-            myDisplay.end.setValue(myDisplay.start.nodeToString(n, currentMap));
+            myDisplay.end.setValue(item);
         }
     }
 
@@ -528,19 +968,17 @@ public class Controller extends Application {
 
         if(!FIRST) {
             if (startNode != null){//have to delete old before creating new one (with same ID)
-                //System.out.println("Hiding old start node");
+
                 this.myDisplay.mapDisplay.hideLast(startNode); //hide the last start
             }
-            //eradicate(tempStart, true); //completely get rid of the last start
-            //System.out.println("-1");
+
             temp =  new Landmark(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
         } else {
             if (endNode != null){
-                //System.out.println("Hiding old end node");
+
                 this.myDisplay.mapDisplay.hideLast(endNode); //hide the last end
             }
-            //eradicate(tempEnd, false); //completely get rid of the last temp
-            //System.out.println("-2");
+
             temp = new Landmark(-2, x, y, z, x2, y2, z2, currentMap.getID(), "By " + nearestNamedNodeName(x2, y2, z2));
         }
 
@@ -559,7 +997,7 @@ public class Controller extends Application {
 
             if(v.getMap_id() == currentMap.getID() && Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y)) < distance){
                     n = v;
-                    distance =Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y));
+                    distance = Math.sqrt((v.getX() - x)*(v.getX() - x) + (v.getY() - y)*(v.getY() - y));
                 }
         }
 
@@ -728,7 +1166,7 @@ public class Controller extends Application {
      * @return an ArrayList<String?
      */
     public void getInstructions(){
-        this.fullPath =  Directions.stepByStep(this.pathNodes, this.maps);
+        this.fullPath =  Directions.stepByStep(this.pathNodes, this.maps, this.buildings);
     }
 
 
@@ -762,9 +1200,106 @@ public class Controller extends Application {
             }
         });
 
-
         return value;
     }
+
+
+    public void handleSpecificSearch(String s) {
+
+        String prefixes[] 	= {"Nearest ", "Close ", "Near by ", ""};
+        String locations[] 	= {"Bathroom", "Men's Room", "Woman's Bathroom" , "Food", "Restaurant",  };
+
+
+        if (s.equals(prefixes[0]+locations[0]) || s.equals(prefixes[1]+locations[0]) || s.equals(prefixes[2]+locations[0]) || s.equals(prefixes[3]+locations[0])) {
+            setDestination(findNearestRoomType(Bathroom.bathRoomTypeToString(BathroomType.GENERAL)), false);
+        } else if (s.equals(prefixes[0]+locations[1]) || s.equals(prefixes[1]+locations[1]) || s.equals(prefixes[2]+locations[1]) || s.equals(prefixes[3]+locations[1])) {
+            setDestination(findNearestRoomType(Bathroom.bathRoomTypeToString(BathroomType.MENS)), false);
+        } else if (s.equals(prefixes[0]+locations[2]) || s.equals(prefixes[1]+locations[2]) || s.equals(prefixes[2]+locations[2]) || s.equals(prefixes[3]+locations[2])) {
+            setDestination(findNearestRoomType(Bathroom.bathRoomTypeToString(BathroomType.WOMAN)), false);
+        } else if (s.equals(prefixes[0]+locations[3]) || s.equals(prefixes[1]+locations[3]) || s.equals(prefixes[2]+locations[3]) || s.equals(prefixes[3]+locations[3])) {
+            setDestination(findNearestFood(), false);
+        } else if (s.equals(prefixes[0]+locations[4]) || s.equals(prefixes[1]+locations[4]) || s.equals(prefixes[2]+locations[4]) || s.equals(prefixes[3]+locations[4])) {
+            setDestination(findNearestFood(), false);
+        }
+    }
+
+    private void setDestination(INode destination, boolean START){
+        handleSearchInput(destination.getID(), START);
+    }
+
+    private INode findNearestFood(){
+        if (startNode == null) {
+            return  null;
+        };
+
+        double distance = Double.MAX_VALUE;
+        INode n = null;
+
+        ArrayList<INode> toSearch = new ArrayList<>();
+
+
+        for (HashMap.Entry<Integer, INode> cursor : nodes.entrySet()) {
+            INode v = cursor.getValue();
+            if (v instanceof Food) { //we dont want the name Near Near Stratton Hall
+                toSearch.add(v);
+            }
+        }
+
+        for (INode node : toSearch){
+            Directions.stepByStep(AStarShortestPath.AStarSearch(startNode, node, nodes), maps, buildings);
+            if (Directions.getTotalDistance() < distance){
+                distance = Directions.getTotalDistance();
+                n = node;
+            }
+            Directions.cleartotalDistance();
+        }
+
+        return  n;
+    }
+
+
+    private INode findNearestRoomType(String type){
+
+        if (startNode == null) {
+            return  null;
+        };
+
+        double distance = Double.MAX_VALUE;
+        INode n = null;
+
+        ArrayList<INode> inBuilding = new ArrayList<>();
+
+        if (startNode.getMap_id() == 0) {
+
+            for (HashMap.Entry<Integer, INode> cursor : nodes.entrySet()) {
+                INode v = cursor.getValue();
+                if (v.toString().equals(type) && v.getMap_id() == startNode.getMap_id()) { //we dont want the name Near Near Stratton Hall
+                    inBuilding.add(v);
+                }
+            }
+
+        } else {
+
+            for (HashMap.Entry<Integer, INode> cursor : nodes.entrySet()) {
+                INode v = cursor.getValue();
+                if (v.toString().equals(type)) { //we dont want the name Near Near Stratton Hall
+                    inBuilding.add(v);
+                }
+            }
+        }
+
+        for (INode node : inBuilding){
+            Directions.stepByStep(AStarShortestPath.AStarSearch(startNode, node, nodes), maps, buildings);
+            if (Directions.getTotalDistance() < distance){
+                distance = Directions.getTotalDistance();
+                n = node;
+            }
+            Directions.cleartotalDistance();
+        }
+
+        return  n;
+    }
+
 
     public INode getNode(int id){
         return nodes.get(id);
@@ -817,6 +1352,7 @@ public class Controller extends Application {
 
     public void handleIncrementPathMap(){
         //if there is another list of instructions to go
+        rightButtonFlag = true;
         if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
             myDisplay.setInstructions(fullPath.get(++currentIndex)); //TODO UPDATE setInstructions
             switchMapSetting(fullPath.get(currentIndex).get(0).getNode().getMap_id());
@@ -829,11 +1365,13 @@ public class Controller extends Application {
             this.myDisplay.setIDRightArrowButton("arrow-buttons");
         } else {
             this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
-
         }
+        rightButtonFlag = false;
 
     }
+
     public void handleDecrementPathMap(){
+        rightButtonFlag = true;
         //if there is another list of instructions to go
         if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1){
             myDisplay.setInstructions(fullPath.get(--currentIndex)); //TODO UPDATE setInstructions
@@ -847,6 +1385,7 @@ public class Controller extends Application {
         } else {
             this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
         }
+        rightButtonFlag = false;
     }
 
     public void handleWeightOptions(boolean weather, boolean handicap){
@@ -897,6 +1436,38 @@ public class Controller extends Application {
 
     public Display getMyDisplay() {
         return this.myDisplay;
+    }
+
+    public Point2D getStageOffset(){
+        double xOff = this.stage.getX();
+        double yOff = this.stage.getY();
+
+        double appWidth = this.stage.getWidth();
+        double appHeight = this.stage.getHeight();
+        double expandedWidth = this.getMyDisplay().expandedWidth;
+        double gapWidth = this.getMyDisplay().GAP;
+        boolean dashboardEx = this.getMyDisplay().DASHBOARD_VISIBLE.getValue();
+        boolean directionsEx = this.getMyDisplay().DIRECTIONS_VISIBLE.getValue();
+
+        double offsetX = 0;
+        if (dashboardEx){
+            offsetX += expandedWidth;
+        }
+        else {
+            offsetX += gapWidth;
+        }
+        if(directionsEx){
+            offsetX += expandedWidth;
+        }
+        else {
+            offsetX += gapWidth;
+        }
+
+        offsetX /=2;
+
+        Point2D offset = new Point2D(offsetX+xOff+appWidth/2,yOff+appHeight/2.5);
+
+        return offset;
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

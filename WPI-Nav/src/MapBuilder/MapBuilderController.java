@@ -72,7 +72,7 @@ public class MapBuilderController extends Application {
 
 		Scene scene = new Scene(myDisplay, WINDOW_WIDTH, WINDOW_HEIGHT);
 		s.setScene(scene); // sets scene to display
-		scene.getStylesheets().add(getClass().getResource("buttonbar.css").toExternalForm());
+		//scene.getStylesheets().add(getClass().getResource("buttonbar.css").toExternalForm());
 
 		s.show(); // shows scene
 	}
@@ -203,23 +203,23 @@ public class MapBuilderController extends Application {
 		return value;
 	}
 
-	/**
-	 * return the HashMap of Nodes [to display][of the current map]
-	 *
-	 * @param id
-	 * @return
-	 */
-	public HashMap<Integer, INode> getNodesOfBuilding(int id) {
-
-		HashMap<Integer, INode> value = new HashMap<>();
-
-		masterNodeList.forEach((k, v) -> {
-			if (maps.get(v.getMap_id()).getBuildingID() == id) {
-				value.put(k, v);
-			}
-		});
-		return value;
-	}
+//	/**
+//	 * return the HashMap of Nodes [to display][of the current map]
+//	 *
+//	 * @param id
+//	 * @return
+//	 */
+//	public HashMap<Integer, INode> getNodesOfBuilding(int id) {
+//
+//		HashMap<Integer, INode> value = new HashMap<>();
+//
+//		masterNodeList.forEach((k, v) -> {
+//			if (maps.get(v.getMap_id()).getBuildingID() == id) {
+//				value.put(k, v);
+//			}
+//		});
+//		return value;
+//	}
 
 	// Same version as above, but assumes the selected map ID
 	public HashMap<Integer, INode> getNodesOfMap() {
@@ -346,11 +346,11 @@ public class MapBuilderController extends Application {
 		}
 
 
-		/*this.buildings.forEach((k,v) -> {
-			v.translateBuilding(getNodesOfBuilding(k), masterNodeList).forEach((key,value) ->{
-				masterNodeList.put(key, value);
-			});
-		});*/
+//		this.buildings.forEach((k,v) -> {
+//			v.translateBuilding(getNodesOfBuilding(k), masterNodeList).forEach((key,value) ->{
+//				masterNodeList.put(key, value);
+//			});
+//		});
 
 		cleanNodeList(masterNodeList);
 		completeEdges(masterNodeList);

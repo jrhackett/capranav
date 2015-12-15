@@ -1,6 +1,9 @@
 package visuals;
 
 import controller.Controller;
+import feed.Event;
+import feed.Feed;
+import javafx.animation.Animation;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -20,6 +23,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import logic.*;
+import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,9 +45,9 @@ public class Display {
     //Constants
     private static final double INPUT_WIDTH = 160;
     private static final double CONTROL_WIDTH = 30;
-    private static final double GAP = 5;
+    public static final double GAP = 5;
     private final double EDGE;
-    private static final double expandedWidth = 170;//150
+    public static final double expandedWidth = 170;//150
     private static final double MAP_WIDTH = 585; //originally 580+80
     private static final double MAP_HEIGHT = 460;//originally 455+40
     private static final double MAP_BORDER = 15;
@@ -52,7 +56,7 @@ public class Display {
     public Controller controller;
 
 
-    private BooleanProperty DASHBOARD_VISIBLE;
+    public BooleanProperty DASHBOARD_VISIBLE;
     private BooleanProperty SETTINGS_VISIBLE;
     private BooleanProperty EMAIL_VISIBLE;
     public BooleanProperty BUILDING_VISIBLE;
@@ -105,6 +109,8 @@ public class Display {
 
     public TextField yourEmail;
 
+    private PopOver eventPopOver;
+
 
     boolean FLIP = true;
     ZoomAndPan zoomAndPan;
@@ -112,7 +118,13 @@ public class Display {
     String directionStyle = "-fx-background-color: #ac2738";
     String whiteBGStyle = "-fx-background-color: #FFFFFF";
     SlidingAnchorPane    slidingDirections;
+
+    SlidingAnchorPane slidingEmail;
+    SlidingAnchorPane slidingSettings;
+
+
     Button slidingDirectionsButton;
+
 
     RadioButton handicapRadioButton;
     RadioButton weatherRadioButton;
@@ -120,6 +132,17 @@ public class Display {
     HBox directionsTitleBox;
     VBox directionsControlBox;
     HBox emailBox;
+
+    javafx.scene.control.Button menuButton;
+    Button infoButton;
+    Button helpButton;
+    Button locationClearButton;
+    Button slidingButton;
+    Button slidingEmailButton;
+    Label newsLabel;
+    ArrayList<InfoTip> infoTips = new ArrayList<>();
+    int currentToolTip;
+
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -141,7 +164,7 @@ public class Display {
         this.BUILDING_VISIBLE = new SimpleBooleanProperty(false);
         this.EMAIL_VISIBLE = new SimpleBooleanProperty(true);
         this.TIME_VISIBLE = new SimpleBooleanProperty(false);
-        this.DIRECTIONS_VISIBLE = new SimpleBooleanProperty(false); // <<<<<
+        this.DIRECTIONS_VISIBLE = new SimpleBooleanProperty(true); // <<<<<
 
         this.PHOTO_ICON_VISIBLE = new SimpleBooleanProperty(false);
         this.ICON_VISIBLE = new SimpleBooleanProperty(false);
@@ -187,6 +210,7 @@ public class Display {
         /*****************************************************************/
         /** create scene **/
         root.setAlignment(Pos.TOP_LEFT);
+        createInfoTips();
 
         Scene scene = new Scene(root, MAP_WIDTH + MAP_BORDER * 2 + EDGE * 5 + expandedWidth * 2, MAP_HEIGHT + 2 * MAP_BORDER + EDGE * 4);//+MAP_BORDER*2+TITLE_HEIGHT
         //Scene scene = new Scene(root, MAP_WIDTH+MAP_BORDER*2+EDGE*2+expandedWidth*2, MAP_WIDTH + 2 * EDGE);//+MAP_BORDER*2+TITLE_HEIGHT
@@ -289,7 +313,7 @@ public class Display {
         //AnchorPane.setTopAnchor(infoView, 3 * EDGE + GAP + 5); //<--- TODO notice this, these lines break a lot of stuff, no idea why
         //AnchorPane.setLeftAnchor(infoView, GAP);
 
-        //AnchorPane.setBottomAnchor(gearsView, GAP * 2);//TODO these will change with svg
+        //AnchorPane.setBottomAnchor(gearsView, GAP * 2);//TODO these will change wit.setStyle("-fx-background-color: #333333");h svg
         //AnchorPane.setLeftAnchor(gearsView, GAP * 2);
 
         /*****************************************************************/
@@ -339,7 +363,18 @@ public class Display {
         Label locationLabel = new Label("Locations");
         locationLabel.setTextFill(Color.web("#eeeeee"));
 
-        locationLabelBox.getChildren().addAll(locationLabel);
+        locationClearButton = new Button();
+        Label clearLabel = new Label("Clear");
+        clearLabel.setTextFill(Color.web("#eeeeee"));
+        clearLabel.setStyle("-fx-font-size:11");
+        locationClearButton.setGraphic(clearLabel);
+        locationClearButton.setTranslateX(26);
+        locationClearButton.setTranslateY(1);
+        locationClearButton.setId("clear-button");
+
+        locationClearButton.setOnMouseClicked(e -> handleClear());
+
+        locationLabelBox.getChildren().addAll(locationLabel, locationClearButton);
         locationLabelBox.setMinWidth(0);
         locationLabelBox.setPrefWidth(expandedWidth);
         locationLabelBox.setMaxWidth(expandedWidth);
@@ -377,6 +412,37 @@ public class Display {
 
 
         /*****************************************************************/
+        /** Get Connected NewsFeed **/
+
+        HBox newsLabelBox = new HBox();
+        newsLabelBox.setMinHeight(EDGE);
+        newsLabelBox.setMaxHeight(expandedWidth);
+        newsLabelBox.setPrefHeight(EDGE);
+        newsLabelBox.setAlignment(Pos.CENTER);
+
+        newsLabel = new Label("Get Involved");
+        newsLabel.setTextFill(Color.web("#eeeeee"));
+
+        newsLabelBox.getChildren().addAll(newsLabel);
+        AnchorPane.setTopAnchor(newsLabelBox, 3 * EDGE + GAP * .5 + 20);
+        AnchorPane.setLeftAnchor(newsLabelBox, EDGE);
+
+        Image newsIcon = FileFetch.getImageFromFile("news37.png", 20, 20, true, true);
+        ImageView newsIconView = new ImageView(newsIcon);
+
+        newsIconView.visibleProperty().bind(DASHBOARD_VISIBLE);
+        AnchorPane.setTopAnchor(newsIconView, 3 * EDGE + GAP * .5 + 30);
+        AnchorPane.setLeftAnchor(newsIconView, 2 * GAP);
+
+        ListView<Event> eventListView = createEventListView();
+        eventListView.setId("newsfeed-list-view");
+
+        AnchorPane.setTopAnchor(eventListView, 3 * EDGE + GAP * .5 + 60);
+        AnchorPane.setBottomAnchor(eventListView, EDGE-3);
+        eventListView.visibleProperty().bind(DASHBOARD_VISIBLE);
+
+
+        /*****************************************************************/
         /** Change Settings Zone **/
         HBox settingsLabelBox = new HBox();
         settingsLabelBox.setMinHeight(EDGE);
@@ -396,10 +462,10 @@ public class Display {
 
         //settings a sliding pane!div
 
-        SlidingAnchorPane slidingSettings = new SlidingAnchorPane(expandedWidth , EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
+        slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
         slidingSettings.setStyle("-fx-background-color: #333333");
 
-        javafx.scene.control.Button slidingButton = slidingSettings.getButton();
+        slidingButton = slidingSettings.getButton();
         slidingButton.setId("dashboardButton");
         slidingButton.setMaxWidth(EDGE - 5);
         slidingButton.setMinWidth(EDGE - 5);
@@ -457,13 +523,6 @@ public class Display {
         rb2.setTextFill(Color.web("#eeeeee"));
         rb2.setSelected(true);
 
-        RadioButton rb3 = new RadioButton("Night Mode");
-        rb3.setToggleGroup(colorgroup);
-        rb3.setUserData("Night Mode");
-        rb3.setText("Night Mode");
-        rb3.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
-        rb3.setTextFill(Color.web("#eeeeee"));
-
         colorgroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             public void changed(ObservableValue<? extends Toggle> ov,
                                 Toggle old_toggle, Toggle new_toggle) {
@@ -488,13 +547,6 @@ public class Display {
 
                         //   mapDisplay.changeBackOldPathNodes();
                         //controller.updateNodeInformation(controller.getNode(mapDisplay.getStartID()));
-                    }
-
-                    if(colorgroup.getSelectedToggle().getUserData().toString().equals("Night Mode")){
-                        mapDisplay.setNodePathDefault();
-                        controller.setStyleSheet("../visuals/styleNightMode.css");
-
-                       // mapDisplay.changeBackOldPathNodes();
                     }
 
                 }
@@ -541,13 +593,27 @@ public class Display {
         Inputs walkingSpeedBox = new Inputs("Select walking speed", INPUT_WIDTH, controller);
         walkingSpeedBox.setTranslateX(3);  //TODO fix width of this?
         walkingSpeedBox.setItems(walkingSpeedBox.createWalkingItems(walkingArrayList));
-        walkingSpeedBox.setValue(walkingArrayList.get(1));
-        User.setSpeed(3.0);
+        if (User.isUserNew()) {
+            walkingSpeedBox.setValue(walkingArrayList.get(1));
+            User.setSpeed(3.0);
+        }
+        else {
+            int speed = (int)User.getSpeed();
+            int index = 1;
+            switch (speed) {
+                case 2 : index = 0; break;
+                case 3 : index = 1; break;
+                case 4 : index = 2; break;
+                case 6 : index = 3; break;
+            }
+            walkingSpeedBox.setValue(walkingArrayList.get(index));
+        }
 
         walkingSpeedBox.setOnAction(e -> handleWalkingInput(walkingSpeedBox, true));    //TODO finish handleWalkingInput
 
         TextField emailTextField = new TextField();
-        emailTextField.setPromptText("Enter your email");
+        if (User.getEmail() == null) emailTextField.setPromptText("Enter your email");
+        else                         emailTextField.setText(User.getEmail());
         emailTextField.setMaxWidth(INPUT_WIDTH);
         emailTextField.setMaxHeight(walkingSpeedBox.getMaxHeight());
         emailTextField.setTranslateX(3);
@@ -594,6 +660,7 @@ public class Display {
 
         VBox settingsVbox = new VBox();
         settingsVbox.visibleProperty().bind(DASHBOARD_VISIBLE);
+        settingsVbox.setPrefWidth(300); //TODO make this less dirty
         //settingsVbox.getChildren().addAll(divider_3, settingsLabelBox,  settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
 
         settingsWeightLabel.setTranslateX(EDGE - 7);
@@ -616,19 +683,164 @@ public class Display {
 
         /*****************************************************************/
         /** Building of Sliding Dashboard Anchorpane  **/
-        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, dashBoardTitleBox, locationLabelBox, pinView, inputs, slidingSettings); //gearsView, settingsLabelBox, divider_3, // resourcesLabelBox, infoView,
+        this.slidingDashboard = new SlidingAnchorPane(expandedWidth, EDGE, Direction.LEFT, DASHBOARD_VISIBLE, bars, divider_0, divider_1, dashBoardTitleBox, locationLabelBox, pinView, inputs, newsIconView, newsLabelBox, eventListView, slidingSettings); //gearsView, settingsLabelBox, divider_3, // resourcesLabelBox, infoView,
         slidingDashboard.setStyle("-fx-background-color: #333333");
 
         /** STYLE BUTTON HERE **/
-        javafx.scene.control.Button button = slidingDashboard.getButton();
-        button.setId("dashboardButton");
-        button.setMaxWidth(EDGE);
-        button.setMinWidth(EDGE);
-        button.setPrefWidth(EDGE);
-        AnchorPane.setTopAnchor(button, 0.0);
-        AnchorPane.setLeftAnchor(button, 0.0);
+        menuButton = slidingDashboard.getButton();
+        menuButton.setId("dashboardButton");
+        menuButton.setMaxWidth(EDGE);
+        menuButton.setMinWidth(EDGE);
+        menuButton.setPrefWidth(EDGE);
+        AnchorPane.setTopAnchor(menuButton, 0.0);
+        AnchorPane.setLeftAnchor(menuButton, 0.0);
         //slidingDashboard.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + 2 * EDGE);
-        slidingDashboard.getChildren().addAll(button);
+        slidingDashboard.getChildren().addAll(menuButton);
+    }
+
+    private ListView<Event> createEventListView() {
+        ListView<Event> listView = new ListView<>();
+        listView.setId("newsfeed-list-view");
+        listView.setMaxWidth(expandedWidth *2);
+        Feed f = new Feed(50);
+
+        ObservableList<Event> items = FXCollections.observableArrayList ();
+
+        //TODO check for internet access here
+        for(Event e : f) {
+            //String x = "\n" + e.getTitle() + "\n" + e.getDateInfo() + "\n";
+            items.add(e);
+        }
+
+        listView.setCellFactory((ListView<Event> lv) ->
+                new ListCell<Event>() {
+                    @Override
+                    public void updateItem(Event in, boolean empty) {
+                        super.updateItem(in, empty);
+                        if (empty) {
+                            setText(null);
+                        } else {
+                            // use whatever data you need from the album
+                            // object to get the correct displayed value:
+                            Text text = new Text(in.toString());
+                            text.setFill(Color.web("#eee"));
+                            text.setWrappingWidth(expandedWidth-10);
+                            //setText(in.toString());
+                            setGraphic(text);
+                            setId("event-list-cell");
+                            //setStyle("-fx-font-fill:#eee; -fx-background-color:#333;" +
+                                   // "-fx-border-color:#888;-fx-border-width:1 0 0 0;");
+                            setTranslateX(GAP);
+
+                            setOnMouseClicked(e -> {
+                                //Popover?
+                                eventPopOver = createPopOverForEvent(in);
+                                eventPopOver.setId("event-popover");
+                                eventPopOver.show(this, 10);
+                            });
+                        }
+                    }
+                }
+        );
+
+        listView.setItems(items);
+
+        return listView;
+    }
+
+    public PopOver createPopOverForEvent(Event in) {
+        PopOver popOver = new PopOver();
+        VBox vbox = new VBox();
+        vbox.setSpacing(10);
+        vbox.setStyle("-fx-padding:8 8 8 8;");
+
+        FlowPane flowPane = new FlowPane();
+        flowPane.setHgap(2);
+        flowPane.setVgap(2);
+        flowPane.setPrefWrapLength(275);
+
+        Text title = new Text(in.getTitle());
+        title.setWrappingWidth(275);
+        title.setStyle("-fx-font-weight:bold;");
+
+        Text location = new Text(in.getLocation());
+        location.setWrappingWidth(275);
+
+        Text date = new Text(in.getDateInfo());
+        date.setWrappingWidth(275);
+
+        Text description = new Text(in.getTweet());
+        description.setWrappingWidth(275);
+
+        flowPane.getChildren().add(description);
+
+        HBox bottomHBox = new HBox();
+        Button goToButton = new Button();
+        goToButton.setGraphic(new Text("Go to location"));
+        goToButton.setId("popover-buttons");
+        goToButton.setStyle("-fx-max-width:200 !important");
+
+        Button moreInfoButton = new Button();
+        moreInfoButton.setGraphic(new Text("More info"));
+        moreInfoButton.setId("popover-buttons");
+        moreInfoButton.setStyle("-fx-max-width:200 !important");
+
+        moreInfoButton.setOnMouseClicked(e -> {
+            showMoreEventInfo(in);
+            eventPopOver.hide();
+        });
+
+        bottomHBox.getChildren().addAll(goToButton, moreInfoButton);
+        bottomHBox.setAlignment(Pos.CENTER);
+        bottomHBox.setSpacing(10);
+
+        vbox.getChildren().addAll(title, location, date, flowPane, bottomHBox);
+        vbox.setAlignment(Pos.CENTER);
+        popOver.setContentNode(vbox);
+
+        return popOver;
+    }
+
+
+
+
+    public void showMoreEventInfo(Event in) {
+        StackPane imageStack    = new StackPane();
+        javafx.scene.Node frost = controller.freeze(root);
+
+        imageStack.setOnMouseClicked(e -> {
+           root.getChildren().removeAll(imageStack, frost);
+        });
+
+        VBox vbox = new VBox();
+        vbox.setId("about-panel");
+        vbox.setSpacing(8);
+        vbox.setAlignment(Pos.TOP_CENTER);
+
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setId("about-title");
+        Label aboutLabel = new Label(in.getTitle());
+        aboutLabel.setId("about-label");
+        aboutLabel.setTextFill(Color.web("#eeeeee"));
+
+        hbox.getChildren().add(aboutLabel);
+
+        FlowPane flowPane = new FlowPane();
+        Text text = new Text();
+        text.setId("about-text");
+        text.setWrappingWidth(500);
+        //text.setTextAlignment(TextAlignment.JUSTIFY);
+        text.setText(in.getDescription());
+
+        flowPane.setPrefWrapLength(500);
+        flowPane.setAlignment(Pos.CENTER);
+        flowPane.getChildren().add(text);
+
+        vbox.getChildren().addAll(hbox, flowPane);
+        imageStack.getChildren().add(vbox);
+
+        this.root.getChildren().addAll(frost, imageStack);
     }
 
     private void initDirections() {
@@ -796,10 +1008,10 @@ public class Display {
         emailView.setOnMouseClicked(e -> handleEmail(emailBox));*/
 
         /** Sliding Anchor Pane **/
-        SlidingAnchorPane slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
+        slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
         slidingEmail.setId("normallyWhiteBG");
 
-        Button slidingEmailButton = slidingEmail.getButton();
+        slidingEmailButton = slidingEmail.getButton();
         slidingEmailButton.setId("dashboardButton");
         slidingEmailButton.setId("normallyWhiteBG");
         slidingEmailButton.setMaxWidth(EDGE - 5);
@@ -809,7 +1021,7 @@ public class Display {
         HBox divider_4 = createDivider();
         divider_4.visibleProperty().bind(new SimpleBooleanProperty(true));
         divider_4.setTranslateY(-21);
-        divider_4.setTranslateX(-152);   //TODO fix this janky translate garbage
+        divider_4.setTranslateX(-145);   //TODO fix this janky translate garbage
 
         emailBox.getChildren().addAll(slidingEmailButton, emailLabel, divider_4);
 
@@ -829,7 +1041,7 @@ public class Display {
         yourEmail.setOnAction(e -> handleEmailInput2(yourEmail, true));
         Button go = new Button("Send Directions");
         go.setId("email-button");
-        go.setTranslateX(41);
+        go.setTranslateX(45);
         emailBoxContent.getChildren().addAll(yourEmail, go);
         go.setOnAction(e -> handleEmailInput2(yourEmail, true));
         emailBoxContent.setSpacing(GAP);
@@ -887,7 +1099,7 @@ public class Display {
 
     private void initMap() {
         this.map = new AnchorPane();
-
+        //this.map.setStyle("-fx-background-color: #f4f4f4");
         /** Title **/
         HBox mapTitle = new HBox();
         Label mapTitleLabel = new Label("CapraNav");
@@ -896,11 +1108,35 @@ public class Display {
         mapTitleLabel.translateXProperty().bind((mapTitle.widthProperty().subtract(mapTitleLabel.widthProperty()).divide(2)));
         mapTitleLabel.translateYProperty().bind((mapTitle.heightProperty().subtract(mapTitleLabel.heightProperty()).divide(2)));
 
+        Image help = FileFetch.getImageFromFile("question58.png", 18, 18, true, true);
+        ImageView helpButtonView = new ImageView(help);
+        helpButton = new Button();
+        helpButton.setGraphic(helpButtonView);
+        helpButton.setId("question-button");
+        helpButton.setTranslateX(-80);  //TODO fix this janky shit
+        helpButton.setTranslateY(10);
+        helpButtonView.setFitHeight(18);
+
+        helpButton.setOnMouseClicked(e -> handleHelp());
+
+        Image info = FileFetch.getImageFromFile("info.png", 18, 18, true, true);
+        ImageView infoButtonView = new ImageView(info);
+        infoButton = new Button();
+        infoButton.setGraphic(infoButtonView);
+        infoButton.setId("question-button");
+        infoButton.setTranslateX(-65);  //TODO fix this janky shit
+        infoButton.setTranslateY(10);
+        infoButtonView.setFitHeight(18);
+
+        infoButton.setOnMouseClicked(e -> {
+            this.controller.showAboutPanel();
+        });
+
         mapTitle.setMaxHeight(EDGE);
         mapTitle.setPrefHeight(EDGE);
         mapTitle.setMinHeight(EDGE);
         mapTitle.setStyle("-fx-background-color: #444444");
-        mapTitle.getChildren().add(mapTitleLabel);
+        mapTitle.getChildren().addAll(mapTitleLabel, helpButton, infoButton);
 
         AnchorPane.setTopAnchor(mapTitle, 0.0);
         AnchorPane.setLeftAnchor(mapTitle, 0.0);
@@ -926,6 +1162,7 @@ public class Display {
         AnchorPane.setRightAnchor(information, 0.0);
 
         this.mapPane = createMapPane();
+        mapPane.setStyle("-fx-background-color:#eee;");
         mapPane.setAlignment(Pos.CENTER);
 
         Group group = new Group(mapPane);
@@ -936,6 +1173,7 @@ public class Display {
         zoomPane.setOnMouseEntered(e -> {
             zoomPane.requestFocus();
         });
+        zoomPane.setStyle("-fx-background-color:#eee;");
 
         AnchorPane.setTopAnchor(zoomPane, EDGE);//
         AnchorPane.setLeftAnchor(zoomPane, MAP_BORDER);//00
@@ -952,9 +1190,8 @@ public class Display {
         map.setMinHeight(MAP_HEIGHT + EDGE);
         map.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2 + EDGE + EDGE); // + EDGE for NODE INFO
 
+        map.setId("mapBorder");
         map.getChildren().addAll(mapTitle, zoomPane, information);
-        map.setId("normallyEEEEEEBG");
-
     }
 
     /****************************************************************************************************************
@@ -962,13 +1199,14 @@ public class Display {
      ****************************************************************************************************************/
 
     private StackPane createMapPane() {
-        StackPane mapPane = new StackPane();
+        mapPane = new StackPane();
         mapPane.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2);
         mapPane.setMinHeight(MAP_HEIGHT);
         mapPane.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
         mapPane.setMinWidth(MAP_WIDTH);
 
-        mapPane.setId("normallyEEEEEEBG");
+        //mapPane.setId("normallyEEEEEEBG");
+        mapPane.setStyle("-fx-background-color:#333;");
         this.mapDisplay = new MapDisplay(this.controller); //(width - GAP * 2 - BUTTON_SIZE - INPUT_WIDTH - WIDTH_BUFFER * 2), (height - TABLE_HEIGHT - GAP * 2 - 2 * HEIGHT_BUFFER),
         mapPane.getChildren().add(mapDisplay);
         //mapPane.setTranslateX(WIDTH_BUFFER + GAP * 2 + INPUT_WIDTH + BUTTON_SIZE);
@@ -1007,6 +1245,7 @@ public class Display {
         backToCampus.setId("campus-button");
         backToCampus.setOnMouseClicked(e -> {
             if(controller.getCurrentMap().getID() != 0) {
+                controller.prevBuilding = 0;
                 controller.setCurrentMap(0);
                 controller.hideBuildingPane();
             }
@@ -1027,10 +1266,10 @@ public class Display {
         this.left.setGraphic(minusView);
         this.right.setGraphic(plusView);
 
-        this.left.setId("normallyEEEEEEBG");
-        this.right.setId("normallyEEEEEEBG");
         left.setId("arrow-buttons");
+        left.setStyle("-fx-background-color:#eee");
         right.setId("arrow-buttons");
+        right.setStyle("-fx-background-color:#eee");
         buildingName = new Label();
         buildingNumber = new Label();
 
@@ -1052,6 +1291,8 @@ public class Display {
         hbox.setMinHeight(EDGE);
         hbox.setAlignment(Pos.CENTER);
         hbox.setSpacing(GAP);//TODO MAKE SURE THIS LOOKS GOOD
+        hbox.setStyle("-fx-background-color:#eee;");
+        box.setStyle("-fx-background-color:#eee;");
 
         return hbox;
     }
@@ -1086,7 +1327,6 @@ public class Display {
         String input;
         //input = "Time Estimation:\n";
         input = Directions.getTime(User.getSpeed());
-        System.out.println(input);
         totalTimeLabel.setText(input);
     }
 
@@ -1129,9 +1369,15 @@ public class Display {
     public void setRightButtonID(String id) {
         right.setId(id);
     }
+    public void setRightButtonStyle(String style) {
+        right.setStyle(style);
+    }
 
     public void setLeftButtonID(String id) {
         left.setId(id);
+    }
+    public void setLeftButtonStyle(String style) {
+        left.setStyle(style);
     }
 
     public void setBuildingName(String s) {
@@ -1285,7 +1531,8 @@ public class Display {
 
     private void createInstructionListView() {
         this.instructions = new ListView<Instructions>();
-        this.instructions.setId("normallyEEEEEEBG");
+        //this.instructions.setId("normallyEEEEEEBG");
+        this.instructions.setStyle("-fx-background-color:white;");
         this.instructions.setPrefWidth(expandedWidth-10);
 
         instructions.setCellFactory((ListView<Instructions> lv) ->
@@ -1392,7 +1639,7 @@ public class Display {
 
         //this.SETTINGS_VISIBLE.setValue(!SETTINGS_VISIBLE.getValue());
 
-        clearInstructions();
+        this.clearInstructions();
 
         ObservableList<Instructions> data = FXCollections.observableArrayList();
         data.addAll(instructions);
@@ -1406,6 +1653,187 @@ public class Display {
                                                 Llambda Event Handlers
      ****************************************************************************************************************/
 
+    /** calls the controller to do the correct help **/
+    private void handleHelp(){
+       this.controller.help();
+    }
+
+    /** called from the controller and shows all the help tooltips **/
+    public void showToolTips(){
+
+        Animation animation1 = null;
+        Animation animation2 = null;
+
+
+
+        if (!DASHBOARD_VISIBLE.getValue())  animation1 = slidingDashboard.playShowPaneCustom(DASHBOARD_VISIBLE);
+        if (!DIRECTIONS_VISIBLE.getValue()) animation2 = slidingDirections.playShowPaneCustom(DIRECTIONS_VISIBLE);
+
+
+        if (animation1 != null) animation1.play();
+        if (animation2 != null) animation2.play();
+
+        if (animation1 != null) {
+            animation1.setOnFinished(e -> {
+                playToolTips();
+                DASHBOARD_VISIBLE.setValue(true);
+            });
+        } else if(animation2 != null){
+            animation2.setOnFinished(e -> {
+                playToolTips();
+                DIRECTIONS_VISIBLE.setValue(true);
+            });
+        } else {
+            playToolTips();
+        }
+    }
+
+    /** create tool tips **/
+    public void createInfoTips() {
+        this.infoTips = new ArrayList<InfoTip>();
+
+        /** menu bar info tip **/
+        InfoTip a = new InfoTip("This is our dashboard. Click to hide", menuButton, PopOver.ArrowLocation.LEFT_CENTER);
+
+        /** start search bar **/
+        InfoTip b = new InfoTip("Search for a starting location, a room, the nearest bathroom or for food", start, PopOver.ArrowLocation.LEFT_TOP);
+
+        /** start search bar **/
+        InfoTip r = new InfoTip("Search for an ending location", end, PopOver.ArrowLocation.LEFT_TOP);
+
+        /** get involved **/
+        InfoTip c = new InfoTip("Click to view our about screen", infoButton, PopOver.ArrowLocation.LEFT_TOP);
+
+        /** help button **/
+        InfoTip d = new InfoTip("Click to view all tooltips", helpButton, PopOver.ArrowLocation.TOP_LEFT);
+
+        /** clear button **/
+        InfoTip e = new InfoTip("Clear your path and locations", locationClearButton , PopOver.ArrowLocation.TOP_RIGHT);
+
+        /** git involved **/
+        InfoTip f = new InfoTip("View events around campus", newsLabel, PopOver.ArrowLocation.BOTTOM_LEFT );
+
+        /** sliding settings **/
+        InfoTip g = new InfoTip("Click to show settings", slidingButton, PopOver.ArrowLocation.BOTTOM_LEFT);
+
+        /** email button **/
+        InfoTip h = new InfoTip("Click to send directions to your email", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_LEFT);
+
+        /** map **/
+        InfoTip i = new InfoTip("Click on the map to add starting/ending locations", mapPane, PopOver.ArrowLocation.TOP_CENTER);
+
+        /** map **/
+        InfoTip j = new InfoTip("Step by step directions will be shown below", directionsTitleBox, PopOver.ArrowLocation.TOP_LEFT);
+
+        /** left arrow **/
+        InfoTip k = new InfoTip("Go to previous direction", leftArrowButton, PopOver.ArrowLocation.TOP_CENTER);
+
+        /** right arrow **/
+        InfoTip l = new InfoTip("Go to next direction!", rightArrowButton, PopOver.ArrowLocation.TOP_CENTER);
+
+        /** right arrow **/
+        InfoTip m = new InfoTip("Awesome! You're ready to start using CapraNav!", mapPane, PopOver.ArrowLocation.TOP_LEFT);
+
+
+        infoTips.add(a);
+        infoTips.add(b);
+        infoTips.add(r);
+        infoTips.add(c);
+        infoTips.add(d);
+        infoTips.add(j);
+        infoTips.add(l);
+        infoTips.add(k);
+        infoTips.add(e);
+        infoTips.add(f);
+        infoTips.add(g);
+        infoTips.add(h);
+        infoTips.add(i);
+        infoTips.add(m);
+
+    }
+
+    /** called from the controller and plays the sequence **/
+    public void playToolTips(){
+        PopOver controlTutorial = new PopOver();
+        controlTutorial.setTitle("Tutorial");
+        Button back = new Button("Back");
+        back.setId("tutorial-panel-button");
+        Button next = new Button("Next");
+        next.setId("tutorial-panel-button");
+        Button showAll = new Button("Show All Tips");
+        showAll.setId("tutorial-panel-button");
+        Button endTutorial = new Button("End Tutorial");
+        endTutorial.setId("tutorial-panel-button");
+        HBox buttons = new HBox(back, next);
+        buttons.setSpacing(8);
+        buttons.setAlignment(Pos.CENTER);
+        HBox buttonstwo = new HBox(showAll, endTutorial);
+        buttonstwo.setSpacing(8);
+        VBox tutorial = new VBox(buttons, buttonstwo);
+        tutorial.setStyle("-fx-padding:8 8 8 8");
+        tutorial.setAlignment(Pos.CENTER);
+        tutorial.setSpacing(8);
+        controlTutorial.setContentNode(tutorial);
+        controlTutorial.setDetached(true);
+        controlTutorial.show(mapPane);
+
+        next.setOnAction(e -> playNext());
+        back.setOnAction(e -> playBack());
+        endTutorial.setOnAction(e -> {
+            for(InfoTip infoTip : infoTips) infoTip.hide();
+            controlTutorial.hide();
+        });
+        showAll.setOnAction(e -> {
+            for(InfoTip infoTip : infoTips) infoTip.show();
+        });
+
+        currentToolTip = 0;
+    }
+
+    private void playNext(){
+        if (currentToolTip + 1 < infoTips.size()){
+            playToolTip(1);
+        }
+    }
+
+    private void playBack(){
+        if (currentToolTip - 1 < infoTips.size() && currentToolTip - 1 > -1){
+            playToolTip(-1);
+        }
+    }
+
+    private void playToolTip(int i){
+        hideToolTip(currentToolTip);
+        currentToolTip += i;
+        if (this.infoTips.size() > currentToolTip && currentToolTip > -1) this.infoTips.get(currentToolTip).show();
+    }
+
+    private void hideToolTip(int i){
+        if (this.infoTips.size() > i && i > -1) this.infoTips.get(i).hide();
+
+    }
+
+    private void handleClear(){
+        /** clear controller data **/
+        this.controller.clear();
+
+        /** clear visuals **/
+        this.start.getSelectionModel().clearSelection();
+        this.end.getSelectionModel().clearSelection();
+        this.mapDisplay.revertPathNodes();
+        this.mapDisplay.clearPath();
+        this.clearInstructions();
+        this.updateTimeEstimation();
+        this.setIDLeftArrowButton("arrow-buttons-grayed");
+        this.setIDRightArrowButton("arrow-buttons-grayed");
+
+
+        if (DIRECTIONS_VISIBLE.getValue() == true) this.slidingDirections.playHidePane(DIRECTIONS_VISIBLE);
+        TIME_VISIBLE.setValue(false);
+
+
+    }
+
     private void handleRadioButtons(){
         controller.handleWeightOptions(weatherRadioButton.selectedProperty().getValue(), handicapRadioButton.selectedProperty().getValue());
     }
@@ -1415,17 +1843,13 @@ public class Display {
         if (v.getValue() != null && !v.getValue().toString().isEmpty()) {
             if (v.containsNode(v.getValue().toString())) {
                 controller.handleSearchInput(v.getNode(v.getValue().toString()), START);
-//            } else {
-//                System.out.println("BAD 1");
-//                System.out.println("DID NOT CONTAIN: " + v.getValue().toString());
-//            }
-//        } else {
-//            System.out.println("BAD 2");
-//        }
-
+            } else {
+                controller.handleSpecificSearch(v.getValue().toString());
             }
         }
     }
+
+
 
         private void handleWalkingInput (Inputs v,boolean START){
             visuals.Walking value = (visuals.Walking) v.getValue();
@@ -1505,5 +1929,5 @@ public class Display {
         public void setDirectionStyle (String s){
             this.directionStyle = s;
         }
-        }
+}
 

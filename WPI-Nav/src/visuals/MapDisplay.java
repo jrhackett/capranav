@@ -1,11 +1,11 @@
 package visuals;
 
 import controller.Controller;
-import javafx.animation.ScaleTransition;
-import javafx.animation.Transition;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -14,7 +14,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -22,6 +21,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import logic.Building;
 import logic.FileFetch;
@@ -79,6 +79,8 @@ public class MapDisplay extends Pane {
     private ArrayList<ArrayList<Instructions>> pathList;
 
     private int mapIdOldInt;
+
+
     private int mapIdNewInt;
 
     private boolean HIGLIGHTED = false;
@@ -88,7 +90,7 @@ public class MapDisplay extends Pane {
     //////////////////////// ICON CODE ///////////////////////////
     private HashMap<Integer, ImageView> id_ICON;
 
-    private Integer i;
+    public Timeline timeline;
 
     /**
      * Constructor
@@ -98,7 +100,7 @@ public class MapDisplay extends Pane {
     public MapDisplay(Controller controller) {
         super();
         this.controller = controller;
-        this.setStyle("-fx-background-color: #EEEEEE");
+        this.setStyle("-fx-background-color: #f4f4f4");
         this.mapView = new ImageView();
         this.setMaxWidth(IMAGE_WIDTH);
         this.setMaxHeight(IMAGE_HEIGHT);
@@ -323,10 +325,10 @@ public class MapDisplay extends Pane {
             popOver.hide();
         });
 
-        HBox hbox = new HBox();
+        /*HBox hbox = new HBox();
         hbox.getChildren().addAll(buildingName, pictureButton);
         hbox.setAlignment(Pos.CENTER);
-        hbox.setSpacing(2);
+        hbox.setSpacing(2);*/
 
         Label selectFloor = new Label("Select Floor:");
         selectFloor.setTextFill(Color.web("#333333"));
@@ -334,7 +336,6 @@ public class MapDisplay extends Pane {
 
         FlowPane flowPane = new FlowPane();
         flowPane.setId("popover-id");
-
 
         /* displays only the buttons that the building has in rows of up to 3 */
         for(int i = floorPlan.size() - 1; i >= 0; i--) {
@@ -354,10 +355,10 @@ public class MapDisplay extends Pane {
             }
             else
             {
-                value = Integer.toString(i);
+                value = floorPlan.keySet().toArray()[i].toString();
             }
             button.setText(value);
-            final int x = i;
+            final int x = (Integer)floorPlan.keySet().toArray()[i];
             button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -374,40 +375,14 @@ public class MapDisplay extends Pane {
             flowPane.getChildren().add(button);
         }
 
-        /*Button fourth = new Button();       //4
-        fourth.setText("4");
-        fourth.setId("popover-buttons");
-
-        Button third = new Button();        //3
-        third.setText("3");
-        third.setId("popover-buttons");
-
-        Button second = new Button();       //2
-        second.setText("2");
-        second.setId("popover-buttons");
-
-        Button first = new Button();        //1
-        first.setText("1");
-        first.setId("popover-buttons");
-
-        Button basement = new Button();     //0
-        basement.setText("B");
-        basement.setId("popover-buttons");
-
-        Button subBasement = new Button();  //-1
-        subBasement.setText("SB");
-        subBasement.setId("popover-buttons");
-        subBasement.setStyle("-fx-padding:4 3 4 3;");
-
-        flowPane.getChildren().addAll(fourth, third, second, first, basement, subBasement);*/
         flowPane.setHgap(2);
         flowPane.setVgap(2);
         flowPane.setTranslateY(-2);
 
-        vbox.setAlignment(Pos.TOP_CENTER);
+        vbox.setAlignment(Pos.CENTER);
         vbox.setId("popover-id");
         vbox.setSpacing(2);
-        vbox.getChildren().addAll(hbox, flowPane); //select floor? topbuttons, bottombuttons
+        vbox.getChildren().addAll(pictureButton, flowPane);
 
         popOver.setContentNode(vbox);
         popOver.setArrowLocation(PopOver.ArrowLocation.RIGHT_TOP);
@@ -473,6 +448,16 @@ public class MapDisplay extends Pane {
         });
     }
 
+    public void clearPath(){
+        this.lines = new HashMap<>();
+        this.path  = new ArrayList<>();
+    }
+
+
+    public ArrayList<INode> getIDPath() {
+        return idPath;
+    }
+
     /**
      * Show path of nodes
      */
@@ -526,7 +511,12 @@ public class MapDisplay extends Pane {
                 lineArrayList.add(line);
             }
             //System.out.println("lines put into hashmap");
-            lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
+            if (lines.containsKey(list.get(0).getNode().getMap_id())){
+                lineArrayList.addAll(lines.get(list.get(0).getNode().getMap_id()));
+                lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
+            } else {
+                lines.put(list.get(0).getNode().getMap_id(), lineArrayList);
+            }
         }
 
         setStartNode(idPath.get(0));
@@ -559,6 +549,21 @@ public class MapDisplay extends Pane {
         }
     }
 
+    public HashMap<Integer, ArrayList<Line>> getLines() {
+        return lines;
+    }
+
+    public HashMap<Integer, INode> getNodeMap() {
+        return nodeMap;
+    }
+
+    public HashMap<Integer, Circle> getId_circle() {
+        return id_circle;
+    }
+
+    public int getMapIdNewInt() {
+        return mapIdNewInt;
+    }
 
     /**
      * The color and effect for when a node is set as a destination
@@ -797,7 +802,7 @@ public class MapDisplay extends Pane {
                 459.069,184.386,
                 462.861,178.224,
                 473.526,184.386,
-                492.486,152.391,
+                492.723,151.321,
                 476.133,142.2,
                 467.601,156.183,
                 443.427,142.437,
@@ -969,6 +974,20 @@ public class MapDisplay extends Pane {
         library.setFill(Color.TRANSPARENT);
         addPolygonEvents(library, 2148);
 
+        Polygon salisbury = new Polygon();
+        salisbury.getPoints().addAll(new Double[]{
+                441.6495,201.3315,
+                439.5165,214.011,
+                425.889,211.7595,
+                421.0305,241.503,
+                445.323,245.769,
+                443.7825,255.96,
+                463.4535,259.278,
+                472.104,206.427,
+        });
+        salisbury.setFill(Color.TRANSPARENT);
+        addPolygonEvents(salisbury, 1909);//TODO double check this value
+
     }
     private void addPolygonEvents(Polygon p, Integer key){
         this.getChildren().add(p);
@@ -986,8 +1005,18 @@ public class MapDisplay extends Pane {
                         controller.getMyDisplay().zoomAndPan.zoomToNode(controller.getNode(key));
                         PopOver popOver = createPopOverForNode(controller.getNode(key));
                         if (!(previousPopOver.equals(popOver))) {
-                            popOver.show(p, 4);
-                            popOver.setArrowSize(0);
+                            double zX = controller.getMyDisplay().zoomAndPan.zoomOffsetX;
+                            double zY = controller.getMyDisplay().zoomAndPan.zoomOffsetY;
+
+                            if(zX == 0 && zY == 0){
+                                popOver.show(p, 50);
+                                popOver.setArrowSize(0);
+                            }
+
+                            else {
+                                popOver.show(p, controller.getStageOffset().getX() + 40, controller.getStageOffset().getY());
+                                popOver.setArrowSize(0);
+                            }
                             previousPopOver.hide();
                             previousPopOver = popOver;
                         }
@@ -1003,6 +1032,90 @@ public class MapDisplay extends Pane {
                     }
                 });
 
+    }
+
+    public void rotationAnimation(int building){
+        double pivotX = 0, pivotY = 0,angle = 0;
+        switch (building) {
+            case 0: //Campus Map
+                pivotX = 0;
+                pivotY = 0;
+                angle = 0;
+                break;
+            case 1: //Stratton Hall
+                pivotX = 396.5;
+                pivotY = 315.92;
+                angle = -104;
+                break;
+            case 2: //Atwater Kent
+                pivotX = 449.7;
+                pivotY = 160.3;
+                angle = 152;
+                break;
+            case 3: //Boynton
+                pivotX = 424.7;
+                pivotY = 365.2;
+                angle = -12;
+                break;
+            case 4: //Campus Center
+                pivotX = 329;
+                pivotY = 203.82;
+                angle = 83;
+                break;
+            case 5: //Library
+                pivotX = 506.2;
+                pivotY = 278.47;
+                angle = -105;
+                break;
+            case 6: //Higgins House
+                pivotX = 291.54;
+                pivotY = 131.53;
+                angle = -124.74;
+                break;
+            case 7: //HH apartment
+                pivotX = 0;
+                pivotY = 0;
+                angle = 0;
+                break;
+            case 8: //HH garage
+                pivotX = 0;
+                pivotY = 0;
+                angle = 0;
+                break;
+            case 9: //Project Center
+                pivotX = 403.;
+                pivotY = 247;
+                angle = -102;
+                break;
+            case 10: //Fuller Labs
+                pivotX = 505;
+                pivotY = 188;
+                angle = -66;
+                break;
+            case 11: //Salisbury
+                pivotX = 448.6;
+                pivotY = 228;
+                angle = 83;
+                break;
+
+        }
+        Node map = controller.getMyDisplay().zoomAndPan.panAndZoomPane;
+        Rotate rotation = new Rotate();
+        rotation.setPivotX(pivotX);
+        rotation.setPivotY(pivotY);
+        map.getTransforms().add(rotation);
+
+        double dur = Math.abs((angle/360)*800);
+        if (dur < 250){
+            dur += 150;
+        }
+
+        timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(rotation.angleProperty(), 0)),
+                new KeyFrame(Duration.millis(dur), new KeyValue(rotation.angleProperty(), angle)),
+                new KeyFrame(Duration.millis(dur + 1), new KeyValue(rotation.angleProperty(), 0)));
+
+        timeline.play();
     }
 
 }

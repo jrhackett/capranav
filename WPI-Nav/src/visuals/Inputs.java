@@ -57,6 +57,18 @@ public class Inputs<T> extends ComboBox<T> {
 		 */
 	}
 
+
+	private void addSpecialLocations(){
+		String prefixes[] 	= {"Nearest ", "Close ", "Near by ", ""};
+		String locations[] 	= {"Bathroom", "Food", "Restaurant", "Men's Room", "Woman's Bathroom" };
+
+		for (int i = 0; i < prefixes.length; i++){
+			for (int j = 0; j < locations.length; j++){
+				data.add(prefixes[i] + locations[j]);
+			}
+		}
+	}
+
 	/**
 	 * Converts a HashMap of maps to an ObserableList
 	 * 
@@ -88,7 +100,11 @@ public class Inputs<T> extends ComboBox<T> {
 			addNode(v, maps.get(v.getMap_id()), false);
 		});
 
-		return data.sorted();
+		addSpecialLocations();
+
+		FXCollections.sort(data);
+
+		return data;
 	}
 
 	public ObservableList<Walking> createWalkingItems(ArrayList<Walking> walkingArrayList) {
@@ -132,9 +148,9 @@ public class Inputs<T> extends ComboBox<T> {
 			}
 		} else {
 			if (ALL) {
-				if (!data.contains(item)) {
-					data.remove(item);
-				}
+//				if (data.contains(item)) {
+//					data.remove(item);
+//				}
 				item = v.toString() + " near " + ((Controller)controller).nearestNamedNodeName(v.getX(), v.getY(), 0);
 				data.add(item);
 				stringToInt.put(item, v.getID());

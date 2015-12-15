@@ -65,7 +65,10 @@ public class Transition extends Node {
 
     public void addNames(ArrayList<String> name) {this.name = name;}
 
-    public String getName() {return this.name.get(0);}
+    public String getName() {
+        if (name != null && name.size() > 0) return this.name.get(0);
+        else return "Entrance";
+    }
 
     public ArrayList<String> getNames() {return this.name;}
 }
