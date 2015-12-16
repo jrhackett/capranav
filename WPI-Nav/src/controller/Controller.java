@@ -506,7 +506,8 @@ public class Controller extends Application {
         iconRightText.setText("Paper airplane icon made by FreePik from FlatIcon\n" +
                 "Stair icon made by FreePik from FlatIcon\n" +
                 "Elevator icon made by FreePik from FlatIcon\n" +
-                "Parking icon made by Google from FlatIcon");
+                "Parking icon made by Google from FlatIcon\n" +
+                "Bathroom icon made by FreePik from FlatIcon");
 
         iconLeftBox.getChildren().add(iconLeftText);
         iconRightBox.getChildren().add(iconRightText);
