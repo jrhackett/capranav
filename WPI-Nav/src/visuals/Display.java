@@ -6,7 +6,6 @@ import feed.Feed;
 import javafx.animation.Animation;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -127,7 +126,7 @@ public class Display {
 
 
     RadioButton handicapRadioButton;
-    RadioButton weatherRadioButton;
+    RadioButton insideRadioButton;
 
     HBox directionsTitleBox;
     VBox directionsControlBox;
@@ -462,7 +461,7 @@ public class Display {
 
         //settings a sliding pane!div
 
-        slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
+        slidingSettings = new SlidingAnchorPane(expandedWidth + EDGE * 2, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
         slidingSettings.setStyle("-fx-background-color: #333333");
 
         slidingButton = slidingSettings.getButton();
@@ -476,14 +475,16 @@ public class Display {
 
 
         /**------------------------------------------------------------------------------------------------*/
-        /**COLOR CHANGE SETTINGS---------------------------------------------------------------------------*/
+        /**----COLOR CHANGE SETTINGS-----------------------------------------------------------------------*/
         /**------------------------------------------------------------------------------------------------*/
+        /*
 
         HBox settingsColorBox = new HBox();
         HBox settingsColorBoxLine2 = new HBox();
         Label settingsColorLabel = new Label("Color Style:");
         settingsColorLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
         settingsColorLabel.setTextFill(Color.web("#eeeeee"));
+*/
 
         HBox settingsWeightBox = new HBox();
         Label settingsWeightLabel = new Label("Path Preferences:");
@@ -491,23 +492,33 @@ public class Display {
         settingsWeightLabel.setTextFill(Color.web("#eeeeee"));
 
         //TODO: Force all nodes/etc. to update on interaction with checkbox
-        final ToggleGroup colorgroup = new ToggleGroup();
+      //  final ToggleGroup colorgroup = new ToggleGroup();
         final ToggleGroup weightgroup = new ToggleGroup();
-        RadioButton w1 = new RadioButton("Handicap");
-        RadioButton w2 = new RadioButton("Inside Preferred");
-        w1.setToggleGroup(weightgroup);
-        w1.setUserData("Handicap");
-        w1.setText("Handicap");
-        w1.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
-        w1.setTextFill(Color.web("#eeeeee"));
 
-        w2.setToggleGroup(weightgroup);
-        w2.setUserData("Inside Preferred");
-        w2.setText("Inside Preferred");
-        w2.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
-        w2.setTextFill(Color.web("#eeeeee"));
+        handicapRadioButton = new RadioButton("Handicap");
+        insideRadioButton = new RadioButton("Inside Preferred");
 
+        handicapRadioButton.setToggleGroup(weightgroup);
+        handicapRadioButton.setUserData("Handicap");
+        handicapRadioButton.setText("Handicap");
+        handicapRadioButton.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        handicapRadioButton.setTextFill(Color.web("#eeeeee"));
 
+        insideRadioButton.setToggleGroup(weightgroup);
+        insideRadioButton.setUserData("Inside Preferred");
+        insideRadioButton.setText("Inside Preferred");
+        insideRadioButton.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        insideRadioButton.setTextFill(Color.web("#eeeeee"));
+
+        handicapRadioButton.setOnAction(e -> {
+            handleRadioButtons();
+            //handicapRadioButton.selectedProperty().setValue(!handicapRadioButton.selectedProperty().getValue());
+        });
+        insideRadioButton.setOnAction(e -> {
+            handleRadioButtons();
+            //insideRadioButton.selectedProperty().setValue(!insideRadioButton.selectedProperty().getValue());
+        });
+        /*
         RadioButton rb1 = new RadioButton("Colorblind");
         rb1.setToggleGroup(colorgroup);
         rb1.setUserData("Colorblind");
@@ -552,30 +563,32 @@ public class Display {
                 }
             }
         });
+        */
 
+//        weightgroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+//            public void changed(ObservableValue<? extends Toggle> ov,
+//                                Toggle old_toggle, Toggle new_toggle) {
+//                if (weightgroup.getSelectedToggle() != null) {
+//                    if(weightgroup.getSelectedToggle().getUserData().toString().equals("Handicap")){
+//
+//                    }
+//
+//                    if(weightgroup.getSelectedToggle().getUserData().toString().equals("Inside Preferred")){
+//
+//                    }
+//
+//                }
+//            }
+//        });
 
-        weightgroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            public void changed(ObservableValue<? extends Toggle> ov,
-                                Toggle old_toggle, Toggle new_toggle) {
-                if (weightgroup.getSelectedToggle() != null) {
-                    if(weightgroup.getSelectedToggle().getUserData().toString().equals("Handicap")){
-                    }
-
-                    if(weightgroup.getSelectedToggle().getUserData().toString().equals("Inside Preferred")){
-                    }
-
-                }
-            }
-        });
-
-        settingsColorBox.getChildren().add(settingsColorLabel);
-        settingsColorBox.getChildren().add(rb2);
-        settingsColorBox.getChildren().add(rb1);
+        //settingsColorBox.getChildren().add(settingsColorLabel);
+        //settingsColorBox.getChildren().add(rb2);
+        //settingsColorBox.getChildren().add(rb1);
         //settingsColorBoxLine2.getChildren().add(rb3);
 
         settingsWeightBox.getChildren().add(settingsWeightLabel);
-        settingsWeightBox.getChildren().add(w1);
-        settingsWeightBox.getChildren().add(w2);
+        settingsWeightBox.getChildren().add(handicapRadioButton);
+        settingsWeightBox.getChildren().add(insideRadioButton);
         /**-------------------------------------------------------------------------------------------*/
 
         HBox settingsWalkingBox = new HBox();
@@ -632,9 +645,9 @@ public class Display {
         setEmailLabel.setTranslateX(EDGE - 7);
         emailTextField.setTranslateX(EDGE/* - 42*/ );
         /**---------------------------------------*/
-        settingsColorLabel.setTranslateX(EDGE - 7);
-        settingsColorBox.setTranslateX(EDGE/* - 42*/);
-        settingsColorBoxLine2.setTranslateX(EDGE/* - 42*/);
+        //settingsColorLabel.setTranslateX(EDGE - 7);
+        //settingsColorBox.setTranslateX(EDGE/* - 42*/);
+        //settingsColorBoxLine2.setTranslateX(EDGE/* - 42*/);
         /**---------------------------------------*/
         //buttons for handicap / weather
 
@@ -671,7 +684,7 @@ public class Display {
         /** has weight settings */
         //settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
         /** doesn't have weight settings */
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, /*settingsColorLabel, settingsColorBox, settingsColorBoxLine2,*/ setEmailLabel, emailTextField);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox,  setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
@@ -1852,7 +1865,7 @@ public class Display {
     }
 
     private void handleRadioButtons(){
-        controller.handleWeightOptions(weatherRadioButton.selectedProperty().getValue(), handicapRadioButton.selectedProperty().getValue());
+        controller.handleWeightOptions(insideRadioButton.selectedProperty().getValue(), handicapRadioButton.selectedProperty().getValue());
     }
 
     private void handleSearchInput(Inputs v, boolean START) {
