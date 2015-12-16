@@ -48,7 +48,9 @@ public class AutoCompleteComboBoxListener<T> {
 
             if(event.getCode() == KeyCode.BACK_SPACE || event.getCode() == KeyCode.DELETE){
 
-                //comboBox.setValue(null);
+                comboBox.getSelectionModel().clearSelection();
+                comboBox.getItems().clear();
+                return;
             }
 
             if (event.getCode().equals(KeyCode.DOWN)) {
