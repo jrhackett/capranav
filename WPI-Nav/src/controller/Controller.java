@@ -794,16 +794,48 @@ public class Controller extends Application {
 
             if (fullPath != null) {
 
+                if(currentMap.getID() != 0) {
 
-
-                currentIndex = -1;
-
-                for (int z = 0; z < fullPath.size(); z++) {
-                    if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
-                        currentIndex = z;
-                        break;
+                    for (int z = 0; z < fullPath.size(); z++) {
+                        if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
+                            currentIndex = z;
+                            break;
+                        }
                     }
+
+                } else {
+
+
+                    ArrayList<Integer> outsides = new ArrayList<>();
+
+                    for (int z = 0; z < fullPath.size(); z++) {
+                        if (fullPath.get(z).get(0).getNode().getMap_id() == 0) {
+                            outsides.add(z);
+                        }
+                    }
+
+                    if (outsides.size() == 1){
+                        currentIndex = outsides.get(0);
+                    } else {
+                        int smallestDifference = Integer.MAX_VALUE;
+                        int tempIndex          = -1;
+
+                        for(int j = 0; j < outsides.size(); j++){
+                            if (smallestDifference < (outsides.get(j) - currentIndex) && (outsides.get(j) - currentIndex) > 0){
+                                smallestDifference = (outsides.get(j) - currentIndex);
+                                tempIndex          =  outsides.get(j);
+                            }
+                        }
+
+                        currentIndex = tempIndex;
+                    }
+
+
+
+
                 }
+
+
 
                 if (currentIndex != -1) {
                     myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
@@ -885,9 +917,7 @@ public class Controller extends Application {
 
             } else {
                 //campus map
-                int startIndex = currentIndex;
 
-                int counter = 0;
 
                 ArrayList<Integer> outsides = new ArrayList<>();
 
@@ -913,10 +943,6 @@ public class Controller extends Application {
                     currentIndex = tempIndex;
                 }
 
-                while (counter < fullPath.size()){
-
-                    counter++;
-                }
 
 
             }
