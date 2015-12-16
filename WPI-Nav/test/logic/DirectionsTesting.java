@@ -143,7 +143,7 @@ public class DirectionsTesting {
         Directions d = new Directions();
         ArrayList<ArrayList<Instructions>> aI = d.stepByStep(As, mmap, build);
         Instructions i1 = new Instructions("Face South, and walk 200 feet.", As.get(0));
-        Instructions i3 = new Instructions("Make a straight path F, and walk 100 feet.", As.get(1));
+        Instructions i3 = new Instructions("Make a straight path at F, and walk 100 feet.", As.get(1));
         assertEquals("stepByStep did not output correct output", i1.getInstruction_string(), aI.get(0).get(0).getInstruction_string());
         assertEquals("stepByStep did not output correct output", i3.getInstruction_string(), aI.get(0).get(1).getInstruction_string());
     }
