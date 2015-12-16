@@ -846,15 +846,18 @@ public class Display {
      */
     private void goToNode(INode iNode){
         //switch maps
+        this.controller.rightButtonFlag = true;
+
         this.controller.switchMapSetting(this.controller.getMapOfNode(iNode));
 
         //tricky fix here
         final Animation animation = new ScaleTransition(javafx.util.Duration.millis(500), goToButton);
         animation.setOnFinished(e -> {
-            System.out.println("SDFsdF");
             this.zoomAndPan.zoomToNode(iNode);
         });
         animation.play();
+
+        this.controller.rightButtonFlag = false;
 
 
         //zoom to it
