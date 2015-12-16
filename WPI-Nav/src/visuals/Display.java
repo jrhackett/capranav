@@ -4,6 +4,7 @@ import controller.Controller;
 import feed.Event;
 import feed.Feed;
 import javafx.animation.Animation;
+import javafx.animation.ScaleTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
@@ -142,6 +143,8 @@ public class Display {
     ArrayList<InfoTip> infoTips = new ArrayList<>();
     int currentToolTip;
 
+
+    Button goToButton;
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -813,7 +816,7 @@ public class Display {
 
         if(!finalNode.equals("")){
 
-            Button goToButton = new Button();
+            goToButton = new Button();
             goToButton.setGraphic(new Text("Go to location"));
             goToButton.setId("popover-buttons");
             goToButton.setStyle("-fx-max-width:200 !important");
@@ -852,9 +855,21 @@ public class Display {
      */
     private void goToNode(INode iNode){
         //switch maps
+        this.controller.rightButtonFlag = true;
+
         this.controller.switchMapSetting(this.controller.getMapOfNode(iNode));
+
+        //tricky fix here
+        final Animation animation = new ScaleTransition(javafx.util.Duration.millis(500), goToButton);
+        animation.setOnFinished(e -> {
+            this.zoomAndPan.zoomToNode(iNode);
+        });
+        animation.play();
+
+        this.controller.rightButtonFlag = false;
+
+
         //zoom to it
-        this.zoomAndPan.zoomToNode(iNode);
     }
 
     public void showMoreEventInfo(Event in) {
