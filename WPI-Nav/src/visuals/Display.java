@@ -831,7 +831,7 @@ public class Display {
         });
 
         VBox vbox = new VBox();
-        vbox.setId("about-panel");
+        vbox.setId("event-panel");
         vbox.setMinWidth(200);
         vbox.setMinHeight(200);
         vbox.setSpacing(8);
@@ -850,7 +850,6 @@ public class Display {
         Text text = new Text();
         text.setId("about-text");
         text.setWrappingWidth(500);
-        //text.setTextAlignment(TextAlignment.JUSTIFY);
         text.setText(in.getDescription());
 
         flowPane.setPrefWrapLength(500);

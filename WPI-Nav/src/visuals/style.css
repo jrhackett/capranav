@@ -247,6 +247,15 @@
     -fx-effect: dropshadow( three-pass-box , rgba(238,238,238,0.7) , 5, 0.0 , 0 , 1 );
 }
 
+#event-panel {
+    -fx-background-color: white;
+    -fx-max-width: 800;
+    -fx-max-height:550;
+    -fx-min-width:300;
+    -fx-min-height: 550;
+    -fx-padding: 8 8 8 8;
+}
+
 #event-popover {
     -fx-padding:8 8 8 8;
     -fx-max-height:300;
