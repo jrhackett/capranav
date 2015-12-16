@@ -703,7 +703,16 @@ public class Controller extends Application {
         handleMapLines();
     }
 
-    private void switchMapSetting(int mapId){
+    public int getMapOfNode(INode iNode){
+        return this.maps.get(iNode.getMap_id()).getID();
+    }
+
+
+    /**
+     * Switches to the map of the given id
+     * @param mapId
+     */
+    public void switchMapSetting(int mapId){
         if (maps.get(mapId).getID() == 0){
             hideBuildingPane();
             if (currentMap.getID() == 0) {
