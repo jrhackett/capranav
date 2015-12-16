@@ -801,18 +801,19 @@ public class Display {
 
         }
 
-        Button moreInfoButton = new Button();
-        moreInfoButton.setGraphic(new Text("More info"));
-        moreInfoButton.setId("popover-buttons");
-        moreInfoButton.setStyle("-fx-max-width:200 !important");
+        if(in.getDescription().length() >= 150) {
+            Button moreInfoButton = new Button();
+            moreInfoButton.setGraphic(new Text("More info"));
+            moreInfoButton.setId("popover-buttons");
+            moreInfoButton.setStyle("-fx-max-width:200 !important");
 
-        moreInfoButton.setOnMouseClicked(e -> {
-            showMoreEventInfo(in);
-            eventPopOver.hide();
-        });
+            moreInfoButton.setOnMouseClicked(e -> {
+                showMoreEventInfo(in);
+                eventPopOver.hide();
+            });
 
-        bottomHBox.getChildren().addAll(moreInfoButton);
-
+            bottomHBox.getChildren().addAll(moreInfoButton);
+        }
 
 
         return popOver;
@@ -831,6 +832,8 @@ public class Display {
 
         VBox vbox = new VBox();
         vbox.setId("about-panel");
+        vbox.setMinWidth(200);
+        vbox.setMinHeight(200);
         vbox.setSpacing(8);
         vbox.setAlignment(Pos.TOP_CENTER);
 
