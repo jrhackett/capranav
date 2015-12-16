@@ -143,7 +143,7 @@ public class DirectionsTesting {
         Directions d = new Directions();
         ArrayList<ArrayList<Instructions>> aI = d.stepByStep(As, mmap, build);
         Instructions i1 = new Instructions("Face South, and walk 200 feet.", As.get(0));
-        Instructions i3 = new Instructions("You have reached your destination.", As.get(1));
+        Instructions i3 = new Instructions("Make a straight path at F, and walk 100 feet.", As.get(1));
         assertEquals("stepByStep did not output correct output", i1.getInstruction_string(), aI.get(0).get(0).getInstruction_string());
         assertEquals("stepByStep did not output correct output", i3.getInstruction_string(), aI.get(0).get(1).getInstruction_string());
     }
@@ -154,7 +154,7 @@ public class DirectionsTesting {
         Directions d = new Directions();
         ArrayList<ArrayList<Instructions>> aI = d.stepByStep(As, mmap, build);
         Instructions i1 = new Instructions("Face South, and walk 300 feet.", As.get(0));
-        Instructions i3 = new Instructions("You have reached your destination.", As.get(1));
+        Instructions i3 = new Instructions("Make a straight path at F, and walk 200 feet.", As.get(1));
         assertEquals("stepByStep did not output correct output", i1.getInstruction_string(), aI.get(0).get(0).getInstruction_string());
         assertEquals("stepByStep did not output correct output", i3.getInstruction_string(), aI.get(0).get(1).getInstruction_string());
 
@@ -167,7 +167,7 @@ public class DirectionsTesting {
         ArrayList<ArrayList<Instructions>> aI = d.stepByStep(As, mmap, build);
         Instructions i1 = new Instructions("Face East, and walk 100 feet.", As.get(0));
         Instructions i2 = new Instructions("Make a right at B, and walk 100 feet.", As.get(1));
-        Instructions i3 = new Instructions("You have reached your destination.", As.get(2));
+        Instructions i3 = new Instructions("You have reached E.", As.get(2));
         assertEquals("stepByStep did not output correct output", i1.getInstruction_string(), aI.get(0).get(0).getInstruction_string());
         assertEquals("stepByStep did not output correct output", i2.getInstruction_string(), aI.get(0).get(1).getInstruction_string());
         assertEquals("stepByStep did not output correct output", i3.getInstruction_string(), aI.get(0).get(2).getInstruction_string());
@@ -184,7 +184,7 @@ public class DirectionsTesting {
         Instructions i2b = new Instructions("Make a right at B, and walk 100 feet.", As.get(1));
         Instructions i2c = new Instructions("Make a slight right at E, and walk 140 feet.", As.get(1));
 
-        Instructions i3 = new Instructions("You have reached your destination.", As.get(2));
+        Instructions i3 = new Instructions("You have reached G.", As.get(2));
 
 
         assertEquals("stepByStep did not output correct output", i1.getInstruction_string(), aI.get(0).get(0).getInstruction_string());

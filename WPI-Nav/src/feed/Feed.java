@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-//TODO Racism and Inclusion "0:30 pm"
-
 //TODO IMPORTANT : If feed.isEmpty() is true, it means that an internet connection couldn't be made so don't display feed stuff
 
 /**
