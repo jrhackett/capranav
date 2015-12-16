@@ -99,7 +99,7 @@ public class Controller extends Application {
     private static final Effect frostEffect =
             new BoxBlur(BLUR_AMOUNT, BLUR_AMOUNT, 3);
 
-
+    private boolean PATH_FLAG = true;
 
     @Override
     public void init(){
@@ -506,7 +506,8 @@ public class Controller extends Application {
         iconRightText.setText("Paper airplane icon made by FreePik from FlatIcon\n" +
                 "Stair icon made by FreePik from FlatIcon\n" +
                 "Elevator icon made by FreePik from FlatIcon\n" +
-                "Parking icon made by Google from FlatIcon");
+                "Parking icon made by Google from FlatIcon\n" +
+                "Bathroom icon made by FreePik from FlatIcon");
 
         iconLeftBox.getChildren().add(iconLeftText);
         iconRightBox.getChildren().add(iconRightText);
@@ -702,7 +703,16 @@ public class Controller extends Application {
         handleMapLines();
     }
 
-    private void switchMapSetting(int mapId){
+    public int getMapOfNode(INode iNode){
+        return this.maps.get(iNode.getMap_id()).getID();
+    }
+
+
+    /**
+     * Switches to the map of the given id
+     * @param mapId
+     */
+    public void switchMapSetting(int mapId){
         if (maps.get(mapId).getID() == 0){
             hideBuildingPane();
             if (currentMap.getID() == 0) {
@@ -792,18 +802,50 @@ public class Controller extends Application {
 
             /** update arrows **/
 
-            if (fullPath != null) {
+            if (fullPath != null && PATH_FLAG) {
 
+                if(currentMap.getID() != 0) {
 
-
-                currentIndex = -1;
-
-                for (int z = 0; z < fullPath.size(); z++) {
-                    if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
-                        currentIndex = z;
-                        break;
+                    for (int z = 0; z < fullPath.size(); z++) {
+                        if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
+                            currentIndex = z;
+                            break;
+                        }
                     }
+
+                } else {
+
+
+                    ArrayList<Integer> outsides = new ArrayList<>();
+
+                    for (int z = 0; z < fullPath.size(); z++) {
+                        if (fullPath.get(z).get(0).getNode().getMap_id() == 0) {
+                            outsides.add(z);
+                        }
+                    }
+
+                    if (outsides.size() == 1){
+                        currentIndex = outsides.get(0);
+                    } else {
+                        int smallestDifference = Integer.MAX_VALUE;
+                        int tempIndex          = -1;
+
+                        for(int j = 0; j < outsides.size(); j++){
+                            if (smallestDifference < (outsides.get(j) - currentIndex) && (outsides.get(j) - currentIndex) > 0){
+                                smallestDifference = (outsides.get(j) - currentIndex);
+                                tempIndex          =  outsides.get(j);
+                            }
+                        }
+
+                        currentIndex = tempIndex;
+                    }
+
+
+
+
                 }
+
+
 
                 if (currentIndex != -1) {
                     myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
@@ -872,39 +914,69 @@ public class Controller extends Application {
         firstTime = false;
 
 
-        if (fullPath != null) {
+        if (PATH_FLAG) {
+            if (fullPath != null) {
+
+                if (currentMap.getID() != 0) {
+
+                    for (int z = 0; z < fullPath.size(); z++) {
+                        if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
+                            currentIndex = z;
+                            break;
+                        }
+                    }
+
+                } else {
+                    //campus map
 
 
-            currentIndex = -1;
+                    ArrayList<Integer> outsides = new ArrayList<>();
 
-            for (int z = 0; z < fullPath.size(); z++) {
-                if (fullPath.get(z).get(0).getNode().getMap_id() == currentMap.getID()) {
-                    currentIndex = z;
-                    break;
+                    for (int z = 0; z < fullPath.size(); z++) {
+                        if (fullPath.get(z).get(0).getNode().getMap_id() == 0) {
+                            outsides.add(z);
+                        }
+                    }
+
+                    if (outsides.size() == 1) {
+                        currentIndex = outsides.get(0);
+                    } else {
+                        int smallestDifference = Integer.MAX_VALUE;
+                        int tempIndex = -1;
+
+                        for (int j = 0; j < outsides.size(); j++) {
+                            if (smallestDifference < (outsides.get(j) - currentIndex) && (outsides.get(j) - currentIndex) > 0) {
+                                smallestDifference = (outsides.get(j) - currentIndex);
+                                tempIndex = outsides.get(j);
+                            }
+                        }
+
+                        currentIndex = tempIndex;
+                    }
                 }
+
+
+                if (currentIndex != -1) {
+                    myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
+                } else {
+                    this.myDisplay.clearInstructions();
+                }
+
+
+                if (fullPath != null && fullPath.size() > 0 && this.currentIndex + 1 < fullPath.size()) {
+                    this.myDisplay.setIDRightArrowButton("arrow-buttons");
+                } else {
+                    this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
+                }
+
+                if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {
+                    this.myDisplay.setIDLeftArrowButton("arrow-buttons");
+                } else {
+                    this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
+                }
+
+
             }
-
-            if (currentIndex != -1) {
-                myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
-            } else {
-                this.myDisplay.clearInstructions();
-            }
-
-
-
-            if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
-                this.myDisplay.setIDRightArrowButton("arrow-buttons");
-            } else {
-                this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
-            }
-
-            if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1) {
-                this.myDisplay.setIDLeftArrowButton("arrow-buttons");
-            } else {
-                this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
-            }
-
-
         }
     }
 
@@ -1301,7 +1373,7 @@ public class Controller extends Application {
     }
 
 
-    public INode getNode(int id){
+    public INode getNode(Integer id){
         return nodes.get(id);
     }
 
@@ -1317,6 +1389,8 @@ public class Controller extends Application {
         getPathNodes(startNode, endNode);
         getInstructions();
 
+
+
         //set ids of buttons
         if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
             this.myDisplay.setIDRightArrowButton("arrow-buttons");
@@ -1328,6 +1402,8 @@ public class Controller extends Application {
 
         //current index of which arraylist of instructions we are displaying
         currentIndex = 0;//start off with the first list
+
+
 
         //the last map we wee showing
         lastMapID = fullPath.get(currentIndex).get(0).getNode().getMap_id();
@@ -1352,6 +1428,7 @@ public class Controller extends Application {
 
     public void handleIncrementPathMap(){
         //if there is another list of instructions to go
+        PATH_FLAG = false;
         rightButtonFlag = true;
         if (fullPath != null && fullPath.size() > 0 &&  this.currentIndex + 1 < fullPath.size()){
             myDisplay.setInstructions(fullPath.get(++currentIndex)); //TODO UPDATE setInstructions
@@ -1367,10 +1444,12 @@ public class Controller extends Application {
             this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
         }
         rightButtonFlag = false;
+        PATH_FLAG = true;
 
     }
 
     public void handleDecrementPathMap(){
+        PATH_FLAG = false;
         rightButtonFlag = true;
         //if there is another list of instructions to go
         if (fullPath != null && fullPath.size() > 0 && this.currentIndex - 1 > -1){
@@ -1386,16 +1465,18 @@ public class Controller extends Application {
             this.myDisplay.setIDLeftArrowButton("arrow-buttons-grayed");
         }
         rightButtonFlag = false;
+        PATH_FLAG = true;
     }
 
     public void handleWeightOptions(boolean weather, boolean handicap){
+        rightButtonFlag = true;
         Weighted.resetEdges(nodes);
         if (weather)  Weighted.makeEdgesWeather(nodes);
         if (handicap) Weighted.makeEdgesHandicapped(nodes);
         if (startNode != null && endNode != null) {
             findPaths();
         }
-
+        rightButtonFlag = false;
     }
 
     public boolean isStringLocation(String str){

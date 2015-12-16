@@ -45,7 +45,10 @@ public class Date implements Comparable<Date> {
     }
 
     public String getTime() {
-        return hour + ":" + min + ((isAM) ? " AM" : " PM");
+        String val;
+        if (min.equals("00")) val = "" + hour;
+        else val = hour + ":" + min;
+        return val + ((isAM) ? " AM" : " PM");
     }
 
     //True if objects have same dates (could have different times)

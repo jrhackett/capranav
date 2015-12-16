@@ -4,9 +4,9 @@ import controller.Controller;
 import feed.Event;
 import feed.Feed;
 import javafx.animation.Animation;
+import javafx.animation.ScaleTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -126,8 +126,8 @@ public class Display {
     Button slidingDirectionsButton;
 
 
-    RadioButton handicapRadioButton;
-    RadioButton weatherRadioButton;
+    CheckBox handicapRadioButton;
+    CheckBox insideRadioButton;
 
     HBox directionsTitleBox;
     VBox directionsControlBox;
@@ -143,6 +143,8 @@ public class Display {
     ArrayList<InfoTip> infoTips = new ArrayList<>();
     int currentToolTip;
 
+
+    Button goToButton;
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -462,7 +464,7 @@ public class Display {
 
         //settings a sliding pane!div
 
-        slidingSettings = new SlidingAnchorPane(expandedWidth, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
+        slidingSettings = new SlidingAnchorPane(expandedWidth + EDGE * 2, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
         slidingSettings.setStyle("-fx-background-color: #333333");
 
         slidingButton = slidingSettings.getButton();
@@ -476,14 +478,16 @@ public class Display {
 
 
         /**------------------------------------------------------------------------------------------------*/
-        /**COLOR CHANGE SETTINGS---------------------------------------------------------------------------*/
+        /**----COLOR CHANGE SETTINGS-----------------------------------------------------------------------*/
         /**------------------------------------------------------------------------------------------------*/
+        /*
 
         HBox settingsColorBox = new HBox();
         HBox settingsColorBoxLine2 = new HBox();
         Label settingsColorLabel = new Label("Color Style:");
         settingsColorLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
         settingsColorLabel.setTextFill(Color.web("#eeeeee"));
+*/
 
         HBox settingsWeightBox = new HBox();
         Label settingsWeightLabel = new Label("Path Preferences:");
@@ -491,23 +495,33 @@ public class Display {
         settingsWeightLabel.setTextFill(Color.web("#eeeeee"));
 
         //TODO: Force all nodes/etc. to update on interaction with checkbox
-        final ToggleGroup colorgroup = new ToggleGroup();
+      //  final ToggleGroup colorgroup = new ToggleGroup();
         final ToggleGroup weightgroup = new ToggleGroup();
-        RadioButton w1 = new RadioButton("Handicap");
-        RadioButton w2 = new RadioButton("Inside Preferred");
-        w1.setToggleGroup(weightgroup);
-        w1.setUserData("Handicap");
-        w1.setText("Handicap");
-        w1.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
-        w1.setTextFill(Color.web("#eeeeee"));
 
-        w2.setToggleGroup(weightgroup);
-        w2.setUserData("Inside Preferred");
-        w2.setText("Inside Preferred");
-        w2.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
-        w2.setTextFill(Color.web("#eeeeee"));
+        handicapRadioButton = new CheckBox("Handicap");
+        insideRadioButton = new CheckBox("Inside Preferred");
 
+        //handicapRadioButton.setToggleGroup(weightgroup);
+        handicapRadioButton.setUserData("Handicap");
+        handicapRadioButton.setText("Handicap");
+        handicapRadioButton.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        handicapRadioButton.setTextFill(Color.web("#eeeeee"));
 
+        //insideRadioButton.setToggleGroup(weightgroup);
+        insideRadioButton.setUserData("Inside Preferred");
+        insideRadioButton.setText("Inside Preferred");
+        insideRadioButton.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
+        insideRadioButton.setTextFill(Color.web("#eeeeee"));
+
+        handicapRadioButton.setOnAction(e -> {
+            handleRadioButtons();
+            //handicapRadioButton.selectedProperty().setValue(!handicapRadioButton.selectedProperty().getValue());
+        });
+        insideRadioButton.setOnAction(e -> {
+            handleRadioButtons();
+            //insideRadioButton.selectedProperty().setValue(!insideRadioButton.selectedProperty().getValue());
+        });
+        /*
         RadioButton rb1 = new RadioButton("Colorblind");
         rb1.setToggleGroup(colorgroup);
         rb1.setUserData("Colorblind");
@@ -552,30 +566,36 @@ public class Display {
                 }
             }
         });
+        */
 
+//        weightgroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+//            public void changed(ObservableValue<? extends Toggle> ov,
+//                                Toggle old_toggle, Toggle new_toggle) {
+//                if (weightgroup.getSelectedToggle() != null) {
+//                    if(weightgroup.getSelectedToggle().getUserData().toString().equals("Handicap")){
+//
+//                    }
+//
+//                    if(weightgroup.getSelectedToggle().getUserData().toString().equals("Inside Preferred")){
+//
+//                    }
+//
+//                }
+//            }
+//        });
 
-        weightgroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            public void changed(ObservableValue<? extends Toggle> ov,
-                                Toggle old_toggle, Toggle new_toggle) {
-                if (weightgroup.getSelectedToggle() != null) {
-                    if(weightgroup.getSelectedToggle().getUserData().toString().equals("Handicap")){
-                    }
-
-                    if(weightgroup.getSelectedToggle().getUserData().toString().equals("Inside Preferred")){
-                    }
-
-                }
-            }
-        });
-
-        settingsColorBox.getChildren().add(settingsColorLabel);
-        settingsColorBox.getChildren().add(rb2);
-        settingsColorBox.getChildren().add(rb1);
+        //settingsColorBox.getChildren().add(settingsColorLabel);
+        //settingsColorBox.getChildren().add(rb2);
+        //settingsColorBox.getChildren().add(rb1);
         //settingsColorBoxLine2.getChildren().add(rb3);
 
         settingsWeightBox.getChildren().add(settingsWeightLabel);
-        settingsWeightBox.getChildren().add(w1);
-        settingsWeightBox.getChildren().add(w2);
+        VBox vbox = new VBox();
+        vbox.setSpacing(0);
+        vbox.getChildren().addAll(handicapRadioButton, insideRadioButton);
+        vbox.setTranslateX(EDGE-6);
+        //settingsWeightBox.getChildren().add(handicapRadioButton);
+        //settingsWeightBox.getChildren().add(insideRadioButton);
         /**-------------------------------------------------------------------------------------------*/
 
         HBox settingsWalkingBox = new HBox();
@@ -632,9 +652,9 @@ public class Display {
         setEmailLabel.setTranslateX(EDGE - 7);
         emailTextField.setTranslateX(EDGE/* - 42*/ );
         /**---------------------------------------*/
-        settingsColorLabel.setTranslateX(EDGE - 7);
-        settingsColorBox.setTranslateX(EDGE/* - 42*/);
-        settingsColorBoxLine2.setTranslateX(EDGE/* - 42*/);
+        //settingsColorLabel.setTranslateX(EDGE - 7);
+        //settingsColorBox.setTranslateX(EDGE/* - 42*/);
+        //settingsColorBoxLine2.setTranslateX(EDGE/* - 42*/);
         /**---------------------------------------*/
         //buttons for handicap / weather
 
@@ -671,7 +691,7 @@ public class Display {
         /** has weight settings */
         //settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
         /** doesn't have weight settings */
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, /*settingsColorLabel, settingsColorBox, settingsColorBoxLine2,*/ setEmailLabel, emailTextField);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox, vbox, setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
@@ -784,15 +804,19 @@ public class Display {
 
         vbox.getChildren().addAll(bottomHBox);
 
-        if(start.containsNode(in.getLocation())){
+        String originalNode = "";
 
-            Button goToButton = new Button();
+        int nodeID = start.getNodeInclusive(in.getLocation());
+
+        if(nodeID != -1){
+
+            goToButton = new Button();
             goToButton.setGraphic(new Text("Go to location"));
             goToButton.setId("popover-buttons");
             goToButton.setStyle("-fx-max-width:200 !important");
 
             goToButton.setOnMouseClicked(e -> {
-
+                goToNode(this.controller.getNode(nodeID));
                 eventPopOver.hide();
             });
 
@@ -801,25 +825,46 @@ public class Display {
 
         }
 
-        Button moreInfoButton = new Button();
-        moreInfoButton.setGraphic(new Text("More info"));
-        moreInfoButton.setId("popover-buttons");
-        moreInfoButton.setStyle("-fx-max-width:200 !important");
+        if(in.getDescription().length() >= 150) {
+            Button moreInfoButton = new Button();
+            moreInfoButton.setGraphic(new Text("More info"));
+            moreInfoButton.setId("popover-buttons");
+            moreInfoButton.setStyle("-fx-max-width:200 !important");
 
-        moreInfoButton.setOnMouseClicked(e -> {
-            showMoreEventInfo(in);
-            eventPopOver.hide();
-        });
+            moreInfoButton.setOnMouseClicked(e -> {
+                showMoreEventInfo(in);
+                eventPopOver.hide();
+            });
 
-        bottomHBox.getChildren().addAll(moreInfoButton);
-
+            bottomHBox.getChildren().addAll(moreInfoButton);
+        }
 
 
         return popOver;
     }
 
+    /**
+     * Zooms on a node. (Not a selected one or necessarily on this map.)
+     * @param iNode
+     */
+    private void goToNode(INode iNode){
+        //switch maps
+        this.controller.rightButtonFlag = true;
+
+        this.controller.switchMapSetting(this.controller.getMapOfNode(iNode));
+
+        //tricky fix here
+        final Animation animation = new ScaleTransition(javafx.util.Duration.millis(500), goToButton);
+        animation.setOnFinished(e -> {
+            this.zoomAndPan.zoomToNode(iNode);
+        });
+        animation.play();
+
+        this.controller.rightButtonFlag = false;
 
 
+        //zoom to it
+    }
 
     public void showMoreEventInfo(Event in) {
         StackPane imageStack    = new StackPane();
@@ -830,7 +875,9 @@ public class Display {
         });
 
         VBox vbox = new VBox();
-        vbox.setId("about-panel");
+        vbox.setId("event-panel");
+        vbox.setMinWidth(200);
+        vbox.setMinHeight(200);
         vbox.setSpacing(8);
         vbox.setAlignment(Pos.TOP_CENTER);
 
@@ -847,7 +894,6 @@ public class Display {
         Text text = new Text();
         text.setId("about-text");
         text.setWrappingWidth(500);
-        //text.setTextAlignment(TextAlignment.JUSTIFY);
         text.setText(in.getDescription());
 
         flowPane.setPrefWrapLength(500);
@@ -1690,6 +1736,9 @@ public class Display {
         if (animation1 != null) animation1.play();
         if (animation2 != null) animation2.play();
 
+
+
+
         if (animation1 != null) {
             animation1.setOnFinished(e -> {
                 playToolTips();
@@ -1734,10 +1783,10 @@ public class Display {
         InfoTip g = new InfoTip("Click to show settings", slidingButton, PopOver.ArrowLocation.BOTTOM_LEFT);
 
         /** email button **/
-        InfoTip h = new InfoTip("Click to send directions to your email", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_LEFT);
+        InfoTip h = new InfoTip("Click to send directions to your email.", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_LEFT);
 
         /** map **/
-        InfoTip i = new InfoTip("Click on the map to add starting/ending locations", mapPane, PopOver.ArrowLocation.TOP_CENTER);
+        InfoTip i = new InfoTip("Click on the map to add starting/ending locations\nSelect a building, and choose a floor to go inside.", mapPane, PopOver.ArrowLocation.TOP_CENTER);
 
         /** map **/
         InfoTip j = new InfoTip("Step by step directions will be shown below", directionsTitleBox, PopOver.ArrowLocation.TOP_LEFT);
@@ -1792,16 +1841,17 @@ public class Display {
         tutorial.setSpacing(8);
         controlTutorial.setContentNode(tutorial);
         controlTutorial.setDetached(true);
-        controlTutorial.show(mapPane);
+        controlTutorial.show(slidingDirections);
 
         next.setOnAction(e -> playNext());
         back.setOnAction(e -> playBack());
         endTutorial.setOnAction(e -> {
             for(InfoTip infoTip : infoTips) infoTip.hide();
             controlTutorial.hide();
+            if (this.DIRECTIONS_VISIBLE.getValue()) this.slidingDirections.playHidePane(DIRECTIONS_VISIBLE);
         });
         showAll.setOnAction(e -> {
-            for(InfoTip infoTip : infoTips) infoTip.show();
+            for(int i = 0; i < infoTips.size() - 1; i++) infoTips.get(i).show();
         });
 
         currentToolTip = 0;
@@ -1810,11 +1860,19 @@ public class Display {
     private void playNext(){
         if (currentToolTip + 1 < infoTips.size()){
             playToolTip(1);
+        } else {
+            hideToolTip(currentToolTip);
+            currentToolTip = -1;
+            playToolTip(1);
         }
     }
 
     private void playBack(){
         if (currentToolTip - 1 < infoTips.size() && currentToolTip - 1 > -1){
+            playToolTip(-1);
+        } else if (currentToolTip == 0){
+            hideToolTip(currentToolTip);
+            currentToolTip = infoTips.size() - 1;
             playToolTip(-1);
         }
     }
@@ -1852,7 +1910,7 @@ public class Display {
     }
 
     private void handleRadioButtons(){
-        controller.handleWeightOptions(weatherRadioButton.selectedProperty().getValue(), handicapRadioButton.selectedProperty().getValue());
+        controller.handleWeightOptions(insideRadioButton.selectedProperty().getValue(), handicapRadioButton.selectedProperty().getValue());
     }
 
     private void handleSearchInput(Inputs v, boolean START) {

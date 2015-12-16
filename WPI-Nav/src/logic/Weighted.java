@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class Weighted {
 
     private static double weatherWeight = 15;
-    private static double handicapWeight = 10;
+    private static double handicapWeight = 50;
     /**
      * changes edge weights for all Tstairs Nodes to handicap weight
      * @param allNodes

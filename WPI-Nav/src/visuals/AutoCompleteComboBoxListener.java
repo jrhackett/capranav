@@ -48,7 +48,9 @@ public class AutoCompleteComboBoxListener<T> {
 
             if(event.getCode() == KeyCode.BACK_SPACE || event.getCode() == KeyCode.DELETE){
 
-                //comboBox.setValue(null);
+                comboBox.getSelectionModel().clearSelection();
+                comboBox.getItems().clear();
+                return;
             }
 
             if (event.getCode().equals(KeyCode.DOWN)) {
@@ -173,6 +175,10 @@ public class AutoCompleteComboBoxListener<T> {
         System.out.println("Old size: " + oldList.size() + ", New size: " + comboBox.getItems().size());
 
         return comboBox.getItems();
+    }
+
+    public ObservableList<T> getAllNodes(){
+        return FXCollections.observableArrayList(originalList);
     }
 
 }

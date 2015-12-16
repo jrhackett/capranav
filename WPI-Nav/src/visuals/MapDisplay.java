@@ -158,11 +158,13 @@ public class MapDisplay extends Pane {
 
         //this.mapImage = FileFetch.getImageFromFile("floorPlans/" + map.getFilePath(), )
 
-        try {
-            this.mapImage = new Image(getClass().getResourceAsStream("../images/floorPlans/" + map.getFilePath()));//
-        } catch (NullPointerException e) {
-            this.mapImage = new Image(getClass().getResourceAsStream("/images/floorPlans/" + map.getFilePath()));//, IMAGE_WIDTH, IMAGE_HEIGHT, true, true
-        }
+        this.mapImage = FileFetch.getImageFromFile("floorPlans/" + map.getFilePath());
+
+//        try {
+//            this.mapImage = new Image(getClass().getResourceAsStream("../images/floorPlans/" + map.getFilePath()));//
+//        } catch (NullPointerException e) {
+//            this.mapImage = new Image(getClass().getResourceAsStream("/images/floorPlans/" + map.getFilePath()));//, IMAGE_WIDTH, IMAGE_HEIGHT, true, true
+//        }
 
 
         this.mapView = new ImageView(mapImage);
@@ -988,6 +990,31 @@ public class MapDisplay extends Pane {
         salisbury.setFill(Color.TRANSPARENT);
         addPolygonEvents(salisbury, 1909);//TODO double check this value
 
+        Polygon harrington = new Polygon();
+        harrington.getPoints().addAll(new Double[]{
+                192.207,216.7365,
+                186.4005,237.8295,
+                185.9265,257.5005,
+                192.918,260.3445,
+                192.0885,266.7435,
+                196.71,267.4545,
+                197.5395,262.2405,
+                207.4935,266.388,
+                207.138,269.1135,
+                226.335,272.076,
+                226.6905,269.469,
+                230.2455,269.1135,
+                229.7715,272.6685,
+                234.5115,273.261,
+                235.2225,268.758,
+                249.561,267.4545,
+                254.775,248.376,
+                255.6045,226.2165,
+
+        });
+        harrington.setFill(Color.TRANSPARENT);
+        addPolygonEvents(harrington,3579);
+
     }
     private void addPolygonEvents(Polygon p, Integer key){
         this.getChildren().add(p);
@@ -1097,6 +1124,10 @@ public class MapDisplay extends Pane {
                 pivotY = 228;
                 angle = 83;
                 break;
+            case 12: //Harrington
+                pivotX = 219;
+                pivotY = 244;
+                angle = -10;
 
         }
         Node map = controller.getMyDisplay().zoomAndPan.panAndZoomPane;

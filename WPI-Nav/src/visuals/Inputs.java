@@ -210,7 +210,18 @@ public class Inputs<T> extends ComboBox<T> {
 		}
 	}
 
+	public Integer getNodeInclusive(String str){
+		for(HashMap.Entry<String, Integer> hashSet : stringToInt.entrySet()){
+			if(hashSet.getKey().contains(str)){
+				return hashSet.getValue();
+			}
+		}
+
+		return -1;
+	}
+
 	public boolean containsNode(String str){
 		return stringToInt.containsKey(str);
 	}
+
 }

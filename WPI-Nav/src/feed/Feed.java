@@ -10,11 +10,10 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-
-//TODO Racism and Inclusion "0:30 pm"
 
 //TODO IMPORTANT : If feed.isEmpty() is true, it means that an internet connection couldn't be made so don't display feed stuff
 
@@ -106,7 +105,8 @@ public class Feed implements Iterable<Event> {
 
     //Get the value of a field in XML document
     private static String getField(Document doc, String tag, int i) {
-        return doc.getElementsByTagName(tag).item(i).getTextContent();
+        String val =  doc.getElementsByTagName(tag).item(i).getTextContent();
+        return val.replaceAll("[^\\p{ASCII}]", "");
     }
 
     public Iterator<Event> iterator() {
