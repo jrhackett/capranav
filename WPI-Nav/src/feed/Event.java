@@ -34,10 +34,10 @@ public class Event implements Comparable<Event> {
     public String getDateInfo() {
         if (sDate.sameDate(eDate)) {
             if (eDate.emptyTime() && !sDate.emptyTime()) { return sDate.getDate() + " at " + sDate.getTime(); } //End has no interesting time info, but start does
-            else if (!sDate.emptyTime()) { return sDate.getDate() + " from " + sDate.getTime() + " to " + eDate.getTime(); } //Both have interesting time info, print both
+            else if (!sDate.emptyTime()) { return sDate.getDate() + " " + sDate.getTime() + " to " + eDate.getTime(); } //Both have interesting time info, print both
             else { return sDate.getDate(); } //Neither have an interesting time, print neither
         }
-        else { return "From " + sDate.getDate() + " to " + eDate.getDate(); } //Different dates, just give date range
+        else { return sDate.getDate() + " to " + eDate.getDate(); } //Different dates, just give date range
     }
 
     public String getTitle() {
