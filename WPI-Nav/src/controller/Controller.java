@@ -1459,13 +1459,14 @@ public class Controller extends Application {
     }
 
     public void handleWeightOptions(boolean weather, boolean handicap){
+        rightButtonFlag = true;
         Weighted.resetEdges(nodes);
         if (weather)  Weighted.makeEdgesWeather(nodes);
         if (handicap) Weighted.makeEdgesHandicapped(nodes);
         if (startNode != null && endNode != null) {
             findPaths();
         }
-
+        rightButtonFlag = false;
     }
 
     public boolean isStringLocation(String str){
