@@ -803,13 +803,14 @@ public class Display {
 
         if(start.containsNode(in.getLocation())){
 
+
             Button goToButton = new Button();
             goToButton.setGraphic(new Text("Go to location"));
             goToButton.setId("popover-buttons");
             goToButton.setStyle("-fx-max-width:200 !important");
 
             goToButton.setOnMouseClicked(e -> {
-
+                goToNode(this.controller.getNode(start.getNode(in.getLocation())));
                 eventPopOver.hide();
             });
 
@@ -836,8 +837,16 @@ public class Display {
         return popOver;
     }
 
-
-
+    /**
+     * Zooms on a node. (Not a selected one or necessarily on this map.)
+     * @param iNode
+     */
+    private void goToNode(INode iNode){
+        //switch maps
+        this.controller.switchMapSetting(this.controller.getMapOfNode(iNode));
+        //zoom to it
+        this.zoomAndPan.zoomToNode(iNode);
+    }
 
     public void showMoreEventInfo(Event in) {
         StackPane imageStack    = new StackPane();
@@ -1709,6 +1718,9 @@ public class Display {
         if (animation1 != null) animation1.play();
         if (animation2 != null) animation2.play();
 
+
+
+
         if (animation1 != null) {
             animation1.setOnFinished(e -> {
                 playToolTips();
@@ -1820,7 +1832,7 @@ public class Display {
             controlTutorial.hide();
         });
         showAll.setOnAction(e -> {
-            for(InfoTip infoTip : infoTips) infoTip.show();
+            for(int i = 0; i < infoTips.size() - 1; i++) infoTips.get(i).show();
         });
 
         currentToolTip = 0;
