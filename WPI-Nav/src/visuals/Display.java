@@ -808,7 +808,7 @@ public class Display {
 
         int nodeID = start.getNodeInclusive(in.getLocation());
 
-        if(nodeID != 0){
+        if(nodeID != -1){
 
             goToButton = new Button();
             goToButton.setGraphic(new Text("Go to location"));
@@ -816,7 +816,7 @@ public class Display {
             goToButton.setStyle("-fx-max-width:200 !important");
 
             goToButton.setOnMouseClicked(e -> {
-                goToNode(this.controller.getNode(nodeID);
+                goToNode(this.controller.getNode(nodeID));
                 eventPopOver.hide();
             });
 

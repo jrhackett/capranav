@@ -1373,7 +1373,7 @@ public class Controller extends Application {
     }
 
 
-    public INode getNode(int id){
+    public INode getNode(Integer id){
         return nodes.get(id);
     }
 

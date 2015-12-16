@@ -211,12 +211,13 @@ public class Inputs<T> extends ComboBox<T> {
 	}
 
 	public Integer getNodeInclusive(String str){
-		stringToInt.forEach( (k, v) ->{
-			if(k.contains(str)){
-				return v;
+		for(HashMap.Entry<String, Integer> hashSet : stringToInt.entrySet()){
+			if(hashSet.getKey().contains(str)){
+				return hashSet.getValue();
 			}
-		});
-		return 0;
+		}
+
+		return -1;
 	}
 
 	public boolean containsNode(String str){
