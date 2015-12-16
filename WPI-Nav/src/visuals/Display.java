@@ -801,8 +801,17 @@ public class Display {
 
         vbox.getChildren().addAll(bottomHBox);
 
-        if(start.containsNode(in.getLocation())){
+        String originalNode = "";
 
+        for(String str : start.getItems()){
+            if(str.contains(in.getLocation())){
+                originalNode = str;
+            }
+        }
+
+        final String finalNode = originalNode;
+
+        if(!finalNode.equals("")){
 
             Button goToButton = new Button();
             goToButton.setGraphic(new Text("Go to location"));
@@ -810,7 +819,7 @@ public class Display {
             goToButton.setStyle("-fx-max-width:200 !important");
 
             goToButton.setOnMouseClicked(e -> {
-                goToNode(this.controller.getNode(start.getNode(in.getLocation())));
+                goToNode(this.controller.getNode(start.getNode(finalNode)));
                 eventPopOver.hide();
             });
 
