@@ -1753,10 +1753,10 @@ public class Display {
         InfoTip g = new InfoTip("Click to show settings", slidingButton, PopOver.ArrowLocation.BOTTOM_LEFT);
 
         /** email button **/
-        InfoTip h = new InfoTip("Click to send directions to your email", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_LEFT);
+        InfoTip h = new InfoTip("Click to send directions to your email.", slidingEmailButton, PopOver.ArrowLocation.BOTTOM_LEFT);
 
         /** map **/
-        InfoTip i = new InfoTip("Click on the map to add starting/ending locations", mapPane, PopOver.ArrowLocation.TOP_CENTER);
+        InfoTip i = new InfoTip("Click on the map to add starting/ending locations\nSelect a building, and choose a floor to go inside.", mapPane, PopOver.ArrowLocation.TOP_CENTER);
 
         /** map **/
         InfoTip j = new InfoTip("Step by step directions will be shown below", directionsTitleBox, PopOver.ArrowLocation.TOP_LEFT);
@@ -1811,7 +1811,7 @@ public class Display {
         tutorial.setSpacing(8);
         controlTutorial.setContentNode(tutorial);
         controlTutorial.setDetached(true);
-        controlTutorial.show(mapPane);
+        controlTutorial.show(slidingDirections);
 
         next.setOnAction(e -> playNext());
         back.setOnAction(e -> playBack());
@@ -1829,11 +1829,19 @@ public class Display {
     private void playNext(){
         if (currentToolTip + 1 < infoTips.size()){
             playToolTip(1);
+        } else {
+            hideToolTip(currentToolTip);
+            currentToolTip = -1;
+            playToolTip(1);
         }
     }
 
     private void playBack(){
         if (currentToolTip - 1 < infoTips.size() && currentToolTip - 1 > -1){
+            playToolTip(-1);
+        } else if (currentToolTip == 0){
+            hideToolTip(currentToolTip);
+            currentToolTip = infoTips.size() - 1;
             playToolTip(-1);
         }
     }
