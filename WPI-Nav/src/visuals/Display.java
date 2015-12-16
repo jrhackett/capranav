@@ -1845,6 +1845,7 @@ public class Display {
         endTutorial.setOnAction(e -> {
             for(InfoTip infoTip : infoTips) infoTip.hide();
             controlTutorial.hide();
+            if (this.DIRECTIONS_VISIBLE.getValue()) this.slidingDirections.playHidePane(DIRECTIONS_VISIBLE);
         });
         showAll.setOnAction(e -> {
             for(int i = 0; i < infoTips.size() - 1; i++) infoTips.get(i).show();
