@@ -177,4 +177,8 @@ public class AutoCompleteComboBoxListener<T> {
         return comboBox.getItems();
     }
 
+    public ObservableList<T> getAllNodes(){
+        return FXCollections.observableArrayList(originalList);
+    }
+
 }

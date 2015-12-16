@@ -210,7 +210,17 @@ public class Inputs<T> extends ComboBox<T> {
 		}
 	}
 
+	public Integer getNodeInclusive(String str){
+		stringToInt.forEach( (k, v) ->{
+			if(k.contains(str)){
+				return v;
+			}
+		});
+		return 0;
+	}
+
 	public boolean containsNode(String str){
 		return stringToInt.containsKey(str);
 	}
+
 }
