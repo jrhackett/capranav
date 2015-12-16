@@ -125,8 +125,8 @@ public class Display {
     Button slidingDirectionsButton;
 
 
-    RadioButton handicapRadioButton;
-    RadioButton insideRadioButton;
+    CheckBox handicapRadioButton;
+    CheckBox insideRadioButton;
 
     HBox directionsTitleBox;
     VBox directionsControlBox;
@@ -495,16 +495,16 @@ public class Display {
       //  final ToggleGroup colorgroup = new ToggleGroup();
         final ToggleGroup weightgroup = new ToggleGroup();
 
-        handicapRadioButton = new RadioButton("Handicap");
-        insideRadioButton = new RadioButton("Inside Preferred");
+        handicapRadioButton = new CheckBox("Handicap");
+        insideRadioButton = new CheckBox("Inside Preferred");
 
-        handicapRadioButton.setToggleGroup(weightgroup);
+        //handicapRadioButton.setToggleGroup(weightgroup);
         handicapRadioButton.setUserData("Handicap");
         handicapRadioButton.setText("Handicap");
         handicapRadioButton.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
         handicapRadioButton.setTextFill(Color.web("#eeeeee"));
 
-        insideRadioButton.setToggleGroup(weightgroup);
+        //insideRadioButton.setToggleGroup(weightgroup);
         insideRadioButton.setUserData("Inside Preferred");
         insideRadioButton.setText("Inside Preferred");
         insideRadioButton.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
@@ -587,8 +587,12 @@ public class Display {
         //settingsColorBoxLine2.getChildren().add(rb3);
 
         settingsWeightBox.getChildren().add(settingsWeightLabel);
-        settingsWeightBox.getChildren().add(handicapRadioButton);
-        settingsWeightBox.getChildren().add(insideRadioButton);
+        VBox vbox = new VBox();
+        vbox.setSpacing(0);
+        vbox.getChildren().addAll(handicapRadioButton, insideRadioButton);
+        vbox.setTranslateX(EDGE-6);
+        //settingsWeightBox.getChildren().add(handicapRadioButton);
+        //settingsWeightBox.getChildren().add(insideRadioButton);
         /**-------------------------------------------------------------------------------------------*/
 
         HBox settingsWalkingBox = new HBox();
@@ -684,7 +688,7 @@ public class Display {
         /** has weight settings */
         //settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
         /** doesn't have weight settings */
-        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox,  setEmailLabel, emailTextField);
+        settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox, vbox, setEmailLabel, emailTextField);
 
 
         AnchorPane.setBottomAnchor(slidingSettings, 0.0);// 2 * EDGE - 2 * GAP - 20);
