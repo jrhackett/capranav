@@ -158,11 +158,13 @@ public class MapDisplay extends Pane {
 
         //this.mapImage = FileFetch.getImageFromFile("floorPlans/" + map.getFilePath(), )
 
-        try {
-            this.mapImage = new Image(getClass().getResourceAsStream("../images/floorPlans/" + map.getFilePath()));//
-        } catch (NullPointerException e) {
-            this.mapImage = new Image(getClass().getResourceAsStream("/images/floorPlans/" + map.getFilePath()));//, IMAGE_WIDTH, IMAGE_HEIGHT, true, true
-        }
+        this.mapImage = FileFetch.getImageFromFile("floorPlans/" + map.getFilePath());
+
+//        try {
+//            this.mapImage = new Image(getClass().getResourceAsStream("../images/floorPlans/" + map.getFilePath()));//
+//        } catch (NullPointerException e) {
+//            this.mapImage = new Image(getClass().getResourceAsStream("/images/floorPlans/" + map.getFilePath()));//, IMAGE_WIDTH, IMAGE_HEIGHT, true, true
+//        }
 
 
         this.mapView = new ImageView(mapImage);
