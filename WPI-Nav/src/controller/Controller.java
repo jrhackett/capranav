@@ -1434,7 +1434,7 @@ public class Controller extends Application {
             this.myDisplay.setIDRightArrowButton("arrow-buttons-grayed");
         }
         rightButtonFlag = false;
-        PATH_FLAG = true
+        PATH_FLAG = true;
 
     }
 
