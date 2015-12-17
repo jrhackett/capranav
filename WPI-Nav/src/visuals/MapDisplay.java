@@ -126,7 +126,7 @@ public class MapDisplay extends Pane {
 
 
     /****************************************************************************************************************
-     WORKING CIRCLE CODE
+                                         CIRCLE CODE
      ****************************************************************************************************************/
 
 
@@ -156,15 +156,7 @@ public class MapDisplay extends Pane {
         //Removes all old nodes, old lines, and old maps
         this.getChildren().remove(0, this.getChildren().size());
 
-        //this.mapImage = FileFetch.getImageFromFile("floorPlans/" + map.getFilePath(), )
-
         this.mapImage = FileFetch.getImageFromFile("floorPlans/" + map.getFilePath());
-
-//        try {
-//            this.mapImage = new Image(getClass().getResourceAsStream("../images/floorPlans/" + map.getFilePath()));//
-//        } catch (NullPointerException e) {
-//            this.mapImage = new Image(getClass().getResourceAsStream("/images/floorPlans/" + map.getFilePath()));//, IMAGE_WIDTH, IMAGE_HEIGHT, true, true
-//        }
 
 
         this.mapView = new ImageView(mapImage);
@@ -182,20 +174,19 @@ public class MapDisplay extends Pane {
         });
     }
 
+    /**
+     * Selects the nearest node, allowing the controller to handle it
+     * @param e
+     */
     private void selectNearestNode(MouseEvent e){
         controller.handleMapClick(controller.nearestNode(e.getX(), e.getY()));
    }
 
-//    private void createTempLandmark(MouseEvent e) {
-//        //CREATE TEMPORARY POINT ->
-//        INode temp = controller.createTempLandmark(e.getX(), e.getY());
-//        Circle c = createCircle(temp);
-//        id_circle.put(temp.getID(), c);
-//        normal(c, temp);
-//        this.getChildren().add(c);
-//        controller.handleMapClick(temp);
-//    }
-
+    /**
+     * An animation that plays a soft scaling and setting to the appropriate color
+     * @param idOld
+     * @param idNew
+     */
     public void softSelectAnimation(int idOld, int idNew) {
         Circle c;
 
@@ -215,8 +206,7 @@ public class MapDisplay extends Pane {
         c.setFill(Color.HOTPINK);
 
         ScaleTransition st = new ScaleTransition(Duration.millis(75), c);
-        //st.setByX(1.1f);
-        //st.setByY(1.1f);
+
         st.setToX(2);
         st.setToY(2);
         st.setCycleCount(1);
@@ -239,11 +229,6 @@ public class MapDisplay extends Pane {
      * @param c
      */
     public void normal(Circle c, INode v) {
-//        if (v != null && v.isTransition()) { //v != null &&
-//            c.setFill(transitionColor);
-//        } else {
-//            c.setFill(Color.TRANSPARENT);
-//        }
 
         c.setFill(Color.TRANSPARENT);
         c.setStrokeWidth(0);
@@ -253,6 +238,11 @@ public class MapDisplay extends Pane {
     }
 
 
+    /**
+     * Creates a circle associated with a node
+     * @param v
+     * @return
+     */
     private Circle createCircle(INode v) {
 
 
@@ -267,43 +257,15 @@ public class MapDisplay extends Pane {
             }
         });
 
-//        if (v.isTransition()) {
-//            circle.setOnMouseClicked(e -> {
-//               if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
-//                    controller.handleMapClick(v);
-//                }
-//            });
-//        } else {
-//            circle.setOnMouseClicked(e -> {
-//                if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
-//                    controller.handleMapClick(v);
-//                }
-//            });
-//        }
-
-//        if((v instanceof logic.Transition) && v.getMap_id() == 0 && ((logic.Transition)v).getBuildingID() != 0){
-//
-//            PopOver popOver = createPopOverForNode(v);
-//
-//            circle.setOnMouseEntered(e -> {
-//                //content of popover
-//                System.out.println("showing popover for ID: " + v.getID());
-//                if(!(previousPopOver.equals(popOver))) {
-//                    popOver.show(circle, -13);
-//                    previousPopOver.hide();
-//                    previousPopOver = popOver;
-//                    //controller.updateNodeInformation(v);
-//                }
-//            });
-
-            /*circle.setOnMouseExited(e -> {
-                popOver.hide();
-            });*/
-
 
         return circle;
     }
 
+    /**
+     * Creates the popover for a node
+     * @param v
+     * @return
+     */
     public PopOver createPopOverForNode(INode v) {
         PopOver popOver = new PopOver();
         popOver.setId("popover-id");
@@ -326,11 +288,6 @@ public class MapDisplay extends Pane {
             controller.showNodeImage(v);
             popOver.hide();
         });
-
-        /*HBox hbox = new HBox();
-        hbox.getChildren().addAll(buildingName, pictureButton);
-        hbox.setAlignment(Pos.CENTER);
-        hbox.setSpacing(2);*/
 
         Label selectFloor = new Label("Select Floor:");
         selectFloor.setTextFill(Color.web("#333333"));
@@ -370,10 +327,6 @@ public class MapDisplay extends Pane {
             });
 
             button.setOnMouseEntered(e -> requestFocus());
-//            button.setOnMouseClicked(e -> {
-//                controller.switchToBuildingView(building.getID(), i);
-//                popOver.hide();
-//            });
             flowPane.getChildren().add(button);
         }
 
@@ -450,14 +403,12 @@ public class MapDisplay extends Pane {
         });
     }
 
+    /**
+     * Clears the path
+     */
     public void clearPath(){
         this.lines = new HashMap<>();
         this.path  = new ArrayList<>();
-    }
-
-
-    public ArrayList<INode> getIDPath() {
-        return idPath;
     }
 
     /**
@@ -467,11 +418,9 @@ public class MapDisplay extends Pane {
     public void createPath(ArrayList<ArrayList<Instructions>> path) {
 
         pathList = path;
-        //upon creation of a new path fully reset old nodes
         revertPathNodes();
 
-        //clears the arraylist of nodes (idPath) and hashmap of arrays lists of lines (lines)
-        idPath = new ArrayList<>(); //TODO AM I REMVOING THE OLD LINES
+        idPath = new ArrayList<>();
         lines = new HashMap<>();
 
 
@@ -551,20 +500,12 @@ public class MapDisplay extends Pane {
         }
     }
 
+    /**
+     * Gets the lines
+     * @return
+     */
     public HashMap<Integer, ArrayList<Line>> getLines() {
         return lines;
-    }
-
-    public HashMap<Integer, INode> getNodeMap() {
-        return nodeMap;
-    }
-
-    public HashMap<Integer, Circle> getId_circle() {
-        return id_circle;
-    }
-
-    public int getMapIdNewInt() {
-        return mapIdNewInt;
     }
 
     /**
@@ -575,28 +516,22 @@ public class MapDisplay extends Pane {
     public void setStartNode(INode iNode) {
         startNode = iNode;
 
-       // if (st.getNode() == null || !st.getNode().equals(id_circle.get(iNode.getID()))) {
-            Circle c;
+        Circle c;
 
-            if (!id_circle.containsKey(iNode.getID())) {
-                c = createCircle(controller.getNode(iNode.getID()));
-            } else {
-                c = id_circle.get(iNode.getID());
+        if (!id_circle.containsKey(iNode.getID())) {
+            c = createCircle(controller.getNode(iNode.getID()));
+        } else {
+            c = id_circle.get(iNode.getID());
 
-            }
+        }
 
-            //this.getChildren().remove(c);
-            //this.getChildren().add(c);
-
-
-            c.setRadius(5);
-            highlight(c, startBodyColor, startBorderColor);
-            id_circle.put(iNode.getID(), c);
+        c.setRadius(5);
+        highlight(c, startBodyColor, startBorderColor);
+        id_circle.put(iNode.getID(), c);
 
 
         ScaleTransition st = new ScaleTransition(Duration.millis(75), c);
-        //st.setByX(1.1f);
-        //st.setByY(1.1f);
+
         st.setToX(2);
         st.setToY(2);
         st.setCycleCount(1);
@@ -612,10 +547,14 @@ public class MapDisplay extends Pane {
         st.setOnFinished(event -> {
             st2.play();
         });
-      //  }
     }
 
 
+    /**
+     * Sets the end node
+     * @param v
+     * @param animation
+     */
     public void setEndNode(INode v, boolean animation) {
         endNode = v;
         Circle c;
@@ -678,58 +617,6 @@ public class MapDisplay extends Pane {
                                                  ICON CODE
      ****************************************************************************************************************/
 
-
-    /**
-     * Creates an SVGPath icon (dependent on the node type)
-     *
-     * @param v
-     * @return
-     */
-    private ImageView createNodeIcon(INode v) {
-
-        double x = v.getX();  /* the nodes currently have way too small X / Y s - later we'll need to somehow scale */
-        double y = v.getY();
-
-        ImageView icon = v.getIcon();
-        //Circle circle = new Circle(x, y, 5);
-        icon.setTranslateX(x);
-        icon.setTranslateY(y);
-        icon.setScaleX(.67);
-        icon.setScaleY(.67);
-        //normal(v);
-        icon.setOnMouseClicked(e -> {
-            controller.handleMapClick(v);
-        });
-        return icon;
-    }
-
-
-    /**
-     * hides the icon
-     *
-     * @param c
-     */
-    public void hideICON(ImageView c) {
-        c.setVisible(false);
-        //c.setScaleX(.67);
-        //c.setScaleY(.67);
-        //c.setStrokeWidth(0);
-        //c.setRadius(5);
-        c.setOpacity(1);
-        c.setEffect(null);
-    }
-
-
-
-/*    private void createTempLandmark(MouseEvent e){
-        //CREATE TEMPORARY POINT ->
-        INode temp = controller.createTempLandmark(e.getX(), e.getY());
-        ImageView c = createNodeIcon(temp);
-        id_ICON.put(temp.getID(), c);
-        this.getChildren().add(c);
-        controller.handleMapClick(temp);
-    }*/
-
     /****************************************************************************************************************
      Color Change CODE
      ****************************************************************************************************************/
@@ -746,21 +633,6 @@ public class MapDisplay extends Pane {
         }catch(Exception e){
 
         }
-    }
-
-    public void setNodePathDefault() {
-        setPathColor(Color.BLUE, Color.LIGHTBLUE, Color.web("#00CCFF", 0.7));
-        setStartColor(Color.GREEN, Color.LIGHTGREEN);
-        setEndColor(Color.FIREBRICK, Color.RED);
-        setTransitionColor(Color.YELLOW);
-        updateAll();
-    }
-    public void setNodePathColorBlind(){
-        setPathColor(Color.BLUE, Color.LIGHTBLUE, Color.web("#00CCFF", 0.7));
-        setStartColor(Color.GREEN, Color.LIGHTGREEN);
-        setEndColor(Color.DARKVIOLET, Color.LIGHTPINK);
-        setTransitionColor(Color.ORANGE);
-        updateAll();
     }
 
     public void setTransitionColor(Color body){
@@ -782,16 +654,9 @@ public class MapDisplay extends Pane {
 
 
     /****************************************************************************************************************
-     NOT UPDATED CODE BELOW
+     *  POLYGONS
      ****************************************************************************************************************/
 
-
-    /**
-     * Below is the Polygon Code - Josh
-     */
-    private void createPoly() {
-
-    }
 
     private void makePolygons() {
         //Create Atwater Kent ID 1883
@@ -1016,6 +881,12 @@ public class MapDisplay extends Pane {
         addPolygonEvents(harrington,3579);
 
     }
+
+    /**
+     * Creates the events for the polygons
+     * @param p
+     * @param key
+     */
     private void addPolygonEvents(Polygon p, Integer key){
         this.getChildren().add(p);
         PopOver popOver;
@@ -1061,6 +932,10 @@ public class MapDisplay extends Pane {
 
     }
 
+    /**
+     * Specifics for different rotations
+     * @param building
+     */
     public void rotationAnimation(int building){
         double pivotX = 0, pivotY = 0,angle = 0;
         switch (building) {

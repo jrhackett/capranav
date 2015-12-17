@@ -22,7 +22,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
-import logic.*;
+import logic.Directions;
+import logic.FileFetch;
+import logic.INode;
+import logic.User;
 import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,30 +59,12 @@ public class Display {
     public Controller controller;
 
 
-    public BooleanProperty DASHBOARD_VISIBLE;
-    private BooleanProperty SETTINGS_VISIBLE;
-    private BooleanProperty EMAIL_VISIBLE;
-    public BooleanProperty BUILDING_VISIBLE;
-    public BooleanProperty PHOTO_ICON_VISIBLE;
-    public BooleanProperty ICON_VISIBLE;
-    public BooleanProperty TIME_VISIBLE;
-
-    public BooleanProperty DIRECTIONS_VISIBLE;
-
-    final BooleanProperty firstTime = new SimpleBooleanProperty(true);
-
-
-    private boolean EMAIL = false;
     //Visual Elements
-    private VBox dashBoard;
     private SlidingAnchorPane slidingDashboard;
-    public SlidingAnchorPane slidingBuilding;
-    private AnchorPane directions;
     private AnchorPane map; //VBox
     public StackPane root;
     private HBox dashBoardTitleBox;
-    public ListView<Instructions> instructions; //ListView<Instruction>
-    private javafx.scene.control.Button hiddenHandler;
+    public ListView<Instructions> instructions;
 
     private Label totalTimeLabel;
 
@@ -88,19 +73,13 @@ public class Display {
     private Label buildingName;
     private Label buildingNumber;
 
-    private Label nodeTitle;
-    private StackPane nodeViewHolder;
     private ImageView nodeView;
-    //private ImageView nodeIconView;
-    private javafx.scene.control.Button nodeIconViewButton;
 
     private javafx.scene.control.Button left;
     private javafx.scene.control.Button right;
 
     javafx.scene.control.Button leftArrowButton;
     javafx.scene.control.Button rightArrowButton;
-
-    private javafx.scene.control.Button nodeTransitionButton;
 
     private StackPane mapPane;
     public MapDisplay mapDisplay;
@@ -112,20 +91,40 @@ public class Display {
     private PopOver eventPopOver;
 
 
-    boolean FLIP = true;
-    ZoomAndPan zoomAndPan;
 
+    public ZoomAndPan zoomAndPan;
+
+
+    /////  Word goes here ////
     String directionStyle = "-fx-background-color: #ac2738";
-    String whiteBGStyle = "-fx-background-color: #FFFFFF";
-    SlidingAnchorPane    slidingDirections;
 
+
+    ///// SlidingPanes: /////
+    SlidingAnchorPane    slidingDirections;
     SlidingAnchorPane slidingEmail;
     SlidingAnchorPane slidingSettings;
 
+    //Boolean Properties
+    public BooleanProperty DASHBOARD_VISIBLE;
+    private BooleanProperty SETTINGS_VISIBLE;
+    private BooleanProperty EMAIL_VISIBLE;
+    public BooleanProperty BUILDING_VISIBLE;
+    public BooleanProperty PHOTO_ICON_VISIBLE;
+    public BooleanProperty ICON_VISIBLE;
+    public BooleanProperty TIME_VISIBLE;
+    public BooleanProperty DIRECTIONS_VISIBLE;
 
+    //Buttons
     Button slidingDirectionsButton;
 
 
+    ///// Logic Switches: /////
+    boolean EMAIL = true;
+    boolean FLIP = true;
+    final BooleanProperty firstTime = new SimpleBooleanProperty(true);
+
+
+    ///// Settings: /////
     CheckBox handicapRadioButton;
     CheckBox insideRadioButton;
 
@@ -133,6 +132,12 @@ public class Display {
     VBox directionsControlBox;
     HBox emailBox;
 
+
+    ///// Tutorial: /////
+    ArrayList<InfoTip> infoTips = new ArrayList<>();
+    int currentToolTip;
+
+    ///// Buttons used in Tutorial /////
     javafx.scene.control.Button menuButton;
     Button infoButton;
     Button helpButton;
@@ -140,11 +145,9 @@ public class Display {
     Button slidingButton;
     Button slidingEmailButton;
     Label newsLabel;
-    ArrayList<InfoTip> infoTips = new ArrayList<>();
-    int currentToolTip;
-
-
     Button goToButton;
+
+
     /****************************************************************************************************************
                                                       Functions
      ****************************************************************************************************************/
@@ -157,7 +160,7 @@ public class Display {
         root.setId("root");
 
         this.controller = controller;
-        this.directions = new AnchorPane();
+        //this.directions = new AnchorPane();
         this.map = new AnchorPane();
         this.slidingDashboard = new SlidingAnchorPane();
 
@@ -261,8 +264,6 @@ public class Display {
         divider_3.setTranslateY(-1);
 
         /** images **/
-        //Image pin =				new Image(getClass().getResourceAsStream("../images/pin.png"), 20, 20, true, true);
-        //ImageView pinView = 	new ImageView(pin);
 
         SVGPath pinView = new SVGPath();
         pinView.setContent("M233.292,0c-85.1,0-154.334,69.234-154.334,154.333c0,34.275,21.887,90.155,66.908,170.834" +
@@ -278,10 +279,6 @@ public class Display {
         AnchorPane.setTopAnchor(pinView, 1 * EDGE + GAP + 5);
         AnchorPane.setLeftAnchor(pinView, GAP);
 
-
-        //Image info =			new Image(getClass().getResourceAsStream("../images/info.png"), 20, 20, true, true);
-        //ImageView infoView = 	new ImageView(info);
-        //the real infoview
         SVGPath infoView = new SVGPath();
         infoView.setContent("M254.26,0C113.845,0,0,113.845,0,254.26s113.845,254.26,254.26,254.26" +
                 "s254.26-113.845,254.26-254.26S394.675,0,254.26,0z M286.042,381.39c0,17.544-14.239,31.782-31.782,31.782" +
@@ -297,26 +294,11 @@ public class Display {
         Image gears = FileFetch.getImageFromFile("gears.png", 20, 20, true, true);
 
         ImageView gearsView = new ImageView(gears);
-        //gearsView.setStyle("-fx-fill: #eeeeee;");
-        //SVGPath gearsView = new SVGPath();
-
-
-        //gearsView.setScaleX(.5);
-        //gearsView.setScaleY(.5);
-        //gearsView.setTranslateX(50 * 9 + 9);
-        //gearsView.setTranslateY(50 * 1 + 5);
-        //gearsView.setId("pinView");
 
 
         pinView.visibleProperty().bind(DASHBOARD_VISIBLE);
         infoView.visibleProperty().bind(DASHBOARD_VISIBLE);
         gearsView.visibleProperty().bind(DASHBOARD_VISIBLE);
-
-        //AnchorPane.setTopAnchor(infoView, 3 * EDGE + GAP + 5); //<--- TODO notice this, these lines break a lot of stuff, no idea why
-        //AnchorPane.setLeftAnchor(infoView, GAP);
-
-        //AnchorPane.setBottomAnchor(gearsView, GAP * 2);//TODO these will change wit.setStyle("-fx-background-color: #333333");h svg
-        //AnchorPane.setLeftAnchor(gearsView, GAP * 2);
 
         /*****************************************************************/
         /** Dashboard **/
@@ -408,10 +390,6 @@ public class Display {
         AnchorPane.setTopAnchor(resourcesLabelBox, 3 * EDGE + GAP * .5 + 25);
         AnchorPane.setLeftAnchor(resourcesLabelBox, EDGE);
 
-        //TODO REMOVE THIS TEMP BUTTOn
-        javafx.scene.control.Button goButton = new Button("GO");
-        //goButton.setOnAction();
-
 
         /*****************************************************************/
         /** Get Connected NewsFeed **/
@@ -456,13 +434,10 @@ public class Display {
         settingsLabel.setTextFill(Color.web("#eeeeee"));
 
         settingsLabel.setTranslateX(5);
-        //settingsLabelBox.getChildren().addAll(settingsLabel);
         settingsLabelBox.setMinWidth(0);
         settingsLabelBox.setPrefWidth(expandedWidth);
         settingsLabelBox.setMaxWidth(expandedWidth);
 
-
-        //settings a sliding pane!div
 
         slidingSettings = new SlidingAnchorPane(expandedWidth + EDGE * 2, EDGE, Direction.UP, SETTINGS_VISIBLE, gearsView); //remove EDGE * 2 + EDGE * 2 + 7 * 6
         slidingSettings.setStyle("-fx-background-color: #333333");
@@ -480,14 +455,6 @@ public class Display {
         /**------------------------------------------------------------------------------------------------*/
         /**----COLOR CHANGE SETTINGS-----------------------------------------------------------------------*/
         /**------------------------------------------------------------------------------------------------*/
-        /*
-
-        HBox settingsColorBox = new HBox();
-        HBox settingsColorBoxLine2 = new HBox();
-        Label settingsColorLabel = new Label("Color Style:");
-        settingsColorLabel.setStyle("-fx-padding: 8 8; -fx-font-size:12;");
-        settingsColorLabel.setTextFill(Color.web("#eeeeee"));
-*/
 
         HBox settingsWeightBox = new HBox();
         Label settingsWeightLabel = new Label("Path Preferences:");
@@ -515,11 +482,9 @@ public class Display {
 
         handicapRadioButton.setOnAction(e -> {
             handleRadioButtons();
-            //handicapRadioButton.selectedProperty().setValue(!handicapRadioButton.selectedProperty().getValue());
         });
         insideRadioButton.setOnAction(e -> {
             handleRadioButtons();
-            //insideRadioButton.selectedProperty().setValue(!insideRadioButton.selectedProperty().getValue());
         });
         /*
         RadioButton rb1 = new RadioButton("Colorblind");
@@ -629,7 +594,7 @@ public class Display {
             walkingSpeedBox.setValue(walkingArrayList.get(index));
         }
 
-        walkingSpeedBox.setOnAction(e -> handleWalkingInput(walkingSpeedBox, true));    //TODO finish handleWalkingInput
+        walkingSpeedBox.setOnAction(e -> handleWalkingInput(walkingSpeedBox, true));
 
         TextField emailTextField = new TextField();
         if (User.getEmail() == null) emailTextField.setPromptText("Enter your email");
@@ -650,47 +615,18 @@ public class Display {
         settingsWalkingBox.setTranslateX(EDGE - 7);
         walkingSpeedBox.setTranslateX(EDGE/* - 42*/ );
         setEmailLabel.setTranslateX(EDGE - 7);
-        emailTextField.setTranslateX(EDGE/* - 42*/ );
-        /**---------------------------------------*/
-        //settingsColorLabel.setTranslateX(EDGE - 7);
-        //settingsColorBox.setTranslateX(EDGE/* - 42*/);
-        //settingsColorBoxLine2.setTranslateX(EDGE/* - 42*/);
-        /**---------------------------------------*/
-        //buttons for handicap / weather
+        emailTextField.setTranslateX(EDGE );
 
-        /*
-
-        handicapRadioButton = new RadioButton();
-        handicapRadioButton.setText("Handicap");
-        handicapRadioButton.setTextFill(Color.web("eee"));
-        weatherRadioButton  = new RadioButton("Weather");
-        weatherRadioButton.setText("Weather");
-        weatherRadioButton.setTextFill(Color.web("eee"));
-        handicapRadioButton.setTranslateX(EDGE);
-        handicapRadioButton.setTranslateY(8);
-        weatherRadioButton.setTranslateX(EDGE);
-        weatherRadioButton.setTranslateY(11); //TODO play with this
-
-        handicapRadioButton.setOnAction(e -> handleRadioButtons());
-        weatherRadioButton.setOnAction(e -> handleRadioButtons());
-
-         */
-        //handicapRadioButton, weatherRadioButton
 
 
         VBox settingsVbox = new VBox();
         settingsVbox.visibleProperty().bind(DASHBOARD_VISIBLE);
-        settingsVbox.setPrefWidth(300); //TODO make this less dirty
-        //settingsVbox.getChildren().addAll(divider_3, settingsLabelBox,  settingsWalkingBox, walkingSpeedBox, setEmailLabel, emailTextField);
+        settingsVbox.setPrefWidth(300);
 
         settingsWeightLabel.setTranslateX(EDGE - 7);
         settingsWeightBox.setTranslateX(EDGE/* - 42*/);
 
 
-
-        /** has weight settings */
-        //settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox, settingsColorLabel, settingsColorBox, settingsColorBoxLine2, setEmailLabel, emailTextField);
-        /** doesn't have weight settings */
         settingsVbox.getChildren().addAll(divider_3, settingsLabelBox, settingsWalkingBox, walkingSpeedBox, settingsWeightLabel, settingsWeightBox, vbox, setEmailLabel, emailTextField);
 
 
@@ -714,10 +650,13 @@ public class Display {
         menuButton.setPrefWidth(EDGE);
         AnchorPane.setTopAnchor(menuButton, 0.0);
         AnchorPane.setLeftAnchor(menuButton, 0.0);
-        //slidingDashboard.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + 2 * EDGE);
         slidingDashboard.getChildren().addAll(menuButton);
     }
 
+    /**
+     * Creates the list view of events
+     * @return
+     */
     private ListView<Event> createEventListView() {
         ListView<Event> listView = new ListView<>();
         listView.setId("newsfeed-list-view");
@@ -726,7 +665,6 @@ public class Display {
 
         ObservableList<Event> items = FXCollections.observableArrayList ();
 
-        //TODO check for internet access here
         for(Event e : f) {
             //String x = "\n" + e.getTitle() + "\n" + e.getDateInfo() + "\n";
             items.add(e);
@@ -768,6 +706,11 @@ public class Display {
         return listView;
     }
 
+    /**
+     * Creates the popover for the event
+     * @param in
+     * @return
+     */
     public PopOver createPopOverForEvent(Event in) {
         PopOver popOver = new PopOver();
         VBox vbox = new VBox();
@@ -803,8 +746,6 @@ public class Display {
         bottomHBox.setSpacing(10);
 
         vbox.getChildren().addAll(bottomHBox);
-
-        String originalNode = "";
 
         int nodeID = start.getNodeInclusive(in.getLocation());
 
@@ -866,6 +807,10 @@ public class Display {
         //zoom to it
     }
 
+    /**
+     * Shows more info on the event
+     * @param in
+     */
     public void showMoreEventInfo(Event in) {
         StackPane imageStack    = new StackPane();
         javafx.scene.Node frost = controller.freeze(root);
@@ -906,15 +851,11 @@ public class Display {
         this.root.getChildren().addAll(frost, imageStack);
     }
 
+    /**
+     * Creates the cirections
+     */
     private void initDirections() {
-        /**
-         * There should be no need to modify this into an AnchorPane, hopefully
-         * all we need to do is add the Email Directions button and Label after the TableView
-         * and set the tableview min height to be ~200
-         *
-         *
-         * UPDATE: it would be a lot better to make this an AnchorPane ];
-         **/
+
 
         /** Title Box **/
         directionsTitleBox = new HBox();
@@ -932,11 +873,7 @@ public class Display {
         Image directionsArrow = FileFetch.getImageFromFile("forward.png", 27, 27, true, true);
 
         ImageView directionsArrowView = new ImageView(directionsArrow);
-        //directionsArrowView.setTranslateX(8);
         directionsArrowView.setTranslateY(5);
-        //directionsControlBox.getChildren().addAll(directionsArrowView); //TODO CHANGE BACK
-        //directionsControlBox.getStyleClass().add("directionLabel");
-        //directionsControlBox.setStyle("-fx-background-color: #ac2738");
         directionsControlBox.setMinHeight(EDGE);
 
 
@@ -978,8 +915,6 @@ public class Display {
             handleLeftArrowButton();
             rightArrowButton.setId("arrow-buttons");
             rightArrowButton.setStyle("-fx-background-color:white;");
-
-            //controller.handleIncrementPathMap();
         });
 
         Image rightArrow = FileFetch.getImageFromFile("rightArrow.png", 24, 24, true, true);
@@ -994,8 +929,6 @@ public class Display {
             handleRightArrowButton();
             leftArrowButton.setId("arrow-buttons");
             leftArrowButton.setStyle("-fx-background-color:white;");
-
-            //controller.handleIncrementPathMap();
         });
 
         AnchorPane.setRightAnchor(leftArrowButton, expandedWidth - 5.5 - leftArrowButton.getPrefWidth());
@@ -1031,7 +964,6 @@ public class Display {
         AnchorPane.setLeftAnchor(instructions, 0.0);
         AnchorPane.setRightAnchor(instructions, 0.0);
         AnchorPane.setBottomAnchor(instructions, EDGE);
-        //instructions.setPrefHeight(MAP_HEIGHT + 2 * EDGE - 36);
 
         /** Email Box **/
 
@@ -1047,28 +979,14 @@ public class Display {
 
         ImageView emailView = new ImageView(emailImage);
 
-        //VBox emailIconBox = new VBox();
         emailView.setTranslateX(7);
         emailView.setTranslateY(0);
-        /*emailIconBox.getChildren().addAll(emailView);
-        emailIconBox.setMaxWidth(20);
-        emailIconBox.setMaxHeight(20);
-        emailIconBox.setStyle("-fx-background-color: #ffffff");
-        emailIconBox.setMinHeight(EDGE);*/
 
 
         /** Label **/
         Label emailLabel = new Label("Email Me");
         emailLabel.setTextFill(Color.web("#333333"));
         emailLabel.setId("normallyWhiteBG");
-
-        //emailLabel.setStyle("-fx-background-color:white;");
-        //emailBox.setStyle("-fx-background-color:white;");
-
-        //emailBox.getChildren().addAll(emailIconBox, emailLabel);
-
-       /* emailLabel.setOnMouseClicked(e -> handleEmail(emailBox));
-        emailView.setOnMouseClicked(e -> handleEmail(emailBox));*/
 
         /** Sliding Anchor Pane **/
         slidingEmail = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, EMAIL_VISIBLE, emailView);
@@ -1087,8 +1005,6 @@ public class Display {
         divider_4.setTranslateX(-145);   //TODO fix this janky translate garbage
 
         emailBox.getChildren().addAll(slidingEmailButton, emailLabel, divider_4);
-
-        /////////// INFO IN EMAIL SLIDE
 
         VBox emailBoxContent = new VBox();
         yourEmail = new TextField();
@@ -1119,7 +1035,6 @@ public class Display {
         slidingEmail.getChildren().addAll(finalSlidingBox);
 
 
-        /////////////
 
 
         AnchorPane.setBottomAnchor(slidingEmail, 0.0);
@@ -1137,12 +1052,7 @@ public class Display {
         slidingDirectionsButton.setMinWidth(EDGE);
         slidingDirectionsButton.setPrefWidth(EDGE);
         directionsControlBox.getChildren().addAll(slidingDirectionsButton);
-//        directions.getChildren().addAll(directionsTitleBox, instructionArrows, instructions, slidingEmail);
-//        directions.setStyle("-fx-background-color: #ffffff");
-//        directions.setPrefWidth(expandedWidth + EDGE);
-//        directions.setMinWidth(0);
-//        directions.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + EDGE);
-        //directionsTitleBox.visibleProperty().bind(DIRECTIONS_VISIBLE);
+
         directionsTitleLabel.visibleProperty().bind(DIRECTIONS_VISIBLE);
         instructionArrows.visibleProperty().bind(DIRECTIONS_VISIBLE);
         instructions.visibleProperty().bind(DIRECTIONS_VISIBLE);
@@ -1154,15 +1064,14 @@ public class Display {
         slidingDirections.setMinWidth(0);
         slidingDirections.setPrefHeight(MAP_HEIGHT + 2 * MAP_BORDER + EDGE);
         slidingDirections.playHidePane(DIRECTIONS_VISIBLE);
-        //testing sliding stuff:
-        //slidingDirections.getChildren().addAll(directions);
-
-
     }
 
+    /**
+     * Creates the map
+     */
     private void initMap() {
         this.map = new AnchorPane();
-        //this.map.setStyle("-fx-background-color: #f4f4f4");
+
         /** Title **/
         HBox mapTitle = new HBox();
         Label mapTitleLabel = new Label("CapraNav");
@@ -1206,14 +1115,9 @@ public class Display {
         AnchorPane.setRightAnchor(mapTitle, 0.0);
 
         /** Hidden Sliding Panel **/
-        //slidingBuilding  = new SlidingAnchorPane(EDGE * 2, EDGE, Direction.UP, BUILDING_VISIBLE, new Text("hidden"));
         HBox nodeBox = createNodeBox();
         HBox buildingBox = createBuildingBox();
         buildingBox.visibleProperty().bind(BUILDING_VISIBLE);
-
-        //slidingBuilding.getChildren().addAll(nodeBox, buildingBox);//buildingBox
-        //slidingBuilding.setMaxHeight(EDGE);
-        //slidingBuilding.setMinHeight(0);
 
         VBox information = new VBox();
         information.getChildren().addAll(nodeBox, buildingBox);
@@ -1229,8 +1133,7 @@ public class Display {
         mapPane.setAlignment(Pos.CENTER);
 
         Group group = new Group(mapPane);
-//        GraphicsScaling graphicsScaling = new GraphicsScaling();
-//        Parent zoomPane = graphicsScaling.createZoomPane(group);
+
         zoomAndPan = new ZoomAndPan();
         Parent zoomPane = zoomAndPan.createZoomPane(group);
         zoomPane.setOnMouseEntered(e -> {
@@ -1242,10 +1145,6 @@ public class Display {
         AnchorPane.setLeftAnchor(zoomPane, MAP_BORDER);//00
         AnchorPane.setRightAnchor(zoomPane, MAP_BORDER);
         AnchorPane.setBottomAnchor(zoomPane, EDGE * 2); //+ GAP + 2 * EDGE
-        //ImageView imageView = new ImageView();
-       // mapDisplay.mapView.fitHeightProperty().bind(map.layoutYProperty());
-       // mapDisplay.mapView.fitWidthProperty().bind(map.layoutXProperty());
-
 
         map.setMinWidth(MAP_WIDTH);
         map.setPrefWidth(MAP_WIDTH + MAP_BORDER * 2);
@@ -1261,6 +1160,10 @@ public class Display {
                          Functions that set up further subsidiaries of base visual features
      ****************************************************************************************************************/
 
+    /**
+     * Creates the map pane
+     * @return
+     */
     private StackPane createMapPane() {
         mapPane = new StackPane();
         mapPane.setPrefHeight(MAP_HEIGHT + MAP_BORDER * 2);
@@ -1277,31 +1180,12 @@ public class Display {
         return mapPane;
     }
 
-
+    /**
+     * Creates the information on the floors and building
+     * @return
+     */
     private HBox createNodeBox() {
         HBox hbox = new HBox();
-
-        /*nodeViewHolder = new StackPane();
-        nodeTitle = new Label();
-        nodeTransitionButton = new javafx.scene.control.Button();
-
-        Image nodeIconImage = FileFetch.getImageFromFile("picture.png", 27, 27, true, true);
-
-        ImageView nodeIconView = new ImageView(nodeIconImage);
-        nodeTransitionButton.setGraphic(nodeViewHolder);
-        nodeIconView.setFitHeight(27);
-        nodeIconView.setFitWidth(27);
-
-        nodeTransitionButton.visibleProperty().bind(PHOTO_ICON_VISIBLE);
-        this.nodeTransitionButton.setId("arrow-buttons");
-        this.nodeTransitionButton.setStyle("-fx-background-color:#eeeeee");
-
-        nodeIconViewButton = new javafx.scene.control.Button();
-        nodeIconViewButton.visibleProperty().bind(PHOTO_ICON_VISIBLE);
-        nodeIconViewButton.setGraphic(nodeIconView);
-        nodeIconViewButton.setOnAction(event -> handleFullScreenPicture());
-        nodeIconViewButton.setId("arrow-buttons");
-        nodeIconViewButton.setStyle("-fx-background-color: #eeeeee");*/
 
         Button backToCampus = new Button();
         backToCampus.setText("Back to Campus");
@@ -1360,32 +1244,9 @@ public class Display {
         return hbox;
     }
 
-
-    public void updatePictureIcon(boolean val) {
-        //change visibility
-        logger.info("Entered updatePictureIcon with {}", val);
-        PHOTO_ICON_VISIBLE.setValue(val);
-        //change image it is connected with
-    }
-
-    public void updateNodeTitle(String s) {
-        this.nodeTitle.setText(s);
-    }
-
-    public void updateNodeIcon(ImageView i, INode iNode) {
-        logger.info("Entered updateNodeIcon with iNode {}", iNode.toString());
-        this.nodeViewHolder.getChildren().remove(nodeView);
-        this.nodeViewHolder.getChildren().add(i); //= i;
-        this.nodeView = i;
-        if (iNode.isTransition()) {
-            this.nodeTransitionButton.setId("arrow-buttons");
-            this.nodeTransitionButton.setOnAction(e -> controller.handleEnterBuilding((Transition) iNode));
-        } else {
-            this.nodeTransitionButton.setId("arrow-buttons-grayed2");
-            this.nodeTransitionButton.setOnAction(e -> {});//// TODO: 12/2/15 fix
-        }
-    }
-
+    /**
+     * Updates time estimation
+     */
     public void updateTimeEstimation() {
         String input;
         //input = "Time Estimation:\n";
@@ -1393,168 +1254,112 @@ public class Display {
         totalTimeLabel.setText(input);
     }
 
-    //TODO THIS IS START OF BUILDING BOX PANE!
+    /**
+     * Creates BuildingBox information pane
+     * @return
+     */
     private HBox createBuildingBox() { //its going to be an HBox with stuff inside of the sliding anchorpane
 
-          HBox box = new HBox();
-//        this.left = new javafx.scene.control.Button();
-//        this.right = new javafx.scene.control.Button();
-//
-//        Image minus = FileFetch.getImageFromFile("minus104.png", 20, 20, true, true);
-//        Image plus = FileFetch.getImageFromFile("plus79.png", 20, 20, true, true);
-//
-//        ImageView minusView = new ImageView(minus);
-//        ImageView plusView = new ImageView(plus);
-//
-//        this.left.setGraphic(minusView);
-//        this.right.setGraphic(plusView);
-//
-//        this.left.setStyle("-fx-background-color:#eee;");
-//        this.right.setStyle("-fx-background-color:#eee;");
-//
-          buildingName = new Label();
-          buildingNumber = new Label();
-//
-//        left.setOnMouseClicked(e -> controller.handleDecreaseFloorButton());
-//        right.setOnMouseClicked(e -> controller.handleIncreaseFloorButton());
+        HBox box = new HBox();
+
+        buildingName = new Label();
+        buildingNumber = new Label();
 
         box.setMaxHeight(EDGE);
         box.setMinHeight(0);
         box.setPrefHeight(0);
 
-        //TODO LEFT AND RIGHT HERE
         box.setAlignment(Pos.CENTER);
         box.setSpacing(GAP);
         box.getChildren().addAll( buildingName, buildingNumber);
         return box;
     }
 
+    /**
+     * Sets the CSS id of the right button
+     * @param id
+     */
     public void setRightButtonID(String id) {
         right.setId(id);
     }
+
+    /**
+     * Sets the style of the right button
+     * @param style
+     */
     public void setRightButtonStyle(String style) {
         right.setStyle(style);
     }
 
+    /**
+     * Sets the CSS id of the left button
+     * @param id
+     */
     public void setLeftButtonID(String id) {
         left.setId(id);
     }
+
+    /**
+     * Sets the style of the right button
+     * @param style
+     */
     public void setLeftButtonStyle(String style) {
         left.setStyle(style);
     }
 
+    /**
+     * Visually sets the building name
+     * @param s
+     */
     public void setBuildingName(String s) {
         this.buildingName.setText(s);
     }
 
+    /**
+     * Sets the floor number
+     * @param i
+     */
     public void setBuildingNumber(int i) {
-        //TODO ADD FLICKERING ANIMATION
-        //System.out.println("building number set called");
-        this.buildingNumber.setText(Integer.toString(i));
+
+        if (i > 0){
+            this.buildingNumber.setText(Integer.toString(i));
+        } else if (i == 0){
+            this.buildingNumber.setText("Basement");
+        } else if (i == -1){
+            this.buildingNumber.setText("Sub-Basement");
+        }
+
     }
 
+
+    /**
+     * Creates the input box
+     * @return
+     */
     private VBox createInput() {
 
 		/* start */
         this.start = new Inputs<String>("Search WPI Maps", INPUT_WIDTH, controller);
         start.setOnAction(e -> handleSearchInput(start, true));
-//        start.setOnKeyPressed(new EventHandler<KeyEvent>() {
-//            @Override
-//            public void handle(KeyEvent event) {
-//                //.getSelectionModel().getSelectedItem();
-//                if (event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.TAB){
-//                    //handleSearchInput(start, true);
-//                    handleSearchInput(start, true);
-//                    end.requestFocus();
-//                }
-//            }
-//        });
-
-
 
 		/* end */
         this.end = new Inputs<String>("For Destination", INPUT_WIDTH, controller);
         end.setOnAction(e -> handleSearchInput(end, false));
-//        end.setOnKeyPressed(new EventHandler<KeyEvent>() {
-//            @Override
-//            public void handle(KeyEvent event) {
-//                //.getSelectionModel().getSelectedItem();
-//                if (event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.TAB){
-//                    handleSearchInput(end, true);
-//                    root.requestFocus();
-//                }
-//            }
-//        });
-
-
-
-        /*
-        start.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    System.out.println("Start ENTER");
-                    handleSearchInput(start, true);
-                    end.requestFocus();
-                } else if (event.getCode() == KeyCode.ESCAPE) {
-                    System.out.println("Start ESCAPE");
-                    start.setValue(null);
-                    end.setValue(null);
-                } else if (event.getCode() == KeyCode.TAB) {
-                    System.out.println("Start TAB");
-                    end.requestFocus();
-                }
-            }});
-            */
-
-        //start.setOnAction(e -> handleSearchInput(start, true));
-
-		/* end */
-       /*
-        end.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    System.out.println("End ENTER");
-                    handleSearchInput(end, true);
-                } else if (event.getCode() == KeyCode.ESCAPE) {
-                    System.out.println("End ESCAPE");
-                    start.setValue(null);
-                    end.setValue(null);
-                } else if (event.getCode() == KeyCode.TAB) {
-                    System.out.println("End TAB");
-                    handleSearchInput(end, true);
-                }
-            }});
-*/
-
-       // end.setOnAction(e -> handleSearchInput(end, false));
-
-//        start.getStyleClass().add("combo-box");
-
-        //      end.getStyleClass().add("combo-box");
-
-        //start.applyCss();
-        //end.applyCss();
 
         /** Add All Interesting Nodes to the List **/
-
-
         start.createInputItems(this.getNodes(), this.getMaps());
         start.setItems(start.data);
-        //start.getStyleClass().add("combobox");
+
         end.createInputItems(this.getNodes(), this.getMaps());
         end.setItems(end.data);
-        //end.getStyleClass().add("combobox");
 
 
         VBox inputs = new VBox();
         inputs.setSpacing(GAP);
         end.setTranslateY(3);
-        inputs.getChildren().addAll(start, end);
 
-        //this.start.setPlaceholder(new Label("Search or Select Starting Location"));
-        //this.end.setPlaceholder(new Label("Search or Select End Location"));
+
+        inputs.getChildren().addAll(start, end);
 
         this.start.setPromptText("Starting point");
         this.end.setPromptText("Destination");
@@ -1572,6 +1377,10 @@ public class Display {
         return inputs;
     }
 
+    /**
+     * Creates a visual divider between sections
+     * @return
+     */
     private HBox createDivider() {
         HBox divide = new HBox();
         divide.setStyle("-fx-background-color: #888888");
@@ -1586,12 +1395,14 @@ public class Display {
         divide.setPrefHeight(1);
 		/* binding size */
 
-        //divide.translateXProperty().bind((slidingDashboard.widthProperty().subtract(divide.widthProperty()).divide(2)));
 
         return divide;
     }
 
 
+    /**
+     * Creates the list view of instructions
+     */
     private void createInstructionListView() {
         this.instructions = new ListView<Instructions>();
         //this.instructions.setId("normallyEEEEEEBG");
@@ -1654,6 +1465,9 @@ public class Display {
 
     }
 
+    /**
+     * Clears the instructions set
+     */
     public void clearInstructions() {
         instructions.setCellFactory((ListView<Instructions> lv) ->
                 new ListCell<Instructions>() {
@@ -1683,16 +1497,6 @@ public class Display {
                     }
                 }
         );
-        //this.instructions.getSelectionModel().clearSelection();
-        /*instructions.setCellFactory((ListView<Instructions> lv) ->
-                new ListCell<Instructions>() {
-                    @Override
-                    public void updateItem(Instructions in, boolean empty) {
-                        setText(null);
-                        setGraphic(null);
-                    }
-                }
-        );*/
     }
 
     /**
@@ -1718,7 +1522,7 @@ public class Display {
 
     /** calls the controller to do the correct help **/
     private void handleHelp(){
-       this.controller.help();
+        showToolTips();
     }
 
     /** called from the controller and shows all the help tooltips **/
@@ -1857,6 +1661,9 @@ public class Display {
         currentToolTip = 0;
     }
 
+    /**
+     * Plays the next tool tip. and loops around at the end
+     */
     private void playNext(){
         if (currentToolTip + 1 < infoTips.size()){
             playToolTip(1);
@@ -1867,6 +1674,9 @@ public class Display {
         }
     }
 
+    /**
+     * Goes backwards
+     */
     private void playBack(){
         if (currentToolTip - 1 < infoTips.size() && currentToolTip - 1 > -1){
             playToolTip(-1);
@@ -1877,17 +1687,28 @@ public class Display {
         }
     }
 
+    /**
+     * Plays the given tooltip
+     * @param i
+     */
     private void playToolTip(int i){
         hideToolTip(currentToolTip);
         currentToolTip += i;
         if (this.infoTips.size() > currentToolTip && currentToolTip > -1) this.infoTips.get(currentToolTip).show();
     }
 
+    /**
+     * hides the tool tip
+     * @param i
+     */
     private void hideToolTip(int i){
         if (this.infoTips.size() > i && i > -1) this.infoTips.get(i).hide();
 
     }
 
+    /**
+     * Clear button handler
+     */
     private void handleClear(){
         /** clear controller data **/
         this.controller.clear();
@@ -1909,10 +1730,18 @@ public class Display {
 
     }
 
+    /**
+     * Options handler [Handicap/weather]
+     */
     private void handleRadioButtons(){
         controller.handleWeightOptions(insideRadioButton.selectedProperty().getValue(), handicapRadioButton.selectedProperty().getValue());
     }
 
+    /**
+     * Handles input from the search bar
+     * @param v
+     * @param START
+     */
     private void handleSearchInput(Inputs v, boolean START) {
 
         if (v.getValue() != null && !v.getValue().toString().isEmpty()) {
@@ -1924,85 +1753,87 @@ public class Display {
         }
     }
 
+    /**
+     * Handles updating walkspeed
+     * @param v
+     * @param START
+     */
+    private void handleWalkingInput (Inputs v,boolean START){
+        visuals.Walking value = (visuals.Walking) v.getValue();
+        User.setSpeed(value.getWalkingSpeed());
+        updateTimeEstimation();
+        //System.out.println(value.getWalkingSpeed()); //TODO Remove
+    }
 
+    /**
+     * Email handler
+     * @param v
+     * @param START
+     */
+    private void handleEmailInput (TextField v,boolean START){
+        User.setEmail(v.getText());
 
-        private void handleWalkingInput (Inputs v,boolean START){
-            visuals.Walking value = (visuals.Walking) v.getValue();
-            User.setSpeed(value.getWalkingSpeed());
-            updateTimeEstimation();
-            //System.out.println(value.getWalkingSpeed()); //TODO Remove
+        //Validate Address
+        try {
+            new InternetAddress(v.getText()).validate();
+        } catch (AddressException e) { //If invalid, set color to red
+            v.setId("text-field-denied");
+            return;
         }
+        //If valid, set other textbox & color
+        yourEmail.setText(User.getEmail());
+        v.setId("text-field-confirmed");
+    }
 
-        //Green if email addr valid, red if not
-        private void handleEmailInput (TextField v,boolean START){
-            User.setEmail(v.getText());
-
-            //Validate Address
-            try {
-                new InternetAddress(v.getText()).validate();
-            } catch (AddressException e) { //If invalid, set color to red
-                v.setId("text-field-denied");
-                return;
-            }
-            //If valid, set other textbox & color
-            yourEmail.setText(User.getEmail());
-            v.setId("text-field-confirmed");
-        }
-
-        //Green if email is sent, red if not
-        private void handleEmailInput2 (TextField v,boolean START){
-            if (yourEmail.getText() != null) {
-                if (sendEmail(yourEmail.getText())) {
-                    yourEmail.setId("email-text-field-confirmed");
-                    EMAIL = false;
-                } else {
-                    yourEmail.setId("email-text-field-denied");
-                }
-            }
-        }
-
-
-        private void handleRightArrowButton () {
-            this.controller.handleIncrementPathMap();
-        }
-
-        private void handleLeftArrowButton () {
-            this.controller.handleDecrementPathMap();
-        }
-
-        public void setIDRightArrowButton (String s){
-            this.rightArrowButton.setId(s);
-        }
-
-        public void setIDLeftArrowButton (String s){
-            this.leftArrowButton.setId(s);
-        }
-
-        /****************************************************************************************************************
-         Semi Facade Interface with Controller
-         ****************************************************************************************************************/
-        private boolean sendEmail (String email){
-            if (!email.equals("") && !email.equals("Enter Email Here") && !email.equals("Email Sent") && !email.equals("Invalid Email")) {
-                return controller.sendEmail(email); //Should return true if the email goes through
+    //Green if email is sent, red if not
+    private void handleEmailInput2 (TextField v,boolean START){
+        if (yourEmail.getText() != null) {
+            if (sendEmail(yourEmail.getText())) {
+                yourEmail.setId("email-text-field-confirmed");
+                EMAIL = false;
             } else {
-                return false;
+                yourEmail.setId("email-text-field-denied");
             }
         }
+    }
 
-        private HashMap<Integer, logic.INode> getInterestingNodes () {
-            return controller.getInterestingNodes();
-        }
 
-        private HashMap<Integer, logic.INode> getNodes () {
-            return controller.getNodes();
-        }
 
-        private HashMap<Integer, logic.IMap> getMaps () {
-            return controller.getMaps();
-        }
 
-        public void setDirectionStyle (String s){
-            this.directionStyle = s;
+
+    /****************************************************************************************************************
+                                     Facade Interface with Controller
+     ****************************************************************************************************************/
+    private boolean sendEmail (String email){
+        if (!email.equals("") && !email.equals("Enter Email Here") && !email.equals("Email Sent") && !email.equals("Invalid Email")) {
+            return controller.sendEmail(email); //Should return true if the email goes through
+        } else {
+            return false;
         }
+    }
+
+    private HashMap<Integer, logic.INode> getNodes () {
+        return controller.getNodes();
+    }
+
+    private HashMap<Integer, logic.IMap> getMaps () {
+        return controller.getMaps();
+    }
+
+    private void handleRightArrowButton () {
+        this.controller.handleIncrementPathMap();
+    }
+
+    private void handleLeftArrowButton () {
+        this.controller.handleDecrementPathMap();
+    }
+
+    public void setIDRightArrowButton (String s){
+        this.rightArrowButton.setId(s);
+    }
+
+    public void setIDLeftArrowButton (String s){
+        this.leftArrowButton.setId(s);
+    }
 }
 

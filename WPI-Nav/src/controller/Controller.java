@@ -76,8 +76,6 @@ public class Controller extends Application {
     private int lastMapID;
 
 
-    private INode selectedInformationNode;
-
 
     private Stage stage;
 
@@ -101,12 +99,16 @@ public class Controller extends Application {
 
     private boolean PATH_FLAG = true;
 
+
+    /**
+     * init occurs in the preloader
+     */
     @Override
     public void init(){
          /* load up svg converter */
 
         /* load up svg converter */
-        SvgImageLoaderFactory.install(); //TODO FIND A BETTER WAY
+        SvgImageLoaderFactory.install();
 
 		/* get information */
         nodesFromFile();
@@ -151,6 +153,7 @@ public class Controller extends Application {
 
     }
 
+    /** Starts the visual UI when ready **/
     @Override
     public void start(Stage s) throws Exception {
 
@@ -194,14 +197,9 @@ public class Controller extends Application {
      ****************************************************************************************************************/
 
 
-
-    public void help(){
-        //boolean firstUse = User.getFirst();
-        this.myDisplay.showToolTips();
-
-    }
-
-
+    /**
+     * Clears the path and data, and then zooms out
+     */
     public void clear(){
 
         Directions.cleartotalDistance();
@@ -225,46 +223,12 @@ public class Controller extends Application {
             this.myDisplay.end.getEditor().clear();
         }
 
-    /**
-     * Changes the Style Sheet
-     * @param style the directory of the .css
-     */
-    public void setStyleSheet(String style){
-        display.getStylesheets().clear();
-        display.getStylesheets().add(getClass().getResource(style).toExternalForm());
-    }
 
     /**
-     * Brings up the picture of the node on to the screen and greys out the screen
-     * TODO:
-     *      Potentials ideas / improvements
-     *      Arrows on left and right to switch to node information
-     *          Would have to notify the selected node information
+     * Creates the freeze image of the background
+     * @param background
+     * @return
      */
-    public void showNodeImage(){
-        if (this.selectedInformationNode != null) { //if there is a selected node
-
-            StackPane imageStack = new StackPane();
-            StackPane shadowStack = new StackPane();
-            shadowStack.setStyle("-fx-background-color: #333333; -fx-opacity: .75");
-
-            imageStack.setOnMouseClicked(e -> {
-                myDisplay.root.getChildren().removeAll(imageStack, shadowStack);
-            });
-
-            //add image to stack pane -> if no image return void
-            Image image = new Image(getClass().getResourceAsStream("../images/" + this.selectedInformationNode.getPicturePath()));
-            ImageView iv = new ImageView(image);
-
-            imageStack.getChildren().add(iv);
-
-            this.myDisplay.root.getChildren().addAll(shadowStack, imageStack);
-
-            //for(Map.Entry<String, Integer> : nodes.entrySet())
-
-        }
-    }
-
     public StackPane freeze(Node background) {
         Image frostImage = background.snapshot(
                 new SnapshotParameters(),
@@ -422,6 +386,9 @@ public class Controller extends Application {
 
     }
 
+    /**
+     * Shows credits
+     */
     public void showCredits() {
         StackPane imageStack = new StackPane();
         javafx.scene.Node frost      = freeze(this.myDisplay.root);
@@ -513,18 +480,6 @@ public class Controller extends Application {
         iconRightBox.getChildren().add(iconRightText);
 
         iconBox.getChildren().addAll(iconLeftBox, iconRightBox);
-
-        /* Author links to add to this pane:
-        http://www.danielbruce.se -- question mark
-        http://www.freepik.com -- picture
-        http://www.freepik.com -- gears
-        http://icon-works.com -- email
-        http://www.freepik.com -- pin
-        http://www.freepik.com -- plane
-        http://www.freepik.com -- stairs
-        http://www.freepik.com -- elevator
-        http://www.google.com -- parking
-         */
 
         vbox.getChildren().addAll(hbox, teamLabel,teamFlowPane, iconLabel, iconBox);
         imageStack.getChildren().add(vbox);
@@ -679,11 +634,6 @@ public class Controller extends Application {
             }
         }
 
-
-        //if (startNode != null && endNode != null) {
-         //   findPaths();
-       // }// else
-           //     if (startNode != null) switchMapSetting(startNode.getMap_id());
         flipFlop *= -1;
         stage.setWidth(stage.getWidth() + flipFlop);
         rightButtonFlag = false;
@@ -703,6 +653,9 @@ public class Controller extends Application {
         handleMapLines();
     }
 
+    /**
+     * Gets the map id of a given node
+     */
     public int getMapOfNode(INode iNode){
         return this.maps.get(iNode.getMap_id()).getID();
     }
@@ -731,7 +684,11 @@ public class Controller extends Application {
         }
     }
 
-
+    /**
+     * Switches to the view for buildings
+     * @param buildingID
+     * @param startingFLOOR
+     */
     public void switchToBuildingView(int buildingID, int startingFLOOR){
         this.currentBuilding = buildingID;
         this.currentMap      = maps.get(buildings.get(buildingID).getFloorID(startingFLOOR));
@@ -742,6 +699,9 @@ public class Controller extends Application {
         setFloor(startingFLOOR);
     }
 
+    /**
+     * Increases the floor we're on
+     */
     public void handleIncreaseFloorButton(){
         if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor + 1)){
             //setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(++currentFloor));
@@ -749,6 +709,9 @@ public class Controller extends Application {
         }
     }
 
+    /**
+     * goes down in floors
+     */
     public void handleDecreaseFloorButton(){
         if (currentBuilding != 0 && buildings.get(currentBuilding).getFloorMap().containsKey(currentFloor - 1)){
             //setCurrentMap(buildings.get(currentBuilding).getFloorMap().get(--currentFloor));
@@ -839,13 +802,7 @@ public class Controller extends Application {
 
                         currentIndex = tempIndex;
                     }
-
-
-
-
                 }
-
-
 
                 if (currentIndex != -1) {
                     myDisplay.setInstructions(fullPath.get(currentIndex)); //TODO UPDATE setInstructions
@@ -1022,44 +979,12 @@ public class Controller extends Application {
         }
     }
 
-    public INode createTempLandmark(double x, double y){
-
-        double z;
-
-        if(currentMap.inside()) {
-           z = ((Floor)currentMap).getFloor() * 15; //ROUGH Z value
-        } else {
-           z = 0;
-        }
-
-        double x2 = x;//TODO ADD TRANSLATE HERE
-        double y2 = y;
-        double z2 = z;
-
-        Landmark temp;
-
-        if(!FIRST) {
-            if (startNode != null){//have to delete old before creating new one (with same ID)
-
-                this.myDisplay.mapDisplay.hideLast(startNode); //hide the last start
-            }
-
-            temp =  new Landmark(-1, x, y, z, x2, y2, z2, currentMap.getID(), "Near " + nearestNamedNodeName(x2, y2, z2));
-        } else {
-            if (endNode != null){
-
-                this.myDisplay.mapDisplay.hideLast(endNode); //hide the last end
-            }
-
-            temp = new Landmark(-2, x, y, z, x2, y2, z2, currentMap.getID(), "By " + nearestNamedNodeName(x2, y2, z2));
-        }
-
-        INode nearest = nearestNode(x, y);
-        temp.addEdge(new Edge(nearest.getID(), 1), nearest);
-
-        return temp;
-    }
-
+    /**
+     * Finds the nearest node on the same map
+     * @param x
+     * @param y
+     * @return
+     */
     public INode nearestNode(double x, double y){
         double distance = Double.MAX_VALUE;
         INode n = null;
@@ -1164,37 +1089,6 @@ public class Controller extends Application {
         return n.toString();
     }
 
-
-    /**
-     * Removes this node from everything
-     * @param n
-     */
-    public void eradicate(INode n, boolean start){
-        if( n != null) {
-            nodes.remove(n); //remove node froms nodes [the hashmap]
-
-            //remove references of this node in other nodes
-            for (Edge e : n.getAdjacencies()) {//
-                nodes.get(e.getTarget()).removeEdge(n.getID());
-            }
-
-            if (start) {
-                //System.out.printf("Removing from options tempstart id:%d (should be -1)!\n", tempStart.getID());
-                myDisplay.start.setValue(null);        //set the list value to empty [this won't last very long]
-                myDisplay.start.removeNode(n.getID()); //remove it from the observable list
-                startNode = null; //todo test
-            } else {
-                //System.out.printf("Removing from options tempend id:%d (should be -2)!\n", tempStart.getID());
-                myDisplay.end.setValue(null);
-                myDisplay.end.removeNode(n.getID());
-                endNode = null; //todo test
-            }
-
-            //System.out.printf("Removing node  %d from mapdisplay: %d", n.getID(),n.getID());
-            myDisplay.mapDisplay.removeNode(n.getID()); //remove it from the map, visually and from the list
-        }
-    }
-
     /**
      * Sets the current map to the campus map
      */
@@ -1218,16 +1112,12 @@ public class Controller extends Application {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-    private boolean validateNotEquality(INode n, INode m){
-        if (n.getID() == m.getID()){
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-
+    /**
+     * Get's the path nodes from the start node to the end node
+     * @param s
+     * @param f
+     * @return
+     */
     public ArrayList<logic.INode> getPathNodes(logic.INode s, logic.INode f){
         this.pathNodes = AStarShortestPath.AStarSearch(s, f, nodes);
         return pathNodes;
@@ -1276,6 +1166,10 @@ public class Controller extends Application {
     }
 
 
+    /**
+     * Handles searches for specific nodes - nearest/close/near by
+     * @param s
+     */
     public void handleSpecificSearch(String s) {
 
         String prefixes[] 	= {"Nearest ", "Close ", "Near by ", ""};
@@ -1295,10 +1189,19 @@ public class Controller extends Application {
         }
     }
 
+    /**
+     * Sets the desintation as the give node
+     * @param destination
+     * @param START
+     */
     private void setDestination(INode destination, boolean START){
         handleSearchInput(destination.getID(), START);
     }
 
+    /**
+     * Finds the nearest Food node
+     * @return
+     */
     private INode findNearestFood(){
         if (startNode == null) {
             return  null;
@@ -1329,7 +1232,11 @@ public class Controller extends Application {
         return  n;
     }
 
-
+    /**
+     * Finds the nearest room of a given type - set up for bathrooms only
+     * @param type
+     * @return
+     */
     private INode findNearestRoomType(String type){
 
         if (startNode == null) {
@@ -1373,6 +1280,11 @@ public class Controller extends Application {
     }
 
 
+    /**
+     * Returns the node given the id
+     * @param id
+     * @return
+     */
     public INode getNode(Integer id){
         return nodes.get(id);
     }
@@ -1426,6 +1338,10 @@ public class Controller extends Application {
         myDisplay.mapDisplay.previousPopOver.hide();
     }
 
+    /**
+     * Handles the organization of data and events when the user increments
+     * the floor on the map
+     */
     public void handleIncrementPathMap(){
         //if there is another list of instructions to go
         PATH_FLAG = false;
@@ -1448,6 +1364,10 @@ public class Controller extends Application {
 
     }
 
+    /**
+     * Handles the organization of data and events when the user decrements
+     * the floor on the map
+     */
     public void handleDecrementPathMap(){
         PATH_FLAG = false;
         rightButtonFlag = true;
@@ -1468,6 +1388,9 @@ public class Controller extends Application {
         PATH_FLAG = true;
     }
 
+    /**
+     * Changes the weights corresponding to weather / handicap
+     */
     public void handleWeightOptions(boolean weather, boolean handicap){
         rightButtonFlag = true;
         Weighted.resetEdges(nodes);
@@ -1479,41 +1402,11 @@ public class Controller extends Application {
         rightButtonFlag = false;
     }
 
-    public boolean isStringLocation(String str){
-        return false;
-    }
-
     /****************************************************************************************************************
-                                                  PARSING FUNCTIONS
+                                    Zooming Functions and Control
      ****************************************************************************************************************/
 
 
-    public HashMap<Integer, IMap> getMaps(){
-        return this.maps;
-    }
-
-    /**
-     * Load nodes to file
-     * @param
-     */
-    private void nodesFromFile(){
-        nodes = new Parser<INode>().fromFileGraph();
-    }
-
-    /**
-     * Loads buildings from file
-     */
-    private void buildingsFromFile(){
-        buildings = new Parser<Building>().fromFileBuilding();
-    }
-
-    /**
-     * Loads maps from file
-     */
-    private void mapsFromFile() {
-        maps = new Parser<IMap>().fromFileMap();
-        campus = (Campus)maps.get(0);
-    }
 
     public Building getBuilding(int buildingID) {
         return buildings.get(buildingID);
@@ -1554,6 +1447,40 @@ public class Controller extends Application {
 
         return offset;
     }
+
+
+    /****************************************************************************************************************
+                                                  PARSING FUNCTIONS
+     ****************************************************************************************************************/
+
+
+    public HashMap<Integer, IMap> getMaps(){
+        return this.maps;
+    }
+
+    /**
+     * Load nodes to file
+     * @param
+     */
+    private void nodesFromFile(){
+        nodes = new Parser<INode>().fromFileGraph();
+    }
+
+    /**
+     * Loads buildings from file
+     */
+    private void buildingsFromFile(){
+        buildings = new Parser<Building>().fromFileBuilding();
+    }
+
+    /**
+     * Loads maps from file
+     */
+    private void mapsFromFile() {
+        maps = new Parser<IMap>().fromFileMap();
+        campus = (Campus)maps.get(0);
+    }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         public static void main(String[] args) {
