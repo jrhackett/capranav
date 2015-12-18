@@ -1,6 +1,8 @@
 # CapraNav
 
-CapraNav is a navigation system for the campus Worcester Polytechnic Institute.
+CapraNav is a navigation system for the Worcester Polytechnic Institute campus. It provides detailed maps of the campus and of several buildings. The program provides turn-by-turn directions as well as a graphically drawn path on the maps.
+
+We also developed a MapBuilder tool too speed up the process of adding nodes and edges to maps. It is very intuitive to use; you can add nodes and edges to maps by clicking directly on the maps.
 
 ## History
 
@@ -12,7 +14,7 @@ CapraNav uses the A* algorithm to find the shortest path between locations on ca
 
 ## Installation
 
-Clone our repo, open the "FinalProduct" folder. Within that there is a folder for Windows/Mac/Linux, and inside each of those is an executable. capra.exe/.jar is CapraNav, devtool.jar is the MapBuilder tool.
+Download our repo, open the "FinalProduct" folder. Within that are all of the program files. capra.exe / capra.jar is CapraNav, devtool.jar is the MapBuilder tool.
 
 ## Usage
 
