@@ -72,6 +72,7 @@ public class Event implements Comparable<Event> {
 
     //Reduces the description to be at most chars characters, with "..." appearing at the end
     private String reduceDescription(int chars) {
+        if (description.indexOf(" ", chars+1) == -1) return reduceDescription(chars-1);
         return description.substring(0, description.indexOf(" ", chars+1)) + "...";
     }
 }
